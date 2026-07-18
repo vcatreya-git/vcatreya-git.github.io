@@ -388,8 +388,9 @@
       <p class="role">Product Owner · Business Analyst · Technical Product Manager</p>
       <p class="lede">
         15+ years delivering enterprise banking products from ideation through production —
-        payments modernisation across 40+ markets, API platforms for bank clients,
-        and multi-entity transformations with measurable outcomes.
+        payments modernisation across 40+ markets, API platforms for bank clients, and multi-entity transformations.
+        Currently defining the product for a multi-tenant, vendor-agnostic enterprise notification platform
+        (SMS, email, push foundation; voice and intelligence on the roadmap).
       </p>
       <div class="hero-proof no-print">
         <div class="proof-item">
@@ -454,7 +455,8 @@
         <p class="blurb" style="margin-bottom:0">
           IBS Fintech Innovation Award 2019 — Best Payments Implementation (QNB: 5 countries, ~60% STP lift).
           BPS digital banking APIs for Western Alliance Bank. SCB origination Pre-Processor across 40+ markets.
-          Current: vendor-agnostic notification platform on AWS (requirements, roadmap, phased execution).
+          Current: multi-tenant enterprise notification platform — single outbound API, provider abstraction,
+          priority lanes, full audit trail (product definition, roadmap, staged execution).
           Side builds: PMRocket and Predictopia.
         </p>
       </div>
@@ -554,8 +556,11 @@
           digital banking API launch for Western Alliance Bank; origination-layer ownership in SCB transformation across 40+ markets.
         </p>
         <p style="margin-top:8px">
-          <strong>Current focus (FIS):</strong> vendor-agnostic enterprise notification platform on AWS — defined product
-          requirements, roadmap, and phased execution (SMS, email, push; expanding to voice and two-way communication).
+          <strong>Current focus (FIS):</strong> multi-tenant enterprise Notification Platform — organisation-wide outbound
+          customer notifications (fraud, OTP, transaction, statements) via one API; bank-level tenant isolation;
+          vendor-agnostic delivery; priority-based routing; reliable observable delivery with audit trail.
+          Defined product requirements, goals/non-goals, functional architecture, and three-stage execution strategy
+          (Stage 1 delivery foundation SMS/email/push → Stage 2 platform intelligence → Stage 3 event-driven delivery).
         </p>
       </div>
 
@@ -578,10 +583,13 @@
             as Product Owner, Business Analyst, and Technical Product Manager across platform and client programs.
           </p>
 
-          <p class="job-sub">Current assignment — Enterprise Customer Notification Platform</p>
+          <p class="job-sub">Current assignment — Enterprise Notification Platform</p>
           <ul>
-            <li>Defined product requirements, roadmap, and phased execution strategy for a vendor-agnostic multi-channel notification platform on AWS, replacing a multi-vendor legacy stack while keeping SMS, email, and push providers swappable.</li>
-            <li>Roadmap includes voice and two-way communication; channel abstraction designed so new types can onboard without re-platforming.</li>
+            <li>Defined product requirements, goals/non-goals, functional architecture, and staged execution for a multi-tenant enterprise Notification Platform: single standardised outbound API for all bank channels (e.g. digital banking, fraud, CIAM, lending), replacing fragmented per-team SMS/email/push integrations and multi-vendor sprawl.</li>
+            <li>Stage 1 (current foundation): reliable, observable delivery for <strong>SMS, email, and push</strong> — validate, prioritise, route, deliver, and track; upstream owns content and addresses; platform owns retries, circuit breakers, DLQ, failover, and audit history.</li>
+            <li>Platform capabilities in scope: multi-tenant bank isolation, vendor-agnostic provider adapters, priority lanes (Critical → Low so fraud/OTP never starve behind low-priority traffic), unicast/broadcast, dual platform/provider status (pull + push), idempotency, and immutable processing history.</li>
+            <li>Three-stage roadmap without breaking early integrators: Stage 2 intelligence (templates, address/channel resolution, preferences/consent) via optional enrichment flags; Stage 3 event-driven delivery (business events → platform owns notify); voice channel expansion on the delivery roadmap after foundation is live.</li>
+            <li>Explicit non-goals kept out of scope (marketing automation, in-app inbox, bidirectional chat, analytics product) to protect platform focus; open decisions tracked separately (onboarding, billing, Config Manager/ODS timing, preference ownership).</li>
           </ul>
 
           <p class="job-sub">Money Movement Hub — Origination APIs · Product Owner</p>
@@ -774,7 +782,11 @@
           <span class="skill-chip">Postman / Swagger</span>
           <span class="skill-chip">Visio / PowerPoint</span>
           <span class="skill-chip">AWS</span>
+          <span class="skill-chip">Multi-tenant platforms</span>
+          <span class="skill-chip">Vendor-agnostic architecture</span>
           <span class="skill-chip">Multi-channel notifications</span>
+          <span class="skill-chip">Priority-based routing</span>
+          <span class="skill-chip">Platform product definition</span>
           <span class="skill-chip">Digital &amp; core banking (domain)</span>
           <span class="skill-chip">Enterprise integrations</span>
           <span class="skill-chip">AI product design</span>
