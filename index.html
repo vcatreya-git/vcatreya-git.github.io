@@ -94,8 +94,40 @@
     display: grid; grid-template-columns: 1fr; gap: 28px;
   }
   @media (min-width: 720px) {
-    .hero-inner { grid-template-columns: 1.45fr 1fr; align-items: center; }
+    .hero-inner { grid-template-columns: auto 1.45fr 1fr; align-items: center; }
   }
+  .profile-photo-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .profile-photo {
+    width: 148px;
+    height: 148px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 3px solid white;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.12), 0 0 0 1px var(--slate-200);
+    background: var(--slate-100);
+  }
+  @media (min-width: 720px) {
+    .profile-photo { width: 160px; height: 160px; }
+  }
+  .resume-photo {
+    width: 88px;
+    height: 88px;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center top;
+    border: 1px solid var(--slate-200);
+    flex-shrink: 0;
+  }
+  .resume-header-row {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .resume-header-row .resume-header-text { flex: 1; min-width: 0; }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--teal-light); color: var(--teal-dark);
@@ -289,10 +321,11 @@
       display: none !important;
     }
     .hero { background: none; padding: 0 0 8px; }
-    .hero-inner { display: block; }
+    .hero-inner { display: none; }
     .hero h1 { font-size: 16pt; margin-bottom: 2px; }
     .hero .role { font-size: 10pt; margin-bottom: 4px; }
     .hero .lede { font-size: 9pt; margin-bottom: 0; max-width: none; }
+    .resume-photo { width: 72px; height: 72px; }
     #resume { padding: 0; background: white; }
     .section-label, .section-title, .section-sub { display: none; }
     .resume-paper {
@@ -320,6 +353,15 @@
 
 <header class="hero" id="top">
   <div class="hero-inner">
+    <div class="profile-photo-wrap">
+      <img
+        class="profile-photo"
+        src="assets/profile.jpg"
+        alt="Venkatraman Chandrasekar"
+        width="160"
+        height="160"
+      />
+    </div>
     <div>
       <div class="eyebrow">Open to Product Owner / Product Manager roles · Toronto / remote</div>
       <h1>Venkatraman Chandrasekar</h1>
@@ -448,16 +490,27 @@
 
     <article class="resume-paper" id="resume-paper" aria-label="Resume">
       <header class="resume-header">
-        <h2>Venkatraman Chandrasekar</h2>
-        <p class="title-line">Product Owner · Product Manager</p>
-        <div class="resume-contact">
-          <a href="mailto:vc.atreya@gmail.com">vc.atreya@gmail.com</a>
-          <span>·</span>
-          <a href="tel:+16479172912">647-917-2912</a>
-          <span>·</span>
-          <span>Ajax, ON (Toronto)</span>
-          <span>·</span>
-          <a href="https://github.com/vcatreya-git">github.com/vcatreya-git</a>
+        <div class="resume-header-row">
+          <img
+            class="resume-photo"
+            src="assets/profile.jpg"
+            alt="Venkatraman Chandrasekar"
+            width="88"
+            height="88"
+          />
+          <div class="resume-header-text">
+            <h2>Venkatraman Chandrasekar</h2>
+            <p class="title-line">Product Owner · Product Manager</p>
+            <div class="resume-contact">
+              <a href="mailto:vc.atreya@gmail.com">vc.atreya@gmail.com</a>
+              <span>·</span>
+              <a href="tel:+16479172912">647-917-2912</a>
+              <span>·</span>
+              <span>Ajax, ON (Toronto)</span>
+              <span>·</span>
+              <a href="https://github.com/vcatreya-git">github.com/vcatreya-git</a>
+            </div>
+          </div>
         </div>
       </header>
 
