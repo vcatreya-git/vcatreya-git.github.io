@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Venkatraman Chandrasekar — Product Leadership · Enterprise Platforms</title>
-<meta name="description" content="Venkatraman Chandrasekar — 15+ years delivering enterprise products from ideation through production. Product Owner, BA, and TPM experience across global banking platforms.">
+<title>Venkatraman Chandrasekar — Product Owner · BA · TPM</title>
+<meta name="description" content="Venkatraman Chandrasekar — Product Owner, Business Analyst, and Technical Product Manager with 15+ years in enterprise banking platforms. Payments modernisation across 40+ markets. IBS Fintech Innovation Award 2019.">
 <style>
   :root {
     --teal: #0D9488;
@@ -86,32 +86,52 @@
   }
 
   .hero {
-    background: linear-gradient(160deg, var(--teal-xlight) 0%, var(--white) 60%);
-    padding: 80px 24px 64px;
+    background: linear-gradient(150deg, var(--teal-xlight) 0%, var(--white) 55%);
+    padding: 96px 24px 80px;
   }
   .hero-inner {
-    max-width: 900px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr; gap: 28px;
+    max-width: 860px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr; gap: 32px;
   }
   @media (min-width: 720px) {
-    .hero-inner { grid-template-columns: auto 1.45fr 1fr; align-items: center; }
+    .hero-inner { grid-template-columns: auto 1fr; gap: 52px; align-items: center; }
   }
   .profile-photo-wrap {
     display: flex;
     justify-content: center;
   }
   .profile-photo {
-    width: 148px;
-    height: 148px;
+    width: 152px;
+    height: 152px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
-    border: 3px solid white;
-    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.12), 0 0 0 1px var(--slate-200);
+    border: 4px solid white;
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.14), 0 0 0 1px var(--slate-200);
     background: var(--slate-100);
   }
   @media (min-width: 720px) {
-    .profile-photo { width: 160px; height: 160px; }
+    .profile-photo { width: 180px; height: 180px; }
+  }
+  .hero-proof {
+    display: flex; align-items: center; flex-wrap: wrap;
+    row-gap: 12px; margin: 24px 0 30px;
+  }
+  .proof-item {
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 0 20px;
+  }
+  .proof-item:first-child { padding-left: 0; }
+  .proof-num {
+    font-size: 21px; font-weight: 800; color: var(--slate-900);
+    letter-spacing: -0.5px; line-height: 1;
+  }
+  .proof-label {
+    font-size: 10.5px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.9px; color: var(--slate-500);
+  }
+  .proof-sep {
+    width: 1px; height: 34px; background: var(--slate-200); flex-shrink: 0;
   }
   .resume-photo {
     width: 88px;
@@ -135,13 +155,13 @@
     border-radius: 100px; margin-bottom: 16px;
   }
   .hero h1 {
-    font-size: clamp(28px, 5vw, 42px); font-weight: 800;
-    color: var(--slate-900); letter-spacing: -1.2px; line-height: 1.15; margin-bottom: 12px;
+    font-size: clamp(30px, 5vw, 44px); font-weight: 800;
+    color: var(--slate-900); letter-spacing: -1.2px; line-height: 1.12; margin-bottom: 10px;
   }
-  .hero .role { font-size: 17px; font-weight: 600; color: var(--teal-dark); margin-bottom: 14px; }
+  .hero .role { font-size: 16px; font-weight: 600; color: var(--teal-dark); margin-bottom: 18px; letter-spacing: 0.1px; }
   .hero .lede {
-    font-size: 16px; color: var(--slate-600); line-height: 1.7;
-    margin-bottom: 24px; max-width: 540px;
+    font-size: 16px; color: var(--slate-600); line-height: 1.75;
+    margin-bottom: 0; max-width: 560px;
   }
   .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
   .hero-card {
@@ -317,7 +337,7 @@
       background: white; font-size: 10pt; color: #000;
       -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
-    nav.site-nav, .no-print, #about, #case-studies, #projects, footer, .hero-ctas, .resume-toolbar, .hero-card, .eyebrow {
+    nav.site-nav, .no-print, #about, #case-studies, #projects, footer, .hero-ctas, .resume-toolbar, .hero-card, .eyebrow, .hero-proof {
       display: none !important;
     }
     .hero { background: none; padding: 0 0 8px; }
@@ -363,47 +383,37 @@
       />
     </div>
     <div>
-      <div class="eyebrow">Toronto · remote · enterprise product &amp; platforms</div>
+      <div class="eyebrow">Toronto area · remote · payments &amp; enterprise platforms</div>
       <h1>Venkatraman Chandrasekar</h1>
       <p class="role">Product Owner · Business Analyst · Technical Product Manager</p>
       <p class="lede">
-        15+ years taking enterprise products from ideation through strategy, execution, and production delivery —
-        product requirements, roadmaps, prioritization, stakeholder alignment, and multi-market rollouts.
-        Currently defining requirements, roadmap, and phased execution for a vendor-agnostic customer
-        notification platform on AWS (SMS, email, push; expanding to voice and two-way communication).
+        15+ years delivering enterprise banking products from ideation through production —
+        payments modernisation across 40+ markets, API platforms for bank clients,
+        and multi-entity transformations with measurable outcomes.
       </p>
+      <div class="hero-proof no-print">
+        <div class="proof-item">
+          <span class="proof-num">15+</span>
+          <span class="proof-label">Years in enterprise banking</span>
+        </div>
+        <div class="proof-sep"></div>
+        <div class="proof-item">
+          <span class="proof-num">40+</span>
+          <span class="proof-label">Markets delivered</span>
+        </div>
+        <div class="proof-sep"></div>
+        <div class="proof-item">
+          <span class="proof-num">IBS 2019</span>
+          <span class="proof-label">Best Payments Implementation</span>
+        </div>
+      </div>
       <div class="hero-ctas no-print">
-        <a class="btn btn-primary" href="#case-studies">Case studies</a>
-        <a class="btn btn-secondary" href="#resume">View resume</a>
+        <a class="btn btn-primary" href="#resume">View resume</a>
+        <a class="btn btn-secondary" href="#about">About</a>
+        <a class="btn btn-secondary" href="#projects">Projects</a>
         <button class="btn btn-secondary" type="button" onclick="window.print()">Save as PDF</button>
-        <a class="btn btn-secondary" href="#projects">Side projects</a>
       </div>
     </div>
-    <aside class="hero-card no-print">
-      <h3>Contact</h3>
-      <div class="meta-row">
-        <div>
-          <span>Email</span>
-          <a href="mailto:vc.atreya@gmail.com">vc.atreya@gmail.com</a>
-        </div>
-        <div>
-          <span>Phone</span>
-          <a href="tel:+16479172912">647-917-2912</a>
-        </div>
-        <div>
-          <span>Location</span>
-          Ajax, Ontario · Toronto area · travel OK
-        </div>
-        <div>
-          <span>GitHub</span>
-          <a href="https://github.com/vcatreya-git" target="_blank" rel="noopener">github.com/vcatreya-git</a>
-        </div>
-        <div>
-          <span>LinkedIn</span>
-          <a href="https://www.linkedin.com/in/chandrasekarvenkatraman" target="_blank" rel="noopener">linkedin.com/in/chandrasekarvenkatraman</a>
-        </div>
-      </div>
-    </aside>
   </div>
 </header>
 
@@ -412,36 +422,31 @@
     <div class="section-label">About</div>
     <h2 class="section-title">What I bring</h2>
     <p class="section-sub">
-      End-to-end product delivery across ideation, strategy, execution, and production —
-      for complex enterprise platforms and multi-stakeholder programs.
+      End-to-end product delivery across ideation, strategy, execution, and production.
     </p>
     <div class="project-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
       <div class="project-card">
         <h3 style="font-size:16px;margin-bottom:10px;">Ideation</h3>
         <p class="blurb" style="margin-bottom:0">
-          Frame business problems and opportunities through workshops, gap analysis, and customer journey design —
-          turning ambiguity into a clear product direction.
+          Workshops, gap analysis, and journey mapping to turn ambiguous banking problems into clear product scope.
         </p>
       </div>
       <div class="project-card">
         <h3 style="font-size:16px;margin-bottom:10px;">Strategy</h3>
         <p class="blurb" style="margin-bottom:0">
-          Product requirements, roadmaps, and phased execution plans. Align vision, scope, and sequencing
-          across business, technology, risk, and vendor stakeholders.
+          Requirements, roadmaps, and phased plans — platform vs market-specific, what ships now vs later.
         </p>
       </div>
       <div class="project-card">
         <h3 style="font-size:16px;margin-bottom:10px;">Execution</h3>
         <p class="blurb" style="margin-bottom:0">
-          Backlog prioritization, user stories and acceptance criteria, solution design, and vendor evaluation —
-          with close partnership across engineering, QA, compliance, and partners.
+          Backlog, user stories, solution design, and vendor alignment with engineering, QA, risk, and partners.
         </p>
       </div>
       <div class="project-card">
         <h3 style="font-size:16px;margin-bottom:10px;">Delivery</h3>
         <p class="blurb" style="margin-bottom:0">
-          Production rollouts, UAT, change management, and post-go-live adoption —
-          including multi-market launches and platform modernization programs.
+          Multi-market rollouts, UAT, go-live, and post-launch change — with outcomes you can point to (e.g. IBS 2019, STP lift).
         </p>
       </div>
     </div>
@@ -453,7 +458,7 @@
     <div class="section-label">Case studies</div>
     <h2 class="section-title">Case studies</h2>
     <p class="section-sub">
-      Space for product deep dives (problem, decisions, tradeoffs, results). Empty for now — fill in later.
+      Product deep dives — problem framing, decisions, tradeoffs, and outcomes.
     </p>
 
     <div class="case-grid">
@@ -462,7 +467,7 @@
         <h3>Case study 1</h3>
         <p class="case-meta">Title · context · domain — TBD</p>
         <p class="blurb">Problem, approach, decisions, and outcomes go here.</p>
-        <p class="case-coming">You’ll fill this later.</p>
+        <p class="case-coming">Coming soon.</p>
       </article>
 
       <article class="case-card placeholder">
@@ -470,7 +475,7 @@
         <h3>Case study 2</h3>
         <p class="case-meta">Title · context · domain — TBD</p>
         <p class="blurb">Problem, approach, decisions, and outcomes go here.</p>
-        <p class="case-coming">You’ll fill this later.</p>
+        <p class="case-coming">Coming soon.</p>
       </article>
 
       <article class="case-card placeholder">
@@ -478,7 +483,7 @@
         <h3>Case study 3</h3>
         <p class="case-meta">Title · context · domain — TBD</p>
         <p class="blurb">Problem, approach, decisions, and outcomes go here.</p>
-        <p class="case-coming">You’ll fill this later.</p>
+        <p class="case-coming">Coming soon.</p>
       </article>
     </div>
   </div>
@@ -532,17 +537,16 @@
       <div class="resume-block">
         <h3>Professional summary</h3>
         <p>
-          Product leader with 15+ years delivering enterprise platforms from ideation through strategy,
-          execution, and production delivery. Strengths include product requirements and roadmaps, phased execution
-          planning, backlog prioritization, solution design, agile delivery, and stakeholder management across
-          business, technology, risk, vendors, and clients. Track record spanning API products, digital channels,
-          platform modernization, and multi-market programs for FIS, Standard Chartered, Qatar National Bank,
-          First Abu Dhabi Bank, and others.
+          Product Owner, Business Analyst, and Technical Product Manager with 15+ years delivering enterprise banking
+          platforms from ideation through production. Strengths: product requirements and roadmaps, phased execution,
+          backlog prioritization, solution design, agile delivery, and stakeholder alignment across business, technology,
+          risk, and vendors. Domain depth in payments modernisation, API products, ISO 20022 / open banking (FDX), and
+          multi-market programmes. Highlights: IBS Fintech Innovation Award 2019 (QNB hub, 5 countries, ~60% STP improvement);
+          digital banking API launch for Western Alliance Bank; origination-layer ownership in SCB transformation across 40+ markets.
         </p>
         <p style="margin-top:8px">
-          <strong>Current focus:</strong> enterprise customer notification platform on AWS (SMS, email, push;
-          expanding to voice and two-way communication) — product requirements, roadmap, and phased execution
-          strategy for a vendor-agnostic multi-channel platform.
+          <strong>Current focus (FIS):</strong> vendor-agnostic enterprise notification platform on AWS — defined product
+          requirements, roadmap, and phased execution (SMS, email, push; expanding to voice and two-way communication).
         </p>
       </div>
 
@@ -567,52 +571,51 @@
 
           <p class="job-sub">Current assignment — Enterprise Customer Notification Platform</p>
           <ul>
-            <li>Defined product requirements, roadmap, and phased execution strategy for a vendor-agnostic multi-channel notification platform on AWS, replacing a costly multi-vendor legacy stack while keeping providers swappable.</li>
-            <li>Channels: SMS, email, push; roadmap includes voice and two-way communication.</li>
+            <li>Defined product requirements, roadmap, and phased execution strategy for a vendor-agnostic multi-channel notification platform on AWS, replacing a multi-vendor legacy stack while keeping SMS, email, and push providers swappable.</li>
+            <li>Roadmap includes voice and two-way communication; channel abstraction designed so new types can onboard without re-platforming.</li>
           </ul>
 
           <p class="job-sub">Money Movement Hub — Origination APIs · Product Owner</p>
           <ul>
-            <li>Spearheaded development of initiation and core integration APIs enabling connectivity with IBS and HZN systems.</li>
-            <li>Led requirement gathering and solution design for origination APIs and status-update events for enterprise clients.</li>
+            <li>Owned product definition for payment initiation and core integration APIs connecting to IBS and HZN cores for enterprise clients.</li>
+            <li>Drove requirements, API contracts, and solution design for origination flows and real-time status-update events.</li>
           </ul>
 
           <p class="job-sub">Open Access Connect · Product Owner</p>
           <ul>
-            <li>Led development of secure data-sharing APIs (accounts, balances, transactions, statements) with identity verification and consent management.</li>
-            <li>Requirement gathering, gap analysis, user stories; prioritized real-time access and open-banking compliance (FDX).</li>
-            <li>Managed agile delivery in Jira — solution design, API testing, and stakeholder collaboration for third-party integrations.</li>
+            <li>Owned open-banking data-sharing APIs (accounts, balances, transactions, statements) with consent and identity — FDX-aligned.</li>
+            <li>Led gap analysis, backlog prioritization, and agile delivery with Tech, QA, and third-party integration stakeholders.</li>
           </ul>
 
           <p class="job-sub">BPS Realtime Payments · Tech Lead / Product Owner · Jan 2024 – Dec 2024</p>
           <ul>
-            <li>Led the API implementation team through development and testing cycles.</li>
-            <li>Developed a provider-agnostic decision model for real-time rails; reverse engineering, backlog refinement, feature definition, service decomposition, user stories, and architectural strategy discussions.</li>
+            <li>Led API delivery for real-time payment rails — sprint coordination, integration testing, and release readiness.</li>
+            <li>Defined a provider-agnostic decision model for real-time rails; reverse-engineered legacy behaviour into serviceable product components and stories.</li>
           </ul>
 
           <p class="job-sub">Wires API &amp; Business Hub Phase II · Product Owner · Aug 2023 – Jan 2024</p>
           <ul>
-            <li>Owned strategic direction and execution; requirements with UI/UX mockups; user stories; backend API services.</li>
-            <li>Resolved functional and technical gaps; led launch of inaugural BPS digital banking APIs for Western Alliance Bank.</li>
+            <li>Owned strategy and execution for Business Hub Phase II APIs with UI/UX-backed requirements and backend services.</li>
+            <li>Closed functional/technical gaps and launched inaugural BPS digital banking APIs for Western Alliance Bank.</li>
           </ul>
 
           <p class="job-sub">IBS Deposit Origination · Product Owner · Nov 2022 – Aug 2023</p>
           <ul>
-            <li>Championed modernization of Deposit Origination and Service Request Management — workflows, UX, CAT workflow.</li>
-            <li>Partnered with Product Managers and UI/UX; reverse engineering; business rules; backlog and user story ownership.</li>
+            <li>Led modernization of Deposit Origination and Service Request Management, including CAT workflow and UX redesign with PM and design partners.</li>
+            <li>Owned business-rule capture, backlog, and user stories from reverse engineering through delivery.</li>
           </ul>
 
           <p class="job-sub">Banking Platform Services — ACH &amp; Wires · Product Owner · Jul 2021 – Oct 2022</p>
           <ul>
-            <li>Contributed to channel-agnostic platform APIs (service breakdown, mapping docs, testing); later led wires modernization.</li>
-            <li>Designed provider-agnostic decision support for external processors; reverse engineering; backlog; architecture strategy sessions.</li>
+            <li>Contributed channel-agnostic platform APIs for ACH; later led wires modernisation with external processors (e.g. eWires, Fundtech).</li>
+            <li>Designed provider-agnostic decision support; refined backlog and architectural options with platform stakeholders.</li>
           </ul>
         </div>
 
         <div class="job">
           <div class="job-top">
             <div>
-              <div class="job-role">Senior Manager / Lead Consultant / Implementation Consultant</div>
+              <div class="job-role">Senior Manager · Lead Consultant · Implementation Consultant</div>
               <div class="job-org">Capgemini Technology Services</div>
             </div>
             <div>
@@ -623,22 +626,21 @@
 
           <p class="job-sub">First Abu Dhabi Bank — Corporate Channel Rollout · Implementation Consultant · Aug 2020 – Jun 2021</p>
           <ul>
-            <li>Led implementation of Corporate Web Portal and Host-to-Host services in Saudi Arabia.</li>
-            <li>Gap analysis, interface design, backlog prioritization, vendor coordination; stakeholder elicitation; user stories.</li>
-            <li>Defined customer journeys for onboarding, entitlements, account services, H2H, bill payment, WPS, and statements.</li>
+            <li>Led Saudi Arabia rollout of Corporate Web Portal and Host-to-Host (H2H) services with vendor coordination and backlog ownership.</li>
+            <li>Defined journeys for onboarding, entitlements, accounts, H2H, bill payment, WPS, and statements; authored user stories from stakeholder workshops.</li>
           </ul>
 
-          <p class="job-sub">Standard Chartered — Strategic Platform · Lead Consultant · Aug 2019 – Jul 2020</p>
+          <p class="job-sub">Standard Chartered — Global Payments Transformation · Lead Consultant · Aug 2019 – Jul 2020</p>
           <ul>
-            <li>Led as-is architecture review and platform roadmap / strategy for a multi-market transformation (40+ markets).</li>
-            <li>Designed standards-aligned message formats and a global preprocessor for single/bulk migration from legacy systems.</li>
-            <li>Directed BAs on a microservices-based rebuild — system studies, backlog grooming, functional decomposition, user stories, rollout and client migration plans.</li>
+            <li>Owned the origination Pre-Processor in SCB’s strategic payments transformation — phased migration to microservice SCPAY across 40+ markets while corporate channel and payment apps moved in parallel.</li>
+            <li>Designed the integration bridge across mixed migration states (legacy/new channel × legacy/new payment), multi-format (IFX, ISO 20022, MT/SWIFT, Pain.001), and per product × country rollout plans.</li>
+            <li>Led BAs on system studies, backlog, functional decomposition, and stories; documented as-is architecture and interface contracts.</li>
           </ul>
 
           <p class="job-sub">Clearing Connect™ · Lead Consultant · Jun 2019 – Jul 2019</p>
           <ul>
-            <li>Hub integration with clearing/settlement mechanisms; process flows (use cases, sequence diagrams); requirement workshops.</li>
-            <li>Solution design, transformation rules, Jira user stories, and solution reviews.</li>
+            <li>Designed hub-to-CSM integration flows (use cases, sequence diagrams) and ISO 20022 → proprietary transformation rules.</li>
+            <li>Ran requirement workshops and solution reviews; delivered Jira stories aligned to clearing-scheme constraints.</li>
           </ul>
         </div>
 
@@ -654,21 +656,22 @@
             </div>
           </div>
 
-          <p class="job-sub">Qatar National Bank — Enterprise Hub · Functional Anchor · Mar 2017 – May 2019</p>
+          <p class="job-sub">Qatar National Bank — Enterprise Payments Hub · Functional Anchor · Mar 2017 – May 2019</p>
           <ul>
-            <li>Led multi-entity platform implementation across Qatar, France, UK, Singapore, and Kuwait.</li>
-            <li>Requirement workshops, gap analysis, future-state architecture, solution design; authored FRSD and IRSD.</li>
-            <li>Agile delivery (Jira, Confluence), UAT, post-go-live change management; training; demos/POCs; integrations that improved STP rates.</li>
+            <li>Led Finacle Enterprise Payments Hub for QNB across Qatar, France, UK, Singapore, and Kuwait as part of national payments modernisation.</li>
+            <li>Delivered multi-entity, multi-currency architecture (15 payment types, 16 channels); ISO 20022 SOA consolidating QIPS/QATCH onto a real-time platform.</li>
+            <li>Partnered with Finacle product engineering on base-product vs client build tradeoffs while the platform matured; authored FRSD/IRSD; drove UAT and post-go-live change.</li>
+            <li>Integrations improved STP by ~60%. Awarded <strong>Best Payments System Implementation — IBS Fintech Innovation Awards 2019</strong>.</li>
           </ul>
 
           <p class="job-sub">BRAC Bank — Platform Migration · Functional Anchor</p>
           <ul>
-            <li>System studies, requirement gathering, gap analysis, and Master Requirements Document (MRD) for major version upgrade; porting customizations with stakeholders.</li>
+            <li>Led payments-module gap analysis and Master Requirements Document for Finacle 7.x → 10.x migration; steered customization porting with bank stakeholders.</li>
           </ul>
 
-          <p class="job-sub">Bancolombia — Enterprise Implementation · Product Owner · Jul 2016 – Dec 2019</p>
+          <p class="job-sub">Bancolombia — Enterprise Implementation · Product Owner · Jul 2016 – May 2019</p>
           <ul>
-            <li>End-to-end product ownership for foreign-currency and real-time settlement tracks — requirements, gap analysis, solution design, and documentation for critical integrations.</li>
+            <li>Owned FCY and RTGS (SEBRA) tracks end-to-end — requirements, gap analysis, and solution design for SWIFT and RTGS integrations.</li>
           </ul>
         </div>
 
@@ -684,16 +687,16 @@
             </div>
           </div>
           <ul>
-            <li>Led integration of interfaces with core banking, corporate and retail channels, processing systems, and reconciliation platforms.</li>
-            <li>Rolled out real-time capabilities across Singapore, Malaysia, Bahrain, and Sri Lanka.</li>
-            <li>BRD analysis, gap analysis, elicitation, solution write-ups, interface specs, impact analysis, and change request management.</li>
+            <li>Led multi-system integrations across core banking, corporate (S2B), retail channels, payments, and reconciliation (TLM).</li>
+            <li>Rolled out real-time payment capabilities in Singapore, Malaysia, Bahrain, and Sri Lanka with market-specific compliance.</li>
+            <li>Owned BRDs, interface specs, impact analysis, and change requests across multi-entity releases.</li>
           </ul>
         </div>
 
         <div class="job">
           <div class="job-top">
             <div>
-              <div class="job-role">System Analyst / Business Analyst</div>
+              <div class="job-role">System Analyst · Business Analyst</div>
               <div class="job-org">Tata Consultancy Services</div>
             </div>
             <div>
@@ -702,8 +705,8 @@
             </div>
           </div>
           <ul>
-            <li><strong>Tata Capital / Tata Motor Finance:</strong> Retail loan origination — gap analysis, estimation, design, HLD/LLD-based development, SIT/UAT, production install, demos, change management.</li>
-            <li><strong>Khan Bank (Mongolia):</strong> Requirements, gap analysis, estimation, solution design, documentation.</li>
+            <li><strong>Tata Capital / Tata Motor Finance:</strong> Retail loan origination — design, build from HLD/LLD, SIT/UAT, production install, and change management.</li>
+            <li><strong>Khan Bank (Mongolia):</strong> Requirements, gap analysis, estimation, and solution documentation for loan origination.</li>
           </ul>
         </div>
       </div>
@@ -765,6 +768,8 @@
           <span class="skill-chip">Multi-channel notifications</span>
           <span class="skill-chip">Digital &amp; core banking (domain)</span>
           <span class="skill-chip">Enterprise integrations</span>
+          <span class="skill-chip">AI product design</span>
+          <span class="skill-chip">LLM / RAG pipelines</span>
         </div>
       </div>
     </article>
@@ -778,6 +783,26 @@
     <p class="section-sub">Portfolio build work outside day-to-day employment.</p>
 
     <div class="project-grid">
+      <article class="project-card">
+        <div class="project-badge">In progress</div>
+        <h3>Predictopia</h3>
+        <p class="blurb">
+          Mobile-first sports prediction league platform — automated pool management, one-tap predictions
+          with auto-lock before toss, real-time leaderboards, and prize tracking with commission-based
+          distribution. Family product targeting IPL and multi-league use; still in progress.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Next.js</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">Vercel</span>
+          <span class="tag">Realtime</span>
+          <span class="tag">Event-driven</span>
+        </div>
+        <div class="project-links">
+          <a class="btn btn-primary" href="https://github.com/vcatreya-git/predictopia" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
       <article class="project-card">
         <div class="project-badge">Flagship · in progress</div>
         <h3>PMRocket</h3>
@@ -805,7 +830,7 @@
 
 <footer class="no-print">
   <strong style="color:var(--slate-600)">Venkatraman Chandrasekar</strong>
-  · Product Owner · BA · TPM
+  · Product Owner · Business Analyst · Technical Product Manager
   · <a href="https://github.com/vcatreya-git">GitHub</a>
   · <a href="https://www.linkedin.com/in/chandrasekarvenkatraman" target="_blank" rel="noopener">LinkedIn</a>
   · <a href="mailto:vc.atreya@gmail.com">Email</a>
