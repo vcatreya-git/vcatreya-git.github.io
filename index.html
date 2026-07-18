@@ -214,6 +214,65 @@
   }
   .project-links { display: flex; gap: 10px; flex-wrap: wrap; }
 
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  @media (min-width: 720px) {
+    .case-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .case-card {
+    background: white;
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  .case-card.featured { border-color: rgba(13,148,136,0.45); box-shadow: var(--shadow); }
+  .case-card.placeholder {
+    border-style: dashed;
+    background: var(--slate-50);
+    color: var(--slate-500);
+  }
+  .case-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--slate-900);
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+  .case-card.placeholder h3 { color: var(--slate-500); font-weight: 700; }
+  .case-meta {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate-500);
+    margin-bottom: 12px;
+  }
+  .case-card .blurb {
+    font-size: 14px;
+    color: var(--slate-600);
+    line-height: 1.65;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+  .case-card ul {
+    padding-left: 18px;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    color: var(--slate-700);
+  }
+  .case-card li { margin-bottom: 4px; line-height: 1.45; }
+  .case-coming {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--slate-400);
+    margin-top: auto;
+  }
+
   footer {
     border-top: 1px solid var(--slate-200);
     padding: 28px 24px; text-align: center;
@@ -226,7 +285,7 @@
       background: white; font-size: 10pt; color: #000;
       -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
-    nav.site-nav, .no-print, #about, #projects, footer, .hero-ctas, .resume-toolbar, .hero-card, .eyebrow {
+    nav.site-nav, .no-print, #about, #case-studies, #projects, footer, .hero-ctas, .resume-toolbar, .hero-card, .eyebrow {
       display: none !important;
     }
     .hero { background: none; padding: 0 0 8px; }
@@ -252,6 +311,7 @@
   <a class="nav-logo" href="#top">Venkat<span>.</span></a>
   <div class="nav-links">
     <a href="#about">About</a>
+    <a href="#case-studies">Case studies</a>
     <a href="#resume">Resume</a>
     <a href="#projects">Projects</a>
     <a href="#resume" class="primary" onclick="setTimeout(() => window.print(), 80)">PDF</a>
@@ -267,13 +327,14 @@
       <p class="lede">
         15+ years delivering payment and banking products across global markets —
         core banking, open banking, RTP/FedNow, wires, and ISO 20022 platforms.
-        End-to-end ownership: strategy, PRDs, agile delivery, and production rollout.
+        Currently leading a vendor-agnostic enterprise customer notification platform on AWS
+        (SMS, email, push — expanding to voice, Telegram, and two-way messaging).
       </p>
       <div class="hero-ctas no-print">
-        <a class="btn btn-primary" href="#resume">View resume</a>
+        <a class="btn btn-primary" href="#case-studies">Case studies</a>
+        <a class="btn btn-secondary" href="#resume">View resume</a>
         <button class="btn btn-secondary" type="button" onclick="window.print()">Save as PDF</button>
-        <a class="btn btn-secondary" href="assets/Venkatraman-Chandrasekar-Resume.docx">Download DOCX</a>
-        <a class="btn btn-secondary" href="#projects">Projects</a>
+        <a class="btn btn-secondary" href="#projects">Side projects</a>
       </div>
     </div>
     <aside class="hero-card no-print">
@@ -320,11 +381,85 @@
           Stakeholder management across Tech, QA, Risk, Compliance, Sales, and clients in 40+ markets.
         </p>
       </div>
+      <div class="project-card">
+        <h3 style="font-size:16px;margin-bottom:10px;">Platform &amp; vendor strategy</h3>
+        <p class="blurb" style="margin-bottom:0">
+          Replace multi-vendor legacy notification stacks with a single AWS-based, vendor-agnostic platform —
+          cut cost and vendor sprawl while keeping channels and providers swappable.
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section" id="resume">
+<section class="section" id="case-studies">
+  <div class="container">
+    <div class="section-label">Case studies</div>
+    <h2 class="section-title">Selected product work</h2>
+    <p class="section-sub">
+      Deep dives on outcomes, decisions, and delivery. First draft below — more case studies to add later.
+    </p>
+
+    <div class="case-grid">
+      <article class="case-card featured">
+        <div class="project-badge">In progress · enterprise</div>
+        <h3>Enterprise Customer Notification Platform</h3>
+        <p class="case-meta">Product lead · AWS · vendor-agnostic multi-channel</p>
+        <p class="blurb">
+          Building a unified, vendor-agnostic customer notification platform on AWS to replace a costly
+          multi-vendor legacy stack. One product surface for outbound enterprise notifications —
+          without locking the bank to a single SMS, email, or push provider.
+        </p>
+        <ul>
+          <li><strong>Channels today:</strong> SMS, email, push</li>
+          <li><strong>Roadmap:</strong> voice, Telegram, then two-way communication</li>
+          <li><strong>Why:</strong> reduce legacy cost and multi-vendor relationships while staying provider-flexible</li>
+        </ul>
+        <p class="case-meta" style="margin-top:4px;margin-bottom:8px;">My role</p>
+        <ul>
+          <li>Key author of the PRD and product definition</li>
+          <li>Roadmap and execution plan</li>
+          <li>Drove architecture and technical design discussions and decisions</li>
+          <li>Vendor evaluation and selection</li>
+          <li>Day-to-day leadership of vendor / contractor build team</li>
+        </ul>
+        <p class="case-coming">Full case study (problem → options → architecture → metrics) — coming soon.</p>
+      </article>
+
+      <article class="case-card placeholder">
+        <div class="project-badge" style="background:var(--slate-100);color:var(--slate-500)">Placeholder</div>
+        <h3>Case study 2</h3>
+        <p class="case-meta">Title · company · domain — TBD</p>
+        <p class="blurb">
+          Slot for a second deep dive (e.g. Open Access Connect, MMH origination APIs, or multi-market payments transformation).
+        </p>
+        <p class="case-coming">You’ll fill this later.</p>
+      </article>
+
+      <article class="case-card placeholder">
+        <div class="project-badge" style="background:var(--slate-100);color:var(--slate-500)">Placeholder</div>
+        <h3>Case study 3</h3>
+        <p class="case-meta">Title · company · domain — TBD</p>
+        <p class="blurb">
+          Slot for a third deep dive — problem, users, decisions, tradeoffs, results.
+        </p>
+        <p class="case-coming">You’ll fill this later.</p>
+      </article>
+
+      <article class="case-card placeholder">
+        <div class="project-badge" style="background:var(--slate-100);color:var(--slate-500)">Placeholder</div>
+        <h3>Case study 4</h3>
+        <p class="case-meta">Title · company · domain — TBD</p>
+        <p class="blurb">
+          Optional fourth case study for portfolio completeness.
+        </p>
+        <p class="case-coming">You’ll fill this later.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="resume">
   <div class="container">
     <div class="section-label no-print">Resume</div>
     <h2 class="section-title no-print">Experience</h2>
@@ -363,8 +498,9 @@
           Product Manager with 15+ years delivering payment and banking solutions across global markets —
           core banking, API banking, digital banking, and open banking. Drives end-to-end product lifecycles:
           strategy, roadmaps, requirement elicitation, solution design, and agile delivery to production.
-          Led initiatives for FIS, Standard Chartered, Qatar National Bank, First Abu Dhabi Bank, and others —
-          including Money Movement Hub origination APIs, Open Access Connect, and multi-market payment platforms.
+          Currently leading a vendor-agnostic enterprise customer notification platform on AWS (SMS, email, push;
+          expanding to voice, Telegram, and two-way messaging). Prior work includes Money Movement Hub origination APIs,
+          Open Access Connect, and multi-market payment platforms for FIS, Standard Chartered, QNB, FAB, and others.
         </p>
       </div>
 
@@ -382,6 +518,13 @@
               <div class="job-loc">Virtual, Canada</div>
             </div>
           </div>
+          <p class="job-sub">Enterprise Customer Notification Platform — current</p>
+          <ul>
+            <li>Key product lead for a vendor-agnostic multi-channel notification platform on AWS, replacing a costly multi-vendor legacy stack while keeping providers swappable.</li>
+            <li>Channels live / in build: SMS, email, push; roadmap includes voice, Telegram, then two-way communication.</li>
+            <li>Owned PRD, roadmap, and execution plan; drove architecture and technical design decisions; led vendor evaluation.</li>
+            <li>Run day-to-day delivery with vendor / contractor engineering teams.</li>
+          </ul>
           <p class="job-sub">Money Movement Hub — Origination APIs</p>
           <ul>
             <li>Owned Payment Initiation and core integration APIs for MMH; connectivity with IBS and HZN cores.</li>
@@ -522,13 +665,17 @@
           <span class="skill-chip">Postman / Swagger</span>
           <span class="skill-chip">Gap analysis</span>
           <span class="skill-chip">Stakeholder management</span>
+          <span class="skill-chip">AWS platforms</span>
+          <span class="skill-chip">Multi-channel notifications</span>
+          <span class="skill-chip">Vendor evaluation</span>
+          <span class="skill-chip">Vendor / contractor delivery</span>
         </div>
       </div>
     </article>
   </div>
 </section>
 
-<section class="section section-alt" id="projects">
+<section class="section" id="projects">
   <div class="container">
     <div class="section-label">Projects</div>
     <h2 class="section-title">Side projects</h2>
