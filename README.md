@@ -10,7 +10,7 @@ Group finals (Team Hashiras) **and** personal research / alternate concepts, lab
 |------------|------|
 | Blinkit PeakPulse + my research & dashboard | [`case-studies/blinkit-peakpulse/`](./case-studies/blinkit-peakpulse/) |
 | Relay (team) + Envoy (my alternate) | [`case-studies/relay-founder-crm/`](./case-studies/relay-founder-crm/) |
-| YouTube long-form + my hypotheses | [`case-studies/youtube-long-form/`](./case-studies/youtube-long-form/) |
+| YouTube long-form (team case study) | [`case-studies/youtube-long-form/`](./case-studies/youtube-long-form/) |
 
 Index: [`case-studies/README.md`](./case-studies/README.md) · Live: https://vcatreya-git.github.io/#case-studies
 

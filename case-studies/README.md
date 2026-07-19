@@ -24,4 +24,3 @@ Team shipped **Relay**. Personal alternate concept: **Envoy**.
 | | |
 |--|--|
 | **Team final** | [Problem brief](./youtube-long-form/problem-brief.pdf) · [Case study](./youtube-long-form/case-study.html) |
-| **My work** | [Hypotheses v5](./youtube-long-form/hypotheses-v5.html) |
