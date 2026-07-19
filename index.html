@@ -274,6 +274,10 @@
   @media (min-width: 720px) {
     .case-grid { grid-template-columns: 1fr 1fr; }
   }
+  @media (min-width: 960px) {
+    .case-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .case-card .project-links { margin-top: auto; }
   .case-card {
     background: white;
     border: 1.5px solid var(--slate-200);
@@ -409,7 +413,7 @@
       </div>
       <div class="hero-ctas no-print">
         <a class="btn btn-primary" href="#resume">View resume</a>
-        <a class="btn btn-secondary" href="#about">About</a>
+        <a class="btn btn-secondary" href="#case-studies">Case studies</a>
         <a class="btn btn-secondary" href="#projects">Projects</a>
         <button class="btn btn-secondary" type="button" onclick="window.print()">Save as PDF</button>
       </div>
@@ -463,34 +467,78 @@
 <section class="section" id="case-studies">
   <div class="container">
     <div class="section-label">Case studies</div>
-    <h2 class="section-title">Case studies</h2>
+    <h2 class="section-title">PM case studies</h2>
     <p class="section-sub">
-      Product deep dives — problem framing, decisions, tradeoffs, and outcomes.
+      Group PM training work (Team Hashiras) — problem framing, PRDs, and presentations.
+      Open the PDFs or HTML write-ups below to read the full work.
     </p>
 
     <div class="case-grid">
-      <article class="case-card placeholder">
-        <div class="project-badge" style="background:var(--slate-100);color:var(--slate-500)">Coming later</div>
-        <h3>Case study 1</h3>
-        <p class="case-meta">Title · context · domain — TBD</p>
-        <p class="blurb">Problem, approach, decisions, and outcomes go here.</p>
-        <p class="case-coming">Coming soon.</p>
+      <article class="case-card featured">
+        <div class="project-badge">Quick commerce · Ops</div>
+        <h3>Blinkit PeakPulse</h3>
+        <p class="case-meta">Peak-hour decision support for dark store managers · Team Hashiras</p>
+        <p class="blurb">
+          During 6–10 PM peaks, dark stores miss SLAs not only from capacity limits but from a
+          3–5 minute blind spot: signals live in the WMS, but managers diagnose on the floor too late.
+          PeakPulse is a real-time triage co-pilot — prioritised action cards, predictive alerts,
+          smart picker assignment, and inventory discrepancy tracking — not another dashboard.
+        </p>
+        <ul>
+          <li>PRD for a manager DSS (command centre, alerts, pickers, stock)</li>
+          <li>Pilot framing for high-volume Bangalore stores</li>
+          <li>Prototype: blinkit-peakpulse.lovable.app</li>
+        </ul>
+        <div class="project-links">
+          <a class="btn btn-primary" href="case-studies/blinkit-peakpulse/problem-brief.pdf" target="_blank" rel="noopener">Problem brief (PDF)</a>
+          <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/prd.html" target="_blank" rel="noopener">Read PRD</a>
+          <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/presentation.pptx">Presentation (PPTX)</a>
+          <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/prd.docx">PRD (DOCX)</a>
+        </div>
       </article>
 
-      <article class="case-card placeholder">
-        <div class="project-badge" style="background:var(--slate-100);color:var(--slate-500)">Coming later</div>
-        <h3>Case study 2</h3>
-        <p class="case-meta">Title · context · domain — TBD</p>
-        <p class="blurb">Problem, approach, decisions, and outcomes go here.</p>
-        <p class="case-coming">Coming soon.</p>
+      <article class="case-card featured">
+        <div class="project-badge">B2B SaaS · Sales</div>
+        <h3>Relay — founder-led CRM</h3>
+        <p class="case-meta">AI memory layer for early-stage founder sales · Team Hashiras</p>
+        <p class="blurb">
+          Early-stage founders run sales across WhatsApp, email, LinkedIn, and calls — then lose
+          follow-ups in Notion and Sheets. Enterprise CRMs are too heavy. Relay sits on tools founders
+          already use: auto-records deal context, proactive nudges, and on-demand retrieval without
+          full-time CRM admin.
+        </p>
+        <ul>
+          <li>Full PRD: ambient capture, morning digest, pipeline visibility</li>
+          <li>Persona, MVP scope, trade-offs, and prototype path</li>
+          <li>Presentation walkthrough included</li>
+        </ul>
+        <div class="project-links">
+          <a class="btn btn-primary" href="case-studies/relay-founder-crm/problem-brief.pdf" target="_blank" rel="noopener">Problem brief (PDF)</a>
+          <a class="btn btn-secondary" href="case-studies/relay-founder-crm/prd.pdf" target="_blank" rel="noopener">Read PRD (PDF)</a>
+          <a class="btn btn-secondary" href="case-studies/relay-founder-crm/presentation.pdf" target="_blank" rel="noopener">Presentation (PDF)</a>
+        </div>
       </article>
 
-      <article class="case-card placeholder">
-        <div class="project-badge" style="background:var(--slate-100);color:var(--slate-500)">Coming later</div>
-        <h3>Case study 3</h3>
-        <p class="case-meta">Title · context · domain — TBD</p>
-        <p class="blurb">Problem, approach, decisions, and outcomes go here.</p>
-        <p class="case-coming">Coming soon.</p>
+      <article class="case-card featured">
+        <div class="project-badge">Consumer · Discovery</div>
+        <h3>YouTube long-form engagement</h3>
+        <p class="case-meta">Discovery &amp; session-start for 10+ minute video · Team Hashiras</p>
+        <p class="blurb">
+          Shorts and AI-accelerated short content pull attention away from long-form — where CPM,
+          creator earnings, and living-room / TV strategy still depend. Case work reframes the job:
+          restore long-form visibility in personalised discovery and cut friction from find → sustained play,
+          without killing the Shorts experience.
+        </p>
+        <ul>
+          <li>Platform-level discovery + session-start problem definition</li>
+          <li>Objectives for feed share and time-to-relevant-discovery</li>
+          <li>Why long-form still matters for ads, creators, and TV</li>
+        </ul>
+        <div class="project-links">
+          <a class="btn btn-primary" href="case-studies/youtube-long-form/problem-brief.pdf" target="_blank" rel="noopener">Problem brief (PDF)</a>
+          <a class="btn btn-secondary" href="case-studies/youtube-long-form/case-study.html" target="_blank" rel="noopener">Read case study</a>
+          <a class="btn btn-secondary" href="case-studies/youtube-long-form/case-study.docx">Case study (DOCX)</a>
+        </div>
       </article>
     </div>
   </div>

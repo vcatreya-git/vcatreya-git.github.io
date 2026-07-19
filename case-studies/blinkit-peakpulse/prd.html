@@ -1,0 +1,1980 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:760px;margin:40px auto;padding:0 20px;line-height:1.55;color:#1e293b} h1,h2,h3{color:#0f172a} a{color:#0D9488}</style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #0000ff}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #1155cc}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #4a86e8}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #38761d}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #e69138}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #cc0000}
+    p.p9 {margin: 12.0px 0.0px 12.0px 0.0px; font: 12.0px Times}
+    p.p10 {margin: 12.0px 0.0px 12.0px 0.0px; font: 12.0px Times; min-height: 14.0px}
+    li.li1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    li.li11 {margin: 12.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    li.li12 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Times}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #000000}
+    span.s3 {text-decoration: underline ; color: #1155cc}
+    span.s4 {color: #4a86e8}
+    table.t1 {border-collapse: collapse}
+    td.td1 {border-style: solid; border-width: 1.0px 1.0px 1.0px 1.0px; border-color: #bfbfbf #bfbfbf #bfbfbf #bfbfbf; padding: 0.0px 5.0px 0.0px 5.0px}
+    ul.ul1 {list-style-type: disc}
+  </style>
+</head>
+<body>
+<p style="margin-bottom:24px"><a href="../../index.html#case-studies" style="color:#0D9488;font-weight:600">← Back to profile · Case studies</a></p>
+
+<p class="p1">Peak-Hour Decision Support System (DSS) for Dark Store Managers</p>
+<p class="p1">Product Requirements Document</p>
+<p class="p1"><b>Date:</b> February 2026 | <b>Author:</b> Team Hashiras (Minions)</p>
+<p class="p2"><br></p>
+<p class="p3"><i>Note: This PRD assumed that the PM is working to design the Product at Blinkit</i></p>
+<p class="p2"><br></p>
+<p class="p1">Section 1: Executive Summary</p>
+<p class="p1">The Problem</p>
+<p class="p1">During peak hours (6-10 PM), Blinkit's dark stores experience operational chaos not because of capacity constraints, but because of an information architecture failure. The Warehouse Management System (WMS) already contains every signal needed to prevent SLA breaches. The problem is that this information does not reach the store manager during the 3-5 minute window when corrective action is still possible.</p>
+<p class="p2"><br></p>
+<p class="p1">Managers currently operate with a 4-minute blind spot. By the time they diagnose an issue through physical floor walks (5-15 minutes), the recovery window has closed. They react instead of anticipating. They handle the loudest problem, not the most urgent one.</p>
+<p class="p1">The Product</p>
+<p class="p1"><span class="s1"><b>PeakPulse</b></span> is a real-time triage co-pilot for dark store managers. It is not a dashboard. It is a single pane of glass that delivers prioritized, prescriptive action cards to wherever the manager physically is, with enough lead time to act before orders breach SLA.</p>
+<p class="p2"><br></p>
+<p class="p1">The system has four core modules:<span class="Apple-converted-space"> </span></p>
+<ul class="ul1">
+  <li class="li1"><b><i>Operations Command Center</i></b> providing all KPIs in one view with real-time SLA gauge, order summary, and hourly trend visualization;<span class="Apple-converted-space"> </span></li>
+  <li class="li1"><b><i>Predictive Alert System</i></b> delivering forward-looking warnings with recommended actions and 30-minute demand lookahead;<span class="Apple-converted-space"> </span></li>
+  <li class="li1"><b><i>Smart Picker Assignment</i></b> routing orders based on picker proficiency (Expert/Mid/New classification); and<span class="Apple-converted-space"> </span></li>
+  <li class="li1"><b><i>Inventory Discrepancy Tracker</i></b> flagging physical-digital mismatches with severity scoring before they cascade.</li>
+</ul>
+<p class="p2"><br></p>
+<p class="p1">A working prototype demonstrating all MVP features plus future-ready moonshot capabilities (including drone dispatch visualization) is available at:<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p4"><span class="s1"><b>https://blinkit-peakpulse.lovable.app/alerts</b><b></b></span></p>
+<p class="p2"><br></p>
+<p class="p4"><span class="s2"><b>Prototype URLs:</b> </span><span class="s1">Overview Dashboard</span><span class="s2">, </span><span class="s1">Alerts Panel</span><span class="s2">, </span><span class="s1">Pickers and Packers Panel</span><span class="s2">, </span><span class="s1">Stock Panel</span><span class="s2">, </span><span class="s1">Riders Panel</span><span class="s2">.</span></p>
+<p class="p2"><br></p>
+<p class="p1">The Impact</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Metric</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Current State</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Target (3 months)</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Target (6 months)</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Peak-hour SLA %</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">~78% (18-22% breach rate)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">85%+</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">93-95%</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager decision latency</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">5-15 min</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;30 seconds</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;30 seconds</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Preventable SLA breaches per session</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">15-20 orders</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">5-8 orders</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;3 orders</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Contribution margin per store/month</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rs 7.1 lakh</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rs 9-10 lakh</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rs 12-13 lakh</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">The Ask</p>
+<p class="p1">We are requesting approval for pilot authorization at 3 high-volume stores in Bangalore (Koramangala, HSR, Indiranagar), engineering allocation of 4 engineers for 16 weeks, and People team alignment on picker incentive structure review (dependency, not blocker).</p>
+<p class="p1">The Competitive Gap</p>
+<p class="p1">No US or Indian quick commerce player has built a real-time manager decision support layer for dark store operations. Gopuff, DashMart, Instacart, Zepto, and Swiggy Instamart all lack documented manager-facing DSS tools during peak hours. India's higher order density (5-10x daily orders vs US analogues) makes the ROI on this investment significantly higher here than anywhere else globally.</p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Player</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Dark Stores</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Manager DSS?</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Key Gap</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Blinkit</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">1,816</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">No (this PRD)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Opportunity</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Zepto</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">1,140</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">No documented tool</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Same gap</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Swiggy Instamart</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">1,062</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">No documented tool</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Same gap</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Gopuff (US)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">500</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">No documented tool</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Lower density makes ROI harder</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 2: Market Context &amp; Strategic Rationale</p>
+<p class="p5"><i>(Aided by primary and secondary research performed using Google, Claude + Industry experts)</i></p>
+<p class="p1">India Quick Commerce Scale</p>
+<p class="p1">The Indian quick commerce market has grown to $5+ billion (2025 projected), with 1,500-2,000 industry dark stores. Blinkit operates 1,816 stores across 100+ cities with a target of 3,000 stores by March 2027. Customer expectations have compressed to 10-15 minute delivery windows. A high-demand dark store processes 1,200-2,000 orders per day with SKU counts ranging between 3,000-5,000 items per store.</p>
+<p class="p1">Peak-Hour Economics</p>
+<p class="p1">The evening window (6-10 PM) is where quick commerce economics are won or lost. Order volume surges 30-50% above baseline within 20-30 minutes, with a typical store doing 600 orders/day concentrating 40% of volume in this 4-hour window. Weather events (rain) and cultural moments (IPL matches) can spike demand 2-4x within 30 minutes. Even a 5% SLA drop during peak impacts hundreds of orders daily across the network.</p>
+<p class="p2"><br></p>
+<p class="p1">When dark stores struggle during peak hours, the cascading effects include direct cost spikes from refunds and compensation payouts, customer trust erosion through dropped ratings and decreased repeat usage, manager attrition from chronic firefighting, and deteriorating unit economics despite volume gains. At 1,800+ stores, even a 5% improvement in peak-hour SLA translates to tens of thousands of recovered orders per day and hundreds of crores in annual margin recovery.</p>
+<p class="p1">Strategic Timing</p>
+<p class="p1">HSBC research confirms that leading quick commerce players are now expected to moderate expansion and focus on optimizing existing operations. The playbook is shifting from "open more stores" to "extract more value from each store." Blinkit's integration with Zomato's ecosystem provides a structural moat through cross-category consumption signals (food ordering patterns predict grocery demand), shared logistics learning, and data density that enables more accurate ML models for demand prediction.</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 3: Problem Statement &amp; Scope Boundaries</p>
+<p class="p5"><i>(Aided by primary and secondary research performed using Google, Claude + Industry experts)</i><i></i></p>
+<p class="p1">Problem Statement</p>
+<p class="p1">During peak hours, Blinkit's high-demand dark stores experience operational chaos due to decision overload and limited real-time clarity for managers.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>The core failure:</b> The right information does not reach the right person at the right time in a usable form.</p>
+<p class="p2"><br></p>
+<p class="p1">The WMS already contains every signal needed to prevent most SLA breaches: real-time order queue depth, per-picker throughput rates, inventory discrepancy logs, and rider availability and ETA data. None of this information reaches the manager in a prioritized, actionable format during the 3-5 minute window when intervention would prevent breach.</p>
+<p class="p1">What This Product IS and IS NOT</p>
+<p class="p1"><b>IS: </b><span class="s1"><b>PeakPulse</b></span> is a real-time decision support system for dark store managers, a triage layer that ranks problems by recoverability (not loudness), a prescriptive tool that recommends actions (not just displays data), and an ambient system that reaches managers wherever they are physically located.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>IS NOT:</b> It is NOT a supply chain redesign, a demand forecasting tool, a rider management system (that is the fleet coach's domain), a replacement for manager judgment, or a physical infrastructure change. We are not expanding store size or adding equipment beyond existing devices.</p>
+<p class="p1">Scope Boundaries</p>
+<p class="p1">The product must target only levers the manager can actually control:</p>
+<p class="p2"><br></p>
+<p class="p1">Note - these are typical boundaries; some of these may differ by dark store, and based on the franchised vs company owner operating model.</p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p6"><b>Manager Can Control</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p7"><b>Manager Can Influence</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p8"><b>Manager Cannot Control</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p6">Picker deployment, floor posture, task assignment on worker arrival, audit timing, pre-peak inventory positioning</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p7">Replenishment timing (can escalate), OD worker availability (can request), Rider allocation (can flag to fleet coach)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p8">SKU selection (HQ decision), pricing/promotions, demand itself (IPL, rain), picker incentive structure (HR)</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1">Any feature that targets a lever outside the manager's control will fail adoption.</p>
+<p class="p2"><br></p>
+<p class="p1">Section 4: Ecosystem Players &amp; Personas</p>
+<p class="p5"><i>(Aided by primary research of multiple dark stores - </i><span class="s3"><b><i>Details in the APPENDIX</i></b></span><i>)</i><i></i></p>
+<p class="p1">4.1 Dark Store Manager (Primary User)</p>
+<p class="p1"><b>Demographics:</b> Typically 25-35 years old, managing 10-20 employees across 3 shifts in a 2,000-4,000 sq ft space. Salary range Rs 30,000-45,000/month with typical tenure of 6 months to 1 year before attrition. Uses desktop dashboard during non-peak but paper checklist during peak (physically cannot access desktop while on floor). Handles 4-5 simultaneous undifferentiated signals during peak, spending 30% of peak time explaining status upward via WhatsApp.</p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Dimension</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Company-Owned Manager</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Franchise Manager</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Primary KPI</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Throughput &amp; SLA</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Net profit margin</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Staffing decision</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Over-staff to protect SLA</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Lean staffing to protect margins</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Peak Hour Pain</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Accountable for SLA</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Accountable for SLA + bears all labor cost overruns</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1"><b>Psychographic:</b> Ranges from intuitive decision-makers ("gut feel") to analytical ("show me data"), and from tech-skeptics ("another system to check") to enthusiasts ("finally, real-time visibility"). Internal locus of control managers who believe they can fix problems if warned early are ideal early adopters.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Behavioral:</b> Key variations include peak-hour movement pattern (stationary at counter vs. mobile on floor) and delegation style (micromanagers vs. exception-only). Low dashboard scanners today will need push-first alerts; high scanners will actively use the command center.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Implication for PeakPulse:</b> Must support both mobile and stationary managers with push alerts that work on floor; progressive disclosure serves both gut-feel (glanceable) and analytical (drill-down) decision styles; franchise managers need ROI framing given direct financial exposure.<b> </b>The DSS must be especially valuable for franchise managers who operate with thinner margins, less organizational support, and direct financial exposure to every peak-hour decision.</p>
+<p class="p9"><b>Current operating reality<br>
+</b>Uses desktop dashboard during non-peak but paper checklist during peak (physically cannot access desktop while on floor). Handles 4–5 simultaneous undifferentiated signals during peak. Spends 30% of peak time explaining status to area managers via WhatsApp.</p>
+<p class="p10"><br></p>
+<p class="p9"><b><i>A Real Picture of DarkStore Manager’s Workstation (</i></b><span class="s4"><b><i>from user research of dark store</i></b></span><b><i>)</i></b></p>
+<p class="p10"><br></p>
+<p class="p1">4.2 Picker-Packers</p>
+<p class="p1"><b>Demographics:</b> Semi-skilled workers (aged 18-28) earning Rs 14,000-18,000/month with 30-40% annual turnover. Compensation: Rs 0.50 per item picked, Rs 12 penalty per complaint, Rs 200 speed bonus. The 24:1 penalty-to-reward ratio creates rational incentives for hiding errors rather than reporting them, corrupting data quality upstream of every DSS metric.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Proficiency Classification:</b><b></b></p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Level</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Performance Criteria</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Typical Tenure</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Expert</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Pick speed &gt;8 orders/hour, accuracy &gt;98%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3+ months</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Mid</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Pick speed 5-8 orders/hour, accuracy 95-98%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">1-3 months</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">New</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Pick speed &lt;5 orders/hour, accuracy &lt;95%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">0-1 month</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1"><b>Psychographic:</b> Split between those viewing this as a transient gig versus a career path, and between competitive ("want to be fastest") versus collaborative orientations. High error-shame sensitivity drives hiding behavior that corrupts inventory data.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Behavioral:</b> Vary in aisle preference (familiar zones vs. exploration) and error recovery (report immediately vs. hide). Notification response patterns range from immediate handheld checks to batch processing.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Implication for PeakPulse:</b> Smart assignment must route new joiners to golden zone only; proficiency badges may motivate career-oriented pickers; inventory discrepancy detection must not rely solely on picker self-reporting given penalty structure.</p>
+<p class="p1">4.3 Riders</p>
+<p class="p1"><b>Demographics:</b> Gig workers (predominantly male, aged 18-30) with 1.5-2 km delivery radius. Compensation Rs 20-35 base per order plus bonuses, earning Rs 16,000-25,000/month. Operational benchmarks: 2.5 orders/hour; 12 riders needed at store at any instant during peak; ~12 minute average return ETA.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Key constraint:</b> Rider allocation is managed by the fleet coach across the cluster. The manager cannot summon riders directly, only flag shortages.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Psychographic:</b> Range from single-platform loyal to multi-app (less responsive to store coordination), and from volume maximizers (receptive to efficiency tools) to effort minimizers (resist extra steps).</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Behavioral:</b> Vary in wait tolerance before abandoning slow pickups and in WhatsApp responsiveness. Return speed variance (consistent vs. unpredictable) directly impacts ETA prediction accuracy.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Implication for PeakPulse:</b> WhatsApp integration value depends on rider responsiveness patterns; ETA predictions must account for high-variance riders; manager can only flag shortages so rider panel focuses on visibility and escalation, not direct control.</p>
+<p class="p1">4.4 Dark Store Owner / Franchise Partner</p>
+<p class="p1"><b>Demographics:</b> Local entrepreneur with Rs 20-40 lakh capex investment, Rs 40-200/sq ft monthly rent. Contribution margin at well-run store: Rs 7-13 lakh/month with 5-9 month target payback.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Psychographic:</b> Range from conservative (protect capital, need ROI proof) to aggressive (will experiment). Platform trust varies from skeptical ("Blinkit extracts value") to aligned ("we grow together").</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Behavioral:</b> Staffing philosophy splits between running lean (need DSS most but resist "one more thing") and buffering with extra staff. Data usage today ranges from ignoring reports to daily analysis.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Implication for PeakPulse:</b> Position as "your tool" not surveillance; lead with cost-per-order impact data for margin-sensitive owners; data-analyzing owners are ideal pilot candidates for franchise stores.</p>
+<p class="p1">4.5 Blinkit (Platform)</p>
+<p class="p1">Market leader with ~47-50% market share, 1,800+ dark stores across 100+ cities, adjusted EBITDA positive. Strategic priorities include improving per-store contribution margin (currently 3.7% on GOV), reducing SLA breach rates across network, and building operational resilience as competitive moat.</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 5: Peak-Hour Workflow &amp; Decision Gap Analysis</p>
+<p class="p5"><i>(Aided by primary research of multiple dark stores - </i><span class="s3"><b><i>Details in the APPENDIX</i></b></span><i>)</i><i></i></p>
+<p class="p1">Current State: The Three Phases of Dark Store Operations</p>
+<p class="p2"><br></p>
+<p class="p1">When Instability Begins: The 4-Minute Gap</p>
+<p class="p1">Core Decision Bottlenecks</p>
+<p class="p1"><b>Diagnosis Gap:</b> A floor walk takes 5-15 minutes. The recovery window is 3-5 minutes. The manager is structurally guaranteed to arrive too late for any issue discovered through physical observation.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Task Conflict:</b> The paper checklist (pre-shift tasks) and live crisis (peak-hour signals) compete for attention. No system reprioritizes for the manager.</p>
+<p class="p1"><b>Invisible Performance Variance:</b> A new joiner taking 6 minutes per order is indistinguishable from a system-wide slowdown on the aggregate dashboard. The right intervention requires per-picker data that exists but is never surfaced.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Loudness Bias:</b> Under 4+ simultaneous signals, the human brain handles whoever is most vocal, not whoever is most urgent. The manager handles the cluster manager call, the rider at the counter, the packer shouting. The manager misses the silent Zone B batch breaching SLA in 4 minutes. <b>Estimated cost:</b> 15-20 orders breach SLA unnoticed per peak session, approximately Rs 1.9 lakh/month in preventable SLA failures per store.</p>
+<p class="p1">The Four Structural Failures</p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Structural Failure</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>What It Corrupts</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Visibility Gap</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager lacks clear visibility of SKU projections for peak hour</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Physical-Digital Mismatch</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">System shows item at location, but physical reality differs due to putaway errors</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Staffing Uncertainty</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Part-time workers may not show up; no early warning</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Rider Dependency</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager cannot control rider allocation but is measured on dispatch time</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 6: Pain Point Prioritization</p>
+<p class="p1">Scoring Criteria &amp; Framework</p>
+<ul class="ul1">
+  <li class="li11"><b>Frequency</b>: 1 = Rare, 2 = Sometimes, 3 = Constant<br>
+</li>
+  <li class="li1"><b>Severity</b>: 1 = Minor, 2 = Moderate, 3 = Critical<br>
+</li>
+  <li class="li12"><b>Alignment</b>: 1 = Tangential, 2 = Related, 3 = Core</li>
+</ul>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Pain Point</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Freq</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Sev</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Align</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Total</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Priority</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Lack of single control layer (no single pane of glass)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">9</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P0</b><b></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">All packers treated same irrespective of experience</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">8</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P1</b><b></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Allocating resources for picking in a hurry</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">8</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P1</b><b></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Discrepancy between physical inventory and system</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">7</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P2</b><b></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Rider resource availability hard to predict</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">7</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P2</b><b></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Accuracy of predictive insight on SKUs is low</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">6</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P3</b><b></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Hard to check expired items during peak</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">1</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">1</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">4</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>P4</b><b></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p9"><b>Priority Definitions</b></p>
+<ul class="ul1">
+  <li class="li11"><b>P0</b> = Must be in MVP (foundational)<br>
+</li>
+  <li class="li1"><b>P1</b> = Should be in MVP (high impact, directly addressable)<br>
+</li>
+  <li class="li1"><b>P2</b> = Phase 2 features<br>
+</li>
+  <li class="li1"><b>P3</b> = Phase 3 features (requires additional data infrastructure)<br>
+</li>
+  <li class="li12"><b>P4</b> = Out of scope for peak-hour DSS</li>
+</ul>
+<p class="p1">Section 7: Product Vision &amp; Core Tenets</p>
+<p class="p1">Product Vision</p>
+<p class="p1">PeakPulse is a real-time triage co-pilot that delivers prioritized, actionable insights to wherever the manager physically is, with enough lead time to act before orders breach SLA. It transforms the manager from a firefighter reacting to the loudest crisis into a commander with situational awareness of the entire battlefield.</p>
+<p class="p1">Core Tenets</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Tenet</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Description</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Single Pane of Glass</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">All critical metrics visible in one view. No tab-switching during peak.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Prescriptive over Descriptive</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">The system tells the manager what to do, not just what's happening. Instead of "SLA is dropping," show "Zone B: 8 orders, breach in 5 min, move 1 picker to Aisle 4."</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Ambient Awareness</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Signals reach the manager wherever they are physically located via push notifications and visual indicators.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Simplicity Under Stress</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Every signal interpretable in under 3 seconds. Glanceable, color-coded, action-oriented.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Recommend, Not Replace</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">The system recommends; the manager decides. Preserving manager agency is critical for adoption.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 8: Solution Architecture</p>
+<p class="p1">Architecture Overview</p>
+<p class="p1">Based on the validated PeakPulse prototype (<span class="s3">https://blinkit-peakpulse.lovable.app/alerts</span>), the DSS has four core modules:</p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Module</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>What It Does</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Pain Point Addressed</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Operations Command Center</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Single pane showing all SLAs vs actual, peer benchmarking, hourly trend sparklines</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Lack of single control layer</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Predictive Alert System</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Forward-looking warnings with prescriptive actions and 30-minute lookahead</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Reactive decision-making</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Resource Intelligence</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Picker proficiency scoring (Expert/Mid/New), smart order routing, idle detection</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">All packers treated same</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Inventory Sync Monitor</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Tracks physical-digital discrepancies with severity scoring, triggers audits</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Inventory mismatch issues</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Drone Dispatch Overview</b><b></b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Future-ready panel for drone delivery program visibility (prototyped, not in Phase 1)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rider bottleneck (moonshot)</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1">Data Sources (All Already Exist)</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Data Source</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>What It Provides</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Latency</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">WMS</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Order queue, pick assignments, completion times</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Real-time</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Picker Handhelds</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Per-picker throughput, "not found" flags</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Real-time</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Inventory System</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Stock levels, discrepancy logs</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Near real-time</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Fleet System</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rider availability, ETA data</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Real-time (via API)</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 9: Feature Specifications - MVP</p>
+<p class="p1">Feature 1: Operations Command Center (P0)</p>
+<p class="p2"><br></p>
+<p class="p1"><b>What it does:</b> Single view showing all operational KPIs against targets, enabling the manager to assess store health in under 10 seconds.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Key metrics displayed:</b><span class="Apple-converted-space"> </span></p>
+<ul class="ul1">
+  <li class="li1">SLA Gauge <i>(color-coded: Green &gt;85%, Yellow 80–85%, Red &lt;80%)</i></li>
+  <li class="li1">Hourly SLA Trend sparkline</li>
+  <li class="li1">Orders Summary <i>(Fulfilled / On-Time / Delayed / Cancelled)</i></li>
+  <li class="li1">Demand vs Capacity Gauge</li>
+  <li class="li1">Peak Hour Indicator <i>(Normal / Elevated / Peak / Surge)</i></li>
+  <li class="li1">Rider Summary with 30-minute availability prediction</li>
+  <li class="li1">Picker Summary with idle detection</li>
+  <li class="li1">Inventory Health by severity</li>
+  <li class="li1">Store vs cluster comparison</li>
+</ul>
+<p class="p2"><br></p>
+<p class="p1"><b>User interface:</b><span class="Apple-converted-space"> </span></p>
+<ul class="ul1">
+  <li class="li1">Color-coded status <i>(Green / Amber / Red)</i></li>
+  <li class="li1">Progressive disclosure <i>(summary default, tap to drill down)</i></li>
+  <li class="li1">Shift-aware adaptation</li>
+  <li class="li1">Auto-refresh every 30 seconds</li>
+  <li class="li1">Dark theme UI optimized for low-light store environments</li>
+</ul>
+<p class="p2"><br></p>
+<p class="p1"><b>Delivery:</b> Desktop (primary) + Tablet-optimized (10") + Mobile responsive. No new hardware required.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Success criteria:</b> Manager can assess store health in under 10 seconds; context-switching between systems reduced by 80%.</p>
+<p class="p1">Feature 2: Predictive Alert System (P1)</p>
+<p class="p1"><b>What it does:</b> Proactive warnings before problems become critical, delivered as prioritized action cards with one-tap CTAs.</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1"><b>Alert types:</b><b></b></p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Alert</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Trigger Condition</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Recommended Action</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Volume surge</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Order rate 40% above baseline for 10+ min</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"Consider calling 2 OD workers"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Picker shortage</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Projected throughput below demand in 30 min</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"Shift 1 picker from housekeeping to active"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">SLA risk (Warning)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">SLA drops below 85% for 2 consecutive 15-min windows</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"SLA trending down - review picker allocation"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">SLA risk (Critical)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">SLA drops below 80% OR demand exceeds capacity by &gt;20%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"Zone B: 8 orders, breach in 5 min, move 1 picker to Aisle 4"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Inventory issue</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">SKU reported "not found" 2+ times</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"SKU X: trigger cycle count, pause orders"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Peak approaching</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Peak predicted in 30 min AND rider availability &lt; threshold</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"Peak hour in 30 mins - only 4 riders free"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Idle pickers</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Idle pickers detected while orders in queue</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">"2 packers free, 6 orders waiting - Reassign"</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1"><b>Delivery mechanism:</b> Push notification to manager's phone (vibration + screen takeover for 8 sec), visual indicator on dashboard (persistent until acknowledged), one tap to confirm action, no tap in 60 sec triggers auto-escalation to cluster manager.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Alert governance:</b> Maximum 10-12 alerts per peak session; alerts ranked by number of recoverable orders; duplicate suppression (same issue not alerted twice in 15 min).</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Success criteria:</b> Alert response rate &gt;70%; average time-to-action on critical alerts &lt;60 seconds; preventable SLA breaches reduced by 50%.</p>
+<p class="p1">Feature 3: Smart Picker Assignment (P1)</p>
+<p class="p1"><b>What it does:</b> Routes orders to pickers based on proficiency scoring rather than simple round-robin.</p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1"><b>Proficiency Classification &amp; Routing:</b><b></b></p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Level</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Criteria</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Assignment Rules</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Expert</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&gt;8 orders/hour, &gt;98% accuracy</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Complex orders (10+ SKUs, heavy items, multi-aisle) route here first</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Mid</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">5-8 orders/hour, 95-98% accuracy</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Standard orders, can handle most aisles</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">New</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;5 orders/hour, &lt;95% accuracy</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Route to "golden zone" only (top 200 SKUs by velocity)</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1"><b>Proficiency score factors:</b> Historical pick speed (orders per hour), accuracy rate (complaints per 100 orders), aisle familiarity (time spent in each zone), recency (last 7 days weighted higher).</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Idle Picker Detection:</b> Highlights pickers with "Idle" status when orders are waiting; triggers alert "2 packers free, 6 orders waiting"; one-tap reassignment action.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Integration:</b> Modification to existing handheld assignment algorithm.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Success criteria:</b> 20-30% reduction in pick times for complex orders; new joiner ramp-up time reduced from 4 weeks to 2 weeks; aisle congestion incidents reduced by 40%.</p>
+<p class="p1">Feature 4: Inventory Discrepancy Tracker (P2)</p>
+<p class="p1"><b>What it does:</b> Monitors physical vs system inventory in real-time, triggers interventions before ghost SKUs cascade.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Severity Classification:</b><b></b></p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Severity</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Gap Threshold</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Action</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">High (Red)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Gap &gt; 15 units</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Immediate cycle count required</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium (Yellow)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Gap 5-15 units</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Schedule cycle count within shift</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Low (Gray)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Gap &lt; 5 units</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Monitor, address during next audit</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1"><b>Logic:</b> Track every "item not found" report by SKU and location. If the same SKU is not found by 2+ different pickers in 30 min: auto-flag, auto-pause incoming orders for that SKU, alert manager with specific bin location for cycle count, reactivate SKU when picker scans fresh unit.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Recurrence Tracking:</b> Flag count (times flagged in past 7 days); same SKU flagged 3+ times in 7 days indicates systemic issue; shrinkage indicator for persistent gaps.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Quick Actions:</b> "Flag Stock" (one-tap for physical recount), "Confirm Resolved" (mark addressed), "Escalate to Warehouse" (notify mother warehouse).</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Success criteria:</b> Ghost SKU cascade incidents reduced by 70%; customer cancellations due to stockout reduced by 50%; time to detect misplacement reduced from hours to 30 minutes.</p>
+<p class="p1">Feature 5: Rider Management Panel (P2)</p>
+<p class="p1"><b>What it does:</b> Surfaces real-time rider status with actionable intelligence and communication tools.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Rider Status Board:</b> Available (at store, ready), In-Transit (currently delivering), Returning (heading back).</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Key Capabilities:</b> Return ETA Predictions (~12 min average), 30-Min Availability Forecast based on current delivery ETAs, One-Tap Rider Request button, WhatsApp Integration for direct messaging via WhatsApp Business API.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Success criteria:</b> 20% reduction in rider request response time; 50% reduction in WhatsApp messages for rider coordination.</p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 10: Moonshot Features</p>
+<p class="p1">Primary Moonshot: Drone-Assisted Rider Intercept</p>
+<p class="p1"><b>The Problem:</b> During peak hours, riders are the primary bottleneck. A rider finishes a drop-off 4 minutes away from their next pickup, but an urgent order is sitting at a store with its SLA clock ticking.</p>
+<p class="p1"><b>The Concept:</b> Smart Intercept catches this scenario in real-time. A drone flies directly to the rider (not to the customer). The rider's bike has a small locked docking cradle mounted on the rear rack. The drone lands precisely on the cradle, the box locks shut automatically, the rider enters OTP to release the package into a sealed compartment, the drone detaches and returns autonomously. This eliminates the "rider return trip" bottleneck entirely. The entire handoff takes under 60 seconds; riders never leave their bike.</p>
+<p class="p1"><b>Prototype Status:</b> A Drone Dispatch Overview panel has been included in the PeakPulse prototype to demonstrate the future-ready architecture.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p4"><span class="s2">See: </span><span class="s1"><b>Prototype of Drone Tracker</b><b></b></span></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><span class="Apple-converted-space">     </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Phase:</i></b><i> 5+ (requires proven DSS foundation, hardware R&amp;D, regulatory clearance)</i><i></i></p>
+<p class="p1"></p>
+<p class="p1">Secondary Moonshots</p>
+<p class="p1"><b>AI Voice Assistant ("PeakPulse Copilot"):</b> Earpiece or hands-free device that communicates actions verbally to the manager. Example: "Zone B batch at risk. Suggest moving Picker 4 to Aisle 7." Requires voice interface R&amp;D and noise-cancellation for warehouse environment. Timeline: Phase 4+.</p>
+<p class="p1"><b>Automated Supplier/Warehouse Triggers:</b> DSS detects SKU movement exceeding forecast and auto-triggers replenishment. Manager receives confirmation, not request for action. Requires deep supply chain integration. Timeline: Phase 4+.</p>
+<p class="p1"><b>Predictive Demand Using Zomato Data:</b> Integrate Zomato food ordering patterns to predict dark store demand before it hits. Higher AOV through predictive bundling. Requires Zomato data partnership. Timeline: Phase 5+.</p>
+<p class="p1">Section 11: UX Principles &amp; Information Architecture</p>
+<p class="p1">Design Principles for Peak-Hour Stress</p>
+<ul class="ul1">
+  <li class="li1"><b>Glanceable:</b> Every signal interpreted in &lt; 3 seconds. No reading text during peak.</li>
+  <li class="li1"><b>Progressive Disclosure:</b> Start with minimum (what to do). Allow drill-down (why) only if tapped. Most managers will never tap.</li>
+  <li class="li1"><b>Color-Coded Priority:</b> Red = Act now (breach imminent); Amber = Monitor (trending negative); Green = Healthy (on track).</li>
+  <li class="li1"><b>No Confrontation Design:</b> Performance data shows position numbers (Picker 3, Picker 7), not names. Prevents interpersonal conflict while enabling routing decisions.</li>
+  <li class="li1"><b>Shift-Aware Interface:</b> Pre-peak mode (planning-focused), Peak mode (action-focused, only critical metrics), Post-peak mode (review-focused, RCA and handover tools).</li>
+  <li class="li1"><b>One-Tap Actions, Auto-Refresh (30 sec), Dark Theme</b> for low-light environments.</li>
+</ul>
+<p class="p1">Before-and-After Workflow Comparison</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Time</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Without DSS</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>With DSS</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">6:45 PM</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager reviews paper checklist</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Dashboard shows predicted surge in 15 min</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">7:00 PM</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Orders spike, manager unaware</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Push alert: "Peak hour in 30 mins - only 4 riders free"</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">7:15 PM</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Picker stuck on unfamiliar aisle</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">System auto-routes complex orders to Expert picker</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">7:30 PM</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Inventory issue discovered by third failed pick</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Alert fired at second failure with severity: High</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">8:00 PM</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Firefighting, handling loudest complaint</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Dashboard green, proactive actions taken, SLA at 87%</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Screen Hierarchy</p>
+<p class="p1"><b>Level 1 (Glance View, Default):</b> 4 KPI tiles, color-coded health status, no scrolling on tablet.</p>
+<p class="p1"><b>Level 2 (Module View, One tap):</b> Detailed view of one module (e.g., picker performance), sortable/filterable, single-screen.</p>
+<p class="p1"><b>Level 3 (Deep Dive, Two taps):</b> Historical trends, root cause analysis. Used post-peak, not during.</p>
+<p class="p1">Section 12: Success Metrics &amp; KPIs</p>
+<p class="p1">Primary Metrics (Lagging - Outcomes)</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Metric</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Current</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Target (3 mon)</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Target (6 mon)</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Peak-hour SLA %</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">~78%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">85%+</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">93-95%</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager decision latency</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">5-15 min</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;30 seconds</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;30 seconds</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Preventable SLA breaches (per ses)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">15-20 orders</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">5-8 orders</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;3 orders</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Pick accuracy rate</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">~96%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">98%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">99%+</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Contri. margin per store/month</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rs 7.1 lakh</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rs 9-10 lakh</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Rs 12-13 lakh</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Secondary Metrics (Leading - Process)</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Metric</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Target (3 months)</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Alert response rate</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&gt;70%</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Time-to-action on critical alerts</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;60 seconds</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Dashboard engagement during peak</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&gt;80% of managers</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Proactive interventions per shift</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">5-10</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Ghost SKU cascade incidents</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">&lt;2/day (from ~5/day)</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Guardrail Metrics</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Guardrail</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Threshold</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Action if Breached</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Picker satisfaction score</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Must not drop &gt;10%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Pause heat map feature, investigate</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager adoption rate</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Must exceed 80% DAU within 2 weeks</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Pause rollout, conduct user research</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">False positive alert rate</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Must stay below 20%</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Retrain ML model, tighten thresholds</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">System latency</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Alerts within 30 sec of trigger</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Infrastructure review</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1">Section 13: MVP Scope &amp; Rollout Plan</p>
+<p class="p1">Phase 1: Pilot (Week 1-2)</p>
+<p class="p1">Deploy Operations Command Center and basic Predictive Alert System (volume surge, SLA risk alerts only) at 3 high-volume stores in Bangalore (Koramangala, HSR, Indiranagar). Desktop and tablet-optimized, mobile-responsive.</p>
+<p class="p1"><b>Store selection criteria:</b> Orders per day &gt;800, existing manager tenure &gt;3 months, reliable connectivity, willingness to participate (opt-in).</p>
+<p class="p1"><b>Success gates:</b> Manager can use dashboard without training; zero critical system failures; initial qualitative feedback positive.</p>
+<p class="p1"><b>Team:</b> 2 backend engineers, 1 frontend engineer, 1 data engineer, 0.5 PM, 0.5 designer.</p>
+<p class="p1">Phase 2: Validation (Week 3-4)</p>
+<p class="p1">Collect usage data and manager feedback. Measure SLA impact metrics vs control stores. Identify top friction points.</p>
+<p class="p1"><b>Success gates:</b> &gt;50% daily active usage among pilot managers; measurable reduction in decision latency; clear signal on SLA improvement (directional).</p>
+<p class="p1">Phase 3: Iteration (Week 5-6)</p>
+<p class="p1">Address top 5 feedback items from pilot managers. Fix critical bugs. Deploy Smart Picker Assignment and Inventory Discrepancy Tracker.</p>
+<p class="p1"><b>Success gates:</b> Feedback items resolved; &gt;70% adoption; picker routing accuracy &gt;85%.</p>
+<p class="p1">Phase 4: Expansion (Week 7-8)</p>
+<p class="p1">Roll out to 20 stores across Bangalore. Mobile-native experience refinement.</p>
+<p class="p1"><b>Success gates:</b> &gt;5% SLA improvement vs control; consistent metrics across 20 stores; positive manager NPS.</p>
+<p class="p1">Phase 5: Scale (Month 3+)</p>
+<p class="p1">Expand to Delhi, Mumbai (100+ stores). ML model refinement. Integration with fleet management. Cluster manager portal for multi-store view.</p>
+<p class="p1"><b>Success gates:</b> Consistent metrics at scale; no degradation; 15% reduction in peak-hour SLA breaches.</p>
+<p class="p1">Phase 6+: Moonshots (Month 5+)</p>
+<p class="p1">Voice assistant pilot (5 stores), drone intercept feasibility study, cross-ecosystem integrations.</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">Section 14: Feasibility, Trade-offs &amp; Risks</p>
+<p class="p1">Technical Feasibility</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Phase</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Data Readiness</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Hardware Needs</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Integration Complexity</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Phase 1-2</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">All data exists in WMS</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">None</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Low</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Phase 3-4</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Requires historical picker data</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">None</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Phase 5</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Needs fleet management API</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">None</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Phase 6+</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">New data collection required</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Significant</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">High</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p1">Phase 1 is low-risk: all data already exists in WMS, no new hardware required, API integrations are straightforward. Phase 3 has moderate complexity: smart assignment requires modification to handheld app; ML model for proficiency scoring needs 4-6 weeks of training data.</p>
+<p class="p1">Key Trade-offs</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Trade-off</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Our Choice</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Rationale</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Build vs. buy</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Build in-house</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Data already in our systems; tight integration needed; competitive advantage</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Desktop vs. mobile first</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Desktop/tablet-first for MVP</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Manager at station during pre-peak when key decisions made</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Automation vs. human judgment</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Recommend, not automate</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Preserve manager agency for adoption; build trust before automating</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Alert frequency</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Max 10-12 per peak session</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Research shows alert fatigue sets in at higher volumes</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Pilot size</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">3 stores (conservative)</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Validate before scaling; easier to iterate with smaller group</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Risks and Mitigations</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Risk</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Impact</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Mitigation</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Over-alerting: manager ignores all alerts</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">High</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Strict threshold governance; ranked by impact; daily limit</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Low adoption: managers don't use tool</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">High</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Co-design with managers; iterate on feedback; target 80% DAU</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Data quality issues corrupt recommendations</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Phase 1 uses only validated data sources; expand cautiously</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Integration complexity delays launch</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Modular architecture; phased rollout; can ship modules independently</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Picker gaming of proficiency scores</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Multiple factors in score; periodic recalibration; human override</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Privacy concerns with performance tracking</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Position numbers not names; no punitive use in Phase 1</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Dependencies on Other Teams</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Dependency</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Team</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>What We Need</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Risk Level</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">WMS real-time API</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Platform/Data</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Read access to order queue, pick events</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Low (exists)</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Handheld SDK</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Mobile/Devices</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Integration for smart assignment</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Rider visibility API</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Fleet/Logistics</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">ETA and availability data</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">WhatsApp Business API</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">External</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Credentials for rider messaging</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Medium</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Incentive structure review</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">People/HR</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Address Rs 12 penalty creating data corruption</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">High (not a blocker, but limits ceiling)</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Known Limitations (MVP)</p>
+<p class="p1">The Lovable prototype uses simulated data; production deployment requires integration with Blinkit's order management, rider management, and inventory systems. Alert rules are initially hardcoded; production version should support configurable thresholds per store. "30-minute lookahead" in MVP is based on simple heuristics; ML-based prediction requires a data pipeline not yet built. MVP is designed for single store view; multi-store (Area Manager view) requires data model expansion. Dashboard requires active internet connection; offline capability planned for future phase.</p>
+<p class="p2"><br></p>
+<p class="p1"></p>
+<p class="p1">Section 15: Appendices</p>
+<p class="p1">Appendix A: Primary Research Summary</p>
+<p class="p1"><b>Source 1 (Rahul's Interview - Demand/Supply Operations):</b> Picker productivity at 5 to 6 units per man minute; expected order is 4 orders / minutes; rider calculation at 2.5 orders per hour with 100 riders needed per shift and 12 at store at any instant; core failure area is "manager does not have visibility of which SKU mix will come in orders"; planogram drift occurs "during receiving/putaway."</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Source 2 (Praditi's Store Visit - DLF Phase 5):</b> 3-shift operation (6AM-3PM, 3PM-11PM, 10PM-7AM); OD worker model via Blinkit onboarding app; manager described system as "well-oiled machine" but "gives RCA to SM" for delays; audit process is core to store operations.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Source 3 (Customer Review Analysis):</b> Top negative themes by volume: Wrong/Missing/Substituted Items (25-30%), Poor Quality/Expired Items (15-20%), Late Delivery/Order Not Delivered (5-10%).</p>
+<p class="p1">Appendix B: Key Calculations</p>
+<p class="p1"><b>Order Volume Context:</b> Typical dark store handles 600-800 orders/day; high-demand stores handle 1,200-2,000 orders/day. Calculations use high-volume benchmarks (2,500 orders/shift) to stress-test capacity requirements.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Rider Requirements:</b> Orders per shift: 2,500; orders per rider per shift: 25 (9 hours x 2.5 orders/hour, accounting for breaks); riders needed per shift: 100; orders per minute at peak: 4; riders needed at store at any instant: 12 (4 x 3); average return ETA: ~12 minutes.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>SLA Impact Math:</b> Preventable breaches per session: 15-20 orders; AOV: Rs 520; daily preventable loss: Rs 7,800-10,400; monthly per store: Rs 1.9-2.5 lakh; network (1,800 stores): Rs 34-45 crore/month potential recovery.</p>
+<p class="p1">Appendix C: Glossary</p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Term</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Definition</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">AOV</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Average Order Value</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">DSS</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Decision Support System</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">GOV</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Gross Order Value</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">OD Worker</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">On-Demand (part-time) Worker</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">RCA</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Root Cause Analysis</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">SLA</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Service Level Agreement (delivery time promise)</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">WMS</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Warehouse Management System</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Ghost SKU</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Item showing in system but not physically present</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Golden Zone</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Aisles containing top 200 SKUs by velocity</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Fleet Coach</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Role responsible for rider allocation across cluster of stores</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">DAU</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Daily Active Users</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p1">Appendix D: Technical Stack (Prototype)</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Prototype URLs:</b> Overview Dashboard (<span class="s3">https://blinkit-peakpulse.lovable.app/</span>), Alerts Panel (/alerts), Pickers Panel (/pickers), Inventory Panel (/inventory), Riders Panel (/riders).</p>
+<p class="p2"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Component</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>Technology</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Framework</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">React 18 (TypeScript)</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Build Tool</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Vite</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Styling</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Tailwind CSS + shadcn/ui</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">State Management</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">React Query (TanStack)</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Routing</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">React Router v6</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Charts</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Recharts</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1">Platform</p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p1">Lovable</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+</body>
+</html>

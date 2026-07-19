@@ -1,6 +1,18 @@
 # vcatreya-git.github.io
 
-Personal profile site — resume + side projects.
+Personal profile site — resume, **PM case studies**, and side projects.
+
+## Case studies
+
+Group PM training work (Team Hashiras), linked from the homepage `#case-studies` section:
+
+| Case study | Path |
+|------------|------|
+| Blinkit PeakPulse (dark store DSS) | [`case-studies/blinkit-peakpulse/`](./case-studies/blinkit-peakpulse/) |
+| Relay — founder-led CRM | [`case-studies/relay-founder-crm/`](./case-studies/relay-founder-crm/) |
+| YouTube long-form engagement | [`case-studies/youtube-long-form/`](./case-studies/youtube-long-form/) |
+
+Index: [`case-studies/README.md`](./case-studies/README.md)
 
 ## Local preview
 
