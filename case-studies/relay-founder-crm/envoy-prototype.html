@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Envoy — Interactive Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET & ROOT ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:    #0A1628;
+  --navy2:   #0F1E3C;
+  --navy3:   #162847;
+  --blue:    #1A5FBE;
+  --blue2:   #2370D4;
+  --blue3:   #3B82F6;
+  --teal:    #0D9488;
+  --teal2:   #14B8A6;
+  --sky:     #38BDF8;
+  --amber:   #F59E0B;
+  --amber2:  #FCD34D;
+  --rose:    #F43F5E;
+  --green:   #10B981;
+  --green2:  #34D399;
+  --slate:   #64748B;
+  --slate2:  #94A3B8;
+  --white:   #F1F5F9;
+  --border:  rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --glass:   rgba(255,255,255,0.04);
+  --glass2:  rgba(255,255,255,0.08);
+  --glass3:  rgba(255,255,255,0.12);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #060E1C;
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 15%, rgba(26,95,190,0.20) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 75%, rgba(13,148,136,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 50% at 50% 40%, rgba(56,189,248,0.05) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ─── OUTER CHROME ──────────────────────────────────────────────────────────── */
+.page-header {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 1100px;
+  padding: 40px 32px 32px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--sky);
+}
+.page-sub { font-size: 12px; color: var(--slate2); margin-top: 4px; }
+.screen-nav {
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
+}
+.snav-btn {
+  background: var(--glass2); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 6px 12px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--slate2); cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.snav-btn:hover { background: var(--glass3); color: var(--white); }
+.snav-btn.active { background: rgba(56,189,248,0.15); border-color: rgba(56,189,248,0.4); color: var(--sky); }
+
+/* ─── DEVICE FRAME ──────────────────────────────────────────────────────────── */
+.stage {
+  position: relative; z-index: 5;
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 48px; padding: 0 32px 64px;
+  width: 100%; max-width: 1100px;
+  flex-wrap: wrap;
+}
+
+.device-wrap {
+  position: relative; flex-shrink: 0;
+}
+.device-frame {
+  width: 393px;
+  background: #0A0A12;
+  border-radius: 52px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.6),
+    0 60px 120px -20px rgba(0,0,0,0.8),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  overflow: hidden;
+  position: relative;
+}
+.device-notch {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 34px;
+  background: #0A0A12;
+  border-radius: 0 0 20px 20px;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.notch-dot { width: 10px; height: 10px; border-radius: 50%; background: #1a1a2e; }
+.notch-pill { width: 64px; height: 8px; border-radius: 4px; background: #1a1a2e; }
+
+.device-screen {
+  width: 393px;
+  height: 852px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── STATUS BAR ────────────────────────────────────────────────────────────── */
+.status-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 54px; z-index: 50;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 28px 8px;
+  pointer-events: none;
+}
+.status-time { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.status-icons { display: flex; gap: 6px; align-items: center; font-size: 11px; color: var(--white); }
+
+/* ─── APP SHELL ─────────────────────────────────────────────────────────────── */
+.app-screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  background: var(--navy);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.app-screen.visible { opacity: 1; pointer-events: all; }
+
+/* ─── TOP BAR ───────────────────────────────────────────────────────────────── */
+.top-bar {
+  padding: 60px 24px 16px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-shrink: 0;
+}
+.top-bar-left {}
+.top-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--slate2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.top-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; line-height: 1.1; }
+.top-title span { color: var(--sky); }
+.avatar {
+  width: 38px; height: 38px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  flex-shrink: 0; cursor: pointer;
+}
+
+/* ─── SCROLL AREA ───────────────────────────────────────────────────────────── */
+.scroll-area {
+  flex: 1; overflow-y: auto; padding: 0 20px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-area::-webkit-scrollbar { width: 3px; }
+.scroll-area::-webkit-scrollbar-track { background: transparent; }
+.scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* ─── BOTTOM NAV ────────────────────────────────────────────────────────────── */
+.bottom-nav {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 12px 8px 28px;
+  background: rgba(10,22,40,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  cursor: pointer; padding: 4px 12px; border-radius: 12px;
+  transition: all 0.2s; min-width: 56px;
+}
+.nav-item:hover { background: var(--glass2); }
+.nav-item.active { background: rgba(56,189,248,0.1); }
+.nav-icon { font-size: 20px; line-height: 1; }
+.nav-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: var(--slate2); text-transform: uppercase; }
+.nav-item.active .nav-label { color: var(--sky); }
+
+/* ─── METRIC CARDS ──────────────────────────────────────────────────────────── */
+.metrics-row { display: flex; gap: 10px; margin-bottom: 20px; }
+.metric-card {
+  flex: 1; background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 12px;
+}
+.metric-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; }
+.metric-lbl { font-size: 10px; color: var(--slate2); margin-top: 2px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+.metric-delta { font-size: 10px; margin-top: 4px; }
+.up { color: var(--green2); }
+.down { color: var(--rose); }
+
+/* ─── SECTION HEADER ────────────────────────────────────────────────────────── */
+.section-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; margin-top: 4px;
+}
+.section-hdr-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--white); }
+.section-hdr-link { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--sky); cursor: pointer; }
+
+/* ─── DEAL CARDS ────────────────────────────────────────────────────────────── */
+.deal-card {
+  background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 16px;
+  margin-bottom: 10px; cursor: pointer;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.deal-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 3px 0 0 3px;
+}
+.deal-card.hot::before { background: var(--green); }
+.deal-card.warm::before { background: var(--amber); }
+.deal-card.cold::before { background: var(--slate); }
+.deal-card.urgent::before { background: var(--rose); }
+.deal-card:hover { border-color: var(--border2); background: var(--glass3); transform: translateY(-1px); }
+
+.deal-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.deal-company { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.deal-contact { font-size: 11px; color: var(--slate2); margin-top: 2px; }
+.warmth-badge {
+  display: flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+}
+.warmth-badge.hot    { background: rgba(16,185,129,0.15); color: var(--green2); border: 1px solid rgba(16,185,129,0.25); }
+.warmth-badge.warm   { background: rgba(245,158,11,0.15); color: var(--amber2); border: 1px solid rgba(245,158,11,0.25); }
+.warmth-badge.cold   { background: rgba(100,116,139,0.15); color: var(--slate2); border: 1px solid rgba(100,116,139,0.25); }
+.warmth-badge.urgent { background: rgba(244,63,94,0.15); color: var(--rose); border: 1px solid rgba(244,63,94,0.25); }
+
+.deal-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.deal-tag {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  padding: 2px 7px; border-radius: 6px;
+  background: var(--glass3); color: var(--slate2);
+  border: 1px solid var(--border);
+  letter-spacing: 0.05em;
+}
+.deal-tag.stage { color: var(--sky); background: rgba(56,189,248,0.08); border-color: rgba(56,189,248,0.2); }
+.deal-tag.channel { color: var(--teal2); background: rgba(13,148,136,0.08); border-color: rgba(13,148,136,0.2); }
+
+.deal-snippet { font-size: 12px; color: var(--slate2); line-height: 1.5; margin-bottom: 12px; }
+
+.deal-actions { display: flex; gap: 7px; }
+.action-btn {
+  flex: 1; padding: 8px 6px; border-radius: 10px; border: none; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.04em;
+  transition: all 0.2s; font-weight: 500;
+}
+.action-btn.primary { background: var(--blue2); color: #fff; }
+.action-btn.primary:hover { background: var(--blue3); }
+.action-btn.secondary { background: var(--glass3); color: var(--slate2); border: 1px solid var(--border); }
+.action-btn.secondary:hover { color: var(--white); border-color: var(--border2); }
+.action-btn.danger { background: rgba(244,63,94,0.12); color: var(--rose); border: 1px solid rgba(244,63,94,0.2); }
+
+/* ─── PIPELINE STAGES ───────────────────────────────────────────────────────── */
+.stage-row {
+  display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px;
+  padding-bottom: 4px;
+}
+.stage-row::-webkit-scrollbar { display: none; }
+.stage-pill {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: 10px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--glass2); color: var(--slate2);
+  transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+}
+.stage-pill.active { background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.35); color: var(--sky); }
+.stage-count {
+  background: var(--glass3); border-radius: 10px;
+  padding: 1px 5px; font-size: 9px;
+}
+.stage-pill.active .stage-count { background: rgba(56,189,248,0.2); }
+
+/* ─── AGENT CHAT ────────────────────────────────────────────────────────────── */
+.chat-area { flex: 1; overflow-y: auto; padding: 8px 20px; display: flex; flex-direction: column; gap: 14px; }
+.chat-area::-webkit-scrollbar { display: none; }
+
+.chat-msg { display: flex; flex-direction: column; }
+.chat-msg.agent { align-items: flex-start; }
+.chat-msg.user  { align-items: flex-end; }
+
+.chat-bubble {
+  max-width: 82%; padding: 12px 16px; border-radius: 18px;
+  font-size: 13px; line-height: 1.55;
+}
+.chat-msg.agent .chat-bubble {
+  background: var(--glass2); border: 1px solid var(--border);
+  border-bottom-left-radius: 4px; color: var(--white);
+}
+.chat-msg.user .chat-bubble {
+  background: var(--blue2); border-bottom-right-radius: 4px; color: #fff;
+}
+.chat-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  color: var(--slate2); margin-bottom: 5px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.chat-card {
+  background: var(--glass3); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 12px 14px; margin-top: 8px;
+}
+.chat-card-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.chat-card-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; border-bottom: 1px solid var(--border); color: var(--slate2); }
+.chat-card-row:last-child { border-bottom: none; }
+.chat-card-row span:last-child { color: var(--white); }
+
+.chat-input-area {
+  flex-shrink: 0; padding: 12px 20px 32px;
+  background: rgba(10,22,40,0.9); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+}
+.chat-suggestions { display: flex; gap: 7px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 2px; }
+.chat-suggestions::-webkit-scrollbar { display: none; }
+.chat-suggestion {
+  flex-shrink: 0; background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 12px;
+  font-size: 11px; color: var(--slate2); cursor: pointer; white-space: nowrap;
+  transition: all 0.15s;
+}
+.chat-suggestion:hover { border-color: var(--border2); color: var(--white); }
+.chat-input-row { display: flex; gap: 10px; align-items: center; }
+.chat-input {
+  flex: 1; background: var(--glass2); border: 1px solid var(--border2);
+  border-radius: 22px; padding: 11px 16px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--white);
+  outline: none; transition: border-color 0.2s;
+}
+.chat-input:focus { border-color: rgba(56,189,248,0.4); }
+.chat-input::placeholder { color: var(--slate); }
+.chat-send {
+  width: 42px; height: 42px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--blue2); display: flex; align-items: center; justify-content: center;
+  font-size: 16px; transition: background 0.2s; flex-shrink: 0;
+}
+.chat-send:hover { background: var(--blue3); }
+
+/* ─── TIMELINE ──────────────────────────────────────────────────────────────── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 8px; bottom: 0;
+  width: 1px; background: linear-gradient(to bottom, var(--border2), transparent);
+}
+.tl-item { position: relative; margin-bottom: 18px; }
+.tl-dot {
+  position: absolute; left: -24px; top: 2px;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--navy);
+}
+.tl-dot.email  { background: var(--blue3); }
+.tl-dot.tg     { background: var(--teal2); }
+.tl-dot.voice  { background: var(--amber); }
+.tl-dot.note   { background: var(--slate2); }
+.tl-date { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--slate); letter-spacing: 0.08em; margin-bottom: 3px; text-transform: uppercase; }
+.tl-text { font-size: 12px; color: var(--slate2); line-height: 1.55; }
+.tl-text strong { color: var(--white); }
+.tl-channel {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  padding: 2px 6px; border-radius: 5px; margin-top: 4px;
+}
+.tl-channel.email  { background: rgba(59,130,246,0.1);  color: var(--blue3); }
+.tl-channel.tg     { background: rgba(20,184,166,0.1);  color: var(--teal2); }
+.tl-channel.voice  { background: rgba(245,158,11,0.1);  color: var(--amber2); }
+.tl-channel.call   { background: rgba(16,185,129,0.1);  color: var(--green2); }
+
+/* ─── COMMITMENT CHIP ───────────────────────────────────────────────────────── */
+.commit-chip {
+  background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.commit-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.commit-text { font-size: 12px; line-height: 1.5; }
+.commit-text strong { color: var(--white); display: block; margin-bottom: 2px; font-size: 11px; }
+.commit-due { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber2); margin-top: 3px; }
+
+/* ─── WARMTH BAR ────────────────────────────────────────────────────────────── */
+.warmth-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+.warmth-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--slate2); width: 56px; flex-shrink: 0; }
+.warmth-track { flex: 1; height: 6px; background: var(--glass3); border-radius: 3px; overflow: hidden; }
+.warmth-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.warmth-val { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; width: 34px; text-align: right; flex-shrink: 0; }
+
+/* ─── ONBOARDING ────────────────────────────────────────────────────────────── */
+.onboard-screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  background: var(--navy);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.onboard-screen.visible { opacity: 1; pointer-events: all; }
+
+.onboard-progress {
+  display: flex; gap: 6px; padding: 60px 24px 0;
+  flex-shrink: 0;
+}
+.progress-dot {
+  flex: 1; height: 3px; border-radius: 2px; background: var(--glass3);
+  transition: background 0.3s;
+}
+.progress-dot.done { background: var(--sky); }
+.progress-dot.active { background: rgba(56,189,248,0.5); }
+
+.onboard-content { flex: 1; padding: 28px 24px 20px; overflow-y: auto; }
+.onboard-step-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--sky); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.onboard-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; line-height: 1.15; margin-bottom: 8px; }
+.onboard-desc { font-size: 13px; color: var(--slate2); line-height: 1.6; margin-bottom: 24px; }
+
+.option-card {
+  background: var(--glass2); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 14px;
+}
+.option-card:hover { border-color: var(--border2); background: var(--glass3); }
+.option-card.selected { border-color: rgba(56,189,248,0.5); background: rgba(56,189,248,0.06); }
+.option-icon { font-size: 22px; width: 40px; text-align: center; flex-shrink: 0; }
+.option-info { flex: 1; }
+.option-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.option-hint { font-size: 11px; color: var(--slate2); margin-top: 2px; }
+.option-check {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-size: 11px; transition: all 0.2s;
+}
+.option-card.selected .option-check { background: var(--sky); border-color: var(--sky); color: var(--navy); }
+.option-badge {
+  font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 7px;
+  border-radius: 6px; flex-shrink: 0; letter-spacing: 0.04em;
+}
+.option-badge.rec { background: rgba(16,185,129,0.15); color: var(--green2); border: 1px solid rgba(16,185,129,0.2); }
+.option-badge.beta { background: rgba(245,158,11,0.15); color: var(--amber2); border: 1px solid rgba(245,158,11,0.2); }
+.option-badge.road { background: var(--glass2); color: var(--slate2); border: 1px solid var(--border); }
+
+.onboard-footer { flex-shrink: 0; padding: 0 24px 32px; }
+.btn-primary {
+  width: 100%; padding: 16px; border: none; border-radius: 16px; cursor: pointer;
+  background: var(--blue2); color: #fff;
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  transition: all 0.2s; letter-spacing: 0.02em;
+}
+.btn-primary:hover { background: var(--blue3); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-ghost {
+  width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 16px; cursor: pointer;
+  background: transparent; color: var(--slate2);
+  font-family: 'DM Sans', sans-serif; font-size: 14px; margin-top: 10px;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--border2); color: var(--white); }
+
+/* ─── HANDOFF ───────────────────────────────────────────────────────────────── */
+.handoff-header {
+  padding: 60px 24px 16px;
+  background: linear-gradient(180deg, rgba(244,63,94,0.08) 0%, transparent 100%);
+}
+.handoff-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(244,63,94,0.12); border: 1px solid rgba(244,63,94,0.25);
+  border-radius: 20px; padding: 5px 12px; margin-bottom: 12px;
+}
+.handoff-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rose); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.handoff-badge-text { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--rose); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.handoff-stat-row { display: flex; gap: 10px; margin-top: 16px; }
+.handoff-stat {
+  flex: 1; background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px; text-align: center;
+}
+.handoff-stat-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--sky); }
+.handoff-stat-lbl { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--slate2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.deal-assign-card {
+  background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+  cursor: pointer; transition: all 0.15s;
+}
+.deal-assign-card:hover { border-color: var(--border2); }
+.deal-assign-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.deal-assign-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.deal-assign-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green2); }
+.deal-assign-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.assign-toggle { display: flex; gap: 6px; }
+.assign-btn {
+  flex: 1; padding: 7px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--glass2); font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--slate2); cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.assign-btn.hire   { color: var(--sky); background: rgba(56,189,248,0.08); border-color: rgba(56,189,248,0.25); }
+.assign-btn.keep   { color: var(--amber2); background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); }
+
+/* ─── GO LIVE SCREEN ────────────────────────────────────────────────────────── */
+.golive-center {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 24px; text-align: center;
+}
+.golive-ring {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(26,95,190,0.1) 60%, transparent 100%);
+  border: 2px solid rgba(56,189,248,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; margin-bottom: 28px;
+  animation: ringPulse 2s ease-in-out infinite;
+}
+@keyframes ringPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(56,189,248,0.3); }
+  50% { box-shadow: 0 0 0 20px rgba(56,189,248,0); }
+}
+.golive-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+.golive-sub { font-size: 13px; color: var(--slate2); line-height: 1.6; margin-bottom: 32px; max-width: 280px; }
+.activity-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 14px; margin-bottom: 8px;
+  width: 100%; text-align: left;
+}
+.activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.activity-dot.done { background: var(--green); }
+.activity-dot.prog { background: var(--sky); animation: pulse 1s infinite; }
+.activity-text { font-size: 12px; flex: 1; }
+.activity-time { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--slate2); }
+
+/* ─── DETAIL SCREEN ─────────────────────────────────────────────────────────── */
+.detail-hero {
+  padding: 56px 24px 20px;
+  background: linear-gradient(180deg, rgba(26,95,190,0.1) 0%, transparent 100%);
+  flex-shrink: 0;
+}
+.detail-back { font-size: 20px; cursor: pointer; margin-bottom: 12px; display: inline-block; }
+.detail-company { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.detail-contact-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.detail-contact-avatar {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+}
+.detail-contact-name { font-size: 13px; color: var(--slate2); }
+.detail-tabs { display: flex; gap: 4px; padding: 0 20px; flex-shrink: 0; margin-top: 4px; }
+.detail-tab {
+  padding: 8px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--slate2);
+  transition: all 0.2s; border: 1px solid transparent;
+}
+.detail-tab.active { background: rgba(56,189,248,0.1); color: var(--sky); border-color: rgba(56,189,248,0.2); }
+
+/* ─── NOTIFICATION BANNER ───────────────────────────────────────────────────── */
+.notif-banner {
+  position: absolute; top: 60px; left: 16px; right: 16px;
+  background: var(--glass3); backdrop-filter: blur(20px);
+  border: 1px solid var(--border2); border-radius: 16px;
+  padding: 14px 16px; z-index: 200; cursor: pointer;
+  animation: slideDown 0.4s ease forwards;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+@keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+.notif-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.notif-app { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--sky); }
+.notif-time { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--slate2); margin-left: auto; }
+.notif-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.notif-body { font-size: 12px; color: var(--slate2); line-height: 1.4; }
+.notif-actions { display: flex; gap: 8px; margin-top: 10px; }
+.notif-btn {
+  flex: 1; padding: 7px; border-radius: 8px; border: none; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+}
+.notif-btn.primary { background: var(--blue2); color: #fff; }
+.notif-btn.ghost { background: var(--glass2); color: var(--slate2); border: 1px solid var(--border); }
+
+/* ─── SIDEBAR ANNOTATIONS ───────────────────────────────────────────────────── */
+.annotations { flex: 1; min-width: 260px; max-width: 340px; padding-top: 8px; }
+.ann-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--white); }
+.ann-item { margin-bottom: 20px; }
+.ann-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--sky); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 5px; }
+.ann-text { font-size: 12px; color: var(--slate2); line-height: 1.6; }
+.ann-text strong { color: var(--white); }
+.ann-divider { height: 1px; background: var(--border); margin: 20px 0; }
+.design-spec {
+  background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px;
+}
+.spec-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+.spec-row:last-child { border-bottom: none; }
+.spec-key { color: var(--slate2); font-family: 'DM Mono', monospace; font-size: 10px; }
+.spec-val { color: var(--white); }
+
+/* Misc */
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+.empty-state { text-align: center; padding: 32px 20px; color: var(--slate2); font-size: 13px; }
+.pulse-ring {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green); margin-right: 6px;
+  animation: pulse 1.5s infinite;
+}
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:9999;background:#0f172a;color:#f8fafc;padding:10px 16px;font:600 13px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><a href="../../index.html#case-studies" style="color:#5eead4;text-decoration:none">← Profile</a><span style="opacity:.85">Envoy prototype · personal work</span></div>
+
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div>
+    <div class="page-title">Envoy — Interactive Prototype</div>
+    <div class="page-sub">Click screens below to navigate · All data is representative</div>
+  </div>
+  <div class="screen-nav">
+    <button class="snav-btn active" onclick="showScreen('onboarding')">Onboarding</button>
+    <button class="snav-btn" onclick="showScreen('today')">Today</button>
+    <button class="snav-btn" onclick="showScreen('pipeline')">Pipeline</button>
+    <button class="snav-btn" onclick="showScreen('detail')">Deal Detail</button>
+    <button class="snav-btn" onclick="showScreen('agent')">Agent Chat</button>
+    <button class="snav-btn" onclick="showScreen('handoff')">Handoff</button>
+    <button class="snav-btn" onclick="showScreen('golive')">Go Live</button>
+  </div>
+</div>
+
+<div class="stage">
+
+  <!-- ══ DEVICE ══════════════════════════════════════════════════════════════ -->
+  <div class="device-wrap">
+    <div class="device-frame">
+      <div class="device-notch">
+        <div class="notch-dot"></div>
+        <div class="notch-pill"></div>
+        <div class="notch-dot"></div>
+      </div>
+      <div class="device-screen">
+
+        <!-- STATUS BAR -->
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <span>●●●</span><span>WiFi</span><span>⬛ 87%</span>
+          </div>
+        </div>
+
+        <!-- ═══ SCREEN: ONBOARDING ════════════════════════════════════════ -->
+        <div class="onboard-screen visible" id="screen-onboarding">
+
+          <!-- Step 1: Notification channel -->
+          <div class="onboard-screen visible" id="ob-step-1">
+            <div class="onboard-progress">
+              <div class="progress-dot active"></div>
+              <div class="progress-dot"></div>
+              <div class="progress-dot"></div>
+              <div class="progress-dot"></div>
+              <div class="progress-dot"></div>
+            </div>
+            <div class="onboard-content">
+              <div class="onboard-step-num">Step 1 of 5</div>
+              <div class="onboard-title">Where should Envoy<br/><span style="color:var(--sky)">reach you?</span></div>
+              <div class="onboard-desc">Choose where your morning digest, urgent alerts, and quick actions are delivered. You can use multiple channels.</div>
+
+              <div class="option-card selected" onclick="toggleOption(this)">
+                <div class="option-icon">📱</div>
+                <div class="option-info">
+                  <div class="option-name">Envoy App</div>
+                  <div class="option-hint">Push notifications · Full context</div>
+                </div>
+                <div class="option-badge rec">Recommended</div>
+                <div class="option-check">✓</div>
+              </div>
+              <div class="option-card" onclick="toggleOption(this)">
+                <div class="option-icon">💬</div>
+                <div class="option-info">
+                  <div class="option-name">WhatsApp</div>
+                  <div class="option-hint">One-tap actions from chat</div>
+                </div>
+                <div class="option-badge beta">Beta</div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" onclick="toggleOption(this)">
+                <div class="option-icon">✈️</div>
+                <div class="option-info">
+                  <div class="option-name">Telegram</div>
+                  <div class="option-hint">Stable API · Highly reliable</div>
+                </div>
+                <div class="option-badge rec">Recommended</div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" onclick="toggleOption(this)">
+                <div class="option-icon">✉️</div>
+                <div class="option-info">
+                  <div class="option-name">Email Digest</div>
+                  <div class="option-hint">Daily summary in your inbox</div>
+                </div>
+                <div class="option-check"></div>
+              </div>
+            </div>
+            <div class="onboard-footer">
+              <button class="btn-primary" onclick="goToStep(2)">Continue →</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Connect channels -->
+          <div class="onboard-screen" id="ob-step-2">
+            <div class="onboard-progress">
+              <div class="progress-dot done"></div>
+              <div class="progress-dot active"></div>
+              <div class="progress-dot"></div>
+              <div class="progress-dot"></div>
+              <div class="progress-dot"></div>
+            </div>
+            <div class="onboard-content">
+              <div class="onboard-step-num">Step 2 of 5</div>
+              <div class="onboard-title">Connect your<br/><span style="color:var(--teal2)">sales channels</span></div>
+              <div class="onboard-desc">Envoy monitors these channels for sales conversations. New channels are added as the platform grows — your setup stays intact.</div>
+
+              <div class="option-card selected" onclick="toggleOption(this)">
+                <div class="option-icon">📧</div>
+                <div class="option-info">
+                  <div class="option-name">Gmail / Outlook</div>
+                  <div class="option-hint">Full OAuth · Retroactive 90-day scan</div>
+                </div>
+                <div class="option-badge rec">Required</div>
+                <div class="option-check">✓</div>
+              </div>
+              <div class="option-card selected" onclick="toggleOption(this)">
+                <div class="option-icon">✈️</div>
+                <div class="option-info">
+                  <div class="option-name">Telegram</div>
+                  <div class="option-hint">Official Bot API · Most stable</div>
+                </div>
+                <div class="option-check">✓</div>
+              </div>
+              <div class="option-card" onclick="toggleOption(this)">
+                <div class="option-icon">💬</div>
+                <div class="option-info">
+                  <div class="option-name">WhatsApp</div>
+                  <div class="option-hint">Personal chat · Web bridge</div>
+                </div>
+                <div class="option-badge beta">Beta</div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" onclick="toggleOption(this)">
+                <div class="option-icon">📹</div>
+                <div class="option-info">
+                  <div class="option-name">Zoom / Meet</div>
+                  <div class="option-hint">Bot joins calls · Auto-transcript</div>
+                </div>
+                <div class="option-badge road">Phase 2</div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" onclick="toggleOption(this)">
+                <div class="option-icon">🔒</div>
+                <div class="option-info">
+                  <div class="option-name">Signal</div>
+                  <div class="option-hint">Secure messaging bridge</div>
+                </div>
+                <div class="option-badge road">Roadmap</div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" style="border-style:dashed; opacity:0.55;">
+                <div class="option-icon">➕</div>
+                <div class="option-info">
+                  <div class="option-name">More coming</div>
+                  <div class="option-hint">LinkedIn, SMS, iMessage + others</div>
+                </div>
+              </div>
+            </div>
+            <div class="onboard-footer">
+              <button class="btn-primary" onclick="goToStep(3)">Connect & Continue →</button>
+              <button class="btn-ghost" onclick="goToStep(1)">← Back</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Pipeline -->
+          <div class="onboard-screen" id="ob-step-3">
+            <div class="onboard-progress">
+              <div class="progress-dot done"></div><div class="progress-dot done"></div>
+              <div class="progress-dot active"></div>
+              <div class="progress-dot"></div><div class="progress-dot"></div>
+            </div>
+            <div class="onboard-content">
+              <div class="onboard-step-num">Step 3 of 5</div>
+              <div class="onboard-title">Where should<br/><span style="color:var(--amber2)">deals live?</span></div>
+              <div class="onboard-desc">Envoy can maintain its own lightweight pipeline, or write structured data into your existing tools.</div>
+
+              <div class="option-card selected" onclick="selectOption(this)">
+                <div class="option-icon">⚡</div>
+                <div class="option-info">
+                  <div class="option-name">Envoy Pipeline</div>
+                  <div class="option-hint">Built-in · Zero setup · Recommended</div>
+                </div>
+                <div class="option-badge rec">Recommended</div>
+                <div class="option-check">✓</div>
+              </div>
+              <div class="option-card" onclick="selectOption(this)">
+                <div class="option-icon">🟠</div>
+                <div class="option-info">
+                  <div class="option-name">HubSpot</div>
+                  <div class="option-hint">Two-way sync · Live now</div>
+                </div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" onclick="selectOption(this)">
+                <div class="option-icon">⬛</div>
+                <div class="option-info">
+                  <div class="option-name">Notion</div>
+                  <div class="option-hint">Writes back to your existing CRM</div>
+                </div>
+                <div class="option-badge road">Phase 2</div>
+                <div class="option-check"></div>
+              </div>
+              <div class="option-card" onclick="selectOption(this)">
+                <div class="option-icon">📊</div>
+                <div class="option-info">
+                  <div class="option-name">Google Sheets</div>
+                  <div class="option-hint">Auto-populates your spreadsheet</div>
+                </div>
+                <div class="option-badge road">Phase 2</div>
+                <div class="option-check"></div>
+              </div>
+            </div>
+            <div class="onboard-footer">
+              <button class="btn-primary" onclick="goToStep(4)">Continue →</button>
+              <button class="btn-ghost" onclick="goToStep(2)">← Back</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Personalise -->
+          <div class="onboard-screen" id="ob-step-4">
+            <div class="onboard-progress">
+              <div class="progress-dot done"></div><div class="progress-dot done"></div>
+              <div class="progress-dot done"></div><div class="progress-dot active"></div>
+              <div class="progress-dot"></div>
+            </div>
+            <div class="onboard-content">
+              <div class="onboard-step-num">Step 4 of 5</div>
+              <div class="onboard-title">Make it<br/><span style="color:var(--green2)">yours</span></div>
+              <div class="onboard-desc">Personalise how your agent speaks and when it reaches you.</div>
+
+              <div style="margin-bottom:20px;">
+                <div style="font-size:12px; color:var(--slate2); margin-bottom:8px; font-family:'DM Mono',monospace; letter-spacing:0.08em; text-transform:uppercase;">Agent name</div>
+                <div style="background:var(--glass2); border:1.5px solid rgba(56,189,248,0.35); border-radius:12px; padding:14px 16px; font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:var(--sky);">Envoy</div>
+              </div>
+
+              <div style="margin-bottom:20px;">
+                <div style="font-size:12px; color:var(--slate2); margin-bottom:8px; font-family:'DM Mono',monospace; letter-spacing:0.08em; text-transform:uppercase;">Communication tone</div>
+                <div style="display:flex; gap:8px;">
+                  <div style="flex:1; padding:10px; border-radius:10px; background:rgba(56,189,248,0.1); border:1.5px solid rgba(56,189,248,0.4); text-align:center; cursor:pointer;">
+                    <div style="font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--sky);">Professional</div>
+                  </div>
+                  <div style="flex:1; padding:10px; border-radius:10px; background:var(--glass2); border:1px solid var(--border); text-align:center; cursor:pointer;">
+                    <div style="font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--slate2);">Casual</div>
+                  </div>
+                  <div style="flex:1; padding:10px; border-radius:10px; background:var(--glass2); border:1px solid var(--border); text-align:center; cursor:pointer;">
+                    <div style="font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--slate2);">Concise</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-bottom:20px;">
+                <div style="font-size:12px; color:var(--slate2); margin-bottom:8px; font-family:'DM Mono',monospace; letter-spacing:0.08em; text-transform:uppercase;">Morning digest time</div>
+                <div style="background:var(--glass2); border:1px solid var(--border2); border-radius:12px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700;">7:00 AM</span>
+                  <span style="font-size:20px; cursor:pointer;">✏️</span>
+                </div>
+              </div>
+            </div>
+            <div class="onboard-footer">
+              <button class="btn-primary" onclick="goToStep(5)">Almost done →</button>
+              <button class="btn-ghost" onclick="goToStep(3)">← Back</button>
+            </div>
+          </div>
+
+          <!-- Step 5: Go live -->
+          <div class="onboard-screen" id="ob-step-5">
+            <div class="onboard-progress">
+              <div class="progress-dot done"></div><div class="progress-dot done"></div>
+              <div class="progress-dot done"></div><div class="progress-dot done"></div>
+              <div class="progress-dot active"></div>
+            </div>
+            <div class="golive-center" style="padding-top:60px;">
+              <div class="golive-ring">🤖</div>
+              <div class="golive-title">Envoy is live.</div>
+              <div class="golive-sub">Your dedicated AI sales agent has started monitoring your channels. Your first captured conversation will appear in the next few minutes.</div>
+              <div style="width:100%; margin-bottom:24px;">
+                <div class="activity-row">
+                  <div class="activity-dot done"></div>
+                  <div class="activity-text">Private server provisioned</div>
+                  <div class="activity-time">done</div>
+                </div>
+                <div class="activity-row">
+                  <div class="activity-dot done"></div>
+                  <div class="activity-text">Gmail connected · scanning 90 days</div>
+                  <div class="activity-time">done</div>
+                </div>
+                <div class="activity-row">
+                  <div class="activity-dot prog"></div>
+                  <div class="activity-text">Classifying 47 email threads…</div>
+                  <div class="activity-time">live</div>
+                </div>
+                <div class="activity-row">
+                  <div class="activity-dot" style="background:var(--border2);"></div>
+                  <div class="activity-text">Building your pipeline</div>
+                  <div class="activity-time">soon</div>
+                </div>
+              </div>
+              <button class="btn-primary" style="width:100%;" onclick="showScreen('today')">Open Today View →</button>
+            </div>
+          </div>
+
+        </div><!-- /screen-onboarding -->
+
+        <!-- ═══ SCREEN: TODAY ═════════════════════════════════════════════ -->
+        <div class="app-screen" id="screen-today">
+          <!-- Notification banner -->
+          <div class="notif-banner" id="notif1" onclick="dismissNotif('notif1')">
+            <div class="notif-top">
+              <div class="notif-app">⚡ Envoy</div>
+              <div class="notif-time">7:01 AM</div>
+            </div>
+            <div class="notif-title">3 follow-ups need your attention</div>
+            <div class="notif-body">TechCorp demo was 5 days ago. Priya hasn't replied to your pricing email.</div>
+            <div class="notif-actions">
+              <button class="notif-btn primary" onclick="dismissNotif('notif1'); event.stopPropagation();">View Now</button>
+              <button class="notif-btn ghost" onclick="dismissNotif('notif1'); event.stopPropagation();">Dismiss</button>
+            </div>
+          </div>
+
+          <div class="top-bar">
+            <div class="top-bar-left">
+              <div class="top-eyebrow">Tuesday · March 10</div>
+              <div class="top-title">Good morning,<br/><span>Venkat</span> 👋</div>
+            </div>
+            <div class="avatar">V</div>
+          </div>
+          <div class="scroll-area">
+            <div class="metrics-row">
+              <div class="metric-card">
+                <div class="metric-val" style="color:var(--rose);">3</div>
+                <div class="metric-lbl">Urgent</div>
+                <div class="metric-delta down">↑ 1 new</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-val" style="color:var(--sky);">12</div>
+                <div class="metric-lbl">Active Deals</div>
+                <div class="metric-delta up">+2 this week</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-val" style="color:var(--green2);">84%</div>
+                <div class="metric-lbl">Pipeline Health</div>
+                <div class="metric-delta up">↑ 6pts</div>
+              </div>
+            </div>
+
+            <!-- Urgent -->
+            <div class="section-hdr">
+              <div class="section-hdr-title">🔴 Follow-up Now</div>
+              <div class="section-hdr-link">See all</div>
+            </div>
+
+            <div class="deal-card urgent" onclick="showScreen('detail')">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">TechCorp India</div>
+                  <div class="deal-contact">Priya Sharma · VP Engineering</div>
+                </div>
+                <div class="warmth-badge urgent">🔴 Cold</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Negotiating</div>
+                <div class="deal-tag channel">Email</div>
+                <div class="deal-tag">5 days silent</div>
+              </div>
+              <div class="deal-snippet">"Send across the enterprise pricing deck" — she's waiting. Your demo went well.</div>
+              <div class="deal-actions">
+                <button class="action-btn primary" onclick="event.stopPropagation()">Draft Reply</button>
+                <button class="action-btn secondary" onclick="event.stopPropagation()">View Deal</button>
+                <button class="action-btn danger" onclick="event.stopPropagation()">Snooze</button>
+              </div>
+            </div>
+
+            <div class="deal-card warm">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">FinStack SEA</div>
+                  <div class="deal-contact">Ahmad Jaffar · CEO</div>
+                </div>
+                <div class="warmth-badge warm">🟡 Warm</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Qualified</div>
+                <div class="deal-tag channel">Telegram</div>
+                <div class="deal-tag">Replied yesterday</div>
+              </div>
+              <div class="deal-snippet">Asked about implementation timeline. Said board meets Friday — needs answer before then.</div>
+              <div class="deal-actions">
+                <button class="action-btn primary" onclick="event.stopPropagation()">Draft Reply</button>
+                <button class="action-btn secondary" onclick="event.stopPropagation()">View Deal</button>
+              </div>
+            </div>
+
+            <!-- Today's calls -->
+            <div class="section-hdr" style="margin-top:8px;">
+              <div class="section-hdr-title">📅 Today's Meetings</div>
+            </div>
+
+            <div style="background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.18); border-radius:14px; padding:14px 16px; margin-bottom:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                <div>
+                  <div style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700;">Nuvama Wealth</div>
+                  <div style="font-size:11px; color:var(--slate2); margin-top:2px;">Discovery Call · Zoom</div>
+                </div>
+                <div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--sky);">2:30 PM</div>
+              </div>
+              <div style="font-size:12px; color:var(--slate2); margin-bottom:10px;">First call. Rajesh Singh, CFO. Inbound — mentioned pricing on LinkedIn. High intent signal.</div>
+              <button class="action-btn primary" style="width:100%; padding:8px;">Read Pre-Meeting Brief →</button>
+            </div>
+
+            <!-- Active deals -->
+            <div class="section-hdr" style="margin-top:8px;">
+              <div class="section-hdr-title">⚡ Recently Active</div>
+              <div class="section-hdr-link">Pipeline →</div>
+            </div>
+
+            <div class="deal-card hot">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">ClearRoute Logistics</div>
+                  <div class="deal-contact">Maya Patel · COO</div>
+                </div>
+                <div class="warmth-badge hot">🟢 Hot · 91</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Proposal Sent</div>
+                <div class="deal-tag channel">WhatsApp</div>
+              </div>
+              <div class="deal-snippet">Replied 2 hrs ago: "Looking good, will revert by EOD." High close probability.</div>
+            </div>
+
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item active" onclick="showScreen('today')">
+              <div class="nav-icon">☀️</div><div class="nav-label">Today</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('pipeline')">
+              <div class="nav-icon">📊</div><div class="nav-label">Pipeline</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('agent')">
+              <div class="nav-icon">🤖</div><div class="nav-label">Agent</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('handoff')">
+              <div class="nav-icon">🤝</div><div class="nav-label">Handoff</div>
+            </div>
+          </div>
+        </div><!-- /today -->
+
+        <!-- ═══ SCREEN: PIPELINE ══════════════════════════════════════════ -->
+        <div class="app-screen" id="screen-pipeline">
+          <div class="top-bar">
+            <div class="top-bar-left">
+              <div class="top-eyebrow">12 active deals</div>
+              <div class="top-title">Pipeline</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <div style="background:var(--glass2); border:1px solid var(--border); border-radius:10px; padding:8px 12px; font-size:18px; cursor:pointer;">🔍</div>
+              <div class="avatar">V</div>
+            </div>
+          </div>
+          <div class="scroll-area" style="padding-top:0;">
+            <div class="stage-row">
+              <div class="stage-pill active">Contact <span class="stage-count">3</span></div>
+              <div class="stage-pill">Interested <span class="stage-count">4</span></div>
+              <div class="stage-pill">Negotiating <span class="stage-count">3</span></div>
+              <div class="stage-pill">Closing <span class="stage-count">2</span></div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div style="font-size:11px; color:var(--slate2);">All stages · Sorted by warmth</div>
+              <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--sky); cursor:pointer;">Filter ↓</div>
+            </div>
+
+            <div class="deal-card hot" onclick="showScreen('detail')">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">ClearRoute Logistics</div>
+                  <div class="deal-contact">Maya Patel · COO</div>
+                </div>
+                <div class="warmth-badge hot">🟢 91</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Closing</div>
+                <div class="deal-tag channel">WhatsApp</div>
+                <div class="deal-tag">₹42L ACV</div>
+              </div>
+              <div class="warmth-row" style="margin:8px 0 4px;">
+                <div class="warmth-label">Warmth</div>
+                <div class="warmth-track"><div class="warmth-fill" style="width:91%; background:linear-gradient(90deg,var(--green),var(--green2));"></div></div>
+                <div class="warmth-val" style="color:var(--green2);">91</div>
+              </div>
+            </div>
+
+            <div class="deal-card hot">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">Nuvama Wealth</div>
+                  <div class="deal-contact">Rajesh Singh · CFO</div>
+                </div>
+                <div class="warmth-badge hot">🟢 78</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Interested</div>
+                <div class="deal-tag channel">Email</div>
+                <div class="deal-tag">$85K ACV</div>
+              </div>
+              <div class="warmth-row" style="margin:8px 0 4px;">
+                <div class="warmth-label">Warmth</div>
+                <div class="warmth-track"><div class="warmth-fill" style="width:78%; background:linear-gradient(90deg,var(--teal),var(--green2));"></div></div>
+                <div class="warmth-val" style="color:var(--green2);">78</div>
+              </div>
+            </div>
+
+            <div class="deal-card warm">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">FinStack SEA</div>
+                  <div class="deal-contact">Ahmad Jaffar · CEO</div>
+                </div>
+                <div class="warmth-badge warm">🟡 64</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Negotiating</div>
+                <div class="deal-tag channel">Telegram</div>
+                <div class="deal-tag">$60K ACV</div>
+              </div>
+              <div class="warmth-row" style="margin:8px 0 4px;">
+                <div class="warmth-label">Warmth</div>
+                <div class="warmth-track"><div class="warmth-fill" style="width:64%; background:linear-gradient(90deg,var(--amber),var(--amber2));"></div></div>
+                <div class="warmth-val" style="color:var(--amber2);">64</div>
+              </div>
+            </div>
+
+            <div class="deal-card urgent">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">TechCorp India</div>
+                  <div class="deal-contact">Priya Sharma · VP Eng</div>
+                </div>
+                <div class="warmth-badge urgent">🔴 31</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Negotiating</div>
+                <div class="deal-tag channel">Email</div>
+                <div class="deal-tag">5 days silent</div>
+              </div>
+              <div class="warmth-row" style="margin:8px 0 4px;">
+                <div class="warmth-label">Warmth</div>
+                <div class="warmth-track"><div class="warmth-fill" style="width:31%; background:linear-gradient(90deg,var(--rose),#FF6B8A);"></div></div>
+                <div class="warmth-val" style="color:var(--rose);">31</div>
+              </div>
+            </div>
+
+            <div class="deal-card cold">
+              <div class="deal-card-top">
+                <div>
+                  <div class="deal-company">BharatPay</div>
+                  <div class="deal-contact">Suresh Menon · CTO</div>
+                </div>
+                <div class="warmth-badge cold">⚫ 18</div>
+              </div>
+              <div class="deal-meta">
+                <div class="deal-tag stage">Contact</div>
+                <div class="deal-tag channel">Email</div>
+                <div class="deal-tag">21 days silent ⚠️</div>
+              </div>
+              <div class="warmth-row" style="margin:8px 0 4px;">
+                <div class="warmth-label">Warmth</div>
+                <div class="warmth-track"><div class="warmth-fill" style="width:18%; background:var(--slate);"></div></div>
+                <div class="warmth-val" style="color:var(--slate2);">18</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item" onclick="showScreen('today')"><div class="nav-icon">☀️</div><div class="nav-label">Today</div></div>
+            <div class="nav-item active" onclick="showScreen('pipeline')"><div class="nav-icon">📊</div><div class="nav-label">Pipeline</div></div>
+            <div class="nav-item" onclick="showScreen('agent')"><div class="nav-icon">🤖</div><div class="nav-label">Agent</div></div>
+            <div class="nav-item" onclick="showScreen('handoff')"><div class="nav-icon">🤝</div><div class="nav-label">Handoff</div></div>
+          </div>
+        </div><!-- /pipeline -->
+
+        <!-- ═══ SCREEN: DEAL DETAIL ═══════════════════════════════════════ -->
+        <div class="app-screen" id="screen-detail">
+          <div class="detail-hero">
+            <div class="detail-back" onclick="showScreen('pipeline')">← </div>
+            <div class="deal-tag" style="display:inline-block; margin-bottom:8px;">Negotiating · $72K ACV</div>
+            <div class="detail-company">TechCorp India</div>
+            <div class="detail-contact-row">
+              <div class="detail-contact-avatar">PS</div>
+              <div class="detail-contact-name">Priya Sharma · VP Engineering</div>
+            </div>
+            <div style="margin-top:12px;">
+              <div class="warmth-row">
+                <div class="warmth-label">Warmth</div>
+                <div class="warmth-track"><div class="warmth-fill" style="width:31%; background:linear-gradient(90deg,var(--rose),#FF6B8A);"></div></div>
+                <div class="warmth-val" style="color:var(--rose);">31</div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-tabs">
+            <div class="detail-tab active">Timeline</div>
+            <div class="detail-tab">Commitments</div>
+            <div class="detail-tab">Brief Me</div>
+          </div>
+          <div class="scroll-area" style="padding-top:16px;">
+
+            <!-- Envoy insight card -->
+            <div style="background:rgba(244,63,94,0.07); border:1px solid rgba(244,63,94,0.2); border-radius:14px; padding:14px 16px; margin-bottom:16px;">
+              <div style="font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--rose); margin-bottom:6px;">⚡ Envoy Alert</div>
+              <div style="font-size:12px; color:var(--slate2); line-height:1.55;">Priya asked for the enterprise pricing deck 5 days ago via email. No follow-up sent. Demo call went well — deal is at risk of going cold.</div>
+              <button class="action-btn primary" style="margin-top:10px; width:100%; padding:9px;">Draft Pricing Email Now</button>
+            </div>
+
+            <!-- Timeline -->
+            <div class="section-hdr"><div class="section-hdr-title">Conversation History</div></div>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-dot email"></div>
+                <div class="tl-date">Mar 5 · Email</div>
+                <div class="tl-text"><strong>Priya replied:</strong> "The demo was impressive. Can you send the enterprise pricing deck? We're evaluating 2 other vendors."</div>
+                <div class="tl-channel email">📧 Gmail</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot voice"></div>
+                <div class="tl-date">Mar 5 · Voice note (you)</div>
+                <div class="tl-text"><strong>Your note:</strong> "Demo went really well. She loved the WhatsApp capture feature. Competitor is Freshsales. Price sensitivity — decision by Mar 20."</div>
+                <div class="tl-channel voice">🎙 Voice Note</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot email"></div>
+                <div class="tl-date">Mar 3 · Email</div>
+                <div class="tl-text"><strong>You sent:</strong> Demo invite for March 5th. She accepted within 40 minutes — high intent signal logged.</div>
+                <div class="tl-channel email">📧 Gmail</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot tg"></div>
+                <div class="tl-date">Feb 28 · Telegram</div>
+                <div class="tl-text"><strong>First contact:</strong> Priya messaged after seeing your Product Hunt post. "We're scaling our sales team and CRM admin is killing us."</div>
+                <div class="tl-channel tg">✈️ Telegram</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="section-hdr"><div class="section-hdr-title">Open Commitments</div></div>
+            <div class="commit-chip">
+              <div class="commit-icon">📤</div>
+              <div>
+                <div class="commit-text"><strong>You owe Priya</strong> Enterprise pricing deck with implementation timeline</div>
+                <div class="commit-due">⚠️ Overdue · was due Mar 7</div>
+              </div>
+            </div>
+            <div class="commit-chip">
+              <div class="commit-icon">📅</div>
+              <div>
+                <div class="commit-text"><strong>Priya committed</strong> Decision by March 20 pending board approval</div>
+                <div class="commit-due">10 days remaining</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item" onclick="showScreen('today')"><div class="nav-icon">☀️</div><div class="nav-label">Today</div></div>
+            <div class="nav-item" onclick="showScreen('pipeline')"><div class="nav-icon">📊</div><div class="nav-label">Pipeline</div></div>
+            <div class="nav-item" onclick="showScreen('agent')"><div class="nav-icon">🤖</div><div class="nav-label">Agent</div></div>
+            <div class="nav-item" onclick="showScreen('handoff')"><div class="nav-icon">🤝</div><div class="nav-label">Handoff</div></div>
+          </div>
+        </div><!-- /detail -->
+
+        <!-- ═══ SCREEN: AGENT CHAT ════════════════════════════════════════ -->
+        <div class="app-screen" id="screen-agent">
+          <div class="top-bar">
+            <div class="top-bar-left">
+              <div class="top-eyebrow"><span class="pulse-ring"></span>Envoy Agent · Online</div>
+              <div class="top-title">Agent</div>
+            </div>
+            <div class="avatar">🤖</div>
+          </div>
+          <div class="chat-area" id="chatArea">
+            <div class="chat-msg agent">
+              <div class="chat-label">Envoy</div>
+              <div class="chat-bubble">
+                Good morning, Venkat. You have 3 urgent follow-ups today. TechCorp is the most at-risk — 5 days without a response to Priya's pricing request.
+                <div class="chat-card">
+                  <div class="chat-card-title">📊 Today's snapshot</div>
+                  <div class="chat-card-row"><span>Urgent deals</span><span style="color:var(--rose);">3</span></div>
+                  <div class="chat-card-row"><span>Meetings today</span><span>1 (2:30 PM)</span></div>
+                  <div class="chat-card-row"><span>Pipeline health</span><span style="color:var(--green2);">84%</span></div>
+                  <div class="chat-card-row"><span>Top priority</span><span style="color:var(--rose);">TechCorp India</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-msg user">
+              <div class="chat-label">You</div>
+              <div class="chat-bubble">Brief me on TechCorp before I reach out</div>
+            </div>
+
+            <div class="chat-msg agent">
+              <div class="chat-label">Envoy</div>
+              <div class="chat-bubble">
+                <strong>TechCorp India · Priya Sharma</strong><br/>
+                First contacted Feb 28 via Telegram after your Product Hunt post. Demo on Mar 5 went well — she loved the WhatsApp capture feature.<br/><br/>
+                She asked for an enterprise pricing deck that same day. <strong style="color:var(--rose);">You haven't sent it yet</strong> — 5 days overdue. Decision deadline is March 20.
+                <div class="chat-card">
+                  <div class="chat-card-title">⚡ Key signals</div>
+                  <div class="chat-card-row"><span>Warmth score</span><span style="color:var(--rose);">31 ↓ (was 72)</span></div>
+                  <div class="chat-card-row"><span>Competitor</span><span>Freshsales</span></div>
+                  <div class="chat-card-row"><span>Decision date</span><span>Mar 20</span></div>
+                  <div class="chat-card-row"><span>Last contact</span><span style="color:var(--rose);">5 days ago</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-msg user">
+              <div class="chat-label">You</div>
+              <div class="chat-bubble">Draft an email sending her the pricing deck</div>
+            </div>
+
+            <div class="chat-msg agent">
+              <div class="chat-label">Envoy</div>
+              <div class="chat-bubble">
+                Here's a draft — tone is professional, references your demo conversation:
+                <div class="chat-card" style="font-style:italic; color:var(--slate2); font-size:11px; line-height:1.6;">
+                  Hi Priya,<br/><br/>
+                  Apologies for the delay — attached is the enterprise pricing deck we discussed after the demo. I've included an implementation timeline on page 4 as you requested.<br/><br/>
+                  Given your March 20 evaluation deadline, happy to jump on a quick 15-min call this week to walk through the commercial terms. Does Thursday work?<br/><br/>
+                  Best, Venkat
+                </div>
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                  <button class="action-btn primary" style="flex:1; padding:8px; font-size:11px;">Send Now</button>
+                  <button class="action-btn secondary" style="flex:1; padding:8px; font-size:11px;">Edit Draft</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="chat-input-area">
+            <div class="chat-suggestions">
+              <div class="chat-suggestion" onclick="addMessage('Which deals should I prioritise this week?')">Which deals to prioritise?</div>
+              <div class="chat-suggestion" onclick="addMessage('Brief me on FinStack SEA')">Brief on FinStack</div>
+              <div class="chat-suggestion" onclick="addMessage('What commitments are overdue?')">Overdue commitments</div>
+              <div class="chat-suggestion" onclick="addMessage('How is my pipeline health?')">Pipeline health</div>
+            </div>
+            <div class="chat-input-row">
+              <input class="chat-input" id="chatInput" type="text" placeholder="Ask Envoy anything about your deals…" onkeypress="if(event.key==='Enter') sendChat()"/>
+              <button class="chat-send" onclick="sendChat()">↑</button>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item" onclick="showScreen('today')"><div class="nav-icon">☀️</div><div class="nav-label">Today</div></div>
+            <div class="nav-item" onclick="showScreen('pipeline')"><div class="nav-icon">📊</div><div class="nav-label">Pipeline</div></div>
+            <div class="nav-item active" onclick="showScreen('agent')"><div class="nav-icon">🤖</div><div class="nav-label">Agent</div></div>
+            <div class="nav-item" onclick="showScreen('handoff')"><div class="nav-icon">🤝</div><div class="nav-label">Handoff</div></div>
+          </div>
+        </div><!-- /agent -->
+
+        <!-- ═══ SCREEN: HANDOFF ══════════════════════════════════════════ -->
+        <div class="app-screen" id="screen-handoff">
+          <div class="handoff-header">
+            <div class="handoff-badge">
+              <div class="handoff-badge-dot"></div>
+              <div class="handoff-badge-text">Handoff Mode</div>
+            </div>
+            <div class="top-title" style="margin-top:4px;">First Hire<br/><span style="color:var(--rose);">Handoff</span></div>
+            <div style="font-size:12px; color:var(--slate2); margin-top:8px; line-height:1.5;">Everything your first sales hire needs to start from day one — auto-generated from your deal history.</div>
+            <div class="handoff-stat-row">
+              <div class="handoff-stat"><div class="handoff-stat-val">12</div><div class="handoff-stat-lbl">Deals to transfer</div></div>
+              <div class="handoff-stat"><div class="handoff-stat-val">94</div><div class="handoff-stat-lbl">Days of history</div></div>
+              <div class="handoff-stat"><div class="handoff-stat-val">8</div><div class="handoff-stat-lbl">Open commits</div></div>
+            </div>
+          </div>
+          <div class="scroll-area" style="padding-top:16px;">
+
+            <div class="section-hdr">
+              <div class="section-hdr-title">Assign Deals</div>
+              <div class="section-hdr-link">Select all →</div>
+            </div>
+
+            <div class="deal-assign-card">
+              <div class="deal-assign-top">
+                <div class="deal-assign-name">ClearRoute Logistics</div>
+                <div class="deal-assign-val">₹42L ACV · Hot</div>
+              </div>
+              <div class="deal-assign-meta">
+                <div class="deal-tag stage">Closing</div>
+                <div class="deal-tag channel">WhatsApp</div>
+                <div class="deal-tag">94 days history</div>
+              </div>
+              <div class="assign-toggle">
+                <div class="assign-btn hire">→ First Hire</div>
+                <div class="assign-btn">Keep (me)</div>
+              </div>
+            </div>
+
+            <div class="deal-assign-card">
+              <div class="deal-assign-top">
+                <div class="deal-assign-name">TechCorp India</div>
+                <div class="deal-assign-val">$72K ACV · Urgent</div>
+              </div>
+              <div class="deal-assign-meta">
+                <div class="deal-tag stage">Negotiating</div>
+                <div class="deal-tag channel">Email</div>
+                <div class="deal-tag">38 days history</div>
+              </div>
+              <div class="assign-toggle">
+                <div class="assign-btn">→ First Hire</div>
+                <div class="assign-btn keep">Keep (me)</div>
+              </div>
+            </div>
+
+            <div class="deal-assign-card">
+              <div class="deal-assign-top">
+                <div class="deal-assign-name">FinStack SEA</div>
+                <div class="deal-assign-val">$60K ACV · Warm</div>
+              </div>
+              <div class="deal-assign-meta">
+                <div class="deal-tag stage">Negotiating</div>
+                <div class="deal-tag channel">Telegram</div>
+                <div class="deal-tag">51 days history</div>
+              </div>
+              <div class="assign-toggle">
+                <div class="assign-btn hire">→ First Hire</div>
+                <div class="assign-btn">Keep (me)</div>
+              </div>
+            </div>
+
+            <div class="deal-assign-card">
+              <div class="deal-assign-top">
+                <div class="deal-assign-name">Nuvama Wealth</div>
+                <div class="deal-assign-val">$85K ACV · Hot</div>
+              </div>
+              <div class="deal-assign-meta">
+                <div class="deal-tag stage">Interested</div>
+                <div class="deal-tag channel">Email</div>
+                <div class="deal-tag">12 days history</div>
+              </div>
+              <div class="assign-toggle">
+                <div class="assign-btn hire">→ First Hire</div>
+                <div class="assign-btn">Keep (me)</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:14px; padding:14px 16px; margin-bottom:16px;">
+              <div style="font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:var(--green2); margin-bottom:6px;">📦 Handoff Package Includes</div>
+              <div style="font-size:12px; color:var(--slate2); line-height:1.8;">
+                ✓ Full conversation history (all channels)<br/>
+                ✓ Open commitments per deal<br/>
+                ✓ Warmth scores + velocity signals<br/>
+                ✓ Voice note transcripts<br/>
+                ✓ AI relationship summary per deal<br/>
+                ✓ Your context notes
+              </div>
+            </div>
+
+            <button class="btn-primary" style="width:100%; margin-bottom:10px;" onclick="showScreen('golive')">Generate Handoff Report →</button>
+            <button class="btn-ghost" style="width:100%;">Invite First Hire by Email</button>
+
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item" onclick="showScreen('today')"><div class="nav-icon">☀️</div><div class="nav-label">Today</div></div>
+            <div class="nav-item" onclick="showScreen('pipeline')"><div class="nav-icon">📊</div><div class="nav-label">Pipeline</div></div>
+            <div class="nav-item" onclick="showScreen('agent')"><div class="nav-icon">🤖</div><div class="nav-label">Agent</div></div>
+            <div class="nav-item active" onclick="showScreen('handoff')"><div class="nav-icon">🤝</div><div class="nav-label">Handoff</div></div>
+          </div>
+        </div><!-- /handoff -->
+
+        <!-- ═══ SCREEN: GO LIVE ══════════════════════════════════════════ -->
+        <div class="app-screen" id="screen-golive">
+          <div class="golive-center" style="padding-top:80px;">
+            <div class="golive-ring">📦</div>
+            <div class="golive-title">Handoff Ready.</div>
+            <div class="golive-sub">Your first hire's welcome package is prepared. Every deal, every conversation, every open commitment — transferred.</div>
+            <div style="width:100%; margin-bottom:24px;">
+              <div class="activity-row"><div class="activity-dot done"></div><div class="activity-text">12 deals packaged</div><div class="activity-time">done</div></div>
+              <div class="activity-row"><div class="activity-dot done"></div><div class="activity-text">94 days of history compiled</div><div class="activity-time">done</div></div>
+              <div class="activity-row"><div class="activity-dot done"></div><div class="activity-text">8 open commitments flagged</div><div class="activity-time">done</div></div>
+              <div class="activity-row"><div class="activity-dot done"></div><div class="activity-text">AI relationship summaries written</div><div class="activity-time">done</div></div>
+            </div>
+            <button class="btn-primary" style="width:100%; margin-bottom:10px;">Invite First Hire →</button>
+            <button class="btn-ghost" style="width:100%;" onclick="showScreen('today')">Back to Today</button>
+          </div>
+        </div><!-- /golive -->
+
+      </div><!-- /device-screen -->
+    </div><!-- /device-frame -->
+  </div><!-- /device-wrap -->
+
+  <!-- ══ ANNOTATIONS PANEL ════════════════════════════════════════════════════ -->
+  <div class="annotations" id="annotations">
+    <!-- Populated by JS per screen -->
+  </div>
+
+</div><!-- /stage -->
+
+<script>
+const SCREENS = {
+  onboarding: {
+    label: 'Onboarding',
+    notes: [
+      { label: 'Journey', text: '<strong>5-step onboarding wizard.</strong> Target: founder goes from signup to first captured conversation in under 15 minutes.' },
+      { label: 'Step 1', text: '<strong>Notification channel</strong> — where Envoy reaches the founder. App is recommended but all options are additive. Not a constraint.' },
+      { label: 'Step 2', text: '<strong>Conversation channels</strong> — what Envoy monitors. Architecture is explicitly extensible. "More coming" card visible to signal open roadmap.' },
+      { label: 'Step 3', text: '<strong>Pipeline destination</strong> — Envoy can write to its own pipeline or to the founder\'s existing tools (HubSpot now, Notion/Sheets in Phase 2).' },
+      { label: 'Step 4', text: '<strong>Personalisation</strong> — agent name, tone, language, digest timing. Creates ownership — this is <em>your</em> agent.' },
+      { label: 'Step 5', text: '<strong>Go Live</strong> — private server spins up, retroactive 90-day email scan begins. Founder sees real-time activity feed before opening Today view.' },
+    ],
+    specs: [['Steps', '5'], ['Target time', '< 15 min'], ['Required fields', 'Email only'], ['Skip allowed', 'Steps 2–4']]
+  },
+  today: {
+    label: 'Today View',
+    notes: [
+      { label: 'Design intent', text: '<strong>Replaces the morning CRM login.</strong> Founder opens this once and knows exactly what to do — no navigation, no searching.' },
+      { label: 'Notification banner', text: '<strong>Push notification</strong> appears at 7:00 AM. Tapping opens the app. Dismissible without losing the underlying items.' },
+      { label: 'Urgency ranking', text: 'Deals sorted by: overdue commitments first → cold deals → meetings today → recently active. Not by stage or value.' },
+      { label: 'One-tap actions', text: 'Every card has <strong>Draft Reply, View Deal, Snooze</strong>. Actions execute without leaving the Today view.' },
+      { label: 'Metrics bar', text: 'Urgent count, active deals, pipeline health score — updated in real time from conversation signals, not manual input.' },
+    ],
+    specs: [['Daily opens (target)', '>1 per day'], ['Action time', '< 10 sec per item'], ['Navigation needed', 'Zero for urgent items'], ['Digest time', '7:00 AM (configurable)']]
+  },
+  pipeline: {
+    label: 'Pipeline View',
+    notes: [
+      { label: 'Warmth score', text: 'Primary sort signal — <strong>not deal stage or value.</strong> A $10K deal with warmth 91 appears above a $200K deal with warmth 18. Reflects what actually needs attention.' },
+      { label: 'Score calculation', text: 'Computed from: response latency, message sentiment, commitment follow-through, meeting behaviour, conversation velocity — never from manually entered fields.' },
+      { label: 'Stage filter', text: 'Horizontal scroll filter at top. Founder can narrow to a single stage. Warmth sort applies within each filter.' },
+      { label: 'Silent deal alert', text: 'BharatPay card shows "21 days silent ⚠️" — phantom pipeline detection. Envoy flags deals gone dark without any founder action.' },
+    ],
+    specs: [['Stages', '4 (Contact → Closing)'], ['Sort default', 'Warmth score ↓'], ['Score range', '0–100'], ['Cold threshold', '21 days silence']]
+  },
+  detail: {
+    label: 'Deal Detail',
+    notes: [
+      { label: 'Cross-channel timeline', text: '<strong>Single unified thread</strong> of all interactions across every connected channel — email, Telegram, voice notes. Chronological. No app switching.' },
+      { label: 'Envoy alert', text: 'When Envoy detects an overdue commitment, it surfaces an <strong>actionable insight at the top</strong> of the deal view — not buried in a notification log.' },
+      { label: 'Commitment tracker', text: 'Classifies: <strong>You owe them / They committed / Both sides.</strong> Due dates extracted automatically from conversation language.' },
+      { label: 'Brief Me tab', text: 'One-tap to get Envoy\'s full relationship summary for this deal — useful before any call or email. Same as asking the agent "brief me on TechCorp".' },
+    ],
+    specs: [['Timeline sources', 'All channels'], ['Tabs', 'Timeline / Commitments / Brief Me'], ['Commitment types', '4'], ['Auto-extraction', '100% automatic']]
+  },
+  agent: {
+    label: 'Agent Chat',
+    notes: [
+      { label: 'Primary interface', text: '<strong>The Envoy App is primary.</strong> This screen is the full conversational interface. Not just a notification reply layer — a complete sales intelligence chat.' },
+      { label: 'Natural language', text: 'Text or voice input. Agent understands deal-specific queries, drafts emails, surfaces signals, and answers "what should I do today?" without a structured form.' },
+      { label: 'Focus constraints', text: 'Agent is scoped to sales-only in Envoy Core. Out-of-scope requests (e.g. "book a flight") are redirected warmly to a relevant sales action instead.' },
+      { label: 'Draft capability', text: 'Agent can <strong>draft emails and messages</strong> in the founder\'s tone, referencing specific conversation history. Founder reviews before sending — never auto-sends in MVP.' },
+      { label: 'Suggestions bar', text: 'Contextual quick-ask chips appear above the input — reduce the blank-page problem for founders who aren\'t sure what to ask first.' },
+    ],
+    specs: [['Response time', '< 3 seconds'], ['Input modes', 'Text + Voice'], ['Draft sends', 'Always founder-reviewed'], ['Scope', 'Sales-only (Core tier)']]
+  },
+  handoff: {
+    label: 'Handoff Mode',
+    notes: [
+      { label: 'Trigger', text: '<strong>Founder activates Handoff Mode</strong> when they\'re ready to bring on a first sales hire. Envoy auto-generates the full report from stored history.' },
+      { label: 'Assign deals', text: 'Founder can assign deals to hire or keep them personally (strategic/sensitive deals). Simple two-button toggle per deal — no complex reassignment flow.' },
+      { label: 'Package contents', text: 'Full cross-channel history, open commitments, warmth scores, voice note transcripts, AI summaries. New hire starts with complete context — not a blank CRM.' },
+      { label: 'Onboarding time target', text: '<strong>< 2 hours</strong> for new hire to review all assigned deals vs. 2 weeks of manual briefing without Envoy.' },
+    ],
+    specs: [['Briefing time (target)', '< 2 hours'], ['History transferred', '90+ days'], ['Channels included', 'All connected'], ['Manual work', 'Annotation only']]
+  },
+  golive: {
+    label: 'Go Live / Confirmation',
+    notes: [
+      { label: 'Usage', text: 'This screen serves double duty: <strong>initial Go Live</strong> after onboarding (showing server provisioning), and <strong>Handoff confirmation</strong> after generating a handoff report.' },
+      { label: 'Activity feed', text: 'Real-time activity list reassures the founder that Envoy is actively working — not a black box. Each item ticks to done in sequence.' },
+      { label: 'CTA', text: 'After onboarding: "Open Today View →". After handoff: "Invite First Hire →". Context-sensitive — same screen, different state.' },
+    ],
+    specs: [['Time to first captured convo', '< 30 min'], ['Retroactive scan', '90 days email'], ['Server type', 'Dedicated private'], ['Isolation', 'Single-tenant']]
+  }
+};
+
+let currentScreen = 'onboarding';
+let currentStep = 1;
+
+function showScreen(name) {
+  // Hide all
+  document.querySelectorAll('.app-screen, .onboard-screen').forEach(el => {
+    el.classList.remove('visible');
+  });
+
+  // Update nav buttons
+  document.querySelectorAll('.snav-btn').forEach(btn => btn.classList.remove('active'));
+  const navBtns = document.querySelectorAll('.snav-btn');
+  const names = ['onboarding','today','pipeline','detail','agent','handoff','golive'];
+  const idx = names.indexOf(name);
+  if (idx >= 0) navBtns[idx].classList.add('active');
+
+  currentScreen = name;
+
+  if (name === 'onboarding') {
+    document.getElementById('screen-onboarding').classList.add('visible');
+    goToStep(currentStep || 1);
+  } else {
+    const el = document.getElementById('screen-' + name);
+    if (el) el.classList.add('visible');
+  }
+
+  updateAnnotations(name);
+}
+
+function goToStep(n) {
+  currentStep = n;
+  document.querySelectorAll('[id^="ob-step-"]').forEach(el => el.classList.remove('visible'));
+  const el = document.getElementById('ob-step-' + n);
+  if (el) el.classList.add('visible');
+  document.getElementById('screen-onboarding').classList.add('visible');
+}
+
+function toggleOption(card) {
+  card.classList.toggle('selected');
+  const check = card.querySelector('.option-check');
+  if (check) check.textContent = card.classList.contains('selected') ? '✓' : '';
+}
+
+function selectOption(card) {
+  card.closest('.onboard-content').querySelectorAll('.option-card').forEach(c => {
+    c.classList.remove('selected');
+    const ch = c.querySelector('.option-check');
+    if (ch) ch.textContent = '';
+  });
+  card.classList.add('selected');
+  const check = card.querySelector('.option-check');
+  if (check) check.textContent = '✓';
+}
+
+function dismissNotif(id) {
+  const el = document.getElementById(id);
+  if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(-8px)'; el.style.transition = '0.3s'; setTimeout(() => el.remove(), 300); }
+}
+
+function updateAnnotations(name) {
+  const data = SCREENS[name];
+  if (!data) return;
+  const ann = document.getElementById('annotations');
+  let html = `<div class="ann-title">${data.label}</div>`;
+  data.notes.forEach(n => {
+    html += `<div class="ann-item"><div class="ann-label">${n.label}</div><div class="ann-text">${n.text}</div></div>`;
+  });
+  html += `<div class="ann-divider"></div><div class="ann-title" style="font-size:12px; margin-bottom:12px;">Design Specs</div><div class="design-spec">`;
+  data.specs.forEach(([k,v]) => {
+    html += `<div class="spec-row"><div class="spec-key">${k}</div><div class="spec-val">${v}</div></div>`;
+  });
+  html += `</div>`;
+  ann.innerHTML = html;
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  addMessage(msg);
+  input.value = '';
+}
+
+function addMessage(msg) {
+  const area = document.getElementById('chatArea');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'chat-msg user';
+  userDiv.innerHTML = `<div class="chat-label">You</div><div class="chat-bubble">${msg}</div>`;
+  area.appendChild(userDiv);
+
+  setTimeout(() => {
+    const agentDiv = document.createElement('div');
+    agentDiv.className = 'chat-msg agent';
+    agentDiv.innerHTML = `<div class="chat-label">Envoy</div><div class="chat-bubble"><span style="color:var(--slate2); font-style:italic;">Thinking…</span></div>`;
+    area.appendChild(agentDiv);
+    area.scrollTop = area.scrollHeight;
+    setTimeout(() => {
+      agentDiv.querySelector('.chat-bubble').innerHTML = getAgentReply(msg);
+      area.scrollTop = area.scrollHeight;
+    }, 900);
+  }, 400);
+  area.scrollTop = area.scrollHeight;
+}
+
+function getAgentReply(msg) {
+  const m = msg.toLowerCase();
+  if (m.includes('prioriti')) return 'Top 3 deals to prioritise today:<br/><br/><strong>1. TechCorp India</strong> — Overdue pricing deck. Decision Mar 20. Act now.<br/><strong>2. FinStack SEA</strong> — Board meeting Friday. They need timeline answer today.<br/><strong>3. ClearRoute</strong> — "Reverting by EOD" — follow up if no word by 5 PM.';
+  if (m.includes('finstack')) return '<strong>FinStack SEA · Ahmad Jaffar</strong><br/>51 days of history. Telegram-first. Warmth: 64.<br/><br/>Ahmad asked about implementation timeline — his board meets this Friday. He needs an answer before then. Last contact: yesterday via Telegram.';
+  if (m.includes('commit')) return 'You have <strong>3 overdue commitments</strong>:<br/><br/>• TechCorp — enterprise pricing deck (5 days overdue)<br/>• FinStack — implementation timeline (due today)<br/>• BharatPay — follow-up call (12 days overdue, deal likely cold)';
+  if (m.includes('health') || m.includes('pipeline')) return 'Pipeline health: <strong style="color:var(--green2);">84%</strong> ↑ 6pts this week.<br/><br/>12 active deals. 2 closing this month (~₹1.2Cr). 1 deal at serious risk (TechCorp). 1 phantom deal flagged (BharatPay, 21 days silent).';
+  return `Understood. Looking at your pipeline for context on "<em>${msg}</em>"...<br/><br/>I\'ll need a moment to pull the relevant deal history. Would you like me to focus on a specific deal or give you a general overview?`;
+}
+
+// Init
+updateAnnotations('onboarding');
+</script>
+</body>
+</html>

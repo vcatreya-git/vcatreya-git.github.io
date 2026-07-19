@@ -4,15 +4,15 @@ Personal profile site — resume, **PM case studies**, and side projects.
 
 ## Case studies
 
-Group PM training work (Team Hashiras), linked from the homepage `#case-studies` section:
+Group finals (Team Hashiras) **and** personal research / alternate concepts, labeled on the site:
 
 | Case study | Path |
 |------------|------|
-| Blinkit PeakPulse (dark store DSS) | [`case-studies/blinkit-peakpulse/`](./case-studies/blinkit-peakpulse/) |
-| Relay — founder-led CRM | [`case-studies/relay-founder-crm/`](./case-studies/relay-founder-crm/) |
-| YouTube long-form engagement | [`case-studies/youtube-long-form/`](./case-studies/youtube-long-form/) |
+| Blinkit PeakPulse + my research & dashboard | [`case-studies/blinkit-peakpulse/`](./case-studies/blinkit-peakpulse/) |
+| Relay (team) + Envoy (my alternate) | [`case-studies/relay-founder-crm/`](./case-studies/relay-founder-crm/) |
+| YouTube long-form + my hypotheses | [`case-studies/youtube-long-form/`](./case-studies/youtube-long-form/) |
 
-Index: [`case-studies/README.md`](./case-studies/README.md)
+Index: [`case-studies/README.md`](./case-studies/README.md) · Live: https://vcatreya-git.github.io/#case-studies
 
 ## Local preview
 

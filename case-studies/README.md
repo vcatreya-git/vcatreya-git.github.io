@@ -1,11 +1,27 @@
-# PM case studies (Team Hashiras)
+# PM case studies
 
-Group PM training case studies by Venkatraman Chandrasekar and team.
+Group PM training (Team Hashiras) plus personal research and alternate concepts.
+Linked from the [profile site](../index.html#case-studies).
 
-| Case study | Folder | Read online |
-|------------|--------|-------------|
-| Blinkit PeakPulse — peak-hour dark store DSS | [blinkit-peakpulse](./blinkit-peakpulse/) | [Problem brief (PDF)](./blinkit-peakpulse/problem-brief.pdf) · [PRD (HTML)](./blinkit-peakpulse/prd.html) |
-| Relay — founder-led CRM / AI memory layer | [relay-founder-crm](./relay-founder-crm/) | [Problem brief (PDF)](./relay-founder-crm/problem-brief.pdf) · [PRD (PDF)](./relay-founder-crm/prd.pdf) · [Presentation (PDF)](./relay-founder-crm/presentation.pdf) |
-| YouTube long-form engagement | [youtube-long-form](./youtube-long-form/) | [Problem brief (PDF)](./youtube-long-form/problem-brief.pdf) · [Case study (HTML)](./youtube-long-form/case-study.html) |
+## Blinkit PeakPulse — dark store DSS
 
-Also linked from the [profile site](../index.html#case-studies).
+| | |
+|--|--|
+| **Team final** | [Problem brief](./blinkit-peakpulse/problem-brief.pdf) · [PRD](./blinkit-peakpulse/prd.html) · [Presentation](./blinkit-peakpulse/presentation.pptx) |
+| **My work** | [Research (16 chapters)](./blinkit-peakpulse/research-16-chapters.html) · [Dashboard prototype](./blinkit-peakpulse/dark-store-dashboard.html) |
+
+## Founder-led sales CRM
+
+Team shipped **Relay**. Personal alternate concept: **Envoy**.
+
+| | |
+|--|--|
+| **Team final — Relay** | [Problem brief](./relay-founder-crm/problem-brief.pdf) · [PRD](./relay-founder-crm/prd.pdf) · [Presentation](./relay-founder-crm/presentation.pdf) |
+| **My work — Envoy** | [Solution](./relay-founder-crm/envoy-solution.html) · [Journeys](./relay-founder-crm/envoy-journeys.html) · [Prototype](./relay-founder-crm/envoy-prototype.html) |
+
+## YouTube long-form engagement
+
+| | |
+|--|--|
+| **Team final** | [Problem brief](./youtube-long-form/problem-brief.pdf) · [Case study](./youtube-long-form/case-study.html) |
+| **My work** | [Hypotheses v5](./youtube-long-form/hypotheses-v5.html) |

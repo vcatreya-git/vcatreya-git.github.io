@@ -1,0 +1,1762 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:760px;margin:40px auto;padding:0 20px;line-height:1.55;color:#1e293b}h1,h2,h3{color:#0f172a}a{color:#0D9488}</style>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Author" content="Un-named">
+  <meta name="LastAuthor" content="Un-named">
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 10.0px 0.0px 4.0px 0.0px; text-align: center; font: 36.0px Arial; color: #ffffff}
+    p.p2 {margin: 2.0px 0.0px 2.0px 0.0px; text-align: center; font: 14.0px Arial; color: #a8d8d8}
+    p.p3 {margin: 4.0px 0.0px 10.0px 0.0px; text-align: center; font: 10.0px Arial; color: #7abfbf}
+    p.p4 {margin: 12.0px 0.0px 12.0px 0.0px; font: 10.0px Arial; color: #7abfbf; min-height: 11.0px}
+    p.p5 {margin: 18.0px 0.0px 8.0px 0.0px; font: 18.0px Arial; color: #1b2a4a}
+    p.p6 {margin: 4.0px 0.0px 4.0px 0.0px; font: 18.0px Arial; color: #1b2a4a; min-height: 21.0px}
+    p.p7 {margin: 4.0px 0.0px 4.0px 0.0px; font: 11.0px Arial; color: #1a1a2e}
+    p.p8 {margin: 3.0px 0.0px 3.0px 0.0px; font: 11.0px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p9 {margin: 6.0px 0.0px 3.0px 0.0px; font: 11.0px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p10 {margin: 2.0px 0.0px 2.0px 0.0px; font: 12.0px Arial; color: #1b2a4a}
+    p.p11 {margin: 2.0px 0.0px 2.0px 0.0px; font: 11.0px Arial; color: #1b2a4a; min-height: 12.0px}
+    p.p12 {margin: 2.0px 0.0px 2.0px 0.0px; font: 11.0px Arial; color: #0d7c7c}
+    p.p13 {margin: 2.0px 0.0px 2.0px 0.0px; font: 11.0px Arial; color: #1b2a4a}
+    p.p14 {margin: 10.0px 0.0px 4.0px 0.0px; font: 11.0px Arial; color: #1b2a4a; min-height: 12.0px}
+    p.p15 {margin: 14.0px 0.0px 6.0px 0.0px; font: 14.0px Arial; color: #0d7c7c}
+    p.p16 {margin: 6.0px 0.0px 4.0px 0.0px; font: 11.0px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p17 {margin: 4.0px 0.0px 3.0px 0.0px; font: 11.0px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p18 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Arial; color: #ffffff}
+    p.p19 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Arial; color: #1a1a2e}
+    p.p20 {margin: 6.0px 0.0px 4.0px 0.0px; font: 10.0px Arial; color: #1a1a2e; min-height: 11.0px}
+    p.p21 {margin: 3.0px 0.0px 3.0px 0.0px; font: 14.0px Arial; color: #0d7c7c; min-height: 16.0px}
+    p.p22 {margin: 10.0px 0.0px 4.0px 0.0px; font: 10.0px Arial; color: #1a1a2e; min-height: 11.0px}
+    p.p23 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    p.p24 {margin: 3.0px 0.0px 2.0px 0.0px; font: 14.0px Arial; color: #0d7c7c; min-height: 16.0px}
+    p.p25 {margin: 10.0px 0.0px 4.0px 0.0px; font: 12.0px Arial; color: #1b2a4a}
+    p.p26 {margin: 3.0px 0.0px 2.0px 0.0px; font: 11.0px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p27 {margin: 4.0px 0.0px 3.0px 0.0px; font: 10.0px Arial; color: #1a1a2e; min-height: 11.0px}
+    p.p28 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.0px Arial; color: #0d7c7c}
+    p.p29 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.0px Arial; color: #cc3333}
+    p.p30 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.0px Arial; color: #cc8800}
+    p.p31 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.0px Arial; color: #007744}
+    p.p32 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.0px Arial; color: #1b2a4a}
+    p.p33 {margin: 6.0px 0.0px 4.0px 0.0px; font: 10.0px Arial; color: #1b2a4a; min-height: 11.0px}
+    p.p34 {margin: 10.0px 0.0px 4.0px 0.0px; font: 11.0px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p35 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.5px Arial; color: #1a1a2e}
+    p.p36 {margin: 6.0px 0.0px 4.0px 0.0px; font: 10.5px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p37 {margin: 2.0px 0.0px 2.0px 0.0px; font: 12.0px Arial; color: #0d7c7c}
+    p.p38 {margin: 10.0px 0.0px 4.0px 0.0px; font: 10.5px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p39 {margin: 4.0px 0.0px 3.0px 0.0px; font: 10.5px Arial; color: #1a1a2e; min-height: 12.0px}
+    p.p40 {margin: 2.0px 0.0px 2.0px 0.0px; font: 11.0px Arial; color: #3d1a1a}
+    p.p41 {margin: 6.0px 0.0px 4.0px 0.0px; font: 11.0px Arial; color: #0d7c7c; min-height: 12.0px}
+    p.p42 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.5px Arial; color: #1b2a4a}
+    p.p43 {margin: 2.0px 0.0px 2.0px 0.0px; font: 10.5px Arial; color: #0d7c7c}
+    p.p44 {margin: 4.0px 0.0px 3.0px 0.0px; font: 10.5px Arial; color: #0d7c7c; min-height: 12.0px}
+    p.p45 {margin: 5.0px 0.0px 4.0px 0.0px; text-align: center; font: 24.0px Arial; color: #ffffff}
+    p.p46 {margin: 2.0px 0.0px 2.0px 0.0px; text-align: center; font: 12.0px Arial; color: #a8d8d8}
+    p.p47 {margin: 3.0px 0.0px 5.0px 0.0px; text-align: center; font: 10.0px Arial; color: #7abfbf}
+    table.t1 {border-collapse: collapse}
+    td.td1 {border-style: solid; border-width: 1.0px 1.0px 1.0px 1.0px; border-color: #bfbfbf #bfbfbf #bfbfbf #bfbfbf; padding: 0.0px 5.0px 0.0px 5.0px}
+  </style>
+</head>
+<body>
+<p style="margin-bottom:24px"><a href="../../index.html#case-studies" style="color:#0D9488;font-weight:600">← Back to profile · Case studies</a></p>
+
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><b>ENVOY</b></p>
+        <p class="p2"><i>Your AI Sales Agent. Always in the Field.</i></p>
+        <p class="p3">Solution Document<span class="Apple-converted-space">  </span>|<span class="Apple-converted-space">  </span>Founder-Led Sales Intelligence Platform</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p4"><br></p>
+<p class="p5"><b>Executive Summary</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Early-stage founders lose between 30-40% of warm leads — not because they don't care, but because the tools built to help them were never designed for how they actually work. Salesforce, HubSpot, Zoho — powerful platforms built for dedicated sales teams — demand constant manual updates that founders simply don't have time to make.</p>
+<p class="p8"><br></p>
+<p class="p7">Envoy is different. It is a fully managed AI sales agent platform that works silently across every channel a founder already uses — WhatsApp, Gmail, Telegram — capturing conversations, logging deals, and flagging what needs attention. No new apps. No manual entry. No CRM to maintain.</p>
+<p class="p8"><br></p>
+<p class="p7">The founder just sells. Envoy handles everything else.</p>
+<p class="p9"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p10"><b><i>The Core Insight</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p12"><b><i>Every existing CRM was built on one assumption: someone on your team will update the system.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>Envoy is built on a different assumption: the founder has no time to update anything. So the system must update itself.</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p14"><b><i></i></b><br></p>
+<p class="p5"><b>The Problem We Are Solving</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p15"><b>How Founders Actually Sell</b></p>
+<p class="p7">A typical early-stage founder manages 50-150 active conversations simultaneously across 4-6 different communication channels. They spend 70% of their time actively selling — closing, pitching, negotiating — and the remaining 30% on everything else that running a company demands.</p>
+<p class="p8"><br></p>
+<p class="p7">There is no time left to log calls, update pipelines, or maintain a CRM. So they don't. And deals fall through the cracks.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>Why Existing CRMs Fail Founders</b></p>
+<p class="p7">The problem is not that existing CRMs lack features. The problem is that they were built for a completely different user — a dedicated sales team where updating the CRM is someone's full-time job.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>CRM Tool</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What It Was Built For</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Why It Fails Founders</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Salesforce</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Enterprise sales teams of 50+</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Overwhelming complexity, requires a dedicated admin</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>HubSpot</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Marketing-led sales teams</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Still demands constant manual updates to stay useful</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Zoho Bigin</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Small teams — their 'lite' version</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Lighter UI, same manual-first philosophy underneath</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Pipedrive</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sales-focused teams</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Good pipeline view, still requires disciplined logging</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p7">The lite versions these companies have built are simply smaller versions of the same product. They removed features — but kept the core assumption that a human will manually log everything. That assumption breaks completely for founders.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>The Result</b></p>
+<p class="p21"><b></b><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Metric</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Current State Without Envoy</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Warm leads receiving follow up</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>60-70% — 30-40% are simply forgotten</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Steps to log one conversation</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>7-10 manual steps minimum</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Pipeline accuracy</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Low — based on memory and gut feel</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Time spent on CRM admin</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>3-5 hours per week, unproductive</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Revenue forecasting</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Unreliable — investors get vague answers</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founder operating mode</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Reactive — chasing deals rather than leading them</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p22"><b></b><br></p>
+<p class="p23"></p>
+<p class="p5"><b>The Solution — Envoy</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p15"><b>What Envoy Is</b></p>
+<p class="p7">Envoy is a managed AI sales agent platform built specifically for early-stage founders. It deploys a dedicated AI agent — hosted on a private server — that connects to every channel the founder already uses for sales. It captures conversations automatically, maintains an accurate pipeline in real time, and proactively tells the founder what needs attention next.</p>
+<p class="p17"><br></p>
+<p class="p7">Envoy is not a CRM the founder logs into. It is an agent that works on their behalf — continuously, silently, across every channel — and surfaces only what the founder needs to act on.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>How Envoy Works</b></p>
+<p class="p24"><b></b><br></p>
+<p class="p25"><b>Step 1 — Onboarding (One Time, 15 Minutes)</b></p>
+<p class="p7">The founder signs up and goes through a simple guided wizard. No technical knowledge required. They choose which communication channels to connect and which CRM to sync with — or they use Envoy's built-in lightweight pipeline.</p>
+<p class="p26"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Choose Your Channels</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Choose Your CRM</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>WhatsApp</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>HubSpot</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Gmail / Outlook</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Notion</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Telegram</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy built-in pipeline</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>More channels added continuously</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>More integrations coming</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p27"><b></b><br></p>
+<p class="p7">Behind the scenes, Envoy spins up a dedicated private server exclusively for this founder. Their data never touches another customer's instance. Ever.</p>
+<p class="p16"><br></p>
+<p class="p25"><b>Step 2 — Envoy Runs Silently In The Background</b></p>
+<p class="p7">From the moment onboarding is complete, the Envoy agent is working. The founder does nothing differently. They continue selling exactly as they always have.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Happens</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Envoy Does</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Founder Does</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Texts a lead on WhatsApp</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Captures conversation, identifies lead, logs against their deal</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Nothing — just sells</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Receives an email reply</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Reads it, extracts intent, updates deal stage automatically</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Nothing — just replies</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sends a voice note to a lead</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Transcribes word for word, logs context and commitments</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Nothing — just communicates</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Finishes a phone call</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founder sends 30-second voice note to Envoy summarising the call</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>30 seconds — once</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>New unknown contact messages</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>AI classifies intent, asks founder one tap to confirm if lead</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>One tap — if unsure</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p25"><b>Step 3 — Envoy Tells You What To Do Next</b></p>
+<p class="p7">Every morning, the founder receives a WhatsApp message from Envoy. No dashboard to open. No app to check. Just a clear, actionable brief delivered to where the founder already is.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>Sample Morning Digest from Envoy</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p28"><b><i>Good morning. Here is your pipeline today.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p29"><b><i>URGENT<span class="Apple-converted-space">  </span>|<span class="Apple-converted-space">  </span>Sarah (Acme Corp) — no contact in 7 days. Last topic: pricing. Suggested follow up ready.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p30"><b><i>DUE TODAY<span class="Apple-converted-space">  </span>|<span class="Apple-converted-space">  </span>Raj (TechCorp) — demo at 3pm. Key concern to address: Slack integration.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p31"><b><i>WARM<span class="Apple-converted-space">  </span>|<span class="Apple-converted-space">  </span>James (FinStack) — replied yesterday, positive tone. No action needed yet.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p32"><b><i>Pipeline: 12 active deals <span class="Apple-converted-space">  </span>| <span class="Apple-converted-space">  </span>Estimated closes this month: 3</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p33"><b><i></i></b><br></p>
+<p class="p25"><b>Step 4 — Founder Replies, Envoy Acts</b></p>
+<p class="p7">Envoy does not just inform — it executes. The founder can instruct Envoy directly from WhatsApp and Envoy will act on their behalf.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Founder Says to Envoy</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Envoy Does</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Draft a follow up for Sarah"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Generates personalised message using full conversation history</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Where are we with TechCorp?"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Returns full deal summary — contacts, history, concerns, next steps</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Log my call with Raj — confirmed $500/month, demo Thursday"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Creates call note, sets reminder, updates pipeline stage</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Who are my hottest leads right now?"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Ranks active deals by engagement and recency, explains why</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Send Sarah the pricing PDF"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sends the file and logs it as a touchpoint on the deal</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p22"><b></b><br></p>
+<p class="p23"></p>
+<p class="p5"><b>The Intelligence Layer — How Envoy Knows What to Log</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">One of the hardest product design challenges in Envoy is knowing which conversations to log as sales activity and which to ignore completely. A founder's WhatsApp contains messages from their spouse, friends, co-founders, investors, and leads — all mixed together.</p>
+<p class="p8"><br></p>
+<p class="p7">Envoy solves this through a four-layer classification system, designed around one core principle: high precision over high recall. It is better to occasionally miss a conversation than to pollute the CRM with noise.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>The Four Classification Layers</b></p>
+<p class="p24"><b></b><br></p>
+<p class="p25"><b>Layer 1 — Known Leads (Automatic, Silent)</b></p>
+<p class="p7">Any contact the founder has already confirmed as a lead is monitored automatically. Every message, voice note, and file exchanged with them is captured without the founder doing anything.</p>
+<p class="p9"><br></p>
+<p class="p25"><b>Layer 2 — New Contacts (AI Classification with Confidence Scoring)</b></p>
+<p class="p7">When a message arrives from an unknown contact, Envoy's AI analyses it and assigns a confidence score based on commercial signals — pricing questions, product mentions, follow up language, inbound responses to outbound messages. Based on the score, Envoy takes one of three actions.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Confidence Level</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Envoy Does</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Founder Effort</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>High — clear sales intent</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Auto-logs silently, creates contact</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Zero</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Medium — ambiguous signals</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sends founder one-tap confirmation request</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>One tap</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Low — clearly personal</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Ignores completely, never surfaces</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Zero</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p25"><b>Layer 3 — Founder Override (Always In Control)</b></p>
+<p class="p7">The founder can instruct Envoy at any time to always track or never track a specific contact, phone number, or email domain. These rules persist and override AI classification permanently.</p>
+<p class="p9"><br></p>
+<p class="p25"><b>Layer 4 — Dedicated Sales Channel (Premium Option)</b></p>
+<p class="p7">For founders who want complete separation, Envoy provides a dedicated WhatsApp Business number. Leads contact this number. Envoy monitors it exclusively. The founder's personal WhatsApp is never touched. Every conversation on the sales number is a lead by definition — no classification needed.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>How Envoy Gets Smarter Over Time</b></p>
+<p class="p7">Every time the founder confirms or dismisses a classification, Envoy learns. Over weeks, it understands this specific founder's network — who their leads tend to be, what language indicates commercial intent in their industry, which contacts are personal. The number of confirmation requests drops significantly after the first two weeks.</p>
+<p class="p34"><br></p>
+<p class="p23"></p>
+<p class="p5"><b>Architecture — Agent as a Service</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Envoy is built as a true Agent-as-a-Service platform. The founder never sees the infrastructure. They see a WhatsApp message every morning and a pipeline that stays accurate without any effort on their part.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>Technology Philosophy</b></p>
+<p class="p7">Envoy is powered by best-in-class agentic AI infrastructure — purpose-built for autonomous, multi-channel, always-on operation. Critically, the underlying technology is abstracted completely from the founder's experience. As the AI agent ecosystem evolves, Envoy upgrades under the hood. The founder's experience only ever gets better.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>Technology Agnostic by Design</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Envoy is not tied to any single AI agent framework or model provider. The platform is built so that as better agent infrastructure emerges, Envoy can adopt it without any disruption to the founder's experience. The brand and the product outlive any single technology choice underneath.</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p36"><b><i></i></b><br></p>
+<p class="p15"><b>One Instance Per Founder — Complete Isolation</b></p>
+<p class="p7">Every Envoy customer runs on their own dedicated private server. Sales conversations are among the most sensitive data a founder possesses — pricing strategy, competitive intelligence, investor discussions, deal terms. Envoy treats them accordingly.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Shared Infrastructure Model</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Envoy's Isolated Instance Model</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>All customers share one platform</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Each founder gets their own private server</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>One breach exposes all customers</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A breach is contained to one instance</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Customisation is limited by shared config</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Each instance configured specifically for that founder</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Noisy neighbour performance issues</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Dedicated resources, consistent performance</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p15"><b>Fully Managed — Not Self-Served</b></p>
+<p class="p7">Envoy is not a tool founders install and configure themselves. It is a managed service. Envoy's team handles infrastructure, uptime, agent updates, new channel integrations, and CRM connection maintenance. The founder pays a monthly subscription. Everything works. When something breaks — Envoy fixes it.</p>
+<p class="p34"><br></p>
+<p class="p23"></p>
+<p class="p5"><b>Value Proposition</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p15"><b>Before and After Envoy</b></p>
+<p class="p24"><b></b><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Before Envoy</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>After Envoy</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>4-6 apps to manage simultaneously</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>One WhatsApp conversation with Envoy</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>7-10 steps to log a single conversation</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Zero — captured automatically</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>30-40% of warm leads never followed up</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Near-zero leads forgotten</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Pipeline based on gut feeling</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Real-time accurate pipeline, always current</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"I think we have around 8 active deals"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"We have 12 deals, 3 closing this month"</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Reactive — always catching up</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Proactive — Envoy tells you what to do next</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>3-5 hours per week on CRM admin</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Near zero — time returned to selling</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Investors get vague pipeline answers</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Instant, accurate pipeline data on demand</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p15"><b>The Key Metrics Envoy Improves</b></p>
+<p class="p24"><b></b><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Metric</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Without Envoy</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>With Envoy</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Follow up rate on warm leads</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>60-70%</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>95%+</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Steps to log a conversation</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>7-10 manual steps</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>0 — automatic</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Time to answer pipeline questions</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>5-10 minutes searching</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>5 seconds — ask Envoy</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Pipeline data accuracy</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Low</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>High — real-time</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Channels monitored simultaneously</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>None — founder's memory</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>All connected channels</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Weekly CRM admin time</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>3-5 hours</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Near zero</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p10"><b><i>The One-Line Value Proposition</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p37"><b><i>Envoy is the sales assistant every founder needs but can never afford to hire — available for the cost of a business lunch.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>A great sales assistant remembers every conversation, flags who needs a follow up, briefs you before every meeting, keeps your pipeline honest, and works 24 hours a day. That is Envoy — minus the salary, the equity, and the onboarding time.</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p38"><b><i></i></b><br></p>
+<p class="p23"></p>
+<p class="p5"><b>What Envoy Is Not</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Being clear about boundaries is as important as the value Envoy delivers. Founders should know exactly what they are getting — and what they are not.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Envoy Is NOT</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Why This Matters</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A replacement for selling</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy does not close deals — founders do. It removes the admin, not the relationship.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A full enterprise CRM</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>No 50-field forms, no complex reporting dashboards, no CRM administrator needed.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A call recorder</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Live phone calls cannot be captured automatically. A 30-second post-call voice note bridges this gap.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A marketing platform</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Built purely for 1-on-1 founder sales conversations, not bulk outreach or email campaigns.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A self-hosted tool</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy manages all infrastructure. Founders never touch a server or configuration file.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>A guarantee of perfect capture</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>High precision over high recall — Envoy errs on the side of accuracy, not volume.</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p22"><b></b><br></p>
+<p class="p5"><b>The Moonshot Vision</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Today, Envoy captures and organises. Tomorrow, Envoy acts autonomously. The full vision is a founder who never manages a sales process — they simply close deals.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>Envoy at Full Capability</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Envoy detects a deal has gone cold<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Drafts a personalised follow up based on conversation history<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Sends it at the optimal time automatically<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Lead responds positively<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Envoy schedules the next call<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Briefs the founder 10 minutes before: "Here is everything you need for your call with Sarah in 10 minutes"<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Call ends<span class="Apple-converted-space">  </span>→<span class="Apple-converted-space">  </span>Envoy sends the follow up summary to the lead, logs the outcome, updates the pipeline, moves the deal to the next stage.</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p36"><b><i></i></b><br></p>
+<p class="p7">A founder with Envoy at full capability is not managing a sales process anymore. They are simply closing deals. The agent handles everything in between.</p>
+<p class="p34"><br></p>
+<p class="p23"></p>
+<p class="p5"><b>Feature 1 — Focus Constraints</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Because Envoy is built on powerful general-purpose agent infrastructure, it is technically capable of doing almost anything — booking flights, writing code, searching the web, managing files. Left unconstrained, founders would inevitably start using Envoy as a personal AI assistant rather than a dedicated sales agent.</p>
+<p class="p8"><br></p>
+<p class="p7">This creates real problems: server costs become unpredictable, product positioning gets blurry, support becomes unmanageable, and the core sales intelligence that makes Envoy valuable gets diluted. Focus constraints solve all of this by design.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>How Focus Constraints Work</b></p>
+<p class="p7">Every Envoy instance is deployed with a locked system prompt — a set of instructions baked into the agent at the infrastructure level that defines exactly what Envoy will and will not do. The founder cannot override this. It is not a setting — it is the product.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>What Envoy Will Do</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Log and track sales conversations across connected channels</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Manage and update the founder's deal pipeline</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Send proactive follow up reminders and daily digests</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Answer questions about active deals and lead history</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Draft contextual sales messages and follow ups</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Brief the founder before meetings with relevant lead context</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p39"><b><i></i></b><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p40"><b><i>What Envoy Will Not Do</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Search the web for general queries</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Book restaurants, travel, or handle personal tasks</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Write code, answer technical questions, or act as a general assistant</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Engage with topics unrelated to the founder's sales pipeline</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p36"><b><i></i></b><br></p>
+<p class="p15"><b>How Envoy Handles Out-of-Scope Requests</b></p>
+<p class="p7">When a founder asks Envoy to do something outside its defined scope, Envoy does not just refuse. It redirects warmly — and uses the moment to bring the founder back to something valuable.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Founder Asks</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Envoy Responds</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"What is the weather in London?"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"I am your sales agent — weather is outside my lane. But you have 2 follow ups due today. Want me to show you?"</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Can you write me a Python script?"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"That is beyond my focus — I am built purely for your pipeline. Speaking of which, TechCorp has gone quiet for 6 days."</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Book me a restaurant for Friday"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"I will leave that to a general assistant. I noticed your Friday has a follow up with James — want me to prep a brief?"</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Search for news about my competitor"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"I am not a web browser — but I can tell you where each of your deals stands right now. Want a pipeline summary?"</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p15"><b>Why This Is a Feature, Not a Limitation</b></p>
+<p class="p7">Focus constraints are not a weakness — they are a deliberate product decision that makes Envoy better at its job. A tool that does everything is a tool that does nothing particularly well.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p12"><b><i>"Envoy does not try to be everything. It is the best sales agent in the world — nothing more, nothing less."</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p41"><b><i></i></b><br></p>
+<p class="p15"><b>Tiered Focus Model — Upsell Opportunity</b></p>
+<p class="p7">For founders who genuinely want broader agent capabilities, focus constraints can become a pricing lever rather than a hard wall.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Plan</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Agent Scope</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Best For</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy Core</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sales tasks only — fully constrained</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founders who want pure sales focus</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy Pro</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sales tasks + 100 general queries/month</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founders who love the agent and want more</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy Team</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Full sales suite + team pipeline visibility</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founding teams of 2-5 people</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p27"><b></b><br></p>
+<p class="p7">Founders who want to use Envoy for general purposes are often the most engaged users — and the most natural upsell candidates. The tiered model converts what could be a problem into a revenue opportunity.</p>
+<p class="p34"><br></p>
+<p class="p23"></p>
+<p class="p5"><b>Feature 2 — Proactive Intelligence &amp; Reminders</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Most CRMs are passive — they wait to be asked. Envoy is the opposite. It monitors the pipeline continuously and surfaces what needs attention before the founder even thinks to check. This is the difference between a database and an agent.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>The Design Principle</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p12"><b><i>Envoy does not wait to be asked. It tells the founder what needs attention before they even thought to check.</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p41"><b><i></i></b><br></p>
+<p class="p15"><b>Three Types of Reminders</b></p>
+<p class="p24"><b></b><br></p>
+<p class="p25"><b>Type 1 — Time-Based Reminders (Founder Sets These)</b></p>
+<p class="p7">The founder explicitly asks Envoy to follow up at a specific time. Envoy remembers — even if the founder forgets completely.</p>
+<p class="p26"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Founder Says</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Happens</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Remind me to follow up with Sarah on Friday"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Friday 9am: Envoy sends the last conversation context + a drafted follow up message</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Check in with Raj after his board meeting next Tuesday"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Wednesday 9am: Envoy sends a brief and suggested opening message</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>"Follow up with James if I haven't heard back in 3 days"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Day 3: Envoy monitors inbox and sends reminder only if no reply detected</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p25"><b>Type 2 — Behaviour-Based Reminders (Envoy Detects These)</b></p>
+<p class="p7">Envoy monitors every active deal for inactivity. When a deal goes quiet for longer than the defined threshold, Envoy flags it automatically — without the founder setting any reminder.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Deal Temperature</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Inactivity Threshold</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Envoy Does</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Hot — actively negotiating</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>3 days without contact</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Urgent flag in morning digest + drafted follow up</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Warm — interested, early stage</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>7 days without contact</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Reminder with conversation summary</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Cold — early contact only</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>14 days without contact</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Prompt to mark as cold or re-engage</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Any — meeting was mentioned</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Day after meeting date</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Check in: did the meeting happen? Any update?</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p25"><b>Type 3 — Event-Based Reminders (Envoy Extracts These)</b></p>
+<p class="p7">This is Envoy's most powerful reminder capability. The agent reads every conversation and detects implicit commitments — things the founder said they would do, or events that were mentioned — and automatically creates reminders without the founder doing anything.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Was Said In Conversation</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Envoy Does Automatically</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Lead: "Let's reconnect after our board meeting next Tuesday"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sets reminder for Wednesday: "Raj's board meeting was yesterday. Good time to reconnect."</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founder: "I'll send you the proposal by end of week"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Thursday reminder: "You promised Sarah a proposal by Friday. Want me to draft it?"</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Lead: "We're making a decision at the end of the month"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sets reminder for 28th: "TechCorp is deciding this week. Have you followed up?"</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Founder: "Call me next month when your budget is confirmed"</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sets reminder 30 days later: "You asked James to call when budget was confirmed. No word yet — want to reach out?"</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p27"><b></b><br></p>
+<p class="p7">The founder never set any of these reminders. Envoy extracted them directly from the conversation and acted on them. This is the capability that most directly mirrors having a great human sales assistant.</p>
+<p class="p16"><br></p>
+<p class="p15"><b>The Daily Rhythm — Structured Proactive Touchpoints</b></p>
+<p class="p7">Beyond individual reminders, Envoy operates on a structured daily rhythm that keeps the founder oriented without overwhelming them. All timings are configurable during onboarding.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Time</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What Envoy Sends</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What It Contains</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>7:00 AM — Morning Digest</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Daily WhatsApp / Telegram message</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Priority follow ups, deals gone cold, overnight responses, pipeline health score</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>12:00 PM — Midday Pulse</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Only sent if something is urgent</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Hot lead responded, deal stage changed, something needs immediate attention</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>5:00 PM — End of Day Wrap</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Brief daily summary</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>What moved today, what is pending tomorrow, one key action to take before tomorrow</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Pre-Meeting Brief</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Sent 10 minutes before any logged meeting</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Full lead context: history, concerns, last conversation, suggested talking points</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p15"><b>One-Tap Actions — Never Just Inform, Always Enable</b></p>
+<p class="p7">Every reminder and digest Envoy sends comes with built-in actions. Envoy never just delivers information and leaves the founder to figure out the next step. Every message offers an immediate path forward.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p13"><b><i>Example — Inactivity Reminder with Actions</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Sarah (Acme Corp) has not heard from you in 5 days.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p35"><b><i>Last conversation: she asked about pricing for the Pro plan.</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p11"><b><i><span class="Apple-converted-space"> </span></i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p42"><b><i>What would you like to do?</i></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p43"><b><i>[Draft Follow Up] <span class="Apple-converted-space">    </span>[Snooze 2 Days] <span class="Apple-converted-space">    </span>[Mark Deal Cold] <span class="Apple-converted-space">    </span>[Show Full History]</i></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p44"><b><i></i></b><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>One-Tap Action</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What It Does</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Draft Follow Up</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy generates a personalised message based on conversation history. Founder reviews and approves with one tap.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Snooze 2 Days</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Reminder is paused. Envoy resurfaces it in exactly 2 days if no contact is made.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Mark Deal Cold</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Deal moves to cold stage in pipeline. Envoy stops monitoring for inactivity.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Show Full History</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy sends a complete summary of every interaction with this lead.</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Send Now</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Envoy sends the drafted follow up directly. Deal is updated automatically.</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p20"><b></b><br></p>
+<p class="p15"><b>Reminder Preferences — Founder Controls the Volume</b></p>
+<p class="p7">Envoy is designed to be helpful, not noisy. Founders can configure exactly how proactive they want their agent to be during onboarding, and adjust at any time.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Preference Setting</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>What It Controls</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Default</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Morning digest</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On / Off / Time</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On, 7:00 AM</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Midday pulse</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On / Off / Urgency threshold</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On, urgent only</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>End of day wrap</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On / Off / Time</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On, 5:00 PM</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Inactivity thresholds</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Days per deal temperature</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>3 / 7 / 14 days</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Pre-meeting brief</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On / Off / Lead time</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On, 10 minutes before</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Event-based reminders</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On / Off</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Weekend messages</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>On / Off</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Off by default</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p22"><b></b><br></p>
+<p class="p5"><b>Trade-offs and Honest Limitations</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">Every product makes trade-offs. Envoy's are worth being explicit about — both for founders evaluating it and for the product team building it.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Limitation</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Why It Exists</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Mitigation</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>WhatsApp personal calls cannot be captured</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>WhatsApp's platform restricts access to live calls</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>30-second post-call voice note to Envoy</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>WhatsApp integration less stable than Telegram</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>WhatsApp uses web emulation, not an official bot API</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Telegram recommended as primary channel; WhatsApp secondary</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>AI classification is not perfect</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Language is ambiguous — context is hard to infer reliably</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Human confirmation for medium-confidence cases</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>One server per founder increases cost</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Isolation requires dedicated infrastructure per customer</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Justified by privacy requirements; priced into subscription</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Dependent on third-party channel access</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Platform APIs can change or be restricted</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Multi-channel approach means no single point of failure</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Not suitable for complex enterprise sales</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Built for speed, not 12-month enterprise deal cycles</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Clear positioning — this is a founder tool, not Salesforce</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p22"><b></b><br></p>
+<p class="p5"><b>MVP Scope — What To Build First</b></p>
+<p class="p6"><b></b><br></p>
+<p class="p6"><b></b><br></p>
+<p class="p7">The MVP does not try to solve everything. It solves the most painful problem — forgotten follow ups and invisible pipeline — for the highest confidence channel — email — and expands from there.</p>
+<p class="p17"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Include in MVP</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p18"><b>Leave for Later</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Gmail integration — fully automatic capture</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>WhatsApp integration (more complex, less stable)</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Telegram integration — stable, official API</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>LinkedIn integration (API restrictions)</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Simple 4-stage pipeline: Contact, Interested, Negotiating, Closed</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>AI-generated message suggestions</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Morning digest via WhatsApp or Telegram</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Revenue forecasting and reporting</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Post-call voice note logging via Envoy</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Dedicated sales phone number feature</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>One-tap lead confirmation for new contacts</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Multi-user / team features</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>HubSpot sync as first CRM integration</b></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p19"><b>Salesforce, Zoho integrations</b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="p27"><b></b><br></p>
+<p class="p7">The goal of the MVP is simple: prove that founders will trust Envoy with their sales conversations, and that the automatic capture meaningfully reduces the leads they forget to follow up. Everything else can be built once that core value is validated.</p>
+<p class="p34"><br></p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p45"><b>ENVOY</b></p>
+        <p class="p46"><i>Your AI Sales Agent. Always in the Field.</i></p>
+        <p class="p47">The sales assistant every founder needs. Now available for the cost of a business lunch.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

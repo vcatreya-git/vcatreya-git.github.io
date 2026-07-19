@@ -277,7 +277,13 @@
   @media (min-width: 960px) {
     .case-grid { grid-template-columns: 1fr 1fr 1fr; }
   }
-  .case-card .project-links { margin-top: auto; }
+  .case-card .project-links { margin-top: 10px; flex-wrap: wrap; }
+  .case-link-group { margin-top: auto; padding-top: 8px; }
+  .case-link-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--slate-400); margin: 12px 0 8px;
+  }
+  .case-link-label:first-child { margin-top: 4px; }
   .case-card {
     background: white;
     border: 1.5px solid var(--slate-200);
@@ -469,8 +475,8 @@
     <div class="section-label">Case studies</div>
     <h2 class="section-title">PM case studies</h2>
     <p class="section-sub">
-      Group PM training work (Team Hashiras) — problem framing, PRDs, and presentations.
-      Open the PDFs or HTML write-ups below to read the full work.
+      Group PM training (Team Hashiras) plus my own research and alternate concepts.
+      Team finals and personal work are labeled separately.
     </p>
 
     <div class="case-grid">
@@ -485,37 +491,52 @@
           smart picker assignment, and inventory discrepancy tracking — not another dashboard.
         </p>
         <ul>
-          <li>PRD for a manager DSS (command centre, alerts, pickers, stock)</li>
-          <li>Pilot framing for high-volume Bangalore stores</li>
-          <li>Prototype: blinkit-peakpulse.lovable.app</li>
+          <li>Team PRD + presentation for the PeakPulse DSS</li>
+          <li>My 16-chapter dark-store research underpinning the problem space</li>
+          <li>My interactive ops dashboard prototype</li>
         </ul>
-        <div class="project-links">
-          <a class="btn btn-primary" href="case-studies/blinkit-peakpulse/problem-brief.pdf" target="_blank" rel="noopener">Problem brief (PDF)</a>
-          <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/prd.html" target="_blank" rel="noopener">Read PRD</a>
-          <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/presentation.pptx">Presentation (PPTX)</a>
-          <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/prd.docx">PRD (DOCX)</a>
+        <div class="case-link-group">
+          <div class="case-link-label">Team final</div>
+          <div class="project-links">
+            <a class="btn btn-primary" href="case-studies/blinkit-peakpulse/problem-brief.pdf" target="_blank" rel="noopener">Problem brief</a>
+            <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/prd.html" target="_blank" rel="noopener">PRD</a>
+            <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/presentation.pptx">Presentation</a>
+          </div>
+          <div class="case-link-label">My work</div>
+          <div class="project-links">
+            <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/research-16-chapters.html" target="_blank" rel="noopener">Research (16 chapters)</a>
+            <a class="btn btn-secondary" href="case-studies/blinkit-peakpulse/dark-store-dashboard.html" target="_blank" rel="noopener">Dashboard prototype</a>
+          </div>
         </div>
       </article>
 
       <article class="case-card featured">
         <div class="project-badge">B2B SaaS · Sales</div>
-        <h3>Relay — founder-led CRM</h3>
-        <p class="case-meta">AI memory layer for early-stage founder sales · Team Hashiras</p>
+        <h3>Founder-led sales CRM</h3>
+        <p class="case-meta">Team final: Relay · My exploration: Envoy · Team Hashiras</p>
         <p class="blurb">
           Early-stage founders run sales across WhatsApp, email, LinkedIn, and calls — then lose
-          follow-ups in Notion and Sheets. Enterprise CRMs are too heavy. Relay sits on tools founders
-          already use: auto-records deal context, proactive nudges, and on-demand retrieval without
-          full-time CRM admin.
+          follow-ups in Notion and Sheets. The team shipped Relay as an AI memory layer on tools founders
+          already use. I also built Envoy — journeys, interactive prototype, and solution doc — as a full
+          alternate concept for the same problem.
         </p>
         <ul>
-          <li>Full PRD: ambient capture, morning digest, pipeline visibility</li>
-          <li>Persona, MVP scope, trade-offs, and prototype path</li>
-          <li>Presentation walkthrough included</li>
+          <li>Team: Relay PRD + presentation</li>
+          <li>My work: Envoy solution, user journeys, clickable prototype</li>
         </ul>
-        <div class="project-links">
-          <a class="btn btn-primary" href="case-studies/relay-founder-crm/problem-brief.pdf" target="_blank" rel="noopener">Problem brief (PDF)</a>
-          <a class="btn btn-secondary" href="case-studies/relay-founder-crm/prd.pdf" target="_blank" rel="noopener">Read PRD (PDF)</a>
-          <a class="btn btn-secondary" href="case-studies/relay-founder-crm/presentation.pdf" target="_blank" rel="noopener">Presentation (PDF)</a>
+        <div class="case-link-group">
+          <div class="case-link-label">Team final — Relay</div>
+          <div class="project-links">
+            <a class="btn btn-primary" href="case-studies/relay-founder-crm/problem-brief.pdf" target="_blank" rel="noopener">Problem brief</a>
+            <a class="btn btn-secondary" href="case-studies/relay-founder-crm/prd.pdf" target="_blank" rel="noopener">Relay PRD</a>
+            <a class="btn btn-secondary" href="case-studies/relay-founder-crm/presentation.pdf" target="_blank" rel="noopener">Presentation</a>
+          </div>
+          <div class="case-link-label">My work — Envoy</div>
+          <div class="project-links">
+            <a class="btn btn-secondary" href="case-studies/relay-founder-crm/envoy-solution.html" target="_blank" rel="noopener">Solution doc</a>
+            <a class="btn btn-secondary" href="case-studies/relay-founder-crm/envoy-journeys.html" target="_blank" rel="noopener">User journeys</a>
+            <a class="btn btn-secondary" href="case-studies/relay-founder-crm/envoy-prototype.html" target="_blank" rel="noopener">Prototype</a>
+          </div>
         </div>
       </article>
 
@@ -530,14 +551,19 @@
           without killing the Shorts experience.
         </p>
         <ul>
-          <li>Platform-level discovery + session-start problem definition</li>
-          <li>Objectives for feed share and time-to-relevant-discovery</li>
-          <li>Why long-form still matters for ads, creators, and TV</li>
+          <li>Team case write-up on discovery + session-start</li>
+          <li>My hypothesis set (v5) for problem framing and tests</li>
         </ul>
-        <div class="project-links">
-          <a class="btn btn-primary" href="case-studies/youtube-long-form/problem-brief.pdf" target="_blank" rel="noopener">Problem brief (PDF)</a>
-          <a class="btn btn-secondary" href="case-studies/youtube-long-form/case-study.html" target="_blank" rel="noopener">Read case study</a>
-          <a class="btn btn-secondary" href="case-studies/youtube-long-form/case-study.docx">Case study (DOCX)</a>
+        <div class="case-link-group">
+          <div class="case-link-label">Team final</div>
+          <div class="project-links">
+            <a class="btn btn-primary" href="case-studies/youtube-long-form/problem-brief.pdf" target="_blank" rel="noopener">Problem brief</a>
+            <a class="btn btn-secondary" href="case-studies/youtube-long-form/case-study.html" target="_blank" rel="noopener">Case study</a>
+          </div>
+          <div class="case-link-label">My work</div>
+          <div class="project-links">
+            <a class="btn btn-secondary" href="case-studies/youtube-long-form/hypotheses-v5.html" target="_blank" rel="noopener">Hypotheses v5</a>
+          </div>
         </div>
       </article>
     </div>

@@ -1,0 +1,2810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store Command · BKC-04</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Blinkit brand */
+  --yellow:#F8C904;--yellow2:#F8C90420;--yellow3:#F8C90408;
+  /* mapped to existing vars so all existing CSS still works */
+  --bg:#08090C;--s1:#0F1115;--s2:#161A20;--s3:#1D2230;
+  --border:#ffffff0a;--border2:#ffffff14;
+  --g:#1DB954;--g2:#1DB95415;
+  --a:#F8C904;--a2:#F8C90420;
+  --r:#E8003D;--r2:#E8003D14;
+  --b:#0066FF;--b2:#0066FF14;
+  --orange:#FF6B00;--orange2:#FF6B0015;
+  --text:#F0F2F7;--dim:#4A5568;--muted:#1A2030;
+  --mono:'DM Mono',monospace;--display:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:12px;display:flex;flex-direction:column;overflow:hidden}
+#app-root{position:relative;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;flex:1}
+
+/* ── TOPBAR ── */
+.topbar{flex-shrink:0;background:var(--s1);border-bottom:1px solid var(--border2);display:flex;align-items:stretch;gap:0;height:52px}
+.store-block{padding:0 20px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border2)}
+.store-tag{font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--g);box-shadow:0 0 5px var(--g);animation:ld 2s ease-in-out infinite}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.25}}
+.store-name{font-family:var(--display);font-size:14px;font-weight:800;letter-spacing:-.02em;margin-top:1px}
+.kpi-strip{display:flex;flex:1}
+.kpi-cell{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;border-right:1px solid var(--border);padding:0 12px;cursor:default}
+.kpi-cell:last-child{border-right:none}
+.kv{font-family:var(--display);font-size:17px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.kl{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.time-block{padding:0 20px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;border-left:1px solid var(--border2)}
+.clock{font-family:var(--display);font-size:18px;font-weight:700;letter-spacing:.02em}
+.shift{font-size:8px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-top:2px}
+.mode-block{padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:4px;border-left:1px solid var(--border2)}
+.mode-lbl{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.mode-toggle{display:flex;background:var(--s3);border-radius:5px;overflow:hidden;border:1px solid var(--border2)}
+.mbtn{padding:4px 10px;font-family:var(--mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--dim);transition:all .18s;white-space:nowrap}
+.mbtn.active{background:var(--yellow);color:#000;font-weight:700}
+.mbtn:hover:not(.active){color:var(--text)}
+.picker-type-tag{font-size:8px;padding:1px 6px;border-radius:3px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.ptt-reg{background:#3d8ef818;color:var(--b)}.ptt-od{background:#f5a62318;color:var(--a)}
+.shift-info{display:flex;align-items:center;gap:5px;margin-top:4px;flex-wrap:wrap}
+.shift-hours{font-size:9px;color:var(--dim)}.shift-hours.low{color:var(--r)}.shift-hours.mid{color:var(--a)}
+.ext-badge{font-size:8px;padding:1px 5px;border-radius:3px;background:#05d98a12;color:var(--g);letter-spacing:.04em}
+.sel-picker{border-color:var(--yellow)!important;box-shadow:0 0 0 1px var(--yellow)!important}
+
+/* ── TABS ── */
+.tabs{flex-shrink:0;display:flex;background:var(--s1);border-bottom:1px solid var(--border2);padding:0 20px;gap:2px}
+.tab{padding:10px 20px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--dim);border-bottom:2px solid transparent;transition:all .2s;display:flex;align-items:center;gap:7px;font-family:var(--mono)}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--yellow);border-bottom-color:var(--yellow)}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;font-size:8px;font-weight:500}
+.tb-r{background:var(--r2);color:var(--r)}
+.tb-a{background:var(--a2);color:var(--a)}
+.tb-b{background:var(--b2);color:var(--b)}
+
+/* ── TAB PANELS ── */
+.panel{display:none;flex:1;overflow:hidden}
+.panel.active{display:flex}
+
+/* ── SHARED SCROLL REGION ── */
+.scroll{overflow-y:auto;height:100%;padding:16px}
+.scroll::-webkit-scrollbar{width:4px}
+.scroll::-webkit-scrollbar-track{background:transparent}
+.scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── GRID HELPERS ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.col-full{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:10px}
+
+/* ── SECTION LABEL ── */
+.sec{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── CARDS ── */
+.card{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.card.critical{border-color:var(--r)}
+.card.warn{border-color:var(--a)}
+.card.info{border-color:var(--b)}
+.card.ok{border-color:var(--g)}
+.card+.card{margin-top:0}
+
+/* ══════════════════════════
+   TAB 1 — PICKER HEALTH
+══════════════════════════ */
+
+/* Picker row — compact, clock-vs-SLA focus */
+.picker-row{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .25s}
+.picker-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.picker-row.green::before{background:var(--g)}.picker-row.amber::before{background:var(--a)}.picker-row.red::before{background:var(--r);animation:rp 1.2s infinite}.picker-row.idle::before{background:var(--muted)}
+.picker-row.breach{border-color:var(--r)}
+@keyframes rp{0%,100%{box-shadow:none}50%{box-shadow:inset 0 0 0 1px var(--r2)}}
+
+.picker-ava{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:11px;font-weight:700;flex-shrink:0}
+.picker-info{flex:1;min-width:0}
+.picker-name-row{display:flex;align-items:center;gap:6px}
+.pname{font-family:var(--display);font-size:12px;font-weight:600}
+.ptag{font-size:8px;padding:1px 5px;border-radius:3px;letter-spacing:.06em;text-transform:uppercase}
+.ptag.new{background:var(--b2);color:var(--b)}.ptag.exp{background:var(--g2);color:var(--g)}
+.porder{font-size:10px;color:var(--dim);margin-top:2px}
+
+/* THE clock-vs-SLA widget — just the number countdown, dead simple */
+.sla-clock{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;min-width:70px}
+.sla-num{font-family:var(--display);font-size:20px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.sla-sub{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:2px;text-align:right}
+.sla-bar{width:70px;height:3px;background:var(--muted);border-radius:2px;overflow:hidden;margin-top:5px}
+.sla-bar-fill{height:100%;border-radius:2px;transition:width 1s linear,background .5s}
+
+/* speed score — small ring */
+.score-mini{position:relative;width:36px;height:36px;flex-shrink:0}
+.score-mini svg{transform:rotate(-90deg)}
+.score-mini-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:9px;font-weight:500;font-family:var(--display)}
+
+/* breach nudge — quiet, inline */
+.breach-nudge{display:flex;align-items:center;gap:6px;margin-top:7px;padding:5px 8px;background:var(--r2);border-radius:4px;font-size:10px;color:var(--r)}
+.breach-nudge button{margin-left:auto;background:var(--r);color:#fff;border:none;border-radius:3px;padding:2px 8px;font-family:var(--mono);font-size:9px;cursor:pointer;letter-spacing:.04em}
+
+/* packer experience bar */
+.packer-exp-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--s2);border:1px solid var(--border);border-radius:7px}
+.pe-name{font-family:var(--display);font-size:12px;font-weight:600;width:80px;flex-shrink:0}
+.pe-tag{font-size:8px;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+.pe-slots{display:flex;gap:3px;flex:1}
+.pe-slot{height:10px;border-radius:2px;background:var(--muted);flex:1}
+.pe-slot.done{background:var(--g)}.pe-slot.active{background:var(--a);animation:ld 1s infinite}
+.pe-rate{font-size:10px;color:var(--dim);flex-shrink:0;width:42px;text-align:right}
+
+/* resource finder */
+.resource-card{background:var(--s3);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.rc-avail{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rc-name{flex:1;font-family:var(--display);font-size:12px;font-weight:600}
+.rc-meta{font-size:10px;color:var(--dim)}
+.rc-score{font-size:11px;font-weight:500}
+.rc-btn{background:var(--b2);color:var(--b);border:1px solid var(--b);border-radius:4px;padding:3px 10px;font-family:var(--mono);font-size:9px;cursor:pointer;letter-spacing:.04em;flex-shrink:0;transition:opacity .15s}
+.rc-btn:hover{opacity:.7}
+
+/* ══════════════════════════
+   TAB 2 — MANAGER ACTIONS
+══════════════════════════ */
+
+/* action card */
+.ac{background:var(--s2);border-radius:8px;padding:13px;border-left:3px solid transparent;transition:opacity .2s}
+.ac.crit{border-left-color:var(--r)}.ac.warn{border-left-color:var(--a)}.ac.info{border-left-color:var(--b)}.ac.ok{border-left-color:var(--g)}
+.ac-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px}
+.ac-icon{font-size:16px;flex-shrink:0;line-height:1;margin-top:1px}
+.ac-content{flex:1}
+.ac-title{font-family:var(--display);font-size:13px;font-weight:600;line-height:1.3}
+.ac-body{font-size:11px;color:var(--dim);line-height:1.6;margin-top:4px}
+.ac-age{font-size:9px;color:var(--dim);letter-spacing:.06em;flex-shrink:0;white-space:nowrap}
+.ac-note{display:flex;align-items:flex-start;gap:6px;padding:6px 8px;border-radius:4px;font-size:10px;line-height:1.5;margin-bottom:8px}
+.ac-note.auto{background:var(--g2);color:var(--g)}.ac-note.warn{background:var(--a2);color:var(--a)}
+.ac-actions{display:flex;gap:6px;flex-wrap:wrap}
+.abtn{font-family:var(--mono);font-size:9px;padding:5px 12px;border-radius:5px;border:none;cursor:pointer;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:opacity .15s,transform .1s}
+.abtn:hover{opacity:.8;transform:translateY(-1px)}.abtn:active{transform:none}
+.abtn.p{background:var(--g);color:#000}.abtn.w{background:var(--a);color:#000}.abtn.d{background:var(--r);color:#fff}.abtn.g{background:var(--s3);color:var(--dim)}
+@keyframes fadeout{to{opacity:0;max-height:0;padding:0;margin:0;overflow:hidden}}
+.resolving{animation:fadeout .3s ease forwards}
+
+/* pause controls */
+.pause-strip{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s2);border-radius:7px;margin-bottom:8px}
+.pause-strip-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);flex:1}
+.pause-level{display:flex;gap:4px}
+.plbtn{padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--dim);font-family:var(--mono);font-size:9px;cursor:pointer;letter-spacing:.06em;transition:all .2s}
+.plbtn.active{background:var(--r2);color:var(--r);border-color:var(--r)}
+.plbtn:hover:not(.active){color:var(--text)}
+
+.sku-pause-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.sku-pause-row:last-child{border-bottom:none}
+.spname{flex:1;font-size:11px}
+.spstatus{font-size:9px;padding:2px 6px;border-radius:3px}
+.spstatus.paused{background:var(--r2);color:var(--r)}.spstatus.live{background:var(--g2);color:var(--g)}
+.sptoggle{padding:3px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--dim);font-family:var(--mono);font-size:9px;cursor:pointer;transition:all .2s}
+.sptoggle:hover{border-color:var(--r);color:var(--r)}
+.sptoggle.resume:hover{border-color:var(--g);color:var(--g)}
+
+/* discrepancy row */
+.disc-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--s2);border-radius:7px;border-left:3px solid var(--a)}
+.dr-sku{flex:1}
+.dr-name{font-family:var(--display);font-size:12px;font-weight:600}
+.dr-detail{font-size:10px;color:var(--dim);margin-top:2px}
+.dr-actions{display:flex;gap:5px}
+
+/* resolved log */
+.rlog-item{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:var(--g2);border-radius:5px;font-size:10px;color:var(--g);line-height:1.4}
+
+/* ══════════════════════════
+   TAB 3 — PREDICTIVE
+══════════════════════════ */
+
+/* time horizon toggle */
+.horizon-toggle{display:flex;background:var(--s3);border-radius:7px;padding:3px;gap:3px;margin-bottom:14px;border:1px solid var(--border)}
+.ht-btn{flex:1;padding:6px;text-align:center;font-size:9px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--dim);border-radius:5px;transition:all .2s;font-family:var(--mono)}
+.ht-btn.active{background:var(--s1);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+/* demand forecast bars */
+.forecast-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.fb-time{font-size:9px;color:var(--dim);width:36px;flex-shrink:0;line-height:1.4}
+.fb-track{flex:1;height:22px;background:var(--muted);border-radius:3px;overflow:visible;position:relative}
+.fb-track-inner{height:100%;border-radius:3px;overflow:hidden;position:relative}
+.fb-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:9px;font-weight:700;transition:width .8s ease}
+.fb-fill-label{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:9px;font-weight:600;white-space:nowrap}
+.fb-cap-line{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--text);opacity:.7;z-index:2}
+.fb-cap-tick{position:absolute;top:-14px;font-size:8px;color:var(--text);opacity:.7;transform:translateX(-50%);white-space:nowrap}
+.fb-now-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--b);opacity:.6}
+/* legend */
+.forecast-legend{display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.fl-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--dim)}
+.fl-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* throughput problem SKUs */
+.tp-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.tp-row:last-child{border-bottom:none}
+.tp-sku{flex:1}
+.tp-name{font-family:var(--display);font-size:11px;font-weight:600}
+.tp-why{font-size:10px;color:var(--dim);margin-top:2px}
+.tp-impact{font-size:9px;padding:2px 6px;border-radius:3px;flex-shrink:0}
+.tp-high{background:var(--r2);color:var(--r)}.tp-med{background:var(--a2);color:var(--a)}
+.tp-action{font-size:9px;color:var(--b);cursor:pointer;flex-shrink:0;letter-spacing:.04em;text-decoration:underline}
+
+/* shrinkage queue */
+.shrink-row{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--s2);border-radius:6px}
+.sr-icon{font-size:14px;flex-shrink:0}
+.sr-sku{flex:1}
+.sr-name{font-family:var(--display);font-size:11px;font-weight:600}
+.sr-detail{font-size:10px;color:var(--dim);margin-top:1px}
+.sr-badge{font-size:9px;padding:2px 6px;border-radius:3px;flex-shrink:0}
+.sr-exp{background:var(--r2);color:var(--r)}.sr-near{background:var(--a2);color:var(--a)}
+.sr-flag{font-size:9px;color:var(--dim);cursor:pointer;flex-shrink:0;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;font-family:var(--mono);transition:all .2s}
+.sr-flag:hover{border-color:var(--a);color:var(--a)}
+
+/* inventory runway */
+.runway-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rw-sku{width:130px;flex-shrink:0;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rw-track{flex:1;height:8px;background:var(--muted);border-radius:4px;overflow:hidden}
+.rw-fill{height:100%;border-radius:4px;transition:width .8s}
+.rw-label{font-size:9px;color:var(--dim);width:52px;text-align:right;flex-shrink:0}
+
+/* metric card */
+.metric-card{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.mc-val{font-family:var(--display);font-size:24px;font-weight:800;line-height:1}
+.mc-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.mc-delta{font-size:10px;margin-top:2px}
+.mc-delta.up{color:var(--g)}.mc-delta.down{color:var(--r)}.mc-delta.flat{color:var(--dim)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .kpi-strip .kpi-cell:nth-child(n+4){display:none}
+  .topbar{height:auto;flex-wrap:wrap;padding-bottom:8px}
+}
+
+/* ══════════════════════════
+   TAB 4 — RIDERS
+══════════════════════════ */
+.rider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rider-col { display: flex; flex-direction: column; gap: 9px; }
+
+/* Rider card */
+.rc {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s;
+}
+.rc::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: 10px 10px 0 0;
+}
+.rc.waiting::before { background: var(--yellow); }
+.rc.delivering::before { background: var(--g); }
+.rc.returning::before { background: var(--b); }
+.rc.offline::before { background: var(--muted); }
+.rc.breach::before { background: var(--r); }
+.rc.breach { border-color: var(--r); }
+
+.rc-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 9px; }
+.rc-ava {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px; flex-shrink: 0;
+}
+.rc-info { flex: 1; min-width: 0; }
+.rc-name { font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
+.rc-meta { font-size: 10px; color: var(--dim); margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.rc-status-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 7px; border-radius: 20px;
+  font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+}
+.sp-waiting { background: var(--yellow2); color: var(--yellow); }
+.sp-delivering { background: var(--g2); color: var(--g); }
+.sp-returning { background: var(--b2); color: var(--b); }
+.sp-offline { background: var(--muted); color: var(--dim); }
+.sp-breach { background: var(--r2); color: var(--r); }
+
+/* ETA countdown */
+.eta-block { display: flex; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+.eta-num { font-size: 22px; font-weight: 900; line-height: 1; letter-spacing: -.03em; }
+.eta-unit { font-size: 10px; color: var(--dim); margin-bottom: 2px; font-weight: 500; }
+.eta-sub { font-size: 9px; color: var(--dim); letter-spacing: .04em; text-align: right; margin-top: 1px; }
+
+/* delivery progress bar */
+.delivery-bar { margin-bottom: 8px; }
+.db-track { height: 4px; background: var(--muted); border-radius: 2px; overflow: hidden; }
+.db-fill { height: 100%; border-radius: 2px; transition: width .8s; }
+.db-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 9px; color: var(--dim); }
+
+/* order tag on rider */
+.rider-order-tag {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 9px; background: var(--s3); border-radius: 6px;
+  font-size: 10px;
+}
+.rot-id { font-weight: 700; color: var(--text); }
+.rot-addr { color: var(--dim); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rot-dist { color: var(--dim); flex-shrink: 0; }
+
+/* shift info same as pickers */
+.rider-shift { display: flex; align-items: center; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+.rtype-reg { background: var(--b2); color: var(--b); font-size: 8px; padding: 1px 6px; border-radius: 3px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.rtype-od  { background: var(--yellow2); color: var(--yellow); font-size: 8px; padding: 1px 6px; border-radius: 3px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.rshift-hrs { font-size: 9px; }
+
+/* assign panel */
+.assign-pool {
+  background: var(--s2); border: 1px solid var(--yellow); border-radius: 10px; padding: 12px;
+}
+.pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.pool-title { font-size: 11px; font-weight: 700; }
+.pool-auto-btn {
+  padding: 5px 12px; background: var(--yellow); color: #000;
+  border: none; border-radius: 5px; font-size: 9px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  transition: opacity .15s; font-family: var(--sans);
+}
+.pool-auto-btn:hover { opacity: .85; }
+.pool-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.pool-row:last-child { border-bottom: none; }
+.pr-name { flex: 1; font-size: 12px; font-weight: 600; }
+.pr-meta { font-size: 10px; color: var(--dim); }
+.pr-score { font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.pr-btn {
+  padding: 4px 10px; border-radius: 5px; font-size: 9px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase; cursor: pointer;
+  font-family: var(--sans); transition: opacity .15s; flex-shrink: 0;
+}
+.pr-btn:hover { opacity: .8; }
+.pr-btn-assign { background: var(--yellow); color: #000; border: none; }
+.pr-btn-ext { background: var(--g2); color: var(--g); border: 1px solid var(--g); }
+
+/* stat summary cards */
+.stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 12px; }
+.stat-card {
+  background: var(--s2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 3px;
+}
+.sc-val { font-size: 22px; font-weight: 900; line-height: 1; letter-spacing: -.02em; }
+.sc-lbl { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+.sc-delta { font-size: 9px; margin-top: 2px; }
+
+/* capacity gauge */
+.cap-bar-wrap { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; }
+.cap-bar-track { height: 8px; background: var(--muted); border-radius: 4px; overflow: hidden; margin: 7px 0 5px; }
+.cap-bar-fill { height: 100%; border-radius: 4px; transition: width .8s; }
+.cap-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--dim); }
+
+/* breach nudge */
+.rider-breach-nudge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px; background: var(--r2); border-radius: 4px;
+  font-size: 10px; color: var(--r); margin-top: 6px;
+}
+.rider-breach-nudge button {
+  margin-left: auto; background: var(--r); color: #fff;
+  border: none; border-radius: 3px; padding: 2px 8px;
+  font-size: 9px; cursor: pointer; font-family: var(--sans); font-weight: 600;
+}
+
+/* ══════════════════════════
+   DRAGGABLE WIDGETS
+══════════════════════════ */
+.widget-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: start;
+}
+.widget-full {
+  grid-column: 1 / -1;
+}
+.widget {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow .2s, opacity .2s, transform .15s;
+  position: relative;
+}
+.widget.dragging {
+  opacity: .45;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  transform: scale(.98);
+}
+.widget.drag-over {
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 2px var(--yellow2);
+}
+.widget-handle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: var(--s3);
+  border-bottom: 1px solid var(--border);
+  cursor: grab;
+  user-select: none;
+  transition: background .15s;
+}
+.widget-handle:hover { background: var(--s4); }
+.widget-handle:active { cursor: grabbing; }
+.wh-grip {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+.wh-title {
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  flex: 1;
+}
+.widget-handle:hover .wh-grip { color: var(--yellow); }
+.widget-handle:hover .wh-title { color: var(--text); }
+.widget-body {
+  padding: 12px;
+}
+/* span group */
+.wh-span-group {
+  display: flex;
+  gap: 2px;
+  margin-right: 4px;
+}
+.wh-span-btn {
+  padding: 2px 6px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all .15s;
+  white-space: nowrap;
+}
+.wh-span-btn:hover { color: var(--text); border-color: var(--yellow); }
+.wh-span-btn.active { background: var(--yellow); color: #000; border-color: var(--yellow); }
+/* collapse toggle */
+.wh-collapse {
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--dim);
+  font-size: 9px;
+  flex-shrink: 0;
+  transition: background .15s, color .15s, transform .2s;
+  border: 1px solid var(--border2);
+  background: transparent;
+  font-family: var(--sans);
+  line-height: 1;
+}
+.wh-collapse:hover { background: var(--border2); color: var(--text); }
+.widget.collapsed .widget-body { display: none; }
+.widget.collapsed .wh-collapse { transform: rotate(180deg); }
+/* reset button */
+.wgrid-reset {
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  font-family: var(--sans);
+  transition: color .15s, border-color .15s;
+  margin-bottom: 10px;
+  display: block;
+  margin-left: auto;
+}
+.wgrid-reset:hover { color: var(--yellow); border-color: var(--yellow); }
+/* placeholder shown while dragging */
+.widget-placeholder {
+  border: 2px dashed var(--yellow);
+  border-radius: 10px;
+  background: var(--yellow3);
+  min-height: 60px;
+}
+@media(max-width:700px){
+  .widget-grid { grid-template-columns: 1fr; }
+  .widget-full { grid-column: 1; }
+}
+
+/* ══════════════════════════════════════
+   ONBOARDING WALKTHROUGH
+══════════════════════════════════════ */
+
+/* Dark backdrop with hole cut for spotlight */
+#wt-backdrop {
+  position: absolute; inset: 0; z-index: 9000;
+  pointer-events: none;
+  transition: opacity .35s;
+}
+#wt-backdrop.hidden { opacity: 0; pointer-events: none; }
+
+/* SVG spotlight overlay */
+#wt-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 9001; pointer-events: none;
+}
+
+/* Click-blocker covers everything except spotlight rect */
+#wt-blocker {
+  position: absolute; inset: 0; z-index: 9002;
+  cursor: default;
+}
+#wt-blocker.hidden { display: none; }
+
+/* Step card */
+#wt-card {
+  position: absolute; z-index: 9010;
+  width: 340px;
+  background: var(--s1);
+  border: 1px solid var(--yellow);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 0 1px rgba(248,201,4,.15);
+  overflow: hidden;
+  transition: top .35s cubic-bezier(.4,0,.2,1),
+              left .35s cubic-bezier(.4,0,.2,1),
+              opacity .25s;
+}
+#wt-card.hidden { opacity: 0; pointer-events: none; }
+
+.wt-card-header {
+  background: var(--yellow);
+  padding: 12px 16px 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.wt-card-logo {
+  width: 26px; height: 26px;
+  background: #000;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 13px; color: var(--yellow);
+  flex-shrink: 0; font-family: var(--display);
+}
+.wt-card-section {
+  font-size: 9px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: #000; flex: 1;
+}
+.wt-card-counter {
+  font-size: 9px; font-weight: 700; color: rgba(0,0,0,.5);
+  letter-spacing: .06em;
+}
+.wt-card-body { padding: 16px; }
+.wt-card-title {
+  font-family: var(--display); font-size: 16px; font-weight: 800;
+  letter-spacing: -.02em; line-height: 1.25; margin-bottom: 8px;
+  color: var(--text);
+}
+.wt-card-text {
+  font-size: 11px; color: var(--dim); line-height: 1.7;
+}
+.wt-card-text b { color: var(--text); font-weight: 600; }
+.wt-card-text .hl-y { color: var(--yellow); font-weight: 600; }
+.wt-card-text .hl-g { color: var(--g); font-weight: 600; }
+.wt-card-text .hl-r { color: var(--r); font-weight: 600; }
+.wt-card-text .hl-b { color: var(--b); font-weight: 600; }
+
+/* Deep-dive expandable section */
+.wt-deepdive {
+  margin-top: 12px;
+  border-top: 1px solid var(--border2);
+  padding-top: 10px;
+}
+.wt-deepdive-toggle {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--yellow); cursor: pointer; font-weight: 600;
+  background: none; border: none; font-family: var(--sans);
+  padding: 0;
+}
+.wt-deepdive-toggle:hover { opacity: .8; }
+.wt-deepdive-toggle .dd-arrow { transition: transform .2s; }
+.wt-deepdive-toggle.open .dd-arrow { transform: rotate(180deg); }
+.wt-deepdive-body {
+  display: none; margin-top: 8px;
+  font-size: 10px; color: var(--dim); line-height: 1.7;
+}
+.wt-deepdive-body b { color: var(--text); }
+.wt-deepdive-body.open { display: block; }
+
+/* Pill list inside deep dive */
+.wt-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.wt-pill {
+  padding: 3px 8px; border-radius: 12px;
+  font-size: 9px; font-weight: 600; letter-spacing: .04em;
+}
+.wt-pill-g { background: var(--g2); color: var(--g); }
+.wt-pill-y { background: var(--yellow2); color: var(--yellow); }
+.wt-pill-r { background: var(--r2); color: var(--r); }
+.wt-pill-b { background: var(--b2); color: var(--b); }
+
+/* Progress dots */
+.wt-progress {
+  display: flex; align-items: center; gap: 5px;
+  padding: 0 16px 14px;
+}
+.wt-dot {
+  height: 4px; border-radius: 2px;
+  background: var(--border2);
+  transition: all .3s;
+  flex: 1;
+}
+.wt-dot.done { background: var(--yellow); }
+.wt-dot.active { background: var(--yellow); flex: 2; }
+
+/* Footer buttons */
+.wt-footer {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 16px 16px;
+}
+.wt-btn {
+  flex: 1; padding: 9px;
+  border-radius: 8px; border: none;
+  font-size: 11px; font-weight: 700; letter-spacing: .04em;
+  cursor: pointer; font-family: var(--sans);
+  transition: opacity .15s, transform .1s;
+}
+.wt-btn:hover { opacity: .85; transform: translateY(-1px); }
+.wt-btn:active { transform: none; }
+.wt-btn-primary { background: var(--yellow); color: #000; }
+.wt-btn-secondary {
+  background: transparent; color: var(--dim);
+  border: 1px solid var(--border2); flex: none; padding: 9px 14px;
+}
+.wt-btn-secondary:hover { color: var(--text); border-color: var(--border); }
+.wt-btn-skip {
+  background: transparent; color: var(--dim);
+  border: none; font-size: 10px; flex: none; padding: 9px 8px;
+  letter-spacing: .04em;
+}
+.wt-btn-skip:hover { color: var(--text); }
+
+/* Spotlight pulse ring */
+.wt-pulse {
+  position: absolute; z-index: 9003;
+  border: 2px solid var(--yellow);
+  border-radius: 10px;
+  pointer-events: none;
+  animation: wt-pulse-anim 1.8s ease-in-out infinite;
+  box-shadow: 0 0 0 0 var(--yellow2);
+}
+#wt-card.hidden { opacity: 0; pointer-events: none; display: none !important; }
+@keyframes wt-pulse-anim {
+  0%   { box-shadow: 0 0 0 0 rgba(248,201,4,.3); }
+  60%  { box-shadow: 0 0 0 10px rgba(248,201,4,0); }
+  100% { box-shadow: 0 0 0 0 rgba(248,201,4,0); }
+}
+#wt-pulse-ring { transition: all .35s cubic-bezier(.4,0,.2,1); }
+
+/* ? Help button in topbar */
+#wt-help-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px;
+  background: var(--yellow2);
+  border: 1px solid var(--yellow);
+  border-radius: 8px;
+  color: var(--yellow);
+  font-size: 14px; font-weight: 900;
+  cursor: pointer;
+  font-family: var(--display);
+  transition: background .15s;
+  flex-shrink: 0;
+  margin: auto 0 auto 12px;
+}
+#wt-help-btn:hover { background: var(--yellow); color: #000; }
+
+/* Welcome screen (step 0) */
+#wt-welcome {
+  position: absolute; inset: 0; z-index: 9020;
+  background: rgba(8,9,12,.92);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+  transition: opacity .3s;
+  isolation: isolate;
+}
+#wt-welcome.hidden { opacity: 0; pointer-events: none; display: none !important; }
+
+.wt-welcome-card {
+  width: 460px; max-width: 92vw;
+  background: var(--s1);
+  border: 1px solid var(--yellow);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.8);
+  animation: wt-slide-up .4s cubic-bezier(.4,0,.2,1);
+}
+@keyframes wt-slide-up {
+  from { opacity:0; transform: translateY(30px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.wt-welcome-hero {
+  background: var(--yellow);
+  padding: 28px 28px 24px;
+  text-align: center;
+}
+.wt-welcome-logo {
+  width: 48px; height: 48px;
+  background: #000;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; color: var(--yellow);
+  margin: 0 auto 14px;
+  font-family: var(--display);
+}
+.wt-welcome-title {
+  font-family: var(--display); font-size: 22px; font-weight: 900;
+  color: #000; letter-spacing: -.02em; line-height: 1.2;
+}
+.wt-welcome-sub {
+  font-size: 12px; color: rgba(0,0,0,.6); margin-top: 6px; font-weight: 500;
+}
+.wt-welcome-body { padding: 24px 28px; }
+.wt-welcome-desc {
+  font-size: 13px; color: var(--dim); line-height: 1.7; margin-bottom: 18px;
+}
+.wt-welcome-desc b { color: var(--text); }
+.wt-tab-pills {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 20px;
+}
+.wt-tab-pill {
+  background: var(--s2); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.wt-tab-pill-icon {
+  font-size: 18px; flex-shrink: 0;
+}
+.wt-tab-pill-name {
+  font-size: 11px; font-weight: 700; color: var(--text);
+}
+.wt-tab-pill-desc {
+  font-size: 9px; color: var(--dim); margin-top: 1px;
+}
+.wt-welcome-footer {
+  display: flex; gap: 8px; align-items: center;
+}
+.wt-skip-welcome {
+  background: none; border: none; color: var(--dim);
+  font-size: 11px; cursor: pointer; font-family: var(--sans);
+  padding: 10px 4px;
+}
+.wt-skip-welcome:hover { color: var(--text); }
+
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:9999;background:#0f172a;color:#f8fafc;padding:10px 16px;font:600 13px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><a href="../../index.html#case-studies" style="color:#5eead4;text-decoration:none">← Profile</a><span style="opacity:.85">Dark store dashboard · personal work</span></div>
+
+<div id="app-root">
+
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="store-block">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:30px;height:30px;background:var(--yellow);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#000;flex-shrink:0;font-family:var(--display)">b!</div>
+      <div>
+        <div class="store-tag"><div class="ldot"></div>MUM-BKC-04 · LIVE</div>
+        <div class="store-name">BKC Dark Store</div>
+      </div>
+    </div>
+  </div>
+  <div class="kpi-strip">
+    <div class="kpi-cell"><div class="kv" style="color:var(--g)" id="kv1">247</div><div class="kl">Orders Today</div></div>
+    <div class="kpi-cell"><div class="kv" style="color:var(--g)" id="kv2">91%</div><div class="kl">SLA Met</div></div>
+    <div class="kpi-cell"><div class="kv" style="color:var(--a)" id="kv3">—</div><div class="kl">In Queue</div></div>
+    <div class="kpi-cell"><div class="kv" style="color:var(--r)" id="kv4">—</div><div class="kl">At Risk</div></div>
+    <div class="kpi-cell"><div class="kv" style="color:var(--a)" id="kv5">3</div><div class="kl">Unassigned</div></div>
+  </div>
+  <div class="mode-block">
+    <div class="mode-lbl">Assignment</div>
+    <div class="mode-toggle">
+      <button class="mbtn active" id="mbtn-auto" onclick="setMode('auto')">⚡ Auto</button>
+      <button class="mbtn" id="mbtn-manual" onclick="setMode('manual')">✦ Manual</button>
+    </div>
+  </div>
+  <div id="wt-help-btn" onclick="wtRelaunch()" title="Re-open guide">?</div>
+  <div class="time-block">
+    <div class="clock" id="clock">--:--</div>
+    <div class="shift">Shift 2 · IST</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('t1',this)">
+    <span>Picker Floor</span><span class="tab-badge tb-r" id="badge-t1">1</span>
+  </button>
+  <button class="tab" onclick="switchTab('t2',this)">
+    <span>Manager Actions</span><span class="tab-badge tb-a" id="badge-t2">5</span>
+  </button>
+  <button class="tab" onclick="switchTab('t3',this)">
+    <span>Predictive</span><span class="tab-badge tb-b" id="badge-t3">4</span>
+  </button>
+  <button class="tab" onclick="switchTab('t4',this)">
+    <span>🛵 Riders</span><span class="tab-badge" id="badge-t4" style="background:var(--yellow2);color:var(--yellow)">—</span>
+  </button>
+</div>
+
+<!-- ════════════════════════════════
+     TAB 1 — PICKER FLOOR
+════════════════════════════════ -->
+<div class="panel active" id="t1">
+  <div class="scroll" style="width:100%">
+    <div class="widget-grid" id="wgrid-t1" data-tab="t1" style="max-width:1100px;margin:0 auto">
+
+      <div class="widget" data-id="active-pickers">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Active Pickers</span></div>
+        <div class="widget-body">
+          <div id="pickers-list"></div>
+        </div>
+      </div>
+
+      <div class="widget" data-id="packing-station">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Packing Station</span></div>
+        <div class="widget-body">
+          <div id="packers-list"></div>
+        </div>
+      </div>
+
+      <div class="widget" data-id="unassigned-queue">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Unassigned Queue <span id="ua-count" style="color:var(--a);font-size:10px;margin-left:4px"></span></span></div>
+        <div class="widget-body">
+          <div id="unassigned-list"></div>
+        </div>
+      </div>
+
+      <div class="widget" data-id="find-resource">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Find Additional Resource</span></div>
+        <div class="widget-body">
+          <div id="resource-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     TAB 2 — MANAGER ACTIONS
+════════════════════════════════ -->
+<div class="panel" id="t2">
+  <div class="scroll" style="width:100%">
+    <div class="widget-grid" id="wgrid-t2" data-tab="t2" style="max-width:960px;margin:0 auto">
+
+      <div class="widget" data-id="intake-controls">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Order Intake Controls</span></div>
+        <div class="widget-body">
+          <div class="pause-strip">
+            <div class="pause-strip-label">Pause order intake</div>
+            <div class="pause-level">
+              <button class="plbtn" id="pb-sku" onclick="togglePauseLevel('sku')">Single SKU</button>
+              <button class="plbtn" id="pb-cat" onclick="togglePauseLevel('cat')">Category</button>
+              <button class="plbtn active" id="pb-store" onclick="togglePauseLevel('store')" style="display:none">⚠ Store Paused</button>
+            </div>
+          </div>
+          <div class="card" id="sku-pause-panel" style="display:none">
+            <div class="sec" style="margin-bottom:10px">Active SKU / Category Pauses</div>
+            <div id="pause-sku-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="widget" data-id="discrepancies">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Physical vs Digital Discrepancies</span></div>
+        <div class="widget-body">
+          <div style="display:flex;flex-direction:column;gap:7px" id="disc-list"></div>
+        </div>
+      </div>
+
+      <div class="widget" data-id="needs-decision">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Needs a Decision</span></div>
+        <div class="widget-body">
+          <div style="display:flex;flex-direction:column;gap:8px" id="actions-list"></div>
+        </div>
+      </div>
+
+      <div class="widget" id="breach-section" style="display:none" data-id="sla-breaches">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title" style="color:var(--r)">SLA Breaches — assign or override</span></div>
+        <div class="widget-body">
+          <div style="display:flex;flex-direction:column;gap:6px" id="breach-list"></div>
+        </div>
+      </div>
+
+      <div class="widget" data-id="resolved-log">
+        <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Resolved This Shift</span></div>
+        <div class="widget-body">
+          <div style="display:flex;flex-direction:column;gap:5px" id="resolved-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     TAB 3 — PREDICTIVE
+════════════════════════════════ -->
+<div class="panel" id="t3">
+  <div class="scroll" style="width:100%">
+    <div style="max-width:1100px;margin:0 auto">
+
+      <!-- horizon toggle — always on top, not draggable -->
+      <div class="horizon-toggle" style="margin-bottom:12px">
+        <button class="ht-btn active" onclick="setHorizon('30m',this)">Next 30 mins</button>
+        <button class="ht-btn" onclick="setHorizon('2h',this)">Next 2 hours</button>
+      </div>
+
+      <!-- metric row — always on top -->
+      <div class="grid3" id="pred-metrics" style="margin-bottom:12px"></div>
+
+      <div class="widget-grid" id="wgrid-t3" data-tab="t3">
+
+        <div class="widget" data-id="demand-forecast">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Demand Forecast</span></div>
+          <div class="widget-body"><div class="card" id="forecast-chart"></div></div>
+        </div>
+
+        <div class="widget" data-id="inventory-runway">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Inventory Runway</span></div>
+          <div class="widget-body"><div class="card" id="runway-chart"></div></div>
+        </div>
+
+        <div class="widget" data-id="throughput-skus">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Throughput Problem SKUs</span></div>
+          <div class="widget-body"><div class="card" id="throughput-list"></div></div>
+        </div>
+
+        <div class="widget" data-id="shrinkage-queue">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Shrinkage Queue · Auto-Flagged by WMS</span></div>
+          <div class="widget-body"><div style="display:flex;flex-direction:column;gap:6px" id="shrinkage-list"></div></div>
+        </div>
+
+        <div class="widget widget-full" data-id="rider-capacity">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Rider Capacity vs Order Demand</span></div>
+          <div class="widget-body"><div class="card" id="rider-capacity-chart"></div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     TAB 4 — RIDERS
+════════════════════════════════ -->
+<div class="panel" id="t4">
+  <div class="scroll" style="width:100%">
+    <div style="max-width:1200px;margin:0 auto">
+
+      <!-- stat summary + gauge always on top -->
+      <div class="stat-row" id="rider-stat-row" style="margin-bottom:10px"></div>
+      <div class="cap-bar-wrap" id="cap-gauge" style="margin-bottom:12px"></div>
+
+      <div class="widget-grid" id="wgrid-t4" data-tab="t4">
+
+        <div class="widget" data-id="on-delivery">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">On Delivery</span></div>
+          <div class="widget-body">
+            <div id="riders-delivering" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+        </div>
+
+        <div class="widget" data-id="returning">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Returning to Store</span></div>
+          <div class="widget-body">
+            <div id="riders-returning" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+        </div>
+
+        <div class="widget" data-id="waiting-store">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Waiting at Store</span></div>
+            <div id="riders-waiting" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+        </div>
+
+        <div class="widget" data-id="assign-riders">
+          <div class="widget-handle"><span class="wh-grip">⠿</span><span class="wh-title">Assign Riders to Shift</span></div>
+          <div class="widget-body">
+            <div id="rider-pool"></div>
+          </div>
+        </div>
+
+      </div><!-- end widget-grid -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CLOCK ──
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('en-IN',{hour12:false,hour:'2-digit',minute:'2-digit'});
+}
+tick(); setInterval(tick,1000);
+
+// ── DATA ──
+const calcSLA=(skus,isNew)=>Math.round((30+skus*13)*(isNew?1.3:1));
+
+// ── ASSIGNMENT MODE STATE ──
+let MODE='auto';
+let selPickerId=null;
+let selOrderId=null;
+
+function setMode(m){
+  MODE=m;
+  document.getElementById('mbtn-auto').classList.toggle('active',m==='auto');
+  document.getElementById('mbtn-manual').classList.toggle('active',m==='manual');
+  selPickerId=null; selOrderId=null;
+  renderPickers(); renderUnassigned();
+}
+
+function onPickerClick(pid){
+  if(MODE!=='manual') return;
+  const p=PICKERS.find(x=>x.id===pid);
+  if(!p||p.status!=='idle') return;
+  if(selOrderId){
+    // order was selected first — assign now
+    doAssign(selOrderId,pid); return;
+  }
+  selPickerId=(selPickerId===pid)?null:pid;
+  renderPickers(); renderUnassigned();
+}
+
+function onOrderClick(oid){
+  if(MODE!=='manual') return;
+  const o=ORDERS.find(x=>x.id===oid);
+  if(!o||o.status!=='unassigned') return;
+  if(selPickerId){
+    doAssign(oid,selPickerId); return;
+  }
+  selOrderId=(selOrderId===oid)?null:oid;
+  renderPickers(); renderUnassigned();
+}
+
+function doAssign(oid,pid){
+  const o=ORDERS.find(x=>x.id===oid);
+  const p=PICKERS.find(x=>x.id===pid);
+  if(!o||!p) return;
+  o.status='active'; o.assignedTo=p.name;
+  p.orderId=o.id; p.skus=o.skus; p.elapsed=0; p.status='green';
+  selPickerId=null; selOrderId=null;
+  ORDERS.splice(ORDERS.indexOf(o),1);
+  RESOLVED_LOG.unshift('✓ '+o.id+' ('+o.skus+' items) assigned to '+p.name);
+  renderPickers(); renderUnassigned(); renderResources(); renderResolved();
+}
+
+function bestPickerFor(order){
+  const idle=PICKERS.filter(p=>p.status==='idle');
+  if(!idle.length) return null;
+  if(order.skus<=4){ const nb=idle.filter(p=>p.isNew); if(nb.length) return nb.sort((a,b)=>b.score-a.score)[0]; }
+  return idle.filter(p=>!p.isNew).concat(idle.filter(p=>p.isNew)).sort((a,b)=>b.score-a.score)[0];
+}
+
+function autoAssignAll(){
+  [...ORDERS].filter(o=>o.status==='unassigned').forEach(o=>{
+    const p=bestPickerFor(o); if(p) doAssign(o.id,p.id);
+  });
+}
+
+const PICKERS=[
+  // type: 'reg' = regular shift, 'od' = on-demand/overtime
+  // shiftEndsIn: hours remaining, extendable: can manager ask them to stay
+  {id:'P1',name:'Ravi K.',  score:88,isNew:false,streak:5, status:'green',orderId:'#4421',skus:6,elapsed:55, type:'reg',shiftEndsIn:3.5,extendable:false},
+  {id:'P2',name:'Sunita M.',score:74,isNew:false,streak:2, status:'amber',orderId:'#4418',skus:8,elapsed:84, type:'reg',shiftEndsIn:3.5,extendable:false},
+  {id:'P3',name:'Ajay R.',  score:61,isNew:false,streak:0, status:'red',  orderId:'#4415',skus:5,elapsed:91, type:'od', shiftEndsIn:0.5,extendable:false},
+  {id:'P4',name:'Priya L.', score:94,isNew:false,streak:8, status:'green',orderId:'#4424',skus:4,elapsed:27, type:'reg',shiftEndsIn:2.0,extendable:true},
+  {id:'P5',name:'M. Ansari',score:79,isNew:false,streak:4, status:'green',orderId:'#4422',skus:7,elapsed:42, type:'od', shiftEndsIn:1.0,extendable:true},
+  {id:'P6',name:'Divya T.', score:42,isNew:true, streak:1, status:'idle', orderId:null,   skus:0,elapsed:0,  type:'reg',shiftEndsIn:3.5,extendable:false},
+  {id:'P7',name:'Karim B.', score:35,isNew:true, streak:0, status:'idle', orderId:null,   skus:0,elapsed:0,  type:'od', shiftEndsIn:1.5,extendable:true},
+];
+
+const PACKERS=[
+  {name:'Kiran S.',exp:'Senior',done:12,active:1,total:15,rate:'4.2/hr'},
+  {name:'Naseem B.',exp:'Junior',done:9,active:1,total:12,rate:'3.1/hr'},
+  {name:'Tara V.',exp:'Trainee',done:5,active:0,total:8,rate:'2.0/hr'},
+];
+
+const ORDERS=[
+  {id:'#4430',items:'9 items · Grocery + FMCG',skus:9,status:'unassigned'},
+  {id:'#4431',items:'3 items · Snacks',        skus:3,status:'unassigned'},
+  {id:'#4432',items:'6 items · Cold + Fresh',  skus:6,status:'unassigned'},
+];
+
+const DISCREPANCIES=[
+  {id:'d1',sku:'Amul Taaza 1L',wms:14,physical:6,note:'Box near column B may have 3 units',_done:false},
+  {id:'d2',sku:'Maggi 70g (12-pack)',wms:8,physical:3,note:'Possible miscount in last restock',_done:false},
+  {id:'d3',sku:'Lays Classic 26g',wms:22,physical:19,note:'Minor — within tolerance',_done:false},
+];
+
+const ACTIONS=[
+  {id:'a1',level:'crit',icon:'🧊',title:'Cold zone rising — 8°C (limit 6°C)',
+   body:'Unit A above threshold 5 mins. Milk, paneer at risk. Maintenance notified.',
+   age:'5m',autoNote:'Maintenance ticket auto-raised.',
+   actions:[{l:'Move stock to unit B',c:'w'},{l:'Suspend cold SKUs',c:'d'}],_done:false},
+  {id:'a2',level:'warn',icon:'🔄',title:'Substitute needed — Order #4418',
+   body:'Amul Gold 500ml out of stock. Mother Dairy Full Cream same price — awaiting customer confirm (48s left).',
+   age:'1m',autoNote:'Customer notified in-app.',
+   actions:[{l:'Confirm sub',c:'p'},{l:'Cancel item',c:'g'}],_done:false},
+  {id:'a3',level:'warn',icon:'📦',title:'Inbound van arriving in 10 mins',
+   body:'Perishables delivery at 18:45 — peak hour. Divya is idle and can receive.',
+   age:'Now',autoNote:null,
+   actions:[{l:'Assign Divya to receive',c:'w'},{l:'Delay van 20 mins',c:'g'}],_done:false},
+];
+
+const RESOLVED_LOG=[
+  '✓ Ghost stock corrected — Maggi 70g: 12→4 units',
+  '✓ Substitute confirmed by customer — Amul Taaza for #4401',
+  '✓ Low stock alert → area manager — Britannia Biscuits',
+];
+
+const PAUSE_SKUS=[
+  {name:'Amul Gold Milk 500ml',reason:'Discrepancy — physical count in progress',paused:true},
+  {name:'Mother Dairy Paneer',reason:'Low stock — 2 units left',paused:false},
+  {name:'All Dairy (Category)',reason:'Cold zone breach active',paused:false},
+];
+
+// ── STATE ──
+let HORIZON='30m';
+let pausedLevels={sku:false,cat:false,store:false};
+
+// ── TABS ──
+function switchTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='t4') renderAllRiders();
+  setTimeout(()=>{ const g=document.getElementById('wgrid-'+id); if(g) initDrag(g); },30);
+}
+
+// ── COLORS ──
+const sc=s=>s>=80?'var(--g)':s>=60?'var(--a)':'var(--r)';
+const ic=s=>({green:'var(--g)',amber:'var(--a)',red:'var(--r)',idle:'var(--dim)'})[s]||'var(--dim)';
+const initials=n=>n.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+const bgForScore=s=>s>=80?'rgba(5,217,138,.12)':s>=60?'rgba(245,166,35,.12)':'rgba(245,59,87,.12)';
+
+// ══════════════════════
+// TAB 1 RENDER
+// ══════════════════════
+function renderPickers(){
+  const breaches=[];
+  const html=PICKERS.map(p=>{
+    const slaTotal=calcSLA(p.skus,p.isNew);
+    const pct=p.skus>0?Math.min(p.elapsed/slaTotal,1):0;
+    const remaining=Math.max(0,Math.round(slaTotal-p.elapsed));
+    const fillPct=Math.max(0,(1-pct)*100);
+    const fillColor=pct<0.65?'var(--g)':pct<0.85?'var(--a)':'var(--r)';
+    const circ=2*Math.PI*14;
+    const scoreC=sc(p.score);
+    const isBreaching=p.status==='red'&&p.skus>0;
+    if(isBreaching) breaches.push(p);
+
+    // shift info
+    const hrs=p.shiftEndsIn;
+    const shiftColor=hrs<=0.75?'low':hrs<=1.5?'mid':'';
+    const shiftLabel=hrs<1?(Math.round(hrs*60)+'m left'):hrs+'h left';
+    const typeTag=p.type==='od'
+      ?`<span class="picker-type-tag ptt-od">OD</span>`
+      :`<span class="picker-type-tag ptt-reg">Regular</span>`;
+    const extTag=p.extendable
+      ?`<span class="ext-badge">can extend</span>`:'';
+    const shiftBlock=`<div class="shift-info">
+      ${typeTag}
+      <span class="shift-hours ${shiftColor}">${shiftLabel}</span>
+      ${extTag}
+    </div>`;
+
+    // manual mode highlight
+    const isSelPicker=MODE==='manual'&&selPickerId===p.id;
+    const isSelOrder=MODE==='manual'&&selOrderId!=null;
+
+    const breachNudge=isBreaching?`
+      <div class="breach-nudge">
+        ⚡ Breaching SLA — assign support or override
+        <button onclick="switchTab('t2',document.querySelectorAll('.tab')[1])">→ Action</button>
+      </div>`:'';
+
+    if(p.status==='idle'){
+      const canAssign=MODE==='manual';
+      return `<div class="picker-row idle${isSelPicker?' sel-picker':''}" onclick="onPickerClick('${p.id}')" style="${isSelPicker?'border-color:var(--b);box-shadow:0 0 0 1px var(--b)':''}">
+        <div class="picker-ava" style="background:var(--muted);color:var(--dim)">${initials(p.name)}</div>
+        <div class="picker-info" style="flex:1">
+          <div class="picker-name-row">
+            <span class="pname">${p.name}</span>
+            <span class="ptag ${p.isNew?'new':'exp'}">${p.isNew?'New':'Exp'}</span>
+          </div>
+          ${shiftBlock}
+          <div class="porder" style="margin-top:4px">${canAssign?(isSelOrder?'← Tap to assign selected order':'Tap to select'):'Idle — waiting for assignment'}</div>
+        </div>
+        <div style="font-size:9px;color:var(--dim);text-align:center">
+          <div style="font-family:var(--display);font-size:16px;font-weight:700;color:${scoreC};line-height:1">${p.score}</div>
+          <div style="font-size:8px;letter-spacing:.06em;margin-top:1px">SPEED</div>
+        </div>
+      </div>`;
+    }
+
+    return `<div class="picker-row ${p.status}${isBreaching?' breach':''}" onclick="onPickerClick('${p.id}')">
+      <div class="picker-ava" style="background:${bgForScore(p.score)};color:${scoreC}">${initials(p.name)}</div>
+      <div class="picker-info" style="flex:1">
+        <div class="picker-name-row">
+          <span class="pname">${p.name}</span>
+          <span class="ptag ${p.isNew?'new':'exp'}">${p.isNew?'New':'Exp'}</span>
+          ${p.streak>=4?`<span style="font-size:12px">${p.streak>=7?'🔥':'⚡'}</span>`:''}
+        </div>
+        ${shiftBlock}
+        <div class="porder" style="margin-top:4px">${p.orderId} · ${p.skus} items to collect${p.isNew?' · +30% buffer':''}</div>
+        ${breachNudge}
+      </div>
+      <div class="sla-clock">
+        <div class="sla-num" style="color:${fillColor}">${remaining}<span style="font-size:11px;font-weight:400;color:var(--dim)">s</span></div>
+        <div class="sla-sub">left on clock</div>
+        <div class="sla-bar"><div class="sla-bar-fill" style="width:${fillPct}%;background:${fillColor}"></div></div>
+      </div>
+      <div>
+        <div class="score-mini">
+          <svg width="36" height="36" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="var(--muted)" stroke-width="3"/>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="${scoreC}" stroke-width="3"
+              stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-p.score/100)}"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-mini-num" style="color:${scoreC}">${p.score}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('pickers-list').innerHTML=html;
+
+  // breach section in tab 2
+  const bs=document.getElementById('breach-section');
+  const bl=document.getElementById('breach-list');
+  if(breaches.length){
+    bs.style.display='';
+    bl.innerHTML=breaches.map(p=>`
+      <div class="ac warn" style="border-left-color:var(--r)">
+        <div class="ac-top">
+          <div class="ac-icon">⏱</div>
+          <div class="ac-content">
+            <div class="ac-title">${p.name} — breaching on ${p.orderId}</div>
+            <div class="ac-body">${p.skus}-item order · SLA ${calcSLA(p.skus,p.isNew)}s · Elapsed ${p.elapsed}s</div>
+          </div>
+          <div class="ac-age">Now</div>
+        </div>
+        <div class="ac-actions">
+          <button class="abtn p" onclick="assignAssist('${p.id}')">Assign support</button>
+          <button class="abtn g">Override SLA</button>
+        </div>
+      </div>`).join('');
+    document.getElementById('badge-t2').textContent=ACTIONS.filter(a=>!a._done).length+breaches.length;
+  } else {
+    bs.style.display='none';
+    document.getElementById('badge-t2').textContent=ACTIONS.filter(a=>!a._done).length;
+  }
+}
+
+function assignAssist(pid){
+  RESOLVED_LOG.unshift('✓ Support assigned to assist '+PICKERS.find(p=>p.id===pid)?.name);
+  renderResolved();
+  renderPickers();
+}
+
+function renderPackers(){
+  document.getElementById('packers-list').innerHTML=PACKERS.map(pk=>{
+    const expColor=pk.exp==='Senior'?'var(--g)':pk.exp==='Junior'?'var(--a)':'var(--b)';
+    const slots=Array.from({length:pk.total},(_,i)=>`<div class="pe-slot${i<pk.done?' done':i===pk.done&&pk.active?' active':''}"></div>`).join('');
+    return `<div class="packer-exp-row">
+      <div class="pe-name">${pk.name}</div>
+      <div class="pe-tag" style="background:${expColor}18;color:${expColor}">${pk.exp}</div>
+      <div class="pe-slots">${slots}</div>
+      <div class="pe-rate">${pk.rate}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderUnassigned(){
+  const unassigned=[...ORDERS].filter(o=>o.status==='unassigned').sort((a,b)=>a.skus-b.skus);
+  const c=unassigned.length;
+  document.getElementById('ua-count').textContent=c?' ('+c+')':'';
+
+  const autoBtn=MODE==='auto'&&c>0
+    ?`<button onclick="autoAssignAll()" style="display:block;width:100%;margin-bottom:8px;padding:7px;background:var(--b2);border:1px solid var(--b);border-radius:5px;color:var(--b);font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">⚡ Auto-assign all ${c} orders</button>`
+    :'';
+
+  document.getElementById('unassigned-list').innerHTML=autoBtn+unassigned.map(o=>{
+    const sla=calcSLA(o.skus,false);
+    const sizeLabel=o.skus<=3?'Quick Win':o.skus<=6?'Medium':'Complex';
+    const sizeC=o.skus<=3?'var(--g)':o.skus<=6?'var(--a)':'var(--r)';
+    const isSel=selOrderId===o.id;
+    const rec=MODE==='auto'?bestPickerFor(o):null;
+    const hint=MODE==='manual'
+      ?(isSel?'<span style="color:var(--b);font-size:9px;margin-left:auto">← tap a picker</span>':'<span style="color:var(--dim);font-size:9px;margin-left:auto">tap to select</span>')
+      :(rec?`<span style="color:var(--g);font-size:9px;margin-left:auto;cursor:pointer;text-decoration:underline" onclick="doAssign('${o.id}','${rec.id}')">→ ${rec.name}</span>`:'');
+    return `<div class="card" onclick="onOrderClick('${o.id}')" style="border-left:3px solid ${sizeC};margin-bottom:6px;cursor:pointer;${isSel?'border-color:var(--b);box-shadow:0 0 0 1px var(--b)':''}">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-family:var(--display);font-size:12px;font-weight:600">${o.id}</span>
+            <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:${sizeC}18;color:${sizeC}">${sizeLabel}</span>
+            ${hint}
+          </div>
+          <div style="font-size:10px;color:var(--dim);margin-top:2px">${o.items}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--dim)">${o.skus} <span style="font-size:9px;font-weight:400">SKUs</span></div>
+          <div style="font-size:9px;color:var(--dim)">Est. ${sla}s</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderResources(){
+  const idle=PICKERS.filter(p=>p.status==='idle');
+  document.getElementById('resource-list').innerHTML=idle.length?idle.map(p=>`
+    <div class="resource-card" style="margin-bottom:5px">
+      <div class="rc-avail" style="background:var(--g)"></div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="rc-name">${p.name}</span>
+          <span class="ptag ${p.isNew?'new':'exp'}">${p.isNew?'New':'Exp'}</span>
+        </div>
+        <div class="rc-meta">Available · Speed ${p.score}${p.isNew?' · Gets +30% SLA buffer':''}</div>
+      </div>
+      <button class="rc-btn" onclick="alert('Assign flow: tap an order in the unassigned queue')">Assign →</button>
+    </div>`).join('')
+    :'<div style="font-size:11px;color:var(--dim);padding:8px 0">No idle pickers — all hands active.</div>';
+}
+
+// ══════════════════════
+// TAB 2 RENDER
+// ══════════════════════
+function renderDiscrepancies(){
+  document.getElementById('disc-list').innerHTML=DISCREPANCIES.filter(d=>!d._done).map(d=>`
+    <div class="disc-row" id="${d.id}">
+      <div class="dr-sku">
+        <div class="dr-name">${d.sku}</div>
+        <div class="dr-detail">WMS: <b style="color:var(--text)">${d.wms}</b> units · Physical: <b style="color:var(--a)">${d.physical}</b> units · ${d.note}</div>
+      </div>
+      <div class="dr-actions">
+        <button class="abtn p" onclick="resolveDisc('${d.id}','Update WMS')">Update WMS</button>
+        <button class="abtn w" onclick="pauseFromDisc('${d.sku}')">Pause SKU</button>
+        <button class="abtn g" onclick="resolveDisc('${d.id}','Dismissed')">Dismiss</button>
+      </div>
+    </div>`).join('');
+}
+
+function resolveDisc(id,action){
+  const d=DISCREPANCIES.find(x=>x.id===id);
+  if(!d) return;
+  document.getElementById(id)?.classList.add('resolving');
+  setTimeout(()=>{d._done=true;RESOLVED_LOG.unshift('✓ Discrepancy resolved ('+action+') — '+d.sku);renderDiscrepancies();renderResolved();},300);
+}
+
+function pauseFromDisc(sku){
+  PAUSE_SKUS.push({name:sku,reason:'Physical discrepancy flagged',paused:true});
+  document.getElementById('sku-pause-panel').style.display='';
+  renderPausePanel();
+  RESOLVED_LOG.unshift('✓ '+sku+' paused — discrepancy under review');
+  renderResolved();
+}
+
+function renderActions(){
+  document.getElementById('actions-list').innerHTML=ACTIONS.filter(a=>!a._done).map(a=>`
+    <div class="ac ${a.level}" id="${a.id}">
+      <div class="ac-top">
+        <div class="ac-icon">${a.icon}</div>
+        <div class="ac-content">
+          <div class="ac-title">${a.title}</div>
+          <div class="ac-body">${a.body}</div>
+        </div>
+        <div class="ac-age">${a.age}</div>
+      </div>
+      ${a.autoNote?`<div class="ac-note auto">⚡ ${a.autoNote}</div>`:''}
+      <div class="ac-actions">${a.actions.map((x,i)=>`<button class="abtn ${x.c}" onclick="resolveAction('${a.id}',${i})">${x.l}</button>`).join('')}</div>
+    </div>`).join('');
+}
+
+function resolveAction(id,ai){
+  const a=ACTIONS.find(x=>x.id===id);
+  if(!a) return;
+  document.getElementById(id)?.classList.add('resolving');
+  setTimeout(()=>{a._done=true;RESOLVED_LOG.unshift('✓ '+a.actions[ai].l+' — '+a.title.split('—')[0].trim());renderActions();renderResolved();renderPickers();},300);
+}
+
+function renderResolved(){
+  document.getElementById('resolved-list').innerHTML=RESOLVED_LOG.map(r=>`<div class="rlog-item">${r}</div>`).join('');
+}
+
+function togglePauseLevel(level){
+  if(level==='store'){
+    const is=!pausedLevels.store;
+    pausedLevels.store=is;
+    const btn=document.getElementById('pb-store');
+    btn.style.display=is?'':'none';
+    if(is){RESOLVED_LOG.unshift('⚠ Store order intake PAUSED');renderResolved();}
+    else{RESOLVED_LOG.unshift('✓ Store order intake resumed');renderResolved();}
+    return;
+  }
+  document.getElementById('sku-pause-panel').style.display='';
+  renderPausePanel();
+}
+
+function renderPausePanel(){
+  document.getElementById('pause-sku-list').innerHTML=PAUSE_SKUS.map((s,i)=>`
+    <div class="sku-pause-row">
+      <div class="spname">${s.name}<div style="font-size:9px;color:var(--dim);margin-top:2px">${s.reason}</div></div>
+      <span class="spstatus ${s.paused?'paused':'live'}">${s.paused?'PAUSED':'LIVE'}</span>
+      <button class="sptoggle ${s.paused?'resume':''}" onclick="toggleSkuPause(${i})">${s.paused?'Resume':'Pause'}</button>
+    </div>`).join('');
+}
+
+function toggleSkuPause(i){
+  PAUSE_SKUS[i].paused=!PAUSE_SKUS[i].paused;
+  RESOLVED_LOG.unshift((PAUSE_SKUS[i].paused?'⚠ Paused':'✓ Resumed')+' — '+PAUSE_SKUS[i].name);
+  renderPausePanel();
+  renderResolved();
+}
+
+// ══════════════════════
+// TAB 3 RENDER
+// ══════════════════════
+const PRED_DATA={
+  '30m':{
+    metrics:[
+      {val:'68',label:'Orders forecast',delta:'+12 vs last Tue',dir:'up'},
+      {val:'4.2m',label:'Avg pick time trend',delta:'+0.8m vs target',dir:'down'},
+      {val:'82%',label:'Projected SLA hit rate',delta:'Below 90% target',dir:'down'},
+    ],
+    forecast:[
+      {time:'18:30',orders:22,capacity:20,now:false},
+      {time:'18:45',orders:35,capacity:20,now:true},
+      {time:'19:00',orders:41,capacity:20,now:false},
+      {time:'19:15',orders:38,capacity:20,now:false},
+      {time:'19:30',orders:28,capacity:20,now:false},
+      {time:'19:45',orders:18,capacity:20,now:false},
+    ],
+    runway:[
+      {sku:'Amul Gold Milk 500ml',pct:12,label:'~4 mins',color:'var(--r)'},
+      {sku:'Haldiram Bhujia 200g',pct:18,label:'~6 mins',color:'var(--r)'},
+      {sku:'Britannia Biscuits',  pct:38,label:'~18 mins',color:'var(--a)'},
+      {sku:'Lays Classic 26g',    pct:55,label:'~28 mins',color:'var(--a)'},
+      {sku:'Maggi 70g',           pct:72,label:'~35 mins',color:'var(--g)'},
+    ],
+    throughput:[
+      {name:'Amul Gold Milk 500ml',why:'High sub-rate (42%) — picker stops to flag',impact:'high'},
+      {name:'Loose Onions 1kg',why:'Weighing step adds ~35s per order',impact:'high'},
+      {name:'Haldiram Bhujia 200g',why:'Shelf location causes aisle conflict',impact:'med'},
+      {name:'Everest Masala (all)',why:'Near-expiry — picker double-checks dates',impact:'med'},
+    ],
+    shrinkage:[
+      {sku:'Mother Dairy Curd 400g',batch:'Lot 2401',age:28,shelf:30,level:'exp'},
+      {sku:'Everest Garam Masala',  batch:'Lot 2210',age:25,shelf:30,level:'near'},
+      {sku:'Amul Paneer 200g',      batch:'Lot 2403',age:22,shelf:30,level:'near'},
+    ],
+    riderCapacity:[
+      // orders: expected orders in that slot, riders: available riders, avgTripMins: avg round-trip
+      {time:'18:30',orders:22,riders:6,avgTripMins:12,now:false},
+      {time:'18:45',orders:35,riders:6,avgTripMins:12,now:true},
+      {time:'19:00',orders:41,riders:6,avgTripMins:13,now:false},
+      {time:'19:15',orders:38,riders:7,avgTripMins:13,now:false},
+      {time:'19:30',orders:28,riders:7,avgTripMins:11,now:false},
+      {time:'19:45',orders:18,riders:7,avgTripMins:11,now:false},
+    ],
+  },
+  '2h':{
+    metrics:[
+      {val:'210',label:'Orders forecast',delta:'+28 vs last Tue',dir:'up'},
+      {val:'3.9m',label:'Avg pick time (2h)',delta:'Improving trend',dir:'up'},
+      {val:'86%',label:'Projected SLA hit rate',delta:'Recovers post 20:00',dir:'up'},
+    ],
+    forecast:[
+      {time:'18:45',orders:35,capacity:20,now:true},
+      {time:'19:00',orders:41,capacity:20,now:false},
+      {time:'19:30',orders:28,capacity:20,now:false},
+      {time:'20:00',orders:22,capacity:20,now:false},
+      {time:'20:30',orders:18,capacity:20,now:false},
+      {time:'21:00',orders:12,capacity:20,now:false},
+    ],
+    runway:[
+      {sku:'Amul Gold Milk 500ml',pct:5, label:'~2 mins',color:'var(--r)'},
+      {sku:'Haldiram Bhujia 200g',pct:8, label:'~3 mins',color:'var(--r)'},
+      {sku:'Britannia Biscuits',  pct:18,label:'~8 mins',color:'var(--r)'},
+      {sku:'Lays Classic 26g',    pct:32,label:'~52 mins',color:'var(--a)'},
+      {sku:'Maggi 70g',           pct:58,label:'~88 mins',color:'var(--g)'},
+    ],
+    throughput:[
+      {name:'Amul Gold Milk 500ml',why:'Will run out mid-peak — triggers sub flow repeatedly',impact:'high'},
+      {name:'Fresh Coriander 100g',why:'No barcode — picker must manually log every time',impact:'high'},
+      {name:'Loose Onions 1kg',   why:'Weighing step adds ~35s — scales near cold zone',impact:'med'},
+      {name:'Britannia NutriChoice',why:'3 variants look identical — frequent wrong-pick',impact:'med'},
+    ],
+    shrinkage:[
+      {sku:'Mother Dairy Curd 400g',batch:'Lot 2401',age:28,shelf:30,level:'exp'},
+      {sku:'Everest Garam Masala',  batch:'Lot 2210',age:25,shelf:30,level:'near'},
+      {sku:'Amul Paneer 200g',      batch:'Lot 2403',age:22,shelf:30,level:'near'},
+      {sku:'Parle-G 200g',          batch:'Lot 2312',age:21,shelf:30,level:'near'},
+    ],
+    riderCapacity:[
+      {time:'18:45',orders:35,riders:6,avgTripMins:12,now:true},
+      {time:'19:00',orders:41,riders:6,avgTripMins:13,now:false},
+      {time:'19:30',orders:28,riders:7,avgTripMins:11,now:false},
+      {time:'20:00',orders:22,riders:7,avgTripMins:10,now:false},
+      {time:'20:30',orders:18,riders:8,avgTripMins:10,now:false},
+      {time:'21:00',orders:12,riders:8,avgTripMins:9, now:false},
+    ],
+  }
+};
+
+function setHorizon(h,btn){
+  HORIZON=h;
+  document.querySelectorAll('.ht-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPredictive();
+}
+
+function renderPredictive(){
+  const d=PRED_DATA[HORIZON];
+
+  // ── metrics ──
+  document.getElementById('pred-metrics').innerHTML=d.metrics.map(m=>{
+    const isSLA=m.label.includes('SLA');
+    const valColor=isSLA?(m.dir==='up'?'var(--r)':'var(--g)'):(m.dir==='up'?'var(--g)':'var(--r)');
+    const deltaClass=isSLA?(m.dir==='up'?'down':'up'):(m.dir==='up'?'up':'down');
+    return `<div class="metric-card">
+      <div class="mc-val" style="color:${valColor}">${m.val}</div>
+      <div class="mc-label">${m.label}</div>
+      <div class="mc-delta ${deltaClass}">${m.delta}</div>
+    </div>`;
+  }).join('');
+
+  // ── picker demand forecast — improved ──
+  const maxOrders=Math.max(...d.forecast.map(f=>f.orders));
+  const capOrders=d.forecast[0].capacity;
+  const capLinePct=Math.round((capOrders/maxOrders)*100);
+
+  const legend=`<div class="forecast-legend">
+    <div class="fl-item"><div class="fl-dot" style="background:var(--g)"></div>Within picker capacity</div>
+    <div class="fl-item"><div class="fl-dot" style="background:var(--r)"></div>Exceeds picker capacity</div>
+    <div class="fl-item"><div class="fl-dot" style="background:var(--b)"></div>Current slot (NOW)</div>
+    <div class="fl-item" style="gap:5px">
+      <div style="width:2px;height:12px;background:var(--text);border-radius:1px;opacity:.7"></div>
+      <span>Picker capacity limit (${capOrders} orders)</span>
+    </div>
+  </div>`;
+
+  const bars=d.forecast.map(f=>{
+    const pct=Math.round((f.orders/maxOrders)*100);
+    const over=f.orders>f.capacity;
+    const barColor=f.now?'var(--b)':over?'var(--r)':'var(--g)';
+    const surplus=f.orders-f.capacity;
+    const statusText=f.now?'NOW':over?`+${surplus} over`:`${f.capacity-f.orders} spare`;
+    const statusColor=f.now?'var(--b)':over?'var(--r)':'var(--g)';
+    return `<div class="forecast-bar-row">
+      <div class="fb-time">${f.time}${f.now?`<br><span style="color:var(--b);font-weight:700">NOW</span>`:''}</div>
+      <div class="fb-track" style="height:22px">
+        <div class="fb-track-inner" style="height:100%">
+          <div class="fb-fill" style="width:${pct}%;background:${barColor}">
+            <span style="color:rgba(0,0,0,.75);font-size:9px;font-weight:700">${f.orders} orders</span>
+          </div>
+          <span class="fb-fill-label" style="color:${statusColor}">${statusText}</span>
+        </div>
+        <div class="fb-cap-line" style="left:${capLinePct}%">
+          ${f===d.forecast[0]?`<div class="fb-cap-tick">Cap ${capOrders}</div>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('forecast-chart').innerHTML=
+    `<div style="font-size:9px;color:var(--dim);margin-bottom:10px;letter-spacing:.1em;text-transform:uppercase">Picker capacity vs order volume per 15-min slot</div>`
+    +legend+bars;
+
+  // ── inventory runway ──
+  document.getElementById('runway-chart').innerHTML=
+    '<div style="font-size:9px;color:var(--dim);margin-bottom:8px;letter-spacing:.1em;text-transform:uppercase">Time until stockout at current demand rate</div>'+
+    d.runway.map(r=>{
+      const urgencyLabel=r.color==='var(--r)'?'URGENT':r.color==='var(--a)'?'WATCH':'OK';
+      const urgencyBg=r.color==='var(--r)'?'var(--r2)':r.color==='var(--a)'?'var(--a2)':'var(--g2)';
+      return `<div class="runway-row" style="align-items:center">
+        <div class="rw-sku" title="${r.sku}">${r.sku}</div>
+        <div class="rw-track"><div class="rw-fill" style="width:${r.pct}%;background:${r.color}"></div></div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;width:90px;justify-content:flex-end">
+          <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:${urgencyBg};color:${r.color};font-weight:600">${urgencyLabel}</span>
+          <span style="font-size:10px;color:${r.color};font-weight:700;width:40px;text-align:right">${r.label}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+  // ── throughput ──
+  document.getElementById('throughput-list').innerHTML=
+    '<div style="font-size:9px;color:var(--dim);margin-bottom:8px;letter-spacing:.1em;text-transform:uppercase">SKUs that slow down picking — ranked by impact</div>'+
+    '<div>'+d.throughput.map(t=>`
+      <div class="tp-row">
+        <div class="tp-sku">
+          <div class="tp-name">${t.name}</div>
+          <div class="tp-why">${t.why}</div>
+        </div>
+        <span class="tp-impact tp-${t.impact}">${t.impact.toUpperCase()}</span>
+        <span class="tp-action" onclick="pauseFromThroughput('${t.name}')">Pause →</span>
+      </div>`).join('')+'</div>';
+
+  // ── shrinkage ──
+  document.getElementById('shrinkage-list').innerHTML=d.shrinkage.map(s=>`
+    <div class="shrink-row">
+      <div class="sr-icon">${s.level==='exp'?'🔴':'🟡'}</div>
+      <div class="sr-sku">
+        <div class="sr-name">${s.sku}</div>
+        <div class="sr-detail">${s.batch} · ${s.age} of ${s.shelf} days used · ${Math.round((1-s.age/s.shelf)*100)}% shelf life remaining</div>
+      </div>
+      <span class="sr-badge ${s.level==='exp'?'sr-exp':'sr-near'}">${s.level==='exp'?'CHECK NOW':'NEAR LIMIT'}</span>
+      <button class="sr-flag" onclick="flagShrinkage('${s.sku}')">Queue check</button>
+    </div>`).join('');
+
+  // ── rider capacity widget ──
+  const rc=d.riderCapacity;
+  // Rider throughput: each rider can do 60/avgTripMins trips per hour = (15/avgTripMins) per 15-min slot
+  const maxRcOrders=Math.max(...rc.map(r=>r.orders));
+  const rcBars=rc.map(slot=>{
+    const riderThroughput=Math.floor((15/slot.avgTripMins)*slot.riders); // orders completable per slot
+    const gap=slot.orders-riderThroughput;
+    const over=gap>0;
+    const pct=Math.round((slot.orders/maxRcOrders)*100);
+    const capPct=Math.round((riderThroughput/maxRcOrders)*100);
+    const barColor=slot.now?'var(--b)':over?'var(--r)':'var(--g)';
+    const statusText=slot.now?'NOW':over?`${gap} undeliverable`:`${-gap} spare capacity`;
+    const statusColor=slot.now?'var(--b)':over?'var(--r)':'var(--g)';
+    return `<div class="forecast-bar-row">
+      <div class="fb-time">${slot.time}${slot.now?`<br><span style="color:var(--b);font-weight:700">NOW</span>`:''}</div>
+      <div class="fb-track" style="height:22px">
+        <div class="fb-track-inner" style="height:100%">
+          <div class="fb-fill" style="width:${pct}%;background:${barColor}">
+            <span style="color:rgba(0,0,0,.75);font-size:9px;font-weight:700">${slot.orders} orders</span>
+          </div>
+          <span class="fb-fill-label" style="color:${statusColor}">${statusText}</span>
+        </div>
+        <div class="fb-cap-line" style="left:${capPct}%">
+          ${slot===rc[0]?`<div class="fb-cap-tick">${slot.riders} riders · cap ${riderThroughput}</div>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const rcSummary=rc.reduce((acc,slot)=>{
+    const rt=Math.floor((15/slot.avgTripMins)*slot.riders);
+    const gap=slot.orders-rt;
+    if(gap>0) acc.overSlots++; else acc.spareSlots++;
+    acc.totalGap+=Math.max(0,gap);
+    return acc;
+  },{overSlots:0,spareSlots:0,totalGap:0});
+
+  const rcLegend=`<div class="forecast-legend" style="margin-bottom:10px">
+    <div class="fl-item"><div class="fl-dot" style="background:var(--g)"></div>Rider capacity sufficient</div>
+    <div class="fl-item"><div class="fl-dot" style="background:var(--r)"></div>Orders exceed rider capacity</div>
+    <div class="fl-item"><div class="fl-dot" style="background:var(--b)"></div>Current slot (NOW)</div>
+    <div class="fl-item" style="gap:5px">
+      <div style="width:2px;height:12px;background:var(--text);border-radius:1px;opacity:.7"></div>
+      <span>Rider throughput ceiling (varies by active count)</span>
+    </div>
+  </div>`;
+
+  const rcAlert=rcSummary.totalGap>0
+    ?`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--r2);border:1px solid var(--r);border-radius:6px;font-size:10px;color:var(--r);margin-bottom:10px">
+        ⚠ ${rcSummary.totalGap} orders projected undeliverable across ${rcSummary.overSlots} slot${rcSummary.overSlots>1?'s':''} — add riders or stagger orders
+        <button onclick="switchTab('t4',document.querySelectorAll('.tab')[3])" style="margin-left:auto;background:var(--r);color:#fff;border:none;border-radius:4px;padding:3px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:var(--sans)">→ Rider tab</button>
+      </div>`
+    :`<div style="padding:6px 10px;background:var(--g2);border-radius:5px;font-size:10px;color:var(--g);margin-bottom:10px">✓ Rider fleet sufficient for projected order volume this window</div>`;
+
+  document.getElementById('rider-capacity-chart').innerHTML=
+    `<div style="font-size:9px;color:var(--dim);margin-bottom:8px;letter-spacing:.1em;text-transform:uppercase">Orders vs rider throughput ceiling per 15-min slot</div>
+    <div style="font-size:10px;color:var(--dim);margin-bottom:10px">Throughput = <b style="color:var(--text)">(riders on shift × 15) ÷ avg round-trip mins</b>. Assumes continuous dispatch.</div>`
+    +rcAlert+rcLegend+rcBars;
+}
+
+function pauseFromThroughput(sku){
+  PAUSE_SKUS.push({name:sku,reason:'Throughput impact flagged — manager review',paused:true});
+  RESOLVED_LOG.unshift('⚠ Paused (throughput) — '+sku);
+  renderResolved();
+  document.getElementById('sku-pause-panel').style.display='';
+  renderPausePanel();
+  alert('SKU paused: '+sku+'\n\nOrder intake for this item stopped. Existing orders in queue will still be fulfilled.');
+}
+
+function flagShrinkage(sku){
+  RESOLVED_LOG.unshift('📋 Queued for expiry check post-peak — '+sku);
+  renderResolved();
+}
+
+// ══════════════════════
+// KPI UPDATE
+// ══════════════════════
+function updateKPIs(){
+  const atRisk=PICKERS.filter(p=>{
+    const pct=p.skus>0?p.elapsed/calcSLA(p.skus,p.isNew):0;
+    return pct>=0.65&&p.status!=='idle';
+  }).length;
+  document.getElementById('kv3').textContent=ORDERS.filter(o=>o.status==='unassigned').length+5; // active+unassigned
+  document.getElementById('kv4').textContent=atRisk;
+  document.getElementById('kv4').style.color=atRisk>0?'var(--r)':'var(--g)';
+}
+
+// ══════════════════════
+// LIVE TICK
+// ══════════════════════
+setInterval(()=>{
+  PICKERS.forEach(p=>{
+    if(p.status==='idle') return;
+    const total=calcSLA(p.skus,p.isNew);
+    p.elapsed=Math.min(p.elapsed+1,total+20);
+    const pct=p.elapsed/total;
+    p.status=pct<0.65?'green':pct<0.85?'amber':'red';
+  });
+  renderPickers();
+  updateKPIs();
+},1000);
+
+// ══════════════════════════════════════
+// RIDER DATA & LOGIC
+// ══════════════════════════════════════
+
+const RIDERS = [
+  // status: 'delivering' | 'returning' | 'waiting' | 'offline'
+  // type: 'reg' | 'od'
+  // shiftEndsIn: hours, extendable: bool
+  // deliveryPct: 0-100 how far through delivery
+  // etaReturn: minutes till back at store
+  // orderId, address, distKm: current delivery details
+  // score: 0-100 delivery score (speed + rating)
+  { id:'R1', name:'Suresh M.',   score:91, type:'reg', shiftEndsIn:3.5, extendable:false,
+    status:'delivering', orderId:'#4408', address:'Kalina, BKC', distKm:1.4,
+    deliveryPct:75, etaReturn:4, ordersToday:18, slaBreached:false },
+  { id:'R2', name:'Deepak K.',   score:84, type:'reg', shiftEndsIn:3.5, extendable:false,
+    status:'delivering', orderId:'#4410', address:'Bandra Kurla Rd', distKm:1.9,
+    deliveryPct:40, etaReturn:9, ordersToday:14, slaBreached:false },
+  { id:'R3', name:'Vijay R.',    score:76, type:'od',  shiftEndsIn:1.0, extendable:true,
+    status:'delivering', orderId:'#4412', address:'Trident Hotel, BKC', distKm:0.8,
+    deliveryPct:90, etaReturn:2, ordersToday:11, slaBreached:false },
+  { id:'R4', name:'Aakash T.',   score:62, type:'od',  shiftEndsIn:0.5, extendable:false,
+    status:'delivering', orderId:'#4414', address:'G Block, BKC', distKm:2.2,
+    deliveryPct:20, etaReturn:14, ordersToday:8, slaBreached:true },
+  { id:'R5', name:'Ramesh D.',   score:88, type:'reg', shiftEndsIn:2.0, extendable:true,
+    status:'returning', orderId:null, address:null, distKm:1.1,
+    deliveryPct:100, etaReturn:3, ordersToday:16, slaBreached:false },
+  { id:'R6', name:'Pradeep N.',  score:71, type:'od',  shiftEndsIn:1.5, extendable:true,
+    status:'returning', orderId:null, address:null, distKm:0.6,
+    deliveryPct:100, etaReturn:2, ordersToday:9, slaBreached:false },
+  { id:'R7', name:'Santosh B.',  score:93, type:'reg', shiftEndsIn:4.0, extendable:false,
+    status:'waiting', orderId:null, address:null, distKm:0,
+    deliveryPct:0, etaReturn:0, ordersToday:20, slaBreached:false },
+  { id:'R8', name:'Farid A.',    score:55, type:'od',  shiftEndsIn:2.5, extendable:true,
+    status:'waiting', orderId:null, address:null, distKm:0,
+    deliveryPct:0, etaReturn:0, ordersToday:7, slaBreached:false },
+];
+
+// Riders not yet on shift — available to assign
+const RIDER_POOL = [
+  { id:'RP1', name:'Kailash V.',  score:80, type:'reg', available:'Now',    extendable:false },
+  { id:'RP2', name:'Manoj S.',    score:68, type:'od',  available:'Now',    extendable:true  },
+  { id:'RP3', name:'Ranjit K.',   score:74, type:'reg', available:'19:30',  extendable:false },
+  { id:'RP4', name:'Aman T.',     score:59, type:'od',  available:'20:00',  extendable:true  },
+];
+
+const riderInitials = n => n.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+
+const riderAvaStyle = score => {
+  if(score>=80) return 'background:#1DB95420;color:var(--g)';
+  if(score>=65) return 'background:#F8C90420;color:var(--yellow)';
+  return 'background:#E8003D18;color:var(--r)';
+};
+
+function renderRiderStats(){
+  const delivering = RIDERS.filter(r=>r.status==='delivering').length;
+  const returning  = RIDERS.filter(r=>r.status==='returning').length;
+  const waiting    = RIDERS.filter(r=>r.status==='waiting').length;
+  const onShift    = RIDERS.filter(r=>r.status!=='offline').length;
+  const total      = onShift + RIDER_POOL.filter(p=>p.available==='Now').length;
+  const capPct     = Math.round((delivering+returning)/Math.max(1,onShift)*100);
+  const avgEta     = Math.round(RIDERS.filter(r=>r.etaReturn>0).reduce((s,r)=>s+r.etaReturn,0)/Math.max(1,RIDERS.filter(r=>r.etaReturn>0).length));
+  const breaches   = RIDERS.filter(r=>r.slaBreached).length;
+
+  document.getElementById('badge-t4').textContent = breaches > 0 ? breaches : waiting;
+
+  document.getElementById('rider-stat-row').innerHTML = [
+    {val:delivering, lbl:'On Delivery', col:'var(--g)', delta:'↑ +2 vs 30m ago'},
+    {val:returning,  lbl:'Returning',   col:'var(--b)', delta:'Avg ETA '+avgEta+'m'},
+    {val:waiting,    lbl:'Waiting',     col:'var(--yellow)', delta: waiting>3?'⚠ Over-staffed':'Ready to dispatch'},
+    {val:onShift,    lbl:'On Shift',    col:'var(--text)', delta:RIDER_POOL.filter(p=>p.available==='Now').length+' available to add'},
+  ].map(s=>`<div class="stat-card">
+    <div class="sc-val" style="color:${s.col}">${s.val}</div>
+    <div class="sc-lbl">${s.lbl}</div>
+    <div class="sc-delta" style="color:${s.col==='var(--text)'?'var(--dim)':s.col}">${s.delta}</div>
+  </div>`).join('');
+
+  const capColor = capPct>85?'var(--r)':capPct>65?'var(--yellow)':'var(--g)';
+  document.getElementById('cap-gauge').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)">Fleet Utilisation</span>
+      <span style="font-size:11px;font-weight:700;color:${capColor}">${capPct}% capacity</span>
+    </div>
+    <div class="cap-bar-track"><div class="cap-bar-fill" style="width:${capPct}%;background:${capColor}"></div></div>
+    <div class="cap-labels">
+      <span>${delivering} delivering</span>
+      <span>${returning} returning · avg ${avgEta}m to store</span>
+      <span>${waiting} idle</span>
+    </div>`;
+}
+
+function renderDelivering(){
+  const riders = RIDERS.filter(r=>r.status==='delivering');
+  document.getElementById('riders-delivering').innerHTML = riders.map(r=>{
+    const etaColor = r.etaReturn<=3?'var(--g)':r.etaReturn<=8?'var(--yellow)':'var(--r)';
+    const hrsColor = r.shiftEndsIn<=0.75?'var(--r)':r.shiftEndsIn<=1.5?'var(--yellow)':'var(--dim)';
+    const hrsLabel = r.shiftEndsIn<1?(Math.round(r.shiftEndsIn*60)+'m left'):r.shiftEndsIn+'h left';
+    return `<div class="rc delivering${r.slaBreached?' breach':''}">
+      <div class="rc-top">
+        <div class="rc-ava" style="${riderAvaStyle(r.score)}">${riderInitials(r.name)}</div>
+        <div class="rc-info">
+          <div class="rc-name">${r.name}</div>
+          <div class="rc-meta">
+            <span class="rc-status-pill sp-delivering">On Delivery</span>
+            <span class="${r.type==='od'?'rtype-od':'rtype-reg'}">${r.type.toUpperCase()}</span>
+            <span style="color:${hrsColor};font-size:9px">${hrsLabel}</span>
+            ${r.extendable?'<span style="font-size:8px;padding:1px 5px;border-radius:3px;background:var(--g2);color:var(--g)">can extend</span>':''}
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="eta-block" style="justify-content:flex-end">
+            <div class="eta-num" style="color:${etaColor}">${r.etaReturn < 1 ? "<1" : (+r.etaReturn.toFixed(1))}</div>
+            <div class="eta-unit">min</div>
+          </div>
+          <div class="eta-sub">ETA back</div>
+        </div>
+      </div>
+      <div class="delivery-bar">
+        <div class="db-track"><div class="db-fill" style="width:${r.deliveryPct}%;background:${etaColor}"></div></div>
+        <div class="db-labels"><span>Store</span><span>${r.deliveryPct}% delivered</span><span>${r.address}</span></div>
+      </div>
+      <div class="rider-order-tag">
+        <span class="rot-id">${r.orderId}</span>
+        <span class="rot-addr">${r.address}</span>
+        <span class="rot-dist">${r.distKm}km</span>
+      </div>
+      ${r.slaBreached?`<div class="rider-breach-nudge">⚡ Delivery SLA breached — ${r.etaReturn>10?'customer likely affected':'rider close, watch ETA'}<button onclick="riderAlert('${r.id}')">Contact</button></div>`:''}
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:9px;color:var(--dim)">
+        <span>Score <b style="color:${r.score>=80?'var(--g)':r.score>=65?'var(--yellow)':'var(--r)'}">${r.score}</b></span>
+        <span>${r.ordersToday} orders today</span>
+      </div>
+    </div>`;
+  }).join('') || '<div style="font-size:11px;color:var(--dim);padding:8px 0">No riders currently on delivery.</div>';
+}
+
+function renderReturning(){
+  const riders = RIDERS.filter(r=>r.status==='returning');
+  document.getElementById('riders-returning').innerHTML = riders.map(r=>{
+    const etaColor = r.etaReturn<=3?'var(--g)':'var(--b)';
+    const hrsColor = r.shiftEndsIn<=0.75?'var(--r)':r.shiftEndsIn<=1.5?'var(--yellow)':'var(--dim)';
+    const hrsLabel = r.shiftEndsIn<1?(Math.round(r.shiftEndsIn*60)+'m left'):r.shiftEndsIn+'h left';
+    return `<div class="rc returning">
+      <div class="rc-top">
+        <div class="rc-ava" style="${riderAvaStyle(r.score)}">${riderInitials(r.name)}</div>
+        <div class="rc-info">
+          <div class="rc-name">${r.name}</div>
+          <div class="rc-meta">
+            <span class="rc-status-pill sp-returning">Returning</span>
+            <span class="${r.type==='od'?'rtype-od':'rtype-reg'}">${r.type.toUpperCase()}</span>
+            <span style="color:${hrsColor};font-size:9px">${hrsLabel}</span>
+            ${r.extendable?'<span style="font-size:8px;padding:1px 5px;border-radius:3px;background:var(--g2);color:var(--g)">can extend</span>':''}
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="eta-block" style="justify-content:flex-end">
+            <div class="eta-num" style="color:${etaColor}">${r.etaReturn < 1 ? "<1" : (+r.etaReturn.toFixed(1))}</div>
+            <div class="eta-unit">min</div>
+          </div>
+          <div class="eta-sub">ETA back</div>
+        </div>
+      </div>
+      <div class="delivery-bar">
+        <div class="db-track"><div class="db-fill" style="width:100%;background:var(--b)"></div></div>
+        <div class="db-labels"><span>Delivered ✓</span><span>${r.distKm}km away</span><span>Back in ${r.etaReturn<1?"<1min":(+r.etaReturn.toFixed(1))+"m"}</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:9px;color:var(--dim)">
+        <span>Score <b style="color:${r.score>=80?'var(--g)':r.score>=65?'var(--yellow)':'var(--r)'}">${r.score}</b></span>
+        <span>${r.ordersToday} orders today</span>
+      </div>
+    </div>`;
+  }).join('') || '<div style="font-size:11px;color:var(--dim);padding:8px 0">No riders currently returning.</div>';
+}
+
+function renderWaiting(){
+  const riders = RIDERS.filter(r=>r.status==='waiting');
+  document.getElementById('riders-waiting').innerHTML = riders.length
+    ? riders.map(r=>{
+        const hrsColor = r.shiftEndsIn<=0.75?'var(--r)':r.shiftEndsIn<=1.5?'var(--yellow)':'var(--dim)';
+        const hrsLabel = r.shiftEndsIn<1?(Math.round(r.shiftEndsIn*60)+'m left'):r.shiftEndsIn+'h left';
+        return `<div class="rc waiting">
+          <div class="rc-top">
+            <div class="rc-ava" style="${riderAvaStyle(r.score)}">${riderInitials(r.name)}</div>
+            <div class="rc-info">
+              <div class="rc-name">${r.name}</div>
+              <div class="rc-meta">
+                <span class="rc-status-pill sp-waiting">Waiting</span>
+                <span class="${r.type==='od'?'rtype-od':'rtype-reg'}">${r.type.toUpperCase()}</span>
+                <span style="color:${hrsColor};font-size:9px">${hrsLabel}</span>
+                ${r.extendable?'<span style="font-size:8px;padding:1px 5px;border-radius:3px;background:var(--g2);color:var(--g)">can extend</span>':''}
+              </div>
+            </div>
+            <div style="text-align:right;font-size:9px;color:var(--dim)">
+              <div style="font-size:11px;font-weight:700;color:var(--text)">${r.ordersToday}</div>
+              <div>orders today</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:9px;color:var(--dim)">
+            <span>Score <b style="color:${r.score>=80?'var(--g)':r.score>=65?'var(--yellow)':'var(--r)'}">${r.score}</b></span>
+            <span style="color:var(--yellow)">⏳ Waiting for next order</span>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div style="font-size:11px;color:var(--dim);padding:8px 0">No riders waiting — all dispatched.</div>';
+
+  // warn if too many waiting (over-staffed for current demand)
+  if(riders.length > 3){
+    document.getElementById('riders-waiting').insertAdjacentHTML('afterbegin',
+      `<div style="padding:6px 10px;background:var(--yellow2);border:1px solid var(--yellow);border-radius:6px;font-size:10px;color:var(--yellow);margin-bottom:6px">
+        ⚠ ${riders.length} riders waiting — consider releasing OD riders early
+      </div>`);
+  }
+}
+
+function renderRiderPool(){
+  const now = RIDER_POOL.filter(r=>r.available==='Now');
+  const later = RIDER_POOL.filter(r=>r.available!=='Now');
+  let html = `<div class="assign-pool">
+    <div class="pool-header">
+      <div class="pool-title">Available to Assign · ${RIDER_POOL.length} riders</div>
+      ${MODE==='auto'&&now.length?`<button class="pool-auto-btn" onclick="autoAssignRiders()">⚡ Auto-assign all</button>`:''}
+    </div>`;
+
+  if(now.length){
+    html += '<div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:8px">Available Now</div>';
+    html += now.map(r=>`
+      <div class="pool-row">
+        <div>
+          <div class="pr-name">${r.name} <span class="${r.type==='od'?'rtype-od':'rtype-reg'}">${r.type.toUpperCase()}</span></div>
+          <div class="pr-meta">Score ${r.score}${r.extendable?' · Can extend':''}</div>
+        </div>
+        <button class="pr-btn pr-btn-assign" onclick="assignRiderToShift('${r.id}')">Add to shift</button>
+      </div>`).join('');
+  }
+
+  if(later.length){
+    html += '<div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:10px 0 8px">Scheduled Later</div>';
+    html += later.map(r=>`
+      <div class="pool-row" style="opacity:.7">
+        <div>
+          <div class="pr-name">${r.name} <span class="${r.type==='od'?'rtype-od':'rtype-reg'}">${r.type.toUpperCase()}</span></div>
+          <div class="pr-meta">Available ${r.available}${r.extendable?' · Can extend':''}</div>
+        </div>
+        <span style="font-size:9px;color:var(--dim)">from ${r.available}</span>
+      </div>`).join('');
+  }
+
+  html += '</div>';
+  document.getElementById('rider-pool').innerHTML = html;
+}
+
+function assignRiderToShift(rid){
+  const idx = RIDER_POOL.findIndex(r=>r.id===rid);
+  if(idx===-1) return;
+  const r = RIDER_POOL[idx];
+  RIDERS.push({
+    id:r.id, name:r.name, score:r.score,
+    type:r.type, shiftEndsIn:4, extendable:r.extendable,
+    status:'waiting', orderId:null, address:null, distKm:0,
+    deliveryPct:0, etaReturn:0, ordersToday:0, slaBreached:false
+  });
+  RIDER_POOL.splice(idx,1);
+  RESOLVED_LOG.unshift('✓ '+r.name+' added to shift (Rider)');
+  renderAllRiders();
+  renderResolved();
+}
+
+function autoAssignRiders(){
+  [...RIDER_POOL].filter(r=>r.available==='Now').forEach(r=>assignRiderToShift(r.id));
+}
+
+function riderAlert(rid){
+  const r = RIDERS.find(x=>x.id===rid);
+  if(r) { RESOLVED_LOG.unshift('📞 Contact initiated — '+r.name+' re: SLA breach'); renderResolved(); }
+}
+
+function renderAllRiders(){
+  renderRiderStats();
+  renderDelivering();
+  renderReturning();
+  renderWaiting();
+  renderRiderPool();
+}
+
+// Simulate rider ETA countdown
+setInterval(()=>{
+  RIDERS.forEach(r=>{
+    if(r.etaReturn>0){
+      r.etaReturn=Math.max(0,r.etaReturn-1/60);
+      if(r.status==='delivering') r.deliveryPct=Math.min(100,r.deliveryPct+0.1);
+      // auto-transition: if returning and eta hits 0, become waiting
+      if(r.status==='returning'&&r.etaReturn<=0){ r.status='waiting'; r.etaReturn=0; }
+      // auto-transition: if delivering and pct >= 100, become returning
+      if(r.status==='delivering'&&r.deliveryPct>=100){ r.status='returning'; r.etaReturn=Math.round(r.distKm/0.4); r.orderId=null; r.address=null; }
+    }
+  });
+  if(document.getElementById('t4').classList.contains('active')) renderAllRiders();
+}, 1000);
+
+
+
+
+// ══════════════════════
+// INIT
+// ══════════════════════
+renderPickers();
+renderPackers();
+renderUnassigned();
+renderResources();
+renderDiscrepancies();
+renderActions();
+renderResolved();
+renderPredictive();
+updateKPIs();
+renderAllRiders();
+
+// ══════════════════════════════════════
+// DRAGGABLE WIDGETS  v2 — clean rewrite
+// ══════════════════════════════════════
+
+const WS_KEY = 'blinkit-ws-v2';   // widget state: order + span + collapsed
+
+function wsLoad() {
+  try { return JSON.parse(localStorage.getItem(WS_KEY) || '{}'); } catch(e) { return {}; }
+}
+function wsSave() {
+  const state = {};
+  document.querySelectorAll('.widget-grid').forEach(grid => {
+    const tab = grid.dataset.tab;
+    state[tab] = {};
+    grid.querySelectorAll(':scope > .widget').forEach(w => {
+      const id = w.dataset.id;
+      state[tab][id] = {
+        order:   [...grid.querySelectorAll(':scope > .widget')].indexOf(w),
+        span:    w.dataset.span || '1',
+        collapsed: w.classList.contains('collapsed')
+      };
+    });
+  });
+  try { localStorage.setItem(WS_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function wsApply(grid) {
+  const tab   = grid.dataset.tab;
+  const state = wsLoad()[tab];
+  if (!state) return;
+  // Sort widgets by saved order
+  const widgets = [...grid.querySelectorAll(':scope > .widget')];
+  widgets.sort((a, b) => {
+    const oa = state[a.dataset.id]?.order ?? 999;
+    const ob = state[b.dataset.id]?.order ?? 999;
+    return oa - ob;
+  });
+  widgets.forEach(w => {
+    const s = state[w.dataset.id];
+    if (s) {
+      applySpan(w, s.span || '1');
+      if (s.collapsed) w.classList.add('collapsed');
+    }
+    grid.appendChild(w);
+  });
+}
+
+function applySpan(widget, span) {
+  widget.dataset.span = span;
+  if (span === 'full') {
+    widget.style.gridColumn = '1 / -1';
+  } else if (span === '2') {
+    widget.style.gridColumn = 'span 2';
+  } else {
+    widget.style.gridColumn = '';
+  }
+  // Update span button states
+  const btns = widget.querySelectorAll('.wh-span-btn');
+  btns.forEach(b => {
+    b.classList.toggle('active', b.dataset.span === span);
+  });
+}
+
+function addWidgetControls(widget) {
+  const handle = widget.querySelector('.widget-handle');
+  if (!handle || handle.dataset.inited) return;
+  handle.dataset.inited = 'true';
+
+  // ── SPAN CONTROLS ──
+  const spanGroup = document.createElement('div');
+  spanGroup.className = 'wh-span-group';
+  spanGroup.title = 'Widget width';
+
+  [['1','▪ 1 col'],['2','▪▪ 2 col'],['full','▬ Full']].forEach(([val, label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'wh-span-btn';
+    btn.dataset.span = val;
+    btn.textContent = label;
+    btn.title = val === '1' ? 'Single column' : val === '2' ? 'Two columns' : 'Full width';
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      applySpan(widget, val);
+      wsSave();
+    };
+    spanGroup.appendChild(btn);
+  });
+
+  // ── COLLAPSE BUTTON ──
+  const collapseBtn = document.createElement('button');
+  collapseBtn.className = 'wh-collapse';
+  collapseBtn.title = 'Collapse / expand';
+  collapseBtn.innerHTML = '&#9650;';
+  collapseBtn.onclick = (e) => {
+    e.stopPropagation();
+    widget.classList.toggle('collapsed');
+    wsSave();
+  };
+
+  handle.appendChild(spanGroup);
+  handle.appendChild(collapseBtn);
+}
+
+// ── DRAG LOGIC ──
+function initDrag(grid) {
+  if (!grid || grid.dataset.dragInited) return;
+  grid.dataset.dragInited = 'true';
+
+  // Add reset button
+  if (!grid.previousElementSibling?.classList?.contains('wgrid-reset')) {
+    const reset = document.createElement('button');
+    reset.className = 'wgrid-reset';
+    reset.textContent = '↺ Reset layout';
+    reset.onclick = () => {
+      try {
+        const state = wsLoad();
+        delete state[grid.dataset.tab];
+        localStorage.setItem(WS_KEY, JSON.stringify(state));
+      } catch(e) {}
+      location.reload();
+    };
+    grid.parentNode.insertBefore(reset, grid);
+  }
+
+  // Apply saved state
+  wsApply(grid);
+
+  // Init controls on all widgets
+  grid.querySelectorAll(':scope > .widget').forEach(w => addWidgetControls(w));
+
+  // Drag state
+  let dragSrc  = null;
+  let placeholder = null;
+
+  function getPlaceholder() {
+    if (!placeholder) {
+      placeholder = document.createElement('div');
+      placeholder.className = 'widget-placeholder';
+    }
+    return placeholder;
+  }
+
+  grid.querySelectorAll(':scope > .widget').forEach(widget => {
+    const handle = widget.querySelector('.widget-handle');
+    if (!handle) return;
+    handle.setAttribute('draggable', 'true');
+
+    handle.addEventListener('dragstart', e => {
+      dragSrc = widget;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', widget.dataset.id);
+      const ph = getPlaceholder();
+      ph.style.height    = widget.offsetHeight + 'px';
+      ph.style.gridColumn = widget.style.gridColumn || '';
+      setTimeout(() => { widget.classList.add('dragging'); }, 0);
+    });
+
+    handle.addEventListener('dragend', () => {
+      if (dragSrc) dragSrc.classList.remove('dragging');
+      const ph = getPlaceholder();
+      if (ph.parentNode) ph.parentNode.removeChild(ph);
+      grid.querySelectorAll('.widget').forEach(w => w.classList.remove('drag-over'));
+      dragSrc = null;
+      wsSave();
+    });
+  });
+
+  grid.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (!dragSrc) return;
+
+    const target = e.target.closest('.widget');
+    if (!target || target === dragSrc) {
+      // Over empty grid space — append to end
+      grid.appendChild(getPlaceholder());
+      return;
+    }
+
+    grid.querySelectorAll('.widget').forEach(w => w.classList.remove('drag-over'));
+    target.classList.add('drag-over');
+
+    const rect  = target.getBoundingClientRect();
+    const midY  = rect.top + rect.height / 2;
+    const ph    = getPlaceholder();
+
+    if (e.clientY < midY) {
+      grid.insertBefore(ph, target);
+    } else {
+      grid.insertBefore(ph, target.nextSibling);
+    }
+  });
+
+  grid.addEventListener('dragleave', e => {
+    if (!grid.contains(e.relatedTarget)) {
+      grid.querySelectorAll('.widget').forEach(w => w.classList.remove('drag-over'));
+    }
+  });
+
+  grid.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!dragSrc) return;
+    const ph = getPlaceholder();
+    if (ph.parentNode === grid) {
+      grid.insertBefore(dragSrc, ph);
+      ph.parentNode.removeChild(ph);
+    }
+    grid.querySelectorAll('.widget').forEach(w => w.classList.remove('drag-over'));
+    dragSrc.classList.remove('dragging');
+    wsSave();
+  });
+}
+
+function initAllDrag() {
+  document.querySelectorAll('.widget-grid').forEach(g => initDrag(g));
+}
+
+setTimeout(initAllDrag, 120);
+
+
+
+// ══════════════════════════════════════
+// ONBOARDING WALKTHROUGH  v1
+// ══════════════════════════════════════
+
+const WT_KEY = 'blinkit-wt-done-v1';
+
+// ── STEP DEFINITIONS ──────────────────
+// target: CSS selector to spotlight (null = full-screen / no spotlight)
+// tab: switch to this tab before showing step (null = don't switch)
+// card: position of card — 'right','left','below','above','center'
+// section: header label
+// title, text: content
+// deepdive: optional deeper explanation (null = hidden)
+
+const WT_STEPS = [
+  {
+    target: '.topbar',
+    tab: null,
+    card: 'below',
+    section: 'Overview',
+    title: 'Your command strip',
+    text: `The top bar is <b>always visible</b> no matter which tab you're on.<br><br>
+           <span class="hl-g">Orders Today</span> and <span class="hl-g">SLA Met %</span> are your shift health. 
+           <span class="hl-r">At Risk</span> counts pickers or orders close to breaching SLA. 
+           <b>Assignment mode</b> (top right) controls whether the system auto-assigns orders to pickers and riders, or waits for you to do it manually.`,
+    deepdive: `<b>Auto mode</b> — system picks the best available picker for each order based on speed score, experience, and order size. Unassigned orders get a suggested name you can tap to confirm instantly.<br><br>
+               <b>Manual mode</b> — tap an order, then tap a picker (or vice versa) to create the assignment yourself. Both cards highlight in yellow while waiting for a match.`
+  },
+  {
+    target: '.tabs',
+    tab: null,
+    card: 'below',
+    section: 'Overview',
+    title: 'Four tabs, four mental modes',
+    text: `Each tab is a different <b>decision context</b>. Switch when your focus shifts — don't try to watch everything at once.<br><br>
+           The <span class="hl-y">yellow badge</span> on a tab means something needs attention there. Red badges are urgent.`,
+    deepdive: null
+  },
+  {
+    target: '#t1',
+    tab: 't1',
+    card: 'right',
+    section: 'Tab 1 — Picker Floor',
+    title: 'Who\'s picking, how fast, and what\'s waiting',
+    text: `This tab answers: <b>is my floor healthy right now?</b><br><br>
+           Each picker card shows a <b>countdown clock</b> — seconds remaining before their order SLA breaches. 
+           The bar drains from <span class="hl-g">green → amber → red</span> as time runs out.<br><br>
+           Unassigned orders sit on the right, sorted by smallest first — quick wins for idle pickers.`,
+    deepdive: `<b>Speed score (0–100)</b> — rolling average of how fast a picker collects items vs their personal baseline. Not punitive — it's a self-vs-self metric. A score of 60+ is healthy.<br><br>
+               <b>SLA formula:</b> 30s base + 13s per SKU. New pickers automatically get a <b>+30% buffer</b> on every order so they aren't set up to fail.<br><br>
+               <b>Streak badges:</b> ⚡ = 4+ orders on time in a row, 🔥 = 7+ in a row. Visible to the manager, not the picker.`
+  },
+  {
+    target: '[data-id="active-pickers"]',
+    tab: 't1',
+    card: 'right',
+    section: 'Tab 1 — Picker Floor',
+    title: 'OD vs Regular pickers',
+    text: `Every picker card shows their contract type:<br><br>
+           <span class="hl-b">Regular</span> — on a standard shift, usually 6–8 hours. Predictable availability.<br>
+           <span class="hl-y">OD</span> (On Demand) — hourly gig worker. May have as little as 30 minutes left.<br><br>
+           The <b>shift timer</b> under their name counts down hours remaining. It turns <span class="hl-r">red under 45 mins</span> — that's your signal to not assign them long orders.`,
+    deepdive: `A <span class="hl-g">can extend</span> badge means the OD picker has indicated they're available to stay longer if you need them. You can request this via the platform — it doesn't happen automatically.<br><br>
+               OD pickers with under 30 mins left and no extendable flag should <b>not</b> be assigned multi-item orders that would breach their shift end.`
+  },
+  {
+    target: '[data-id="unassigned-queue"]',
+    tab: 't1',
+    card: 'left',
+    section: 'Tab 1 — Picker Floor',
+    title: 'Unassigned queue',
+    text: `Orders waiting for a picker, <b>sorted by item count</b> (fewest first).<br><br>
+           Each card shows the estimated pick time so you can match order complexity to picker availability. 
+           In <span class="hl-b">Auto mode</span>, a suggested picker name appears — tap it to assign instantly. 
+           In <span class="hl-y">Manual mode</span>, tap the order to select it, then tap a picker.`,
+    deepdive: null
+  },
+  {
+    target: '#t2',
+    tab: 't2',
+    card: 'right',
+    section: 'Tab 2 — Manager Actions',
+    title: 'Everything that needs a decision from you',
+    text: `This tab surfaces only what <b>can't resolve itself</b>. Cold zone breach, substitution needed, inbound delivery timing — things the system flagged but can't act on without you.<br><br>
+           Each card has 1–2 action buttons. Once you tap one, the card moves to <b>Resolved This Shift</b> at the bottom.`,
+    deepdive: `Cards are ordered by urgency — critical (red) first, then warnings (amber), then informational. SLA breach nudges from the Picker Floor appear here as a quiet section at the bottom so they don't dominate the view.`
+  },
+  {
+    target: '[data-id="intake-controls"]',
+    tab: 't2',
+    card: 'right',
+    section: 'Tab 2 — Manager Actions',
+    title: 'Pausing order intake',
+    text: `Three levels of pause — use the right level for the situation:<br><br>
+           <b>Single SKU</b> — stops new orders containing one specific item. Use when stock is disputed or a picker just flagged it missing.<br>
+           <b>Category</b> — pauses all dairy, cold items, etc. Use during a cold zone breach.<br>
+           <b>Store pause</b> — emergency stop on all new orders. Last resort only.`,
+    deepdive: `Pausing a SKU does <b>not</b> cancel orders already in the queue — pickers assigned those orders will still attempt to collect. The pause only stops <b>new</b> orders from entering.<br><br>
+               Resume any pause from the same widget. Every pause and resume is logged in Resolved This Shift for the shift handover.`
+  },
+  {
+    target: '#t3',
+    tab: 't3',
+    card: 'right',
+    section: 'Tab 3 — Predictive',
+    title: 'What\'s about to hit you',
+    text: `The Predictive tab is your <b>30-minute early warning system</b>. Toggle between the <span class="hl-y">30-min urgent view</span> and the <span class="hl-b">2-hour planning view</span>.<br><br>
+           The top metrics tell you at a glance whether the coming window is manageable or needs intervention.`,
+    deepdive: null
+  },
+  {
+    target: '[data-id="demand-forecast"]',
+    tab: 't3',
+    card: 'right',
+    section: 'Tab 3 — Predictive',
+    title: 'Reading the demand forecast bars',
+    text: `Each bar is a 15-minute slot. The <b>white vertical line</b> is your picker capacity ceiling.<br><br>
+           <span class="hl-g">Green bar</span> — within capacity, you're fine.<br>
+           <span class="hl-r">Red bar</span> — orders exceed what your current pickers can handle. The label shows how many are over.<br>
+           <span class="hl-b">Blue bar</span> — the current live slot (NOW).`,
+    deepdive: `The rider capacity chart below the main grid works the same way, but uses <b>rider throughput</b> instead — calculated as: <i>(active riders × 15) ÷ avg round-trip minutes</i>. If that ceiling is breached, a red banner appears with a link to the Rider tab to add capacity.`
+  },
+  {
+    target: '#t4',
+    tab: 't4',
+    card: 'right',
+    section: 'Tab 4 — Riders',
+    title: 'Your delivery fleet at a glance',
+    text: `The top strip shows fleet status: <span class="hl-g">On Delivery</span>, <span class="hl-b">Returning</span>, <span class="hl-y">Waiting</span>, and On Shift totals. The utilisation bar shows what % of your fleet is actively working.<br><br>
+           Each rider card shows their <b>ETA back to store</b> — so you know when the next rider becomes available for dispatch.`,
+    deepdive: `If more than 3 riders are waiting idle, a yellow banner suggests releasing OD riders early to avoid paying idle time — especially useful at the end of peak.<br><br>
+               The delivery progress bar on each card goes <b>Store → Destination</b> while delivering, then flips to <b>Returning</b> mode automatically when 100% delivered.`
+  },
+  {
+    target: '[data-id="on-delivery"]',
+    tab: 't4',
+    card: 'right',
+    section: 'Tab 4 — Riders',
+    title: 'OD vs Regular riders',
+    text: `Same contract logic as pickers:<br><br>
+           <span class="hl-b">Regular</span> — standard shift, stable availability.<br>
+           <span class="hl-y">OD</span> — gig rider, watch their shift timer carefully.<br><br>
+           A <span class="hl-r">red shift timer</span> means under 45 mins left. Don't dispatch a long-distance order to a rider who'll clock out before they return.`,
+    deepdive: null
+  },
+  {
+    target: '.widget-handle',
+    tab: 't1',
+    card: 'below',
+    section: 'Customisation',
+    title: 'Make it yours — drag, resize, collapse',
+    text: `Every widget on every tab can be <b>rearranged to match how you work</b>.<br><br>
+           <b>Drag:</b> grab the <span class="hl-y">⠿ grip</span> on any widget header and drop it where you want it.<br>
+           <b>Width:</b> the <span class="hl-y">▪ 1 col / ▪▪ 2 col / ▬ Full</span> buttons change how wide a widget is.<br>
+           <b>Collapse:</b> tap <span class="hl-y">▲</span> to hide a widget's content — keeps the header visible without the clutter.<br><br>
+           Your layout is <b>saved automatically</b> to this device. Each manager on each device keeps their own layout.`,
+    deepdive: `Tap <b>↺ Reset layout</b> (appears above each tab's grid) to go back to the default arrangement at any time.<br><br>
+               Layout saves include: widget order, width (1-col / 2-col / full), and collapsed state.`
+  },
+];
+
+// ── STATE ──
+let wtStep   = -1;   // -1 = welcome shown
+let wtActive = false;
+
+function wtShouldShow() {
+  try { return !localStorage.getItem(WT_KEY); } catch(e) { return true; }
+}
+function wtMarkDone() {
+  try { localStorage.setItem(WT_KEY, '1'); } catch(e) {}
+}
+
+// ── WELCOME ──
+function wtShowWelcome() {
+  const el = document.getElementById('wt-welcome');
+  if (el) {
+    el.style.display = 'flex';
+    el.classList.remove('hidden');
+  }
+}
+function wtHideWelcome() {
+  const el = document.getElementById('wt-welcome');
+  if (el) { el.classList.add('hidden'); el.style.pointerEvents = 'none'; el.style.display = 'none'; }
+}
+function wtBegin() {
+  wtHideWelcome();
+  wtActive = true;
+  wtStep   = 0;
+  wtShowStep(0);
+}
+function wtSkip() {
+  wtHideWelcome();
+  wtHideAll();
+  wtMarkDone();
+  wtActive = false;
+}
+
+// ── NAVIGATION ──
+function wtNext() {
+  if (!wtActive) return;
+  if (wtStep < WT_STEPS.length - 1) {
+    wtStep++;
+    wtShowStep(wtStep);
+  } else {
+    wtFinish();
+  }
+}
+function wtBack() {
+  if (!wtActive || wtStep <= 0) return;
+  wtStep--;
+  wtShowStep(wtStep);
+}
+function wtFinish() {
+  wtHideAll();
+  wtMarkDone();
+  wtActive = false;
+}
+
+// ── SHOW A STEP ──
+function wtShowStep(idx) {
+  const step = WT_STEPS[idx];
+  if (!step) return;
+
+  // Switch tab if needed
+  if (step.tab) {
+    const tabBtns = document.querySelectorAll('.tab');
+    const tabIdx  = ['t1','t2','t3','t4'].indexOf(step.tab);
+    if (tabBtns[tabIdx]) switchTab(step.tab, tabBtns[tabIdx]);
+  }
+
+  // Small delay to let tab render
+  setTimeout(() => {
+    wtRenderCard(step, idx);
+    wtRenderSpotlight(step);
+    wtRenderProgress(idx);
+  }, step.tab ? 80 : 0);
+}
+
+// ── SPOTLIGHT ──
+function wtRenderSpotlight(step) {
+  const svg     = document.getElementById('wt-svg');
+  const hole    = document.getElementById('wt-hole');
+  const blocker = document.getElementById('wt-blocker');
+  const pulse   = document.getElementById('wt-pulse-ring');
+
+  if (!step.target) {
+    svg.style.display    = 'none';
+    pulse.style.display  = 'none';
+    if (blocker) blocker.classList.remove('hidden');
+    return;
+  }
+
+  const el = document.querySelector(step.target);
+  if (!el) {
+    svg.style.display    = 'none';
+    pulse.style.display  = 'none';
+    if (blocker) blocker.classList.remove('hidden');
+    return;
+  }
+
+  const PAD = 8;
+  const r   = el.getBoundingClientRect();
+  const x   = r.left - PAD;
+  const y   = r.top  - PAD;
+  const w   = r.width  + PAD * 2;
+  const h   = r.height + PAD * 2;
+
+  svg.style.display = 'block';
+  hole.setAttribute('x',      x);
+  hole.setAttribute('y',      y);
+  hole.setAttribute('width',  w);
+  hole.setAttribute('height', h);
+
+  pulse.style.display  = 'block';
+  pulse.style.left     = x + 'px';
+  pulse.style.top      = y + 'px';
+  pulse.style.width    = w + 'px';
+  pulse.style.height   = h + 'px';
+
+  blocker.classList.remove('hidden');
+  svg.style.pointerEvents = 'none';
+}
+
+// ── CARD POSITIONING ──
+function wtRenderCard(step, idx) {
+  const card = document.getElementById('wt-card');
+  card.classList.remove('hidden');
+
+  // Content
+  document.getElementById('wt-section').textContent  = step.section;
+  document.getElementById('wt-title').textContent    = step.title;
+  document.getElementById('wt-text').innerHTML       = step.text;
+  document.getElementById('wt-counter').textContent  = (idx + 1) + ' / ' + WT_STEPS.length;
+
+  // Deep dive
+  const dd     = document.getElementById('wt-deepdive');
+  const ddBody = document.getElementById('wt-dd-body');
+  const ddToggle = document.getElementById('wt-dd-toggle');
+  if (step.deepdive) {
+    dd.style.display  = 'block';
+    ddBody.innerHTML  = step.deepdive;
+    ddBody.classList.remove('open');
+    ddToggle.classList.remove('open');
+  } else {
+    dd.style.display  = 'none';
+  }
+
+  // Back button
+  document.getElementById('wt-back-btn').style.display = idx === 0 ? 'none' : '';
+  // Next label
+  document.getElementById('wt-next-btn').textContent = idx === WT_STEPS.length - 1 ? 'Finish ✓' : 'Next →';
+
+  // Position card
+  wtPositionCard(step, card);
+}
+
+function wtPositionCard(step, card) {
+  const cw = 340;   // card width
+  const ch = card.offsetHeight || 320;
+  const appRoot = document.getElementById('app-root');
+  const vw = appRoot ? appRoot.offsetWidth  : window.innerWidth;
+  const vh = appRoot ? appRoot.offsetHeight : window.innerHeight;
+  const M  = 16;    // margin from edge / spotlight
+
+  let top, left;
+
+  if (!step.target || !document.querySelector(step.target)) {
+    // Centre on screen
+    top  = (vh - ch) / 2;
+    left = (vw - cw) / 2;
+  } else {
+    const r   = document.querySelector(step.target).getBoundingClientRect();
+    const PAD = 8;
+    const sx  = r.left - PAD;
+    const sy  = r.top  - PAD;
+    const sw  = r.width  + PAD * 2;
+    const sh  = r.height + PAD * 2;
+
+    switch (step.card) {
+      case 'below':
+        top  = sy + sh + M;
+        left = Math.min(Math.max(sx, M), vw - cw - M);
+        break;
+      case 'above':
+        top  = sy - ch - M;
+        left = Math.min(Math.max(sx, M), vw - cw - M);
+        break;
+      case 'right':
+        top  = Math.min(Math.max(sy, M), vh - ch - M);
+        left = sx + sw + M;
+        if (left + cw > vw - M) left = sx - cw - M;  // flip to left if off-screen
+        break;
+      case 'left':
+        top  = Math.min(Math.max(sy, M), vh - ch - M);
+        left = sx - cw - M;
+        if (left < M) left = sx + sw + M;             // flip to right if off-screen
+        break;
+      default:
+        top  = (vh - ch) / 2;
+        left = (vw - cw) / 2;
+    }
+    // Clamp
+    top  = Math.max(M, Math.min(top,  vh - ch - M));
+    left = Math.max(M, Math.min(left, vw - cw - M));
+  }
+
+  card.style.top  = top  + 'px';
+  card.style.left = left + 'px';
+}
+
+// ── PROGRESS DOTS ──
+function wtRenderProgress(idx) {
+  const bar = document.getElementById('wt-progress');
+  bar.innerHTML = WT_STEPS.map((_, i) =>
+    `<div class="wt-dot ${i < idx ? 'done' : i === idx ? 'active' : ''}"></div>`
+  ).join('');
+}
+
+// ── DEEP DIVE TOGGLE ──
+function wtToggleDeepDive() {
+  const body   = document.getElementById('wt-dd-body');
+  const toggle = document.getElementById('wt-dd-toggle');
+  const open   = body.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  // Reposition card after height change
+  const step = WT_STEPS[wtStep];
+  if (step) setTimeout(() => wtPositionCard(step, document.getElementById('wt-card')), 50);
+}
+
+// ── HIDE ALL ──
+function wtHideAll() {
+  ['wt-svg','wt-card','wt-pulse-ring'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.add('hidden'); el.style.display = 'none'; }
+  });
+  const blocker = document.getElementById('wt-blocker');
+  if (blocker) blocker.classList.add('hidden');
+}
+
+// ── HELP BUTTON ──
+function wtRelaunch() {
+  wtMarkDone();   // clear so it doesn't auto-show
+  try { localStorage.removeItem(WT_KEY); } catch(e) {}
+  wtStep   = -1;
+  wtActive = false;
+  wtHideAll();
+  document.getElementById('wt-welcome').classList.remove('hidden');
+  document.getElementById('wt-welcome').style.pointerEvents = '';
+}
+
+
+// ── AUTO-LAUNCH ──
+setTimeout(() => {
+  if (wtShouldShow()) wtShowWelcome();
+  else {
+    const w = document.getElementById('wt-welcome');
+    if (w) { w.classList.add('hidden'); w.style.pointerEvents = 'none'; }
+  }
+}, 600);
+
+
+</script>
+
+<!-- ══════════════════════════════════════
+     ONBOARDING WALKTHROUGH
+══════════════════════════════════════ -->
+
+<!-- Welcome screen -->
+<div id="wt-welcome">
+  <div class="wt-welcome-card">
+    <div class="wt-welcome-hero">
+      <div class="wt-welcome-logo">b!</div>
+      <div class="wt-welcome-title">Store Command Centre</div>
+      <div class="wt-welcome-sub">BKC Dark Store · MUM-BKC-04</div>
+    </div>
+    <div class="wt-welcome-body">
+      <div class="wt-welcome-desc">
+        Welcome, Manager. This dashboard gives you <b>real-time control</b> of your store floor —
+        pickers, riders, inventory, and what's coming next. Everything you need, in one place.
+      </div>
+      <div class="wt-tab-pills">
+        <div class="wt-tab-pill">
+          <div class="wt-tab-pill-icon">👆</div>
+          <div><div class="wt-tab-pill-name">Picker Floor</div><div class="wt-tab-pill-desc">Who's picking, SLA, queues</div></div>
+        </div>
+        <div class="wt-tab-pill">
+          <div class="wt-tab-pill-icon">⚡</div>
+          <div><div class="wt-tab-pill-name">Manager Actions</div><div class="wt-tab-pill-desc">Decisions, pauses, exceptions</div></div>
+        </div>
+        <div class="wt-tab-pill">
+          <div class="wt-tab-pill-icon">📈</div>
+          <div><div class="wt-tab-pill-name">Predictive</div><div class="wt-tab-pill-desc">Forecasts, inventory runway</div></div>
+        </div>
+        <div class="wt-tab-pill">
+          <div class="wt-tab-pill-icon">🛵</div>
+          <div><div class="wt-tab-pill-name">Riders</div><div class="wt-tab-pill-desc">Fleet, ETAs, assignments</div></div>
+        </div>
+      </div>
+      <div class="wt-welcome-footer">
+        <button class="wt-skip-welcome" onclick="wtSkip()">Skip guide</button>
+        <button class="wt-btn wt-btn-primary" style="flex:1" onclick="wtBegin()">Take me through it →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Spotlight SVG overlay -->
+<svg id="wt-svg" xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <mask id="wt-mask">
+      <rect width="100%" height="100%" fill="white"/>
+      <rect id="wt-hole" rx="10" fill="black"/>
+    </mask>
+  </defs>
+  <rect width="100%" height="100%" fill="rgba(8,9,12,0.82)" mask="url(#wt-mask)"/>
+</svg>
+
+<!-- Click blocker -->
+<div id="wt-blocker" class="hidden" onclick="wtNext()"></div>
+
+<!-- Spotlight pulse ring -->
+<div id="wt-pulse-ring" class="wt-pulse" style="display:none"></div>
+
+<!-- Step card -->
+<div id="wt-card" class="hidden">
+  <div class="wt-card-header">
+    <div class="wt-card-logo">b!</div>
+    <div class="wt-card-section" id="wt-section">Getting Started</div>
+    <div class="wt-card-counter" id="wt-counter">1 / 12</div>
+  </div>
+  <div class="wt-card-body">
+    <div class="wt-card-title" id="wt-title"></div>
+    <div class="wt-card-text" id="wt-text"></div>
+    <div class="wt-deepdive" id="wt-deepdive" style="display:none">
+      <button class="wt-deepdive-toggle" id="wt-dd-toggle" onclick="wtToggleDeepDive()">
+        <span>Deep dive</span><span class="dd-arrow">▾</span>
+      </button>
+      <div class="wt-deepdive-body" id="wt-dd-body"></div>
+    </div>
+  </div>
+  <div class="wt-progress" id="wt-progress"></div>
+  <div class="wt-footer">
+    <button class="wt-btn-skip wt-btn" onclick="wtSkip()">Exit guide</button>
+    <button class="wt-btn wt-btn-secondary" id="wt-back-btn" onclick="wtBack()">← Back</button>
+    <button class="wt-btn wt-btn-primary" id="wt-next-btn" onclick="wtNext()">Next →</button>
+  </div>
+</div>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Envoy — User Journey Diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:   #0F1E3C;
+    --navy2:  #162847;
+    --blue:   #1A5FBE;
+    --blue2:  #2370D4;
+    --teal:   #0D9488;
+    --sky:    #38BDF8;
+    --amber:  #F59E0B;
+    --rose:   #F43F5E;
+    --green:  #10B981;
+    --slate:  #94A3B8;
+    --white:  #F8FAFC;
+    --glass:  rgba(255,255,255,0.06);
+    --glass2: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(26,95,190,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(13,148,136,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 60% at 60% 30%, rgba(56,189,248,0.06) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 32px 80px; }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 56px 0 48px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--sky); opacity: 0.8;
+  }
+  .header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700; line-height: 1.0;
+    background: linear-gradient(135deg, #fff 30%, var(--sky) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .header-sub {
+    font-size: 15px; color: var(--slate); font-weight: 300; max-width: 540px; line-height: 1.6;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; gap: 8px; margin-bottom: 40px;
+    border-bottom: 1px solid var(--border); padding-bottom: 0;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    color: var(--slate);
+    padding: 14px 20px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--white); }
+  .tab-btn.active { color: var(--sky); border-bottom-color: var(--sky); }
+  .tab-num {
+    display: inline-block; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--glass2); font-size: 11px; text-align: center; line-height: 20px;
+    margin-right: 8px;
+  }
+  .tab-btn.active .tab-num { background: var(--blue2); color: #fff; }
+
+  /* ── PANEL ── */
+  .panel { display: none; animation: fadeIn 0.3s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--sky); margin-bottom: 20px; opacity: 0.7;
+  }
+
+  /* ── JOURNEY CONTAINER ── */
+  .journey {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  /* ── PHASE BLOCK ── */
+  .phase {
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--glass);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .phase:hover { border-color: rgba(255,255,255,0.18); }
+
+  .phase-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px;
+    cursor: default;
+  }
+  .phase-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+  .phase-meta { flex: 1; }
+  .phase-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .phase-title { font-size: 15px; font-weight: 600; line-height: 1.2; }
+  .phase-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; padding: 3px 8px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--slate);
+    flex-shrink: 0;
+  }
+
+  /* Phase colour variants */
+  .phase-onboard .phase-icon  { background: rgba(56,189,248,0.15); }
+  .phase-action  .phase-icon  { background: rgba(245,158,11,0.15); }
+  .phase-system  .phase-icon  { background: rgba(16,185,129,0.15); }
+  .phase-hand    .phase-icon  { background: rgba(244,63,94,0.15); }
+  .phase-output  .phase-icon  { background: rgba(139,92,246,0.15); }
+
+  .phase-onboard .phase-time { color: var(--sky); }
+  .phase-action  .phase-time { color: var(--amber); }
+  .phase-system  .phase-time { color: var(--green); }
+  .phase-hand    .phase-time { color: var(--rose); }
+  .phase-output  .phase-time { color: #A78BFA; }
+
+  /* ── PHASE BODY ── */
+  .phase-body {
+    padding: 0 20px 18px 70px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .phase-desc {
+    font-size: 13px; color: var(--slate); line-height: 1.6; margin-bottom: 4px;
+  }
+
+  /* ── NODES (steps inside a phase) ── */
+  .nodes {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .node {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--glass2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 10px;
+    font-size: 12px; font-weight: 500; color: var(--white);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .node:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.2); }
+  .node-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .node.required .node-dot { background: var(--green); }
+  .node.optional .node-dot { background: var(--amber); }
+  .node.future   .node-dot { background: var(--slate); }
+  .node.system   .node-dot { background: var(--sky); }
+  .node.action   .node-dot { background: var(--rose); }
+
+  .node-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; padding: 1px 5px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .node.required .node-tag { background: rgba(16,185,129,0.2); color: var(--green); }
+  .node.optional .node-tag { background: rgba(245,158,11,0.2); color: var(--amber); }
+  .node.future   .node-tag { background: rgba(148,163,184,0.15); color: var(--slate); }
+  .node.system   .node-tag { background: rgba(56,189,248,0.15); color: var(--sky); }
+
+  /* ── CHANNEL GRID ── */
+  .channel-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 6px;
+  }
+  .channel-card {
+    background: var(--glass2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .channel-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); }
+  .channel-name { font-size: 12px; font-weight: 600; }
+  .channel-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .ch-live    { color: var(--green); }
+  .ch-beta    { color: var(--amber); }
+  .ch-road    { color: var(--slate); }
+
+  /* ── CONNECTOR ARROW ── */
+  .arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--slate); font-size: 18px; padding: 2px 0;
+  }
+
+  /* ── DECISION DIAMOND ── */
+  .decision-row {
+    display: flex; align-items: flex-start; gap: 16px; padding: 4px 0;
+  }
+  .decision-diamond {
+    width: 52px; height: 52px; flex-shrink: 0;
+    background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+    transform: rotate(45deg); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .decision-diamond span { transform: rotate(-45deg); font-size: 17px; }
+  .decision-branches { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; padding-top: 4px; }
+  .branch {
+    background: var(--glass2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px; font-size: 12px;
+  }
+  .branch-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; color: var(--slate); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .branch-text { font-weight: 500; color: var(--white); font-size: 12px; }
+
+  /* ── INFO CARD ── */
+  .info-card {
+    background: rgba(13,148,136,0.08); border: 1px solid rgba(13,148,136,0.25);
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 12px; color: var(--slate); line-height: 1.6;
+  }
+  .info-card strong { color: var(--white); }
+
+  /* ── METRIC ROW ── */
+  .metrics {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px;
+  }
+  .metric {
+    background: var(--glass2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; text-align: center;
+  }
+  .metric-val { font-family: 'Fraunces', serif; font-size: 22px; color: var(--sky); }
+  .metric-lbl { font-size: 10px; color: var(--slate); margin-top: 2px; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px;
+    padding: 14px 18px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--slate); }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── MIRO LINK ── */
+  .miro-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 28px; padding: 10px 16px;
+    background: var(--glass2); border: 1px solid var(--border);
+    border-radius: 10px; text-decoration: none; color: var(--slate);
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .miro-link:hover { border-color: rgba(56,189,248,0.4); color: var(--sky); }
+
+  /* ── FLOW CONNECTOR ── */
+  .flow-line {
+    width: 1px; background: linear-gradient(to bottom, var(--border), transparent);
+    height: 20px; margin: 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px 60px; }
+    .channel-grid { grid-template-columns: repeat(2, 1fr); }
+    .metrics { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:9999;background:#0f172a;color:#f8fafc;padding:10px 16px;font:600 13px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><a href="../../index.html#case-studies" style="color:#5eead4;text-decoration:none">← Profile</a><span style="opacity:.85">Envoy journeys · personal work</span></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <p class="header-eyebrow">Product Design · User Journeys · v1.0</p>
+    <h1>Envoy</h1>
+    <p class="header-sub">Three critical user journeys — onboarding, daily rhythm, and first sales hire handoff. Designed for founder-led sales at 0–20 person startups.</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('onboarding', this)">
+      <span class="tab-num">1</span>Onboarding Journey
+    </button>
+    <button class="tab-btn" onclick="switchTab('daily', this)">
+      <span class="tab-num">2</span>Daily Rhythm
+    </button>
+    <button class="tab-btn" onclick="switchTab('handoff', this)">
+      <span class="tab-num">3</span>First Hire Handoff
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       PANEL 1: ONBOARDING
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="panel active" id="panel-onboarding">
+    <p class="section-label">Journey 01 — Onboarding · Target: &lt; 15 minutes to first captured conversation</p>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-val">&lt;15</div><div class="metric-lbl">min to setup</div></div>
+      <div class="metric"><div class="metric-val">&lt;30</div><div class="metric-lbl">min to first captured convo</div></div>
+      <div class="metric"><div class="metric-val">5</div><div class="metric-lbl">steps total</div></div>
+      <div class="metric"><div class="metric-val">0</div><div class="metric-lbl">technical knowledge needed</div></div>
+    </div>
+
+    <div style="height:28px;"></div>
+
+    <div class="journey">
+
+      <!-- Step 1 -->
+      <div class="phase phase-onboard">
+        <div class="phase-header">
+          <div class="phase-icon">🔔</div>
+          <div class="phase-meta">
+            <div class="phase-time">Step 1</div>
+            <div class="phase-title">Choose Notification Channel</div>
+          </div>
+          <div class="phase-badge">Where Envoy reaches you</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Choose where Envoy delivers your morning digest, urgent alerts, and one-tap actions. This is a preference only — all channels remain accessible in the app regardless.</p>
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>Envoy App (push) <span class="node-tag">recommended</span></div>
+            <div class="node optional"><span class="node-dot"></span>WhatsApp <span class="node-tag">optional</span></div>
+            <div class="node optional"><span class="node-dot"></span>Telegram <span class="node-tag">optional</span></div>
+            <div class="node optional"><span class="node-dot"></span>Email digest <span class="node-tag">optional</span></div>
+          </div>
+          <div class="info-card" style="margin-top:8px;">
+            <strong>Design principle:</strong> The app is always the primary surface. Notification channels are a convenience layer for founders who prefer ambient alerts without opening the app.
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Step 2 -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">🔗</div>
+          <div class="phase-meta">
+            <div class="phase-time">Step 2</div>
+            <div class="phase-title">Connect Conversation Channels</div>
+          </div>
+          <div class="phase-badge">What Envoy monitors</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Connect the channels where your sales conversations actually happen. Envoy monitors these automatically — no manual logging ever. Gmail is required. All others are additive.</p>
+          <div class="channel-grid">
+            <div class="channel-card">
+              <div class="channel-name">Gmail / Outlook</div>
+              <div class="channel-status ch-live">✓ Required · Live</div>
+            </div>
+            <div class="channel-card">
+              <div class="channel-name">Telegram</div>
+              <div class="channel-status ch-live">✓ Recommended · Live</div>
+            </div>
+            <div class="channel-card">
+              <div class="channel-name">WhatsApp</div>
+              <div class="channel-status ch-beta">⚡ Beta opt-in</div>
+            </div>
+            <div class="channel-card">
+              <div class="channel-name">Zoom / Meet</div>
+              <div class="channel-status ch-road">→ Phase 2</div>
+            </div>
+            <div class="channel-card">
+              <div class="channel-name">Signal</div>
+              <div class="channel-status ch-road">→ Roadmap</div>
+            </div>
+            <div class="channel-card">
+              <div class="channel-name">LinkedIn DMs</div>
+              <div class="channel-status ch-road">→ Phase 3</div>
+            </div>
+            <div class="channel-card">
+              <div class="channel-name">Phone Calls</div>
+              <div class="channel-status ch-beta">⚡ Voice note bridge</div>
+            </div>
+            <div class="channel-card" style="border-style:dashed; opacity:0.6;">
+              <div class="channel-name">+ More</div>
+              <div class="channel-status ch-road">Extensible architecture</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Step 3 -->
+      <div class="phase phase-action">
+        <div class="phase-header">
+          <div class="phase-icon">🗂</div>
+          <div class="phase-meta">
+            <div class="phase-time">Step 3</div>
+            <div class="phase-title">Choose Pipeline Destination</div>
+          </div>
+          <div class="phase-badge">Where deals are stored</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Where should Envoy write your structured deal data? Most founders use Envoy's built-in pipeline. If you already use a CRM, Envoy syncs to it — no duplicate entry.</p>
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>Envoy built-in pipeline <span class="node-tag">recommended</span></div>
+            <div class="node optional"><span class="node-dot"></span>HubSpot <span class="node-tag">MVP</span></div>
+            <div class="node future"><span class="node-dot"></span>Notion <span class="node-tag">Phase 2</span></div>
+            <div class="node future"><span class="node-dot"></span>Google Sheets / Airtable <span class="node-tag">Phase 2</span></div>
+            <div class="node future"><span class="node-dot"></span>Pipedrive <span class="node-tag">Phase 3</span></div>
+            <div class="node future"><span class="node-dot"></span>Zoho CRM <span class="node-tag">Phase 3</span></div>
+            <div class="node future"><span class="node-dot"></span>Salesforce <span class="node-tag">Phase 4</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Step 4 -->
+      <div class="phase phase-onboard">
+        <div class="phase-header">
+          <div class="phase-icon">✏️</div>
+          <div class="phase-meta">
+            <div class="phase-time">Step 4</div>
+            <div class="phase-title">Personalise Your Agent</div>
+          </div>
+          <div class="phase-badge">One-time setup</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Name your agent, set the tone, language, and digest timing. These choices create a sense of ownership — this is your agent, not a generic AI.</p>
+          <div class="nodes">
+            <div class="node action"><span class="node-dot"></span>Name your agent (default: Envoy)</div>
+            <div class="node action"><span class="node-dot"></span>Tone: Professional / Casual / Concise</div>
+            <div class="node action"><span class="node-dot"></span>Language preference</div>
+            <div class="node action"><span class="node-dot"></span>Digest time (default: 7:00 AM)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Step 5 -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">🚀</div>
+          <div class="phase-meta">
+            <div class="phase-time">Step 5</div>
+            <div class="phase-title">Go Live — Private Server Spins Up</div>
+          </div>
+          <div class="phase-badge">Automated</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Envoy provisions a dedicated private server for this founder. The agent begins monitoring all connected channels immediately. A retroactive 90-day email scan runs in the background.</p>
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>Private server provisioned</div>
+            <div class="node system"><span class="node-dot"></span>Agent monitoring begins (all channels)</div>
+            <div class="node system"><span class="node-dot"></span>Retroactive scan: last 90 days of email</div>
+            <div class="node system"><span class="node-dot"></span>First conversation appears in Today view</div>
+          </div>
+          <div class="info-card" style="margin-top:8px; background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25);">
+            <strong>Success condition:</strong> Founder sees their first auto-captured conversation in the Envoy app within 30 minutes — without having logged anything manually.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <a class="miro-link" href="https://miro.com/app/board/uXjVGztPz4I=/?focusWidget=3458764663140483685" target="_blank">
+      ↗ View on Miro board
+    </a>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>Required</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div>Optional / Beta</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sky);"></div>System / Automated</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--rose);"></div>Founder action</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slate);"></div>Future roadmap</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       PANEL 2: DAILY RHYTHM
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-daily">
+    <p class="section-label">Journey 02 — Daily Rhythm · How a founder's day works with Envoy running</p>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-val">3</div><div class="metric-lbl">attention moments per day</div></div>
+      <div class="metric"><div class="metric-val">&lt;2</div><div class="metric-lbl">min total admin time</div></div>
+      <div class="metric"><div class="metric-val">0</div><div class="metric-lbl">manual pipeline updates</div></div>
+      <div class="metric"><div class="metric-val">∞</div><div class="metric-lbl">channels monitored</div></div>
+    </div>
+
+    <div style="height:28px;"></div>
+    <div class="journey">
+
+      <!-- Morning -->
+      <div class="phase phase-onboard">
+        <div class="phase-header">
+          <div class="phase-icon">☀️</div>
+          <div class="phase-meta">
+            <div class="phase-time">7:00 AM · Morning</div>
+            <div class="phase-title">Priority Triage — Today View</div>
+          </div>
+          <div class="phase-badge">App + notification channel</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Morning digest arrives in chosen notification channel AND as a push on the Envoy app. Every item is urgency-ranked. Every item has one-tap actions attached — no navigation needed.</p>
+          <div class="nodes">
+            <div class="node action"><span class="node-dot"></span>Urgent follow-ups due today</div>
+            <div class="node action"><span class="node-dot"></span>Deals gone cold (configurable threshold)</div>
+            <div class="node action"><span class="node-dot"></span>Overnight replies from any channel</div>
+            <div class="node action"><span class="node-dot"></span>Pre-meeting reminders for today</div>
+          </div>
+          <div style="height:8px;"></div>
+          <div class="decision-row">
+            <div class="decision-diamond"><span>?</span></div>
+            <div class="decision-branches">
+              <div class="branch">
+                <div class="branch-label">Action needed</div>
+                <div class="branch-text">Tap "Draft Follow-Up" → review AI draft → send or edit</div>
+              </div>
+              <div class="branch">
+                <div class="branch-label">Not urgent</div>
+                <div class="branch-text">Snooze 2 days / Mark cold — single tap</div>
+              </div>
+              <div class="branch">
+                <div class="branch-label">Nothing urgent</div>
+                <div class="branch-text">Dismiss digest — go close deals</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Pre-meeting -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">📋</div>
+          <div class="phase-meta">
+            <div class="phase-time">10 min before any meeting</div>
+            <div class="phase-title">Pre-Meeting Brief — Auto-fired</div>
+          </div>
+          <div class="phase-badge">Fully automatic</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Envoy detects the meeting in connected calendar and fires a brief automatically. No action needed from the founder — they simply open it.</p>
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>Full relationship history with this lead</div>
+            <div class="node system"><span class="node-dot"></span>Last conversation summary</div>
+            <div class="node system"><span class="node-dot"></span>Open commitments — both sides</div>
+            <div class="node system"><span class="node-dot"></span>Suggested talking points from history</div>
+            <div class="node system"><span class="node-dot"></span>Warmth score + deal velocity</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Conversation -->
+      <div class="phase phase-action">
+        <div class="phase-header">
+          <div class="phase-icon">💬</div>
+          <div class="phase-meta">
+            <div class="phase-time">Throughout the day</div>
+            <div class="phase-title">Conversations Happen — Any Channel</div>
+          </div>
+          <div class="phase-badge">Extensible channel layer</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">The founder has conversations wherever deals happen. Envoy monitors all connected channels simultaneously. As new channels are added to the platform, they plug into the same capture layer.</p>
+          <div class="channel-grid">
+            <div class="channel-card"><div class="channel-name">Gmail / Outlook</div><div class="channel-status ch-live">Auto-captured</div></div>
+            <div class="channel-card"><div class="channel-name">Telegram</div><div class="channel-status ch-live">Auto-captured</div></div>
+            <div class="channel-card"><div class="channel-name">WhatsApp</div><div class="channel-status ch-beta">Beta — opt-in</div></div>
+            <div class="channel-card"><div class="channel-name">Zoom / Meet</div><div class="channel-status ch-road">Phase 2 bot</div></div>
+            <div class="channel-card"><div class="channel-name">Signal</div><div class="channel-status ch-road">Roadmap</div></div>
+            <div class="channel-card"><div class="channel-name">Phone Calls</div><div class="channel-status ch-beta">Voice note bridge</div></div>
+            <div class="channel-card"><div class="channel-name">LinkedIn DMs</div><div class="channel-status ch-road">Phase 3</div></div>
+            <div class="channel-card" style="border-style:dashed; opacity:0.55;"><div class="channel-name">+ Future channels</div><div class="channel-status ch-road">Architecture open</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Capture -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">⚡</div>
+          <div class="phase-meta">
+            <div class="phase-time">Immediately after conversation</div>
+            <div class="phase-title">Capture — Three Paths</div>
+          </div>
+          <div class="phase-badge">Zero to minimal effort</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Envoy captures context through whichever path requires the least effort for that moment.</p>
+          <div class="decision-row">
+            <div class="decision-diamond"><span>↙↓↘</span></div>
+            <div class="decision-branches">
+              <div class="branch">
+                <div class="branch-label">Path A — Zero effort</div>
+                <div class="branch-text">Connected channel (email, Telegram) → captured automatically</div>
+              </div>
+              <div class="branch">
+                <div class="branch-label">Path B — 30 seconds</div>
+                <div class="branch-text">Voice note to Envoy → transcribed + committed extracted</div>
+              </div>
+              <div class="branch">
+                <div class="branch-label">Path C — 60 seconds</div>
+                <div class="branch-text">Quick note typed in app → structured and logged</div>
+              </div>
+            </div>
+          </div>
+          <div class="nodes" style="margin-top:10px;">
+            <div class="node system"><span class="node-dot"></span>Commitments extracted automatically</div>
+            <div class="node system"><span class="node-dot"></span>Pipeline updated in real time</div>
+            <div class="node system"><span class="node-dot"></span>Follow-up reminder set (if detected)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Lead detection -->
+      <div class="phase phase-action">
+        <div class="phase-header">
+          <div class="phase-icon">🎯</div>
+          <div class="phase-meta">
+            <div class="phase-time">Continuous · Background</div>
+            <div class="phase-title">New Lead Detection</div>
+          </div>
+          <div class="phase-badge">4-layer classification</div>
+        </div>
+        <div class="phase-body">
+          <div class="decision-row">
+            <div class="decision-diamond"><span>AI</span></div>
+            <div class="decision-branches">
+              <div class="branch">
+                <div class="branch-label">High confidence (&gt;80%)</div>
+                <div class="branch-text">Auto-created as lead silently — founder notified</div>
+              </div>
+              <div class="branch">
+                <div class="branch-label">Medium (50–80%)</div>
+                <div class="branch-text">One-tap confirm sent to founder in app</div>
+              </div>
+              <div class="branch">
+                <div class="branch-label">Low (&lt;50%)</div>
+                <div class="branch-text">Silently ignored — no noise</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Evening -->
+      <div class="phase phase-hand">
+        <div class="phase-header">
+          <div class="phase-icon">🌙</div>
+          <div class="phase-meta">
+            <div class="phase-time">5:00 PM · Evening</div>
+            <div class="phase-title">Wrap — End of Day Summary</div>
+          </div>
+          <div class="phase-badge">&lt; 2 minutes to read</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Intentionally short. The founder is done with sales admin in under two minutes.</p>
+          <div class="nodes">
+            <div class="node action"><span class="node-dot"></span>What moved today (deals advanced)</div>
+            <div class="node action"><span class="node-dot"></span>What is pending tomorrow</div>
+            <div class="node action"><span class="node-dot"></span>One key priority action to set</div>
+            <div class="node system"><span class="node-dot"></span>Pipeline health score updated</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <a class="miro-link" href="https://miro.com/app/board/uXjVGztPz4I=/?focusWidget=3458764663140511227" target="_blank">
+      ↗ View on Miro board
+    </a>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>Required</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div>Optional / Beta</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sky);"></div>System / Automated</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--rose);"></div>Founder action</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slate);"></div>Future roadmap</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       PANEL 3: HANDOFF
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-handoff">
+    <p class="section-label">Journey 03 — First Sales Hire Handoff · From founder-only to team sales</p>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-val">-80%</div><div class="metric-lbl">manual briefing time</div></div>
+      <div class="metric"><div class="metric-val">90+</div><div class="metric-lbl">days of history transferred</div></div>
+      <div class="metric"><div class="metric-val">&lt;2hrs</div><div class="metric-lbl">new hire onboarding in Envoy</div></div>
+      <div class="metric"><div class="metric-val">0</div><div class="metric-lbl">context lost in handoff</div></div>
+    </div>
+
+    <div style="height:28px;"></div>
+    <div class="journey">
+
+      <!-- Trigger -->
+      <div class="phase phase-onboard">
+        <div class="phase-header">
+          <div class="phase-icon">🧑‍💼</div>
+          <div class="phase-meta">
+            <div class="phase-time">Trigger · Founder</div>
+            <div class="phase-title">Decision to Hire — Handoff Mode Activated</div>
+          </div>
+          <div class="phase-badge">Founder action</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Founder opens the Envoy app and activates Handoff Mode. Envoy begins generating the Pipeline Handoff Report automatically from all stored conversation history.</p>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Report generation -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">📊</div>
+          <div class="phase-meta">
+            <div class="phase-time">Automated · Envoy</div>
+            <div class="phase-title">Pipeline Handoff Report — Auto-Generated</div>
+          </div>
+          <div class="phase-badge">Fully automated</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Envoy assembles everything it has captured across all channels — email, Telegram, WhatsApp, voice notes, call transcripts — into a structured, deal-by-deal briefing.</p>
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>All active deals + full cross-channel history</div>
+            <div class="node system"><span class="node-dot"></span>Open commitments per deal (both sides)</div>
+            <div class="node system"><span class="node-dot"></span>Warmth score + last contact date per deal</div>
+            <div class="node system"><span class="node-dot"></span>Voice memo transcripts + quick notes</div>
+            <div class="node system"><span class="node-dot"></span>AI-generated relationship summary per deal</div>
+            <div class="node system"><span class="node-dot"></span>Deal velocity signals (hot / cooling / cold)</div>
+          </div>
+          <div class="info-card" style="margin-top:8px;">
+            <strong>All channels, one report:</strong> The report consolidates history across every channel Envoy has monitored — Gmail, Telegram, WhatsApp, Zoom transcripts, voice notes. The hire doesn't need to know which channel each conversation happened on.
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Founder review -->
+      <div class="phase phase-action">
+        <div class="phase-header">
+          <div class="phase-icon">✍️</div>
+          <div class="phase-meta">
+            <div class="phase-time">Founder Review</div>
+            <div class="phase-title">Annotate and Assign Deals</div>
+          </div>
+          <div class="phase-badge">~30 min review</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Founder reviews the report, adds human context where needed, and makes assignment decisions. Envoy has the data — the founder adds the judgment.</p>
+          <div class="nodes">
+            <div class="node action"><span class="node-dot"></span>Mark deals: High / Medium / Low priority</div>
+            <div class="node action"><span class="node-dot"></span>Add context notes on key deals</div>
+            <div class="node action"><span class="node-dot"></span>Flag deals to keep personally (sensitive / strategic)</div>
+            <div class="node action"><span class="node-dot"></span>Assign remainder to new hire</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Share access -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">🔑</div>
+          <div class="phase-meta">
+            <div class="phase-time">Handoff Moment</div>
+            <div class="phase-title">Share Workspace Access</div>
+          </div>
+          <div class="phase-badge">Single action</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Founder shares the Envoy workspace with the new hire's email. New hire receives an invite and joins the workspace with scoped access to their assigned deals.</p>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- New hire day one -->
+      <div class="phase phase-hand">
+        <div class="phase-header">
+          <div class="phase-icon">🆕</div>
+          <div class="phase-meta">
+            <div class="phase-time">New Hire · Day One</div>
+            <div class="phase-title">Onboarding in Envoy App</div>
+          </div>
+          <div class="phase-badge">No briefing sessions needed</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">From their first login, the new hire can see everything they need to continue conversations without re-introducing themselves or asking questions the prospect already answered.</p>
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>Deal-by-deal briefings with full history</div>
+            <div class="node system"><span class="node-dot"></span>Commitment inbox — all open promises</div>
+            <div class="node system"><span class="node-dot"></span>Complete channel history per lead</div>
+            <div class="node system"><span class="node-dot"></span>Warmth + velocity signals per deal</div>
+            <div class="node system"><span class="node-dot"></span>Founder's voice notes and context notes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- On-demand context -->
+      <div class="phase phase-output">
+        <div class="phase-header">
+          <div class="phase-icon">🤖</div>
+          <div class="phase-meta">
+            <div class="phase-time">Ongoing · New Hire</div>
+            <div class="phase-title">On-Demand Context via Envoy Agent</div>
+          </div>
+          <div class="phase-badge">Natural language · Any time</div>
+        </div>
+        <div class="phase-body">
+          <p class="phase-desc">Before any call or email, the new hire can ask the Envoy agent directly for a contextual briefing — in natural language, getting a full answer in seconds.</p>
+          <div class="nodes">
+            <div class="node action"><span class="node-dot"></span>"Brief me on TechCorp"</div>
+            <div class="node action"><span class="node-dot"></span>"What did we last discuss with Priya?"</div>
+            <div class="node action"><span class="node-dot"></span>"What commitments are open on this deal?"</div>
+            <div class="node action"><span class="node-dot"></span>"Which deals should I prioritise this week?"</div>
+          </div>
+          <div class="info-card" style="margin-top:8px; background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.25);">
+            <strong>Response time:</strong> Agent returns full relationship summary in &lt; 3 seconds. No searching across apps. No asking the founder. The context travels with the deal.
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Outcome -->
+      <div class="phase phase-system">
+        <div class="phase-header">
+          <div class="phase-icon">✅</div>
+          <div class="phase-meta">
+            <div class="phase-time">Outcome</div>
+            <div class="phase-title">Seamless Continuity — Zero Context Loss</div>
+          </div>
+          <div class="phase-badge">The Envoy guarantee</div>
+        </div>
+        <div class="phase-body">
+          <div class="nodes">
+            <div class="node system"><span class="node-dot"></span>New hire continues warm conversations from day one</div>
+            <div class="node system"><span class="node-dot"></span>Zero re-introduction to any prospect</div>
+            <div class="node system"><span class="node-dot"></span>Founder freed from 2 weeks of manual briefing</div>
+            <div class="node system"><span class="node-dot"></span>All future conversations captured for next hire</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <a class="miro-link" href="https://miro.com/app/board/uXjVGztPz4I=/?focusWidget=3458764663140546703" target="_blank">
+      ↗ View on Miro board
+    </a>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>Required</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div>Optional / Beta</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sky);"></div>System / Automated</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--rose);"></div>Founder action</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#A78BFA;"></div>New hire action</div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
