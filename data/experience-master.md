@@ -4,27 +4,33 @@ status: canonical
 owner: Venkatraman Chandrasekar
 last_verified: 2026-07-20
 public: false
+source: >
+  User-compiled Master Experience & Skills Document (full conversation history dump).
+  Supersedes earlier short PDF dump + prior master revision.
 note: >
   SOURCE OF TRUTH for resume generation. Not linked from the public site.
   Public page shows a length-limited generic cut. For JD-tailored resumes,
-  read this file fully and select/rephrase bullets — never invent experience.
+  read this file fully and select/rephrase — never invent experience.
 ---
 
-# Experience Master — Venkatraman Chandrasekar
+# Master Experience & Skills Document
 
-**Do not publish this file as a page.** Agents and future JD-tailoring use this as the master dump.
+**Venkatraman Chandrasekar**  
+**Comprehensive Experience Dump & Skills Inventory**
 
-## How to use (Grok / agents)
+Canonical title for public materials: **Agile Product Owner / TPM**  
+*(Unless user overrides for a specific application.)*
 
-1. **Generic profile (site):** Keep `index.html` resume short (1–2 pages printable). Prefer ownership outcomes; omit deep tool/protocol lists unless space allows.
-2. **JD-tailored resume:** When user pastes a JD:
-   - Map JD keywords → skills bank + matching role bullets below
-   - Prefer **demonstrated** experience over implied transfer
-   - Reorder roles/bullets; expand or compress depth
-   - Never invent employers, products, metrics, or dates
-   - If a skill is transferable but not explicit, phrase honestly (e.g. “provider-agnostic API integration patterns applied to…”)
-   - Output: tailored resume (markdown or paste-ready) + short “why these picks” note
-3. **Canonical public title:** `Agile Product Owner / TPM` (unless user overrides for a specific application)
+---
+
+## How agents use this file
+
+1. **Generic site resume** (`index.html`): short, outcomes-first, 1–2 pages printable.
+2. **JD-tailored resume**: map JD keywords → roles/bullets/skills below; reorder and expand; no invention.
+3. **Interview prep**: use “Detailed Experience” narratives for stories (STAR-ready).
+4. Prefer **ownership language** (owned, defined, launched, turned around) — not aspirational title framing.
+
+See also: [`RESUME-WORKFLOW.md`](./RESUME-WORKFLOW.md)
 
 ---
 
@@ -35,266 +41,322 @@ note: >
 | Name | Venkatraman Chandrasekar |
 | Email | vc.atreya@gmail.com |
 | Phone | 647-917-2912 |
-| Location | Ajax, ON (Toronto area) · remote OK |
+| Location | Ajax, ON (Toronto) · remote OK |
 | GitHub | https://github.com/vcatreya-git |
 | LinkedIn | https://www.linkedin.com/in/chandrasekarvenkatraman |
-| Profile site | https://vcatreya-git.github.io/ |
+| Profile | https://vcatreya-git.github.io/ |
 
 ---
 
-## Canonical title (public)
+## Verification notes (2026-07-20)
 
-**Agile Product Owner / TPM**
+Cross-checked this dump against prior profile materials. **Mostly accepted as user truth.** Flagged items:
 
-Platform & API products · open banking · payments · enterprise banking
-
-*Do not use “Senior Product Owner → Product Manager” or “wannabe PM” framing. Lead with ownership and outcomes.*
-
----
-
-## Verification log (2026-07-20)
-
-Cross-checked: Desktop master PDF + live profile HTML + older DOCX dump.
-
-| # | Issue | Resolution in this master |
-|---|--------|---------------------------|
-| 1 | PDF header “Senior Product Owner → Product Manager” | Replaced with **Agile Product Owner / TPM** (user preference) |
-| 2 | FIS title varied (PO/TPM vs Senior Lead vs BSA/Architect in old org chart) | Public/current: **Agile Product Owner / TPM**. Employment note: contractor Jul 2021–Jan 2023; specialist Feb 2023–present |
-| 3 | DOCX FIS still said BA on early ACH | ACH start was BA-leaning contribution; later PO leadership — phrase honestly under BPS ACH & Wires |
-| 4 | Bancolombia DOCX end “Dec 2019” vs Edgeverve left May 2019 | **Jul 2016 – May 2019** (employer end date wins) |
-| 5 | BRAC dates missing in PDF; DOCX Jan 2017–May 2019 | **Jan 2017 – May 2019** (approx, concurrent with QNB) |
-| 6 | TCS: DOCX overlapping Tata Capital through Dec 2013 vs Khan Bank Jan–Mar 2013 | **May 2010 – Mar 2013** total; Khan Bank ~Jan–Mar 2013 within TCS tenure |
-| 7 | Old DOCX “Mar 2010” start vs “May 2010” | **May 2010** (consistent with recent dumps) |
-| 8 | Skills missing from PDF extract | Rebuilt skills bank from DOCX + profile + domain work |
-| 9 | Concurrent Edgeverve clients (QNB / BRAC / Bancolombia) | Expected in consulting — keep all with dates |
-| 10 | Capgemini “Virtual, India” for global bank programmes | Keep location; work was multi-market remote from India base |
-
-**Still open (user can correct anytime):** Exact FIS official HR title string if different from Agile Product Owner / TPM; BRAC exact month range if different.
+| # | Item | Note |
+|---|------|------|
+| 1 | TCS start | Dump says role **May 2010 – Mar 2013** and also **joined March 2010** (training). Master uses **May 2010 – Mar 2013** for employment; note Mar 2010 join/training. |
+| 2 | “Spring Boot” at TCS (2010) | Spring Boot released **2014**. Likely **Spring Framework** / enterprise Java stack. Do **not** claim Spring Boot on 2010 work unless user confirms later Spring use. Tag as **Java/JEE, MVC, Spring (era-appropriate)**. |
+| 3 | Deposit workflow acronym | Earlier materials said **CAT**; this dump says **CAD** (Change Account Titling). **Use CAD** as primary; CAT may have been a mislabel. |
+| 4 | FAB naming | Dump uses FADB / First Abu Dhabi Bank — **FAB / First Abu Dhabi Bank**. |
+| 5 | RTP “~$1.3–1.4M value” | User-stated commercial scale — use only if comfortable; label as approximate programme value if used on resume. |
+| 6 | Concurrent Edgeverve clients | Bancolombia / BRAC / QNB overlap is normal for consulting — keep all. |
+| 7 | FIS title path | BA → stepped up when PO/PM left → **Agile Product Owner / TPM** for public materials. |
 
 ---
 
-## Professional summary (full — for tailoring)
+## Professional summary (full — pick/condense by JD)
 
-Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms from problem framing through production. Depth in **open banking (FDX)**, **API platforms**, **payments modernisation**, and **ISO 20022** across multi-market programmes.
+Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms from problem framing through production. Depth in **open banking**, **channel-agnostic API platforms**, **payments modernisation** (wires, ACH, RTP/FedNow, ISO 20022 / ISO 8583), and **multi-market** delivery.
 
-**Selected outcomes**
-- **IBS Fintech Innovation Award 2019** — Best Payments System Implementation (QNB Enterprise Payments Hub; 5 countries; integrations drove **~60% STP** improvement)
-- Inaugural **BPS digital banking APIs** for **Western Alliance Bank**
-- Origination **pre-processor** ownership in **Standard Chartered** payments transformation across **40+ markets**
-- **FIS (2021–present):** multi-tenant **Notification Platform** — one outbound API replacing fragmented multi-vendor SMS/email/push across bank channels
-
-**How I work:** own product definition, roadmap, backlog, API contracts, solution design, agile delivery, and stakeholder alignment across business, technology, risk, vendors, and bank clients — until it ships.
-
-### Summary variants (pick by JD)
-
-**Platform / API / open banking focus**  
-…emphasize Open Access Connect (FDX), MMH origination APIs, Wires/Business Hub APIs, Western Alliance launch, ISO 20022 / FDX.
-
-**Payments / rails / multi-market**  
-…emphasize SCB 40+ markets pre-processor, QNB hub, RTP, ACH/wires, clearing, multi-format (IFX, ISO 20022, MT/SWIFT, Pain.001).
-
-**Notifications / multi-tenant / SaaS platform**  
-…emphasize Notification Platform multi-tenant model, vendor-agnostic delivery, priority routing, failover, idempotency, audit trail, phased roadmap.
-
-**Transformation / legacy modernisation**  
-…emphasize reverse engineering, deposit origination, Finacle migrations, provider-agnostic decision models, coexistence of legacy and new stacks.
+**Signature outcomes**
+- **IBS Fintech Innovation Award 2019** — Best Payments System Implementation (QNB Enterprise Payments Hub; multi-country; **~60% STP** via intelligent intermediary routing / Bankers Almanac)
+- Turned around troubled implementations (QNB payments hub; FIS wires; IBS UI/UX modernisation)
+- **Western Alliance Bank**, **MidFirst Bank**, **Westmoreland** (BaaS) among FIS API clients
+- **Open Access Connect** — FDX-aligned data sharing, consent management dashboard, fintech consumers
+- **Standard Chartered** — multi-market core interfaces (40+ markets EBBS era) and later origination pre-processor in payments modernisation (40+ markets SCPAY)
+- **Current:** multi-tenant **Enterprise Notification Platform** — single outbound API (SMS/email/push)
 
 ---
 
-## Professional experience (full)
+# Experience (chronological, full narrative)
 
-### FIS — Agile Product Owner / TPM  
-**Jul 2021 – Present** · Virtual, Canada  
+## 1. Tata Consultancy Services (TCS) — May 2010 – March 2013
 
-Employment path: Independent contractor Jul 2021 – Jan 2023; specialist Feb 2023 – present. Product ownership across open banking, payment APIs, and enterprise notifications — problem definition, roadmap, contracts, backlog, and release.
+**Location:** Mumbai (primary); travel to **Dubai**, **Jordan**, **Ulaanbaatar (Mongolia)**  
+**Role progression:** Developer → hybrid Analyst/Developer + pre-sales support  
+**Product:** TCS Banks — **Loan Origination System (LOS)** — Corporate & Retail modules  
 
-#### Current — Enterprise Notification Platform
-- Identified fragmented multi-vendor notification delivery as an integration liability for bank clients; defined and drove a **multi-tenant Notification Platform** — one outbound API replacing siloed SMS/email/push, with priority routing, failover, idempotency, and full audit trail.
-- Owned product definition, roadmap, and phased execution from problem framing through **Stage 1 foundation** (vendor-agnostic delivery for SMS, email, and push).
-- Staged roadmap (intelligence → event-driven delivery; voice post-foundation) so early integrators remain stable as the platform evolves.
-- *Transferable tags:* multi-tenant SaaS, API product, vendor abstraction, reliability/ops concerns, phased platform strategy
+### Detailed experience
+- Joined **March 2010**; training in Trivandrum; specialized training on **Java Enterprise Edition 5 (JEE 5)** with **MVC** and enterprise patterns.
+- **Loan Origination System** full lifecycle: initiation, appraisal, approval, fieldwork/external verification, disbursement.
+- **Corporate LOS** — first customer **L&T Infra**: complex corporate flows, financial **ratio computations**, **P&L statement uploads**, custom **credit scoring framework/algorithm**.
+- **Retail LOS** — **Tata Capital Limited (TCL)** and **Tata Motor Finance**. For TCL: designed/implemented **hub-and-spoke visibility model** for multi-regional India ops (N/S/E/W). Regional HQ saw only regional data; central HQ full visibility — authorization, data segmentation, reporting.
+- Started as pure developer; mastered **rule-engine-based** product; moved into requirement sessions, writing requirements, client discussions.
+- **E2E ownership:** HLD/LLD, coding, build, SIT/UAT, production deployment, change management, post-go-live.
+- **Pre-sales:** Travel with pre-sales to **Dubai** and **Jordan** for RFP responses and live demos — architecture, capabilities, customization options.
+- **Khan Bank (Mongolia):** On-site system study, requirements, product fit for local LOS, requirement docs and solution design artifacts.
+- **Deployment era notes:** Small footprint product (~40–50 MB); deploy on sales laptops for offline use; DB scripts; **Oracle** install; **Tomcat** (also Glassfish, IBM WebSphere packaging experiments); standalone runtime.
+- Stack: **Java/JEE**, MVC, rule engines; Spring ecosystem as used in that product era *(do not force “Spring Boot” label for 2010)*.
 
-#### Money Movement Hub — Origination APIs · Product Owner
-- Owned product definition for **payment initiation** and **core integration APIs** connecting to **IBS** and **HZN** cores for enterprise clients.
-- Drove requirements, API contracts, and solution design for origination flows and **real-time payment status-update events**.
-- *Tags:* payment initiation API, core banking integration, event-driven status, interoperability
+### Skills demonstrated
+- Java/JEE, MVC, rule engines, financial domain modeling (credit scoring, ratios, P&L)
+- Packaged banking product lifecycle ownership
+- Requirements elicitation, functional specs, gap analysis
+- Pre-sales, RFP, live demos, international workshops
+- Multi-regional authorization / hub-and-spoke data models
+- On-prem/offline deployment (Oracle, Tomcat, alternate app servers)
+- Rapid product mastery; developer → hybrid analyst path
 
-#### Open Access Connect · Product Owner
-- Owned **open-banking data-sharing APIs** (accounts, balances, transactions, statements) with **identity and consent** — **FDX-aligned**.
-- Led gap analysis, backlog prioritization, and agile delivery with Tech, QA, and third-party integration stakeholders.
-- Drove solution design, API testing discipline, and scalability considerations for third-party consumers.
-- *Tags:* open banking, FDX, consent, data sharing APIs, TPP integration
-
-#### BPS Realtime Payments · Tech Lead / Product Owner · Jan 2024 – Dec 2024
-- Led API delivery for **real-time payment rails** — sprint coordination, integration testing, and release readiness.
-- Defined a **provider-agnostic decision model** for real-time rails; reverse-engineered legacy behaviour into serviceable product components and stories.
-- Facilitated integration patterns with payment ecosystems (e.g. **FISERV**, **FINASTRA** class integrations via PEX-agnostic DSM).
-- *Tags:* RTP, real-time payments, provider-agnostic design, reverse engineering, tech lead + PO
-
-#### Wires API & Business Hub Phase II · Product Owner · Aug 2023 – Jan 2024
-- Owned strategy and execution for **Business Hub Phase II APIs** with UI/UX-backed requirements and backend services.
-- Closed functional/technical gaps; launched **inaugural BPS digital banking APIs for Western Alliance Bank**.
-- Streamlined wire processes and API feature definition using mockups → stories → delivery.
-- *Tags:* wires, digital banking APIs, bank client launch, UX-backed product definition
-
-#### IBS Deposit Origination · Product Owner · Nov 2022 – Aug 2023
-- Led modernisation of **Deposit Origination** and **Service Request Management** (IBS SAS suite), including **CAT workflow** and UX redesign with PM and design partners.
-- Owned business-rule capture, backlog, and user stories from reverse engineering through delivery.
-- *Tags:* deposit origination, workflow, reverse engineering, UX partnership
-
-#### Banking Platform Services — ACH & Wires · Product Owner · Jul 2021 – Oct 2022
-- Early contribution on **channel-agnostic ACH APIs** (service breakdowns, mapping, testing) within BPS.
-- Later **led wires modernisation** with external processors (e.g. **eWires**, **Fundtech**); designed provider-agnostic decision support.
-- Reverse engineering, backlog refinement, service decomposition, user stories, architectural strategy with platform stakeholders.
-- *Tags:* ACH, wires, BPS, processor integration, channel-agnostic APIs
+### JD tags
+`loan-origination` `java` `credit-scoring` `pre-sales` `packaged-product` `multi-region-auth` `international-delivery` `oracle` `tomcat`
 
 ---
 
-### Capgemini Technology Services — Senior Manager · Lead Consultant · Implementation Consultant  
-**May 2019 – Jun 2021** · Virtual, India (multi-market programmes)
+## 2. Scope International (Standard Chartered GBS) — March 2013 – May 2016
 
-#### First Abu Dhabi Bank — Corporate Channel Rollout · Implementation Consultant · Aug 2020 – Jun 2021
-- Led **Saudi Arabia** rollout of **Corporate Web Portal** and **Host-to-Host (H2H)** services; vendor coordination and backlog ownership.
-- Gap analysis, interface design, stakeholder elicitation; user stories and journey definition.
-- Journeys: onboarding, entitlements, accounts, H2H (proprietary + **Pain.001**, **MT101**), bill payment, **WPS**, statements.
-- *Tags:* corporate banking channel, H2H, FAB, KSA rollout, journey design
+**Location:** Chennai, India; travel to **Singapore**  
+**Role:** Lead Analyst — Payments & Channel Integrations  
+**Context:** Core Banking Interfaces team within **EBBS (Electronic Branch Banking System)** — deployed across **40+ markets**. Core versions: **E10** (Middle East), **E11** (Asia & Africa), **E12** (Singapore, Malaysia, India & Far East).
 
-#### Standard Chartered — Global Payments Transformation · Lead Consultant · Aug 2019 – Jul 2020
-- Owned the **origination Pre-Processor** in SCB’s strategic payments transformation — phased migration to microservice **SCPAY** across **40+ markets** while corporate channel and payment apps moved in parallel.
-- Designed integration bridge across mixed migration states (legacy/new channel × legacy/new payment).
-- Multi-format: **IFX**, **ISO 20022**, **MT/SWIFT**, **Pain.001**; per product × country rollout plans.
-- Led analysts on system studies, backlog, functional decomposition, stories; documented as-is architecture and interface contracts.
-- Defined payments roadmap/strategy inputs using Capgemini Payment Reference Architecture patterns; ISO 20022-ready corporate message design for SWIFT migration readiness.
-- *Tags:* multi-market transformation, pre-processor, microservices payments, ISO 20022 migration, SCB
+### Detailed experience
+- Joined during major core banking consolidation/modernization (moving toward cloud).
+- **Primary mandate:** Standardize integrations/interfaces across core versions and countries.
+- **Key integrations owned:**
+  - Custodian banking product (TCS Banks) — **lien** management (hold/delete) and transaction posting
+  - Transaction banking and payment system interfaces
+  - Digital channels — especially **S2B (Straight-to-Bank)** corporate channel (fixed-length flat files). Led **S2B re-architecture** to standardize information download/dump across markets (high complexity: version differences, frequent format changes)
+- **Faster / real-time payments:** Started **Singapore**, expanded **India, Sri Lanka, Bahrain**, etc. Iterative: transaction posting first (timing issues), then inquiry, then improved posting. Coordinated downstream: statements, reconciliation, alerts, other interfaces.
+- **E12 Gold** rollout Singapore/Malaysia — on-site interface support in **Singapore** during go-live.
+- **Electronic IBFT (Malaysia):** Core banking handled full payment processing (no separate switch initially). Implemented **ISO 8583**; integrated **Euronet** gateway. Account-to-account, loan repayments (**RLS**), card repayments (**CCMS**). Multi-system flows and reconciliations.
+- **Change management:** Analyze CRs from country ops → impact analysis → effort/cost estimate → solution design with architects → **interface contracts** → development oversight → production.
+- **Release management:** Release notes; consolidated notes with other BAs (core + interface); **walkthroughs with CTOs and country heads** per version (E10/E11/E12). Cross-country feature reuse.
+- **Client-facing:** Calls with large **corporate treasurers** on balance calculations / S2B visibility discrepancies.
 
-#### Clearing Connect™ · Lead Consultant · Jun 2019 – Jul 2019
-- Designed hub-to-**CSM** integration flows (use cases, sequence diagrams) and **ISO 20022 → proprietary** transformation rules.
-- Requirement workshops, solution reviews, Jira stories aligned to clearing-scheme constraints.
-- *Tags:* clearing, CSM, ISO 20022 transformation, schemes
+### Skills demonstrated
+- Multi-version, multi-market core banking interface standardization
+- Payments: ISO 8583, IBFT, faster payments, transaction banking
+- Complex multi-system integration design (file, gateway)
+- Change/impact analysis, estimation, interface contracts
+- Release management & executive walkthroughs
+- Corporate client stakeholder management
+- On-site international go-live support
+- Iterative delivery + downstream impact coordination
 
----
-
-### Edgeverve Limited — Consultant · Functional Anchor · Product Owner  
-**Jun 2016 – May 2019** · Doha · London · Dhaka · Medellín
-
-#### Qatar National Bank — Enterprise Payments Hub · Functional Anchor · Mar 2017 – May 2019
-- Led **Finacle Enterprise Payments Hub** for QNB across **Qatar, France, UK, Singapore, Kuwait** (national payments modernisation context).
-- Multi-entity, multi-currency architecture (**15 payment types**, **16 channels**); **ISO 20022 SOA** consolidating **QIPS/QATCH** onto a real-time platform.
-- Cross-border, RTGS, ACH, real-time payments; regulatory/data lineage considerations.
-- Authored **FRSD/IRSD**; partnered with Finacle product engineering on base-product vs client-build tradeoffs; UAT and post-go-live change.
-- Integrations (incl. **Bankers Almanac** for intermediary population) improved **STP ~60%**.
-- **Award: Best Payments System Implementation — IBS Fintech Innovation Awards 2019**.
-- Training back-office teams; demos/POCs/UX journeys for platform capabilities.
-- *Tags:* Finacle, multi-entity payments hub, STP, award, ISO 20022 SOA, QNB
-
-#### BRAC Bank — Platform Migration · Functional Anchor · Jan 2017 – May 2019 (approx)
-- Payments-module focus for **Finacle 7.x → 10.x** UBS upgrade; system study, gap analysis, **Master Requirements Document (MRD)**.
-- Steered customization porting with bank stakeholders.
-- *Tags:* Finacle migration, gap analysis, MRD, Bangladesh
-
-#### Bancolombia — Enterprise Implementation · Product Owner · Jul 2016 – May 2019
-- Owned **FCY** and **RTGS (SEBRA)** tracks end-to-end — requirements, gap analysis, solution design for **SWIFT** and RTGS integrations.
-- *Tags:* LatAm payments, RTGS, SWIFT, Finacle, product ownership
+### JD tags
+`core-banking` `EBBS` `S2B` `ISO-8583` `IBFT` `faster-payments` `multi-market` `interface-contracts` `release-management` `Euronet` `lien-management` `SCB`
 
 ---
 
-### Scope International (Standard Chartered GBS) — Lead Analyst · Payments & Channel Integrations  
-**Mar 2013 – May 2016** · Chennai, India  
+## 3. Edgeverve Limited — June 2016 – May 2019
 
-- Multi-system integrations: **core banking**, corporate **S2B**, retail channels (IB), payments (**DotOpal**, **STS**), reconciliation (**TLM**).
-- Rolled out **real-time / FASTER** payment capabilities in **Singapore, Malaysia, Bahrain, Sri Lanka** with market-specific compliance.
-- Requirements, interface specs, impact analysis (upstream/downstream), change requests across multi-entity releases.
-- *Tags:* SCB GBS, real-time payments Asia, interface specs, multi-entity, TLM
+**Locations:** Primarily **Doha**; travel **Medellín**, **Dhaka**, **London**  
+**Role progression:** Consultant → Functional Anchor / Product Owner (Finacle Enterprise Payments)
 
----
+### Detailed experience
+- Training: **Finacle Core Banking** (1 month) + **Finacle Enterprise Payments Hub** (1 week).
+- **Bancolombia (Medellín)** — Owned **FCY (Foreign Currency)** track for Finacle Enterprise Payments. System study, requirements, user stories in **Agile** (first real Agile exposure). Spanish-speaking users via translators.
+- India support for product capability enhancements.
+- **BRAC Bank (Dhaka)** — Finacle **7.x → 10.x** payments module upgrade; short on-site; system study + requirement documents.
+- **Qatar National Bank (QNB) Enterprise Payments Hub — flagship**
+  - Took over **troubled project** (prior team over-promised and exited). Re-did requirements from scratch; clarified domain for development (payments product still maturing).
+  - Context: FIFA World Cup preparation, very high volumes, major **USD correspondent** bank in Middle East. Close work with **Treasury** and **Operations**.
+  - Immature base product — first major client implementation. Collaborated with **Finacle Product Engineering**: fed gaps; some became base product, others custom.
+  - **Bankers Almanac** integration → intelligent **intermediary routing**; auto-populate correspondents by destination bank → optimized cost + **~60% STP** improvement.
+  - Delivered **FCY**, **Payroll**, **ACH**, **Domestic RTGS**.
+  - Extended design for **QNB Singapore, India, Kuwait, UK, Europe** (incl. **SEPA**).
+  - **London:** Operations floor first days of go-live; user training; payment reconciliations; production issues. Similar hands-on for Qatar go-live.
+  - Championed **Jira** for defects/requirements; workflows between Infosys/Finacle product (offshore) and Doha implementation/customization team.
+  - Outcome: Stabilized, delivered, **IBS Fintech Innovation Award 2019** — Best Payments System Implementation.
 
-### Tata Consultancy Services — Systems Analyst · Product Delivery  
-**May 2010 – Mar 2013** · Mumbai · Ulaanbaatar  
+### Skills demonstrated
+- Enterprise Payments Hub (multi-currency, multi-entity, multi-channel, ISO 20022 concepts)
+- Product ownership in high-stakes implementations; **turnaround** of troubled programmes
+- Base product vs custom trade-offs with product engineering
+- Agile (stories), system study, gap analysis, FRSD/IRSD-class documentation
+- Intelligent routing / data-driven STP optimization
+- Multi-country rollout + on-site go-live / ops floor support
+- Jira workflow design; cross-team product vs implementation coordination
+- Treasury/Operations stakeholder engagement; user training; reconciliation
 
-#### Tata Capital / Tata Motor Finance — Retail Loan Origination
-- Design and build from **HLD/LLD**, SIT/UAT support, production install, change management, client demos.
-- *Tags:* loan origination, SDLC, change management
-
-#### Khan Bank (Mongolia) — Retail Loan Origination · ~Jan–Mar 2013
-- Requirements, gap analysis, effort estimation, solution documentation.
-- *Tags:* loan origination, banking implementation, Mongolia
-
----
-
-## Education
-
-| Degree | School | Years |
-|--------|--------|-------|
-| Executive MBA | Quantic School of Business and Technology | 2023 – 2024 |
-| Bachelor of Engineering, Electrical | Anna University | 2005 – 2009 |
-
----
-
-## Certifications
-
-- Certified Scrum Master (CSM®)
-- SAFe® POPM
-- SAFe® Agilist (SA)
-- ISO 20022 Masterclass
+### JD tags
+`Finacle` `enterprise-payments-hub` `STP` `Bankers-Almanac` `correspondent-banking` `QNB` `turnaround` `SEPA` `RTGS` `ACH` `payroll` `ISO-20022` `award`
 
 ---
 
-## Skills bank (full — for JD matching)
+## 4. Capgemini Technology Services — May 2019 – June 2021
 
-### Product & delivery
-Product strategy · roadmaps · PRDs / FRSD / IRSD / MRD · backlog prioritization · user stories & acceptance criteria · discovery / elicitation · gap analysis · solution design · customer journey design · agile / Scrum / SAFe · stakeholder management · vendor evaluation & delivery · phased platform execution · reverse engineering legacy → product components
+**Role:** Senior Manager / Lead Consultant / Implementation Consultant
 
-### Domain — banking & payments
-Open banking · FDX · digital banking · API banking · core banking · payment initiation · ACH · wires · RTP / real-time payments · RTGS · clearing & settlement · multi-entity / multi-currency · multi-market rollout · corporate channels · H2H · deposit origination · notifications (SMS/email/push) · multi-tenant platforms
+### Standard Chartered — Payments modernisation (SCPAY)
+- Strategic modernisation to microservice payment system **SCPAY**.
+- Recruited for **Origination Pre-Processor** based on prior SCB core banking experience.
+- Led **BA team**: system studies across channels (incl. transforming **S2B**), format analysis, **adapters** non-standard → standard formats, **integration bridges** legacy ↔ new.
+- Multi-format support; per-product/country rollout considerations.
+- Related: **Clearing Connect™** — hub-to-CSM flows, ISO 20022 → proprietary transformation, scheme-aligned stories.
 
-### Standards & messaging
-ISO 20022 (PAIN, PACS, CAMT, Pain.001) · SWIFT MT (e.g. MT1xx, MT2xx, MT9xx) · ISO 8583 · IFX · proprietary scheme formats · consent / identity for data sharing
+### First Abu Dhabi Bank (FAB) — Corporate channel Saudi rollout
+- Digital/corporate banking channel rollout for **Saudi Arabia** (market opening to external banks).
+- Vendor evaluation participation, requirements, successful rollout support.
+- Some **G-banking** requirements for **UAE**.
+- User journeys: onboarding, entitlements, accounts, **H2H**, bill payment, **Wage Protection System (WPS)**.
+- **Regulator interaction** for WPS.
+- User stories; guided client ops on how to articulate requirements into vendor product; **UAT alongside users**.
+
+### Skills demonstrated
+- Payments modernisation in microservices architecture
+- Adapter/format transformation; ISO 20022 clearing patterns
+- BA team leadership
+- Corporate digital channel rollout in new markets
+- Journey definition, vendor management, regulatory interaction (WPS)
+- Requirements translation + UAT facilitation
+
+### JD tags
+`SCPAY` `pre-processor` `microservices-payments` `FAB` `H2H` `WPS` `vendor-management` `multi-format-adapters` `ISO-20022` `Clearing-Connect`
+
+---
+
+## 5. FIS — July 2021 – Present
+
+**Role progression:** Business Analyst → Product Owner / Technical Product Manager (Banking Platform Services / Digital One Business)  
+**Public title:** **Agile Product Owner / TPM**
+
+### Early — District One Business (D1B) API modernisation
+- Joined as **Business Analyst** on API modernisation.
+- Led **Acceptance Criteria** conversations (digital banking familiarity).
+- When PO/PM were let go, **stepped up** to own ACs and product direction.
+
+### Wires API modernisation (D1B / BPS Wires)
+- Took over **troubled Wires** initiative; led from scratch through UAT and production.
+- Clients: **Western Alliance Bank** (inaugural BPS digital banking APIs), **MidFirst Bank** (short-track mortgage processing platform for brokers/bankers), **Westmoreland Bank** (BaaS wrapper — customers onboard to their platform then FIS for wire initiation), others.
+- Features: inquiries, updates, legacy base access; integrations with payment systems (**OPAY**, **Fiserv/Dovetail**) via **IBM MQ**.
+
+### Banking Platform Services (BPS) evolution
+- D1B APIs rebuilt as channel-agnostic **Banking Platform Services** (retail + corporate).
+- **De-facto Product Owner** (periods without dedicated PM). With delivery lead: defined scope, wrote epics, client system studies → API equivalents, client interactions, production rollout, publish to **CodeConnect** API platform.
+
+### IBS UI/UX modernisation — Deposit Origination & SRM
+- Stabilized troubled project.
+- Owned **Deposit Origination** (hardcoded + dynamic/authored pages) and **Change Account Titling (CAD)** workflows.
+- Workflows: progress tracking, validations, document uploads, **e-signature (DocuSign)**, document/form generation, card generation integrations.
+- Two main workflows: direct bank vs traditional.
+- Authored pages: complex, dynamic, rule-based, highly customizable per bank.
+- Focus on hardcoded pages: progress stories, ACs, acceptance testing, release to clients.
+
+### BPS Real-Time Payments (RTP) & Money Movement Hub
+- Delivered channel-agnostic **RTP API** (similar scale/success to Wires; approx **$1.3–1.4M** programme value — use carefully).
+- **Money Movement Hub:** Replace legacy vendor product (**Plus from Fiserv**) for Tier 2/3 banks. Origination API contracts following **ISO 20022**. Owned core integrations (**IBS/HZN**): transaction posting, enquiries, balance checks, place/remove **liens**, account validity. Applied to **RTP** and **FedNow**.
+
+### Open Access Connect (open banking data outreach)
+- Product Owner for data-sharing strategy.
+- Fintech/vendor consumers: **Yodlee/Playa, MX, Finicity**, etc. — accounts, balances, transactions, statements.
+- Flow: fintech onboarding → **user consent** → identity via **NGINX Gen Authentication** → consent validation & entitlement → data fetch/share if authorized.
+- Built **Consent Management Dashboard** (app-permission style control across accounts/applications).
+- Rolled out for **Digital One Retail** and **Digital One Business**.
+
+### Business Hub ideation
+- Owned **discovery and definition** (incl. UI/UX) for marketplace-style multi-bank data + cash-flow management experience.
+- Handed over to dedicated Product Manager for build phase.
+
+### Current — Enterprise Notification Platform
+- Identified fragmented multi-vendor notification delivery as integration pain for bank clients.
+- Defined multi-tenant platform: **single outbound API** (SMS, email, push) — priority routing, failover, idempotency, full audit trail.
+- Owned product definition, roadmap (foundation → intelligence → event-driven → voice), phased execution so early integrators stay stable.
+
+### Skills demonstrated at FIS
+- API/platform product ownership (channel-agnostic design, contracts, CodeConnect publishing)
+- API modernisation; RTP/FedNow; wires; money movement
+- UI/UX modernisation for complex banking workflows (hardcoded vs dynamic pages, DocuSign)
+- Client go-live; **BaaS** models
+- Cross-functional leadership without dedicated PM at times
+- Open banking / consent platforms; fintech integrations
+- Troubled-project stabilization
+- ISO 20022 in origination + core integrations
+- Deep core banking integration patterns (posting, liens, balances, validation)
+
+### JD tags
+`API-product` `BPS` `wires` `RTP` `FedNow` `ISO-20022` `open-banking` `FDX` `consent-management` `CodeConnect` `BaaS` `DocuSign` `multi-tenant` `notifications` `Money-Movement-Hub` `Western-Alliance` `MidFirst` `IBM-MQ` `Fiserv` `IBS` `HZN`
+
+---
+
+# Consolidated skills inventory
+
+### Product management & ownership
+- Full lifecycle: problem framing → roadmap → epics/stories → delivery → production  
+- Roadmap planning, backlog prioritization, acceptance criteria, UAT facilitation  
+- Discovery workshops, client system studies, product vision  
+- Base product vs customization trade-offs  
+- Turning around troubled / sinking projects  
+- De-facto PO when org gaps; handoff to dedicated PMs after discovery (Business Hub)
+
+### Payments & banking domain
+- ISO 20022, ISO 8583, RTGS, ACH, wires, RTP/FedNow, SEPA, IBFT  
+- Correspondent banking, intermediary routing, STP optimization  
+- Multi-format transformations / adapters  
+- Core banking integrations: posting, enquiries, balances, liens, account validation  
+- Faster/real-time payments implementation  
+- Loan origination (corporate & retail), credit scoring, hub-and-spoke regional models  
+- Corporate channels (S2B, H2H, WPS), EBBS multi-market core  
+
+### Open banking, APIs & platforms
+- FDX-aligned data sharing; consent management & dashboards  
+- Channel-agnostic API design (retail + corporate)  
+- Multi-tenant platforms (notifications, data outreach)  
+- API publishing (CodeConnect); marketplace ideation (Business Hub)  
+- Fintech/vendor onboarding (Yodlee, MX, Finicity, etc.)  
+- BaaS wrapper patterns (e.g. Westmoreland)  
+
+### Technical & development
+- Java/JEE 5, MVC, rule engines; Spring ecosystem (era-appropriate)  
+- Web/app server deployment & packaging (Tomcat, Glassfish, WebSphere, etc.)  
+- Dynamic UI frameworks; authored vs hardcoded pages; DocuSign  
+- Integration patterns: IBM MQ, file-based, payment gateways (Euronet, etc.)  
+- Offline/small-footprint product deployment (historical)  
+- Oracle DB scripts / install (historical LOS)  
+
+### Agile, delivery & process
+- Scrum, SAFe, Jira workflow design & championing  
+- Change management, impact analysis, effort estimation, interface contracts  
+- Release notes; version walkthroughs with CTOs/country heads  
+- Multi-country / multi-market rollouts and go-live support  
+- UAT coordination and production stabilization  
+
+### Leadership, client & soft skills
+- Stakeholders: Treasury, Operations, CTOs, regulators, corporate treasurers, fintechs  
+- International travel & on-site support (ME, UK, Colombia, Bangladesh, Singapore, Mongolia, Dubai, Jordan, etc.)  
+- Pre-sales, RFP responses, live product demos  
+- Cross-team coordination (product engineering vs implementation)  
+- Explaining technical concepts to non-technical audiences  
+- BA team leadership; mentoring; stepped-up ownership  
 
 ### Platforms & products (worked with)
-Finacle Enterprise Payments · FIS / BPS platform APIs · IBS / HZN core connectivity · FISERV / FINASTRA class ecosystems · Fundtech · eWires · Bankers Almanac · S2B · DotOpal · STS · TLM · Capgemini Payment Reference Architecture patterns
+Finacle Core / Enterprise Payments Hub · FIS BPS / Digital One · IBS / HZN · CodeConnect · OPAY · Fiserv/Dovetail · Fundtech/eWires (earlier wires modernisation) · Euronet · Bankers Almanac · S2B · TLM (reconciliation context) · RLS · CCMS · Capgemini Clearing Connect / Payment Reference Architecture patterns · DocuSign · NGINX Gen Authentication (consent path)
 
-### Tools & technical collaboration
-Jira · Confluence · Postman · Swagger/OpenAPI · Visio · PowerPoint · GitHub · SharePoint · HP QC / similar test tools · IBM MQ · WebSphere / Weblogic (integration environments) · SQL · familiarity with Java ecosystems in banking stacks · AWS (as used in modern platform contexts)
-
-### Soft / leadership (evidence-backed)
-Cross-functional leadership · multi-vendor coordination · bank client launches · analyst team leadership · training / handover · UAT ownership · workshop facilitation
+### Certifications & education
+- CSM® · SAFe® POPM · SAFe® Agilist (SA) · ISO 20022 Masterclass  
+- Executive MBA — Quantic (2023–2024)  
+- B.E. Electrical — Anna University (2005–2009)  
 
 ---
 
-## Side projects & portfolio (optional for JD / interviews)
+## Side projects (optional for JD / interviews)
 
-| Project | One-liner | Links |
-|---------|-----------|--------|
-| **PMRocket** | Market-grounded PM career navigation — archetype match, evidence roadmap, gap intelligence (RAG); production-shaped SaaS on free tier | github.com/vcatreya-git/pmrocket · profile case study |
-| **Case studies** | Blinkit PeakPulse (ops DSS), Relay/Envoy founder CRM, YouTube long-form | vcatreya-git.github.io/#case-studies |
-| **Predictopia** | Sports prediction league platform (in progress) | github.com/vcatreya-git/predictopia |
-
-Use on JD-tailored resumes only when relevant (AI product, consumer product, 0→1, portfolio proof).
+| Project | Notes |
+|---------|--------|
+| PMRocket | PM career navigation platform; production-shaped SaaS; AI/RAG gap path |
+| Case studies | Blinkit PeakPulse, Relay/Envoy, YouTube long-form — research, PRDs, prototypes |
+| Predictopia | Sports prediction league (in progress) |
 
 ---
 
 ## Generic public resume policy
 
-The site resume (`index.html`) is a **crisp cut** of this master:
-- Title: Agile Product Owner / TPM  
-- Summary: outcomes-first (award, WAB, SCB 40+, notifications)  
-- All employers retained; bullets 2–3 per major track  
-- Skills: high-signal subset only  
-- **Not** a full skills dump — that lives here for JD tailoring  
+Site resume is a **crisp cut**:
+- Title: **Agile Product Owner / TPM**
+- Outcomes: award/STP, WAB (+ clients as space allows), SCB multi-market, open banking, notifications
+- Not a full skills dump — that lives **only** in this master
 
-When regenerating the public resume, prefer this master over older DOCX language (which is more BA/marketing-heavy).
+When regenerating public resume or tailoring to a JD, **this file wins** over older DOCX/PDF marketing language.
 
 ---
 
-## Source files
-
-| File | Role |
-|------|------|
-| `data/experience-master.md` | **This file — canonical** |
-| `data/experience-master-source.pdf` | User-compiled dump (2026-07-20) archived for reference |
-| `assets/Venkatraman-Chandrasekar-Resume.docx` | Older long-form (stale titles/BA language) — mine for detail only |
-| `index.html` | Public generic profile + resume |
-
----
-
-*Last verified: 2026-07-20 · Model: grok-4.5 · Owner: Venkat*
+*Canonical master · 2026-07-20 · Supersedes short PDF-era master · Not linked from public homepage*
