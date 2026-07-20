@@ -2,6 +2,16 @@
 
 Personal profile site — resume, **PM case studies**, and side projects.
 
+## Experience master (not on the public page)
+
+| File | Purpose |
+|------|---------|
+| [`data/experience-master.md`](./data/experience-master.md) | **Canonical full experience + skills bank** for JD-tailored resumes |
+| [`data/RESUME-WORKFLOW.md`](./data/RESUME-WORKFLOW.md) | How agents use the master |
+| `data/experience-master-source.pdf` | Original compiled dump (archive) |
+
+The homepage resume is a **crisp generic cut**. Paste a JD in chat and ask for a custom resume from the master.
+
 ## Case studies
 
 Group finals (Team Hashiras) **and** personal research / alternate concepts, labeled on the site:
