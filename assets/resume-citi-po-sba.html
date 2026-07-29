@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venkatraman Chandrasekar — Resume (Citi PO / SBA SVP)</title>
+<style>
+:root {
+  --slate-900: #0f172a;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --blue: #0F4C81;
+  --blue-dark: #0A3559;
+  --blue-soft: #E8F1F8;
+  --blue-border: #B8D0E6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f8fafc;
+  color: var(--slate-700);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 32px 20px;
+}
+.no-print {
+  max-width: 820px; margin: 0 auto 16px;
+  display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; align-items: center;
+}
+.no-print button, .no-print a {
+  font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 6px;
+  border: none; cursor: pointer; text-decoration: none; display: inline-block;
+}
+.btn-p { background: var(--blue); color: white; }
+.btn-s { background: white; color: var(--slate-700); border: 1.5px solid var(--slate-200); }
+.draft-tag {
+  font-size: 12px; font-weight: 600; color: var(--blue-dark);
+  margin-right: auto; padding: 6px 10px; background: var(--blue-soft); border-radius: 6px;
+}
+.paper {
+  max-width: 820px; margin: 0 auto;
+  background: white;
+  padding: 40px 44px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.rh { border-bottom: 2px solid var(--slate-900); padding-bottom: 14px; margin-bottom: 16px; }
+.rh-row { display: flex; gap: 16px; align-items: flex-start; }
+.rh-photo {
+  width: 80px; height: 80px; border-radius: 8px; object-fit: cover; object-position: center top;
+  border: 1px solid var(--slate-200); flex-shrink: 0;
+}
+.rh h1 { font-size: 22px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.4px; margin-bottom: 2px; }
+.rh .title { font-size: 13px; font-weight: 600; color: var(--blue-dark); margin-bottom: 7px; }
+.rh-contact { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--slate-600); }
+.rh-contact a { color: var(--slate-700); font-weight: 500; text-decoration: none; }
+
+.rb { margin-bottom: 15px; }
+.rb h2 {
+  font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--slate-900); border-bottom: 1px solid var(--slate-200);
+  padding-bottom: 5px; margin-bottom: 9px;
+}
+.rb p { font-size: 13px; color: var(--slate-700); line-height: 1.55; }
+
+.match-bar {
+  background: var(--blue-soft); border: 1px solid var(--blue-border); border-radius: 6px;
+  padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: var(--blue-dark);
+}
+.match-bar strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 5px; }
+.match-bar ul { padding-left: 16px; }
+.match-bar li { margin-bottom: 2px; }
+
+.job { margin-bottom: 12px; }
+.job-top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px; flex-wrap: wrap; }
+.job-role { font-size: 13.5px; font-weight: 700; color: var(--slate-900); }
+.job-org { font-size: 12.5px; font-weight: 600; color: var(--slate-500); }
+.job-dates { font-size: 11.5px; color: var(--slate-400); text-align: right; flex-shrink: 0; }
+.job-sub {
+  font-size: 11.5px; font-weight: 700; color: var(--blue-dark);
+  margin: 7px 0 3px; text-transform: uppercase; letter-spacing: .4px;
+}
+.job-intro { font-size: 12.5px; color: var(--slate-500); margin: 2px 0 8px; line-height: 1.4; }
+.rb ul { padding-left: 17px; }
+.rb li { font-size: 13px; color: var(--slate-700); margin-bottom: 3px; line-height: 1.42; }
+
+.skill-row { margin-bottom: 6px; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.skill-label {
+  font-size: 11px; font-weight: 700; color: var(--slate-500);
+  text-transform: uppercase; letter-spacing: .5px; min-width: 128px; flex-shrink: 0;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  font-size: 11px; font-weight: 600; color: var(--slate-700);
+  background: var(--slate-100); border: 1px solid var(--slate-200);
+  padding: 3px 8px; border-radius: 100px;
+}
+.chip.hi { background: var(--blue-soft); border-color: var(--blue-border); color: var(--blue-dark); }
+.inline-list { display: flex; flex-wrap: wrap; gap: 5px; }
+
+@media print {
+  @page { size: A4; margin: 10mm 11mm 12mm; }
+  body { background: white; padding: 0; font-size: 10pt; }
+  .no-print { display: none; }
+  .paper { box-shadow: none; padding: 0; max-width: none; }
+  .match-bar { display: none; }
+  .rb li { font-size: 9.4pt; line-height: 1.32; }
+  .rh h1 { font-size: 15.5pt; }
+  .job { margin-bottom: 9px; }
+  .chip { font-size: 8.5pt; }
+  .rb { margin-bottom: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <span class="draft-tag">Citi · Product Owner / Senior BA (SVP) · multi-entity focus</span>
+  <a class="btn-s" href="../index.html">Profile</a>
+  <a class="btn-s" href="resume-stripe-connect-v2.html">Stripe draft</a>
+  <button class="btn-p" onclick="window.print()">Save as PDF</button>
+</div>
+
+<article class="paper">
+
+  <header class="rh">
+    <div class="rh-row">
+      <img class="rh-photo" src="profile.jpg" alt="Venkatraman Chandrasekar" width="80" height="80"/>
+      <div>
+        <h1>Venkatraman Chandrasekar</h1>
+        <p class="title">Product Owner · Senior Business Analyst · Complex Banking Delivery</p>
+        <div class="rh-contact">
+          <a href="mailto:vc.atreya@gmail.com">vc.atreya@gmail.com</a>
+          <span>·</span>
+          <span>647-917-2912</span>
+          <span>·</span>
+          <span>Greater Toronto Area · open to hybrid (Mississauga / GTA)</span>
+          <span>·</span>
+          <a href="https://www.linkedin.com/in/chandrasekarvenkatraman">LinkedIn</a>
+          <span>·</span>
+          <a href="https://vcatreya-git.github.io">vcatreya-git.github.io</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="match-bar">
+    <strong>Tailored for Citi Req 26960706 — Product Owner Senior Business Analyst (SVP)</strong>
+    <ul>
+      <li><strong>Multi-entity complexity as a strength:</strong> QNB 5-country hub, SCB 40+ markets, FIS multi-client platform products — not theoretical</li>
+      <li>PO + senior BA + multi-initiative delivery language (vision, roadmap, BRDs/stories, E2E ownership)</li>
+      <li>Stakeholder, risk/control, regulatory, Agile/hybrid — bank-grade; no Fenergo claim (preferred, not required)</li>
+      <li>GenAI framed as adoption opportunity + hands-on builder practice, not vendor keywords</li>
+    </ul>
+  </div>
+
+  <div class="rb">
+    <h2>Professional summary</h2>
+    <p>
+      Product Owner and Senior Business Analyst with 15+ years in global banking and financial
+      services technology — defining product vision, shaping multi-year roadmaps, and driving
+      end-to-end delivery of complex, concurrent initiatives. I thrive in multi-entity, multi-market
+      environments where scope, regulation, and dependencies cut across business, technology,
+      operations, risk, and compliance. Proven at QNB (5-country Enterprise Payments Hub; ~60% STP;
+      IBS Fintech Innovation Award 2019), Standard Chartered (payments modernisation and core
+      interfaces across 40+ markets), and FIS (concurrent platform products: open banking consent/
+      account lifecycle, multi-tenant notifications, rail-agnostic payment origination). Strengths:
+      executive-ready communication, rigorous BA artifacts (BRDs, FRDs, stories, acceptance criteria,
+      process and data flows), and delivery under governance — Agile, waterfall, and hybrid.
+    </p>
+  </div>
+
+  <div class="rb">
+    <h2>Signature multi-entity &amp; multi-initiative outcomes</h2>
+    <ul>
+      <li><strong>QNB — multi-entity payments hub:</strong> Took over a troubled programme; rebuilt requirements and delivered multi-entity, multi-currency architecture across Qatar, France, UK, Singapore, and Kuwait (15 payment types, 16 channels). Intelligent correspondent routing improved STP ~60%; programme recognised with IBS Fintech Innovation Award 2019.</li>
+      <li><strong>Standard Chartered — multi-market complexity:</strong> Owned Origination Pre-Processor spanning mixed migration states (legacy/new channel × legacy/new engine) for 40+ markets; multi-format adapters (IFX, ISO&nbsp;20022, MT/SWIFT) and country × product rollout plans. Earlier: standardised payment/channel interfaces and real-time payment rollouts across multiple countries.</li>
+      <li><strong>FIS — concurrent platform initiatives:</strong> Simultaneously own/drive open banking (Open Access Connect), multi-tenant Notification Platform, Money Movement Hub, and RTP/FedNow/Wires APIs — balancing strategic roadmap with tactical delivery across bank clients and fintech integrators.</li>
+    </ul>
+  </div>
+
+  <div class="rb">
+    <h2>Professional experience</h2>
+
+    <div class="job">
+      <div class="job-top">
+        <div>
+          <div class="job-role">Agile Product Owner / TPM</div>
+          <div class="job-org">FIS · Banking platforms (open banking, payments APIs, enterprise notifications)</div>
+        </div>
+        <div class="job-dates">Jul 2021 – Present · Canada</div>
+      </div>
+      <p class="job-intro">
+        Own product vision inputs, roadmaps, requirements, and delivery outcomes across multiple
+        concurrent platform initiatives. Partner with technology, business clients, and operations
+        through contracts, backlog prioritisation, UAT, and release.
+      </p>
+
+      <p class="job-sub">Multi-initiative ownership · Platform product portfolio</p>
+      <ul>
+        <li>Lead concurrent high-impact workstreams (open banking, payment origination, real-time rails, notifications) with explicit management of scope, dependencies, risks, and sequencing across clients and technology partners.</li>
+        <li>Produce and govern BA/PO artifacts: epics, user stories, acceptance criteria, API contracts, process flows, and solution design inputs; keep requirements testable and release-ready. Navigate multi-client release governance — formal change management, multi-tier approval gates, and risk-aware rollout sequencing across bank clients and BaaS integrators.</li>
+        <li>Translate complex technical and integration topics into clear status, options, and recommendations for business and technology stakeholders; manage expectation shifts on scope and timeline.</li>
+      </ul>
+
+      <p class="job-sub">Open Access Connect — Open Banking · Account &amp; consent lifecycle</p>
+      <ul>
+        <li>Owned FDX-aligned platform for fintech aggregator onboarding and bank data access — modeling third-party identity, authorized applications, data scope, consent lifecycle, and entitlement checks (client-lifecycle and control-sensitive domain adjacent to KYC/CLM patterns).</li>
+        <li>Defined end-to-end flow: fintech onboarding → user consent → authentication → entitlement → authorized data fetch; shipped Consent Management Dashboard reused across retail and business channels.</li>
+        <li>Balanced regulatory/control expectations (consent, permissioning, auditability) with integrator experience — one abstraction, multiple client surfaces.</li>
+      </ul>
+
+      <p class="job-sub">Money Movement Hub · RTP / FedNow / Wires · Notification Platform</p>
+      <ul>
+        <li>Owned ISO&nbsp;20022-aligned origination contracts abstracting posting, balances, lien placement, and account validation across wires, RTP/FedNow, and ACH — scalable multi-rail design for enterprise bank clients.</li>
+        <li>Delivered channel-agnostic RTP/FedNow APIs; turned around troubled Wires API programme through UAT to production (digital banking, mortgage platforms, BaaS initiation patterns).</li>
+        <li>Defined multi-tenant Notification Platform (single outbound API for SMS/email/push) with staged roadmap (foundation → event-driven), failover, idempotency, and audit trail — consolidating fragmented vendor operating models under governance-friendly controls.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div>
+          <div class="job-role">Senior Manager · Lead Consultant</div>
+          <div class="job-org">Capgemini Technology Services · Global banking programmes</div>
+        </div>
+        <div class="job-dates">May 2019 – Jun 2021 · India</div>
+      </div>
+
+      <p class="job-sub">Standard Chartered — Payments modernisation (multi-market)</p>
+      <ul>
+        <li>Owned Origination Pre-Processor for strategic payments modernisation across 40+ markets — bridging concurrent legacy and target states without stopping the business.</li>
+        <li>Led requirements, interface contracts, multi-format adapters, and country × product rollout planning — every release subject to formal change management with multi-tier approval gates; owned impact analysis, risk communications, and release note walkthroughs with CTOs and country heads across 40+ markets.</li>
+        <li>Mentored and directed BA/analyst capacity on system studies, backlog quality, and cross-market consistency — building team capability while owning programme outcomes.</li>
+      </ul>
+
+      <p class="job-sub">First Abu Dhabi Bank — Corporate channel rollout</p>
+      <ul>
+        <li>Led Saudi Arabia implementation of Corporate Web Portal and Host-to-Host: participant onboarding, entitlements, accounts, bill payment, and Wage Protection System (WPS) with regulatory coordination — multi-party lifecycle and compliance-sensitive delivery.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div>
+          <div class="job-role">Product Owner · Functional Anchor</div>
+          <div class="job-org">Edgeverve (Infosys) · Finacle payments · multi-entity banking</div>
+        </div>
+        <div class="job-dates">Jun 2016 – May 2019 · Doha · London · Dhaka · Medellín</div>
+      </div>
+
+      <p class="job-sub">Qatar National Bank — Enterprise Payments Hub (multi-entity success story)</p>
+      <ul>
+        <li><strong>Complex multi-entity environment:</strong> Rebuilt a troubled multi-country hub from requirements up — multi-entity, multi-currency delivery across five jurisdictions with heterogeneous channel and product matrices (15 payment types, 16 channels, ISO&nbsp;20022 SOA).</li>
+        <li>Full E2E ownership from discovery through post-delivery: problem framing, solution options, stakeholder alignment, UAT support, on-site go-live operations (Qatar and London floors), and post-delivery optimisation — risk identification and escalation active throughout, with clear decision materials presented to bank senior leadership at every governance gate.</li>
+        <li>Partnered with product engineering on base vs custom trade-offs; productised recurring custom gaps into platform capabilities — reducing one-off delivery risk and improving long-term operability.</li>
+        <li>Operated as trusted counterpart to Treasury, Operations, and regional heads across five jurisdictions; owned progress, risk, and strategic options communications for programme governance and steering forums.</li>
+      </ul>
+
+      <p class="job-sub">BRAC Bank · Bancolombia</p>
+      <ul>
+        <li>Led gap analysis and requirements for major payments platform migration (BRAC Finacle 7.x → 10.x); owned FCY and RTGS tracks end-to-end at Bancolombia under Agile delivery.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div>
+          <div class="job-role">Lead Analyst — Payments &amp; Channel Integrations</div>
+          <div class="job-org">Scope International (Standard Chartered GBS)</div>
+        </div>
+        <div class="job-dates">Mar 2013 – May 2016 · Chennai</div>
+      </div>
+      <ul>
+        <li>Standardised core banking payment and channel interfaces across 40+ markets; real-time payment capability rollouts in Singapore, India, Sri Lanka, Bahrain; on-site go-lives in Singapore and Malaysia.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div>
+          <div class="job-role">Systems Analyst · Product Delivery</div>
+          <div class="job-org">Tata Consultancy Services</div>
+        </div>
+        <div class="job-dates">May 2010 – Mar 2013 · Mumbai · Ulaanbaatar</div>
+      </div>
+      <ul>
+        <li>Loan origination end-to-end (Tata Capital, Tata Motor Finance, Khan Bank) — design through production; hub-and-spoke authorization models for multi-regional operations.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rb">
+    <h2>Builder work &amp; GenAI practice</h2>
+    <ul>
+      <li><strong>Hands-on GenAI / AI-assisted delivery:</strong> Use modern AI tooling as a delivery co-pilot from discovery and PRD through production code — practical experience identifying where GenAI improves analysis speed, documentation quality, and product iteration (aligned to Citi interest in GenAI adoption for efficiency and insight).</li>
+      <li><strong>PMRocket</strong> — End-to-end product: discovery, PRD, architecture, production build (career navigation with market-grounded intelligence).</li>
+      <li><strong>Predictopia</strong> — Multi-pool platform delivered PRD-to-production in a focused sprint (scoring, real-time updates, multi-tenant pools).</li>
+    </ul>
+  </div>
+
+  <div class="rb">
+    <h2>Skills</h2>
+    <div class="skill-row">
+      <span class="skill-label">Product &amp; BA</span>
+      <div class="chips">
+        <span class="chip hi">Product vision &amp; roadmap</span>
+        <span class="chip hi">Multi-initiative ownership</span>
+        <span class="chip hi">BRD / FRD / user stories</span>
+        <span class="chip hi">Acceptance criteria</span>
+        <span class="chip hi">Process &amp; data flows</span>
+        <span class="chip hi">UAT leadership support</span>
+      </div>
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Complexity</span>
+      <div class="chips">
+        <span class="chip hi">Multi-entity banking</span>
+        <span class="chip hi">Multi-market programmes</span>
+        <span class="chip hi">Matrixed delivery</span>
+        <span class="chip hi">Dependency &amp; risk mgmt</span>
+        <span class="chip hi">Change management governance</span>
+        <span class="chip hi">Programme turnaround</span>
+      </div>
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Stakeholders</span>
+      <div class="chips">
+        <span class="chip hi">Executive communication</span>
+        <span class="chip hi">Business–tech translation</span>
+        <span class="chip hi">Steering / status reporting</span>
+        <span class="chip">Cross-functional partnership</span>
+      </div>
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Domain</span>
+      <div class="chips">
+        <span class="chip hi">Payments / ISO 20022</span>
+        <span class="chip hi">Open banking &amp; consent</span>
+        <span class="chip hi">Onboarding &amp; entitlements</span>
+        <span class="chip hi">Regulatory-sensitive delivery</span>
+        <span class="chip">RTP / FedNow / wires / ACH</span>
+      </div>
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Delivery &amp; tech</span>
+      <div class="chips">
+        <span class="chip hi">Agile / waterfall / hybrid</span>
+        <span class="chip hi">SDLC ownership</span>
+        <span class="chip hi">API contracts</span>
+        <span class="chip">SQL (analysis &amp; design support)</span>
+        <span class="chip hi">GenAI-assisted delivery</span>
+      </div>
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Leadership</span>
+      <div class="chips">
+        <span class="chip hi">Mentoring BAs / analysts</span>
+        <span class="chip hi">Work allocation oversight</span>
+        <span class="chip">High-accountability culture</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rb">
+    <h2>Education &amp; certifications</h2>
+    <div class="job">
+      <div class="job-top">
+        <div><div class="job-role">Executive MBA</div><div class="job-org">Quantic School of Business and Technology</div></div>
+        <div class="job-dates">2023 – 2024</div>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-top">
+        <div><div class="job-role">Bachelor of Engineering, Electrical</div><div class="job-org">Anna University</div></div>
+        <div class="job-dates">2005 – 2009</div>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <div class="inline-list">
+        <span class="chip">ISO 20022 Masterclass</span>
+        <span class="chip">SAFe® POPM</span>
+        <span class="chip">SAFe® Agilist (SA)</span>
+        <span class="chip">Certified Scrum Master (CSM®)</span>
+      </div>
+    </div>
+  </div>
+
+</article>
+</body>
+</html>
