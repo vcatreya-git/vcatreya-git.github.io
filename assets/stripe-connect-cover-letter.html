@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cover Letter — Stripe Connect PM</title>
+<style>
+:root {
+  --slate-900: #0f172a;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --teal: #0D9488;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: #f8fafc;
+  color: var(--slate-700);
+  line-height: 1.8;
+  font-size: 15px;
+  padding: 40px 24px;
+}
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  background: white;
+  padding: 60px 64px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.sender {
+  margin-bottom: 36px;
+}
+.sender strong { font-size: 17px; color: var(--slate-900); display: block; margin-bottom: 4px; font-family: -apple-system, sans-serif; }
+.sender span { font-size: 13px; color: var(--slate-400); font-family: -apple-system, sans-serif; }
+.date { font-size: 13px; color: var(--slate-400); margin-bottom: 28px; font-family: -apple-system, sans-serif; }
+.addressee { margin-bottom: 32px; font-size: 14px; color: var(--slate-600); font-family: -apple-system, sans-serif; }
+.addressee strong { color: var(--slate-900); font-weight: 600; display: block; }
+.subject {
+  font-family: -apple-system, sans-serif;
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--teal); margin-bottom: 28px;
+}
+p { margin-bottom: 20px; }
+.sign-off { margin-top: 36px; }
+.sign-off p { margin-bottom: 6px; }
+.sign-off strong { font-size: 16px; color: var(--slate-900); font-family: -apple-system, sans-serif; display: block; margin-top: 12px; }
+.sign-off span { font-size: 13px; color: var(--slate-400); font-family: -apple-system, sans-serif; }
+
+@media print {
+  body { background: white; padding: 0; }
+  .page { box-shadow: none; padding: 20mm 22mm; max-width: none; }
+}
+.no-print { text-align: right; margin-bottom: 20px; }
+.no-print button {
+  font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600;
+  background: var(--teal); color: white; border: none; padding: 8px 18px;
+  border-radius: 6px; cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="no-print"><button onclick="window.print()">Save as PDF</button></div>
+<div class="page">
+
+  <div class="sender">
+    <strong>Venkatraman Chandrasekar</strong>
+    <span>vc.atreya@gmail.com · 647-917-2912 · Ajax, ON · vcatreya-git.github.io</span>
+  </div>
+
+  <div class="date">July 2026</div>
+
+  <div class="addressee">
+    <strong>Stripe · Connect Abstractions Team</strong>
+    Product Manager, Connect Platform
+  </div>
+
+  <div class="subject">Re: Product Manager, Connect Platform — Connect Abstractions</div>
+
+  <p>
+    Connect is Stripe's bet that the most valuable financial infrastructure is not what you
+    build for end-users directly — it is what you build for the platforms that serve them.
+    That design philosophy is not abstract to me. I have spent 15 years building exactly that
+    kind of infrastructure, from the bank side: the platform primitives that fintechs, corporate
+    channels, and multi-market payment operations depend on to function without having to
+    build financial-services systems themselves.
+  </p>
+
+  <p>
+    At FIS, I owned Open Access Connect — the FDX-aligned platform layer that let fintech
+    aggregators onboard, establish consent, and access account data across bank clients.
+    The product was not a data feed; it was an abstraction for representing a third-party's
+    relationship with a bank — their identity, their authorized applications, their permitted
+    data scope, and the entitlement checks that governed every call. That is the same problem
+    the Connect account model solves: represent participants, configure their capabilities, and
+    manage their lifecycle cleanly across a platform's entire user base.
+  </p>
+
+  <p>
+    I have built multi-tenant platform primitives designed to absorb complexity rather than
+    expose it. The Notification Platform I defined replaced fragmented SMS, email, and push
+    vendors with a single outbound API — one integration contract for any bank client,
+    regardless of channel or underlying provider, with priority routing, failover, and a full
+    audit trail. The Money Movement Hub abstracted payment origination across wires, RTP, and
+    FedNow behind ISO 20022-aligned contracts, so that core integrations — transaction posting,
+    balance checks, lien placement, account validation — worked the same way regardless of rail.
+    These are the same architectural moves Connect makes: one abstraction that holds across the
+    diversity of what platforms need, today and as they grow.
+  </p>
+
+  <p>
+    On the payments domain: I have spent a decade in the mechanics of money movement — ISO 20022,
+    real-time payments (RTP/FedNow), wires, ACH, correspondent routing, and multi-entity clearing
+    — across 40+ markets at Standard Chartered and a five-country payments hub at Qatar National
+    Bank (IBS Fintech Innovation Award 2019, ~60% STP improvement via intelligent intermediary
+    routing). When the JD describes Connect helping platforms "coordinate money movement across
+    large networks," I understand every layer of what that requires to actually work.
+  </p>
+
+  <p>
+    The AI dimension in the JD resonates with something I am already doing, not just observing.
+    I use Claude Code as a development co-pilot to build production products from PRD to deployed
+    code — PMRocket (a PM career navigation platform with RAG gap analysis against real job
+    descriptions, pgvector HNSW indexing, and a five-stage intelligence pipeline) and Predictopia
+    (a full-stack IPL prediction platform built solo in a nine-day sprint). Building with AI
+    gives me a practitioner's view on what AI-native platforms actually need from financial
+    infrastructure: flexible participant models, capability configuration that does not require
+    re-onboarding, and APIs that are designed for agents as callers, not just humans. That is
+    not a hypothetical for me — it is what I am already thinking about.
+  </p>
+
+  <p>
+    What draws me to this role specifically is the "abstractions that compound" framing. The
+    most durable work I have done is not features — it is patterns. The channel-agnostic API
+    design that let BPS serve retail and corporate without forking; the consent architecture
+    that worked across Digital One Retail and Business; the multi-entity payments model at QNB
+    that extended from Qatar to Singapore to the UK with minimal rework. Connect Abstractions
+    is that kind of work, at Stripe scale and at the moment when AI is creating the next wave
+    of platforms that will depend on it. I want to be part of defining what those abstractions
+    look like.
+  </p>
+
+  <div class="sign-off">
+    <p>I would welcome the conversation.</p>
+    <strong>Venkatraman Chandrasekar</strong>
+    <span>vc.atreya@gmail.com · 647-917-2912 · vcatreya-git.github.io</span>
+  </div>
+
+</div>
+</body>
+</html>
