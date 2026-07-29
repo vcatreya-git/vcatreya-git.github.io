@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>User Journeys — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+ul, ol { padding-left: 1.35rem; }
+li { margin: 0.25rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+.wiki-toc { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; }
+.wiki-toc a { margin-right: 10px; }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="Home.html">Wiki</a>
+    <a href="User-Journeys.html">Journeys</a>
+    <a href="Diagrams.html">Diagrams</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<div class="wiki-toc">
+  <a href="Home.html">Home</a>
+  <a href="User-Journeys.html">Journeys</a>
+  <a href="User-Flows.html">Flows</a>
+  <a href="Diagrams.html">Diagrams</a>
+  <a href="Roadmap.html">Roadmap</a>
+  <a href="Feature-Map.html">Features</a>
+  <a href="Architecture.html">Architecture</a>
+</div>
+<h1>User Journeys — Predictopia</h1>
+<p>Narrative journeys that show product judgment: who the user is, what friction they hit, and how Predictopia removes admin labour without becoming a payments app or a gambling product.</p>
+<p><strong>Draw.io sources:</strong> <a href="../diagrams/06-user-journey-admin.drawio"><code>06-user-journey-admin.drawio</code></a> · <a href="../diagrams/07-user-journey-member.drawio"><code>07-user-journey-member.drawio</code></a> · full set in <a href="../diagrams/README.html"><code>docs/diagrams/</code></a></p>
+<p>These journeys are the portfolio proof of persona-driven design: every major feature maps to a named person with a seasonal job-to-be-done, not a feature backlog.</p>
+<hr />
+<h2>Journey 1: Admin sets up the family IPL pool (Day 0)</h2>
+<p><strong>User:</strong> Venkat — pool creator. He organises the family WhatsApp league every year. Historically spends 15–30 minutes per match day on Google Sheets (entry columns, reminders, manual score tallies). Over 70+ IPL matches that is <strong>17–35 hours</strong> of unpaid seasonal labour. If he burns out mid-season, the pool dies.</p>
+<p><strong>Entry point:</strong> Personal link / portfolio / “try it for IPL” message to family.</p>
+<p><strong>What happens:</strong></p>
+<p>Venkat signs in with Google (no new password — family will not install a separate app store product for cricket banter). Onboarding is three beats: display name, emoji avatar, <strong>favourite IPL team</strong>. Favourite team is not decoration — it tints nav accents so the product feels “ours” on first open.</p>
+<p>He taps <strong>Create pool</strong> and names it “Family IPL 2026”. He sets:</p>
+<ul>
+<li>Buy-in <strong>₹500</strong> (real money, offline)</li>
+<li>Commission <strong>10%</strong> (covers trophies / hosting — admin-only visibility later)</li>
+<li>Distribution <strong>Top 3</strong></li>
+<li>League style that auto-generates weekly/monthly/season competitions</li>
+</ul>
+<p>As he adjusts expected headcount, a <strong>live prize preview</strong> recalculates pot and place amounts. That single surface answers the WhatsApp question that used to dominate setup night: “How much does 1st get?”</p>
+<p>He copies the <strong>permanent join link</strong> and pins it once in the family group. He does not create per-match links. He does not open Sheets. Setup is done.</p>
+<p><strong>Product decisions on display:</strong><br />
+- One permanent link (zero daily link spam)<br />
+- Prize preview before first join (reduces money confusion)<br />
+- Money offline — app tracks settlement, does not process UPI (regulatory boundary)<br />
+- Commission % never shown to members (avoids “tax” framing fights)</p>
+<p><strong>Exit:</strong> Pool Home with empty member list waiting for join requests. Admin labour for the rest of the season should collapse to approvals + occasional share nudges.</p>
+<p><strong>Success metric:</strong> Pool live + link shared in under 10 minutes.</p>
+<hr />
+<h2>Journey 2: Casual uncle joins and predicts (Match day 1)</h2>
+<p><strong>User:</strong> Ramesh, 58 — wants to play when reminded, not learn a fintech app. Reads WhatsApp every day; will abandon anything with small text or multi-step forms.</p>
+<p><strong>Entry:</strong> Taps the pinned WhatsApp link on his phone.</p>
+<p><strong>What happens:</strong></p>
+<p>He signs in with Google (already has Gmail). Pool preview shows name, buy-in ₹500, member count — <strong>not</strong> the full leaderboard (privacy + conversion: don’t scare him with a table of cousins already predicting).</p>
+<p>He requests to join. Venkat approves that evening and marks <strong>Paid</strong> after UPI lands — two states, because real money is async.</p>
+<p>Ramesh opens <strong>Predict</strong>. Large team tiles (CSK gold / MI blue abbreviations — no copyrighted logos). One tap on the winner. Countdown: “Closes in 2h 15m.” He changes mind once; last pick sticks. After cutoff he sees the reveal: “CSK (8): … · MI (4): …” — content for the group chat, not a spreadsheet.</p>
+<p>Next morning the leaderboard shows him mid-table. After three correct in a row a streak badge appears — social proof without a tutorial.</p>
+<p><strong>Product decisions on display:</strong><br />
+- 48px tap targets and plain language for seniors<br />
+- Approve ≠ Paid (offline UPI lag is a first-class state machine)<br />
+- Reveal only after cutoff (independent thinking, then banter)<br />
+- No tie option (IPL super over — product matches real sport)<br />
+- Never show net losses (“Won ₹X” only)</p>
+<p><strong>Success metric:</strong> First pick before cutoff without calling Venkat for help.</p>
+<hr />
+<h2>Journey 3: Active predictor across two pools</h2>
+<p><strong>User:</strong> Priya — in family pool and college friends pool. She wants different strategies without two accounts.</p>
+<p><strong>What happens:</strong></p>
+<p>Same account, <strong>My Pools</strong> shows two cards with role badges. For the same fixture she predicts CSK in family and MI in college — bragging rights and strategies differ by social graph.</p>
+<p>She shares a leaderboard card from the college pool to Instagram Stories. The card embeds a join QR, so every screenshot is still distribution.</p>
+<p>Achievements list “Perfect Week” on college pool only — streaks and badges are <strong>per-pool</strong>, not global vanity that would pollute family standings.</p>
+<p><strong>Product decision:</strong> multi-pool prediction isolation is a schema requirement (<code>UNIQUE(pool_id, user_id, match_id)</code>), not an afterthought. This is portfolio evidence of multi-tenant thinking at family scale.</p>
+<p><strong>Success metric:</strong> Two independent predictions for the same match, zero confusion about “which pool am I in?”</p>
+<hr />
+<h2>Journey 4: Mid-season admin ops (low touch)</h2>
+<p><strong>User:</strong> Venkat again, week 6. The product promise is tested here: if he is back in Sheets, V1 failed.</p>
+<p><strong>What happens:</strong></p>
+<ol>
+<li>Admin → <strong>Requests</strong>: two pending joins; approves one, rejects one (pool near full / 100 cap).  </li>
+<li>Marks three members <strong>Paid</strong> after weekend UPI.  </li>
+<li>Shares “Who hasn’t predicted” card into WhatsApp — three people tap through and lock picks before cutoff.  </li>
+<li>Does <strong>not</strong> enter scores — result auto-caches when first person opens the finished match (API thrift: one CricketData call per match, <code>ON CONFLICT DO NOTHING</code>).  </li>
+<li>Checks budget tracker: collected vs allocated vs remaining; commission % stays admin-only.</li>
+</ol>
+<p><strong>Product decisions:</strong><br />
+- Admin labour collapses to approvals + share nudges<br />
+- Results thrifty by design (free-tier API as product constraint)<br />
+- Budget transparency without exposing commission % to members<br />
+- Admin result override exists for disputes only (<code>source = admin_override</code>)</p>
+<p><strong>Success metric:</strong> Match-day admin time under 5 minutes; zero spreadsheet opens.</p>
+<hr />
+<h2>Journey 5: Season end prizes (offline money, in-app truth)</h2>
+<p><strong>User:</strong> Family after the final.</p>
+<p><strong>What happens:</strong></p>
+<p>Season leaderboard freezes. Prize engine shows Top 3 amounts from the Nx formula (position N from bottom of paid places gets N× share of pot). Venkat pays winners via UPI offline and marks prize rows <strong>Paid</strong> in app. Members see “Won ₹X” history — never a net-loss guilt UI (buy-in is sunk by design; the product is social competition, not a broker).</p>
+<p><strong>Product decision:</strong> avoid gambling framing; celebrate winnings; keep settlement human. Portfolio skill: knowing what <strong>not</strong> to build (payment rails, KYC) is as important as what shipped.</p>
+<p><strong>Success metric:</strong> Paid marks match offline UPI; zero “the app stole my money” support drama.</p>
+<hr />
+<h2>Journey 6: Late join (fairness without refunds)</h2>
+<p><strong>User:</strong> Arjun joins mid-season after pool already has 20 completed matches.</p>
+<p><strong>What happens:</strong></p>
+<p>He sees buy-in and requests join. On approval + paid, late-join policy applies (<code>zero</code> or <code>prorated</code> on pool). Default product stance for family V1: late joiners start from current fixtures; buy-in still full; past points not rewritten inventively. Mid-season exit: buy-in stays in the pool (no refund), predictions preserved for history, points frozen.</p>
+<p><strong>Product decision:</strong> fairness rules are explicit and boring. Contested refund logic is out of scope for V1 — scope discipline.</p>
+<hr />
+<h2>Journey map (summary)</h2>
+<table>
+<thead>
+<tr>
+<th>Journey</th>
+<th>Primary persona</th>
+<th>Core job-to-be-done</th>
+<th>Success metric</th>
+<th>Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 Admin setup</td>
+<td>Organiser</td>
+<td>Set and forget</td>
+<td>Pool + link &lt;10 min</td>
+<td>D6</td>
+</tr>
+<tr>
+<td>2 Casual predict</td>
+<td>Senior family</td>
+<td>Play without confusion</td>
+<td>First pick alone</td>
+<td>D7</td>
+</tr>
+<tr>
+<td>3 Multi-pool</td>
+<td>Power user</td>
+<td>Different strategies</td>
+<td>Two independent picks</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4 Mid-season ops</td>
+<td>Admin</td>
+<td>Minimal daily work</td>
+<td>Nudges + approvals only</td>
+<td>D6</td>
+</tr>
+<tr>
+<td>5 Season prizes</td>
+<td>Admin + winners</td>
+<td>Fair transparent payout</td>
+<td>Paid = offline UPI</td>
+<td>D6</td>
+</tr>
+<tr>
+<td>6 Late join</td>
+<td>New member</td>
+<td>Join without drama</td>
+<td>Clear policy, no refunds</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>How these journeys defend scope</h2>
+<table>
+<thead>
+<tr>
+<th>Deferred</th>
+<th>Why journeys allow deferral</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WhatsApp Business API</td>
+<td>Pin one link is enough for V1 family</td>
+</tr>
+<tr>
+<td>In-app payments</td>
+<td>Offline UPI + Paid state is the lived flow</td>
+</tr>
+<tr>
+<td>Public discovery</td>
+<td>Invite-only matches private family social graph</td>
+</tr>
+<tr>
+<td>Phone OTP</td>
+<td>Google covers all family members</td>
+</tr>
+<tr>
+<td>Upset Caller badge</td>
+<td>Needs underdog data; not required for core loop</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="Feature-Map.html">Feature Map</a>, <a href="User-Flows.html">User Flows</a>, <a href="Roadmap.html">Roadmap</a>, <a href="Decision-Log.html">Decision Log</a>.</p>
+<hr />
+<p><em>Journeys grounded in Design + Decision Log · portfolio refresh 2026-07-28 · style aligned with PMRocket User Journeys</em></p>
+</main>
+<div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
+</body></html>

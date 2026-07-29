@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Grok" version="22.1.0">
+  <diagram id="03-deployment" name="03-deployment">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="Predictopia — D3 Deployment (free tier) — v1.0" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=15;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="700" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="User browser&#xa;(mobile-first)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#F3F4F6;strokeColor=#374151;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ver" value="Vercel&#xa;Next.js + Cron&#xa;+ @vercel/og" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#EEF2FF;strokeColor=#4338CA;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="190" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="sb" value="Supabase cloud&#xa;Auth · DB · Realtime" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ECFDF5;strokeColor=#047857;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="520" y="190" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cric" value="CricketData.org" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#F5F3FF;strokeColor=#6D28D9;" vertex="1" parent="1">
+          <mxGeometry x="760" y="200" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="user" target="ver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1_l" value="HTTPS" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e1">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="ver" target="sb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2_l" value="server client" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e2">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="ver" target="cric">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3_l" value="API" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e3">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

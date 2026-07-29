@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Roadmap — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+ul, ol { padding-left: 1.35rem; }
+li { margin: 0.25rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+.wiki-toc { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; }
+.wiki-toc a { margin-right: 10px; }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="Home.html">Wiki</a>
+    <a href="User-Journeys.html">Journeys</a>
+    <a href="Diagrams.html">Diagrams</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<div class="wiki-toc">
+  <a href="Home.html">Home</a>
+  <a href="User-Journeys.html">Journeys</a>
+  <a href="User-Flows.html">Flows</a>
+  <a href="Diagrams.html">Diagrams</a>
+  <a href="Roadmap.html">Roadmap</a>
+  <a href="Feature-Map.html">Features</a>
+  <a href="Architecture.html">Architecture</a>
+</div>
+<h1>Roadmap — Predictopia</h1>
+<p>The product vision across phases: what capability each phase unlocks, who benefits, and what must be true before it ships. Companion to <a href="Feature-Map.html">Feature Map</a> and <a href="Decision-Log.html">Decision Log</a>.</p>
+<p>This page showcases <strong>sequencing discipline</strong>: V1 proves admin labour → 0; growth features wait for habit.</p>
+<hr />
+<h2>Product evolution milestones</h2>
+<h3>V1: Can the family run a full season without Sheets?</h3>
+<p><strong>Capability:</strong> Create pool, permanent invite, one-tap predictions, cutoff lock + reveal, schedule + results, scoring, leaderboards, streaks, achievements, commission prize engine, offline payment tracking, share cards.</p>
+<p><strong>Who it serves:</strong> Family organisers (admin) and casual predictors who live in WhatsApp.</p>
+<p><strong>Validates:</strong> Does admin labour collapse after setup? Do seniors complete a pick without help? Does the pool survive past the first two weeks of IPL?</p>
+<p><strong>Dependencies:</strong> None — this is the foundation. <strong>Status: implemented in code (2026-03); production re-deploy + family E2E remaining.</strong></p>
+<p><strong>In scope (shipped in code):</strong><br />
+- Google auth, onboarding, favourite team tint<br />
+- Pool create, permanent join link, multi-admin (WhatsApp model)<br />
+- Join request + paid states<br />
+- One-tap predictions, advance picks, cutoff lock, reveal<br />
+- Schedule seed + cron refresh, on-demand results<br />
+- Scoring 2/0/1, leaderboards, streaks, achievements<br />
+- Commission prize engine, budget tracker<br />
+- Share cards / QR<br />
+- PWA shell  </p>
+<p><strong>Out of scope (intentional):</strong><br />
+- WhatsApp/Telegram Business APIs<br />
+- In-app payments / KYC<br />
+- Public pool discovery<br />
+- Phone OTP<br />
+- Upset Caller (needs underdog data)  </p>
+<hr />
+<h3>V1.1: Can money and ops feel less rough after real use?</h3>
+<p><strong>Capability:</strong> Member “My Money” (winnings only), better unpaid nudges, bulk paid mark, stronger result reliability, timezone polish, Upset Caller if data exists.</p>
+<p><strong>Who it serves:</strong> Same family after first season feedback.</p>
+<p><strong>Validates:</strong> Which friction is real vs imagined? Does money UX reduce admin DMs?</p>
+<p><strong>Must be true before shipping:</strong><br />
+- At least one full family season (or partial season with real UPI flow)<br />
+- List of top 5 friction points ranked by admin time / member confusion</p>
+<p><strong>Sequencing rationale:</strong> Polishing money UX without real payments is guessing. V1.1 is data-driven, not calendar-driven.</p>
+<hr />
+<h3>V2: Can this grow beyond one family without breaking the product?</h3>
+<p><strong>Capability:</strong> Multi-league templates beyond IPL, opt-in reminders (email/Telegram), discoverable public pools (<code>is_public</code> already in schema), optional comments on reveal if families want social.</p>
+<p><strong>Who it serves:</strong> Organisers who want second/third pools; non-family groups (college, office).</p>
+<p><strong>Validates:</strong> Does public discovery create support/abuse load? Do notifications increase prediction completion without spam?</p>
+<p><strong>Must be true before shipping:</strong><br />
+- V1 retention signal (members return match-day without admin nagging)<br />
+- Abuse and pool-moderation plan for public pools<br />
+- Notification opt-in design (family hate spam)</p>
+<p><strong>Why not earlier:</strong> Distribution without habit is empty growth. V1 private invite is the correct wedge.</p>
+<hr />
+<h2>High-level release table</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>User promise</th>
+<th>Gate</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V1 (built)</strong></td>
+<td>Run a full IPL family league without Sheets</td>
+<td>Pool + predict + score + prizes</td>
+<td>Code complete 2026-03</td>
+</tr>
+<tr>
+<td><strong>V1.1</strong></td>
+<td>Money UX + nicer ops</td>
+<td>After first family season feedback</td>
+<td>Fast follow</td>
+</tr>
+<tr>
+<td><strong>V2</strong></td>
+<td>Growth beyond one family</td>
+<td>After V1 retention signal</td>
+<td>Post-season</td>
+</tr>
+</tbody>
+</table>
+<h2>Sequencing logic</h2>
+<pre><code>V1 proves admin labour → 0
+  → V1.1 polishes money &amp; ops from real friction
+  → V2 expands distribution only after habit exists
+</code></pre>
+<p>No “maybe features” floating unowned. Deferred items live in V1.1/V2 with a reason — portfolio evidence of honest scope.</p>
+<hr />
+<h2>What success looks like by phase</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Leading indicator</th>
+<th>Lagging indicator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1</td>
+<td>Admin setup &lt;10 min; first pick alone</td>
+<td>Full season completed without Sheets</td>
+</tr>
+<tr>
+<td>V1.1</td>
+<td>Fewer “have you paid?” DMs</td>
+<td>Admin match-day time &lt;5 min steady</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Second pool types created</td>
+<td>Organic joins via public/discovery</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Explicit non-goals (portfolio scope defence)</h2>
+<table>
+<thead>
+<tr>
+<th>Non-goal</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Become a payments product</td>
+<td>Regulation, trust, support cost</td>
+</tr>
+<tr>
+<td>Real-money gambling marketplace</td>
+<td>Family product positioning</td>
+</tr>
+<tr>
+<td>Copyrighted team logos / media rights</td>
+<td>Legal risk; abbreviations + colours only</td>
+</tr>
+<tr>
+<td>Live ball-by-ball fantasy</td>
+<td>Different product category and API cost</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Aligned with Decision Log and Feature Map · 2026-07-28 · PMRocket Roadmap structure</em></p>
+</main>
+<div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
+</body></html>

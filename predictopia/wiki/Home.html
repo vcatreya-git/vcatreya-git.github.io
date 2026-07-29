@@ -29,47 +29,63 @@ pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10p
 pre code { background: none; color: inherit; padding: 0; }
 blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
 hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+ul, ol { padding-left: 1.35rem; }
 .footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+.wiki-toc { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; }
+.wiki-toc a { margin-right: 10px; }
 </style>
 </head><body>
 <nav>
   <a class="logo" href="../index.html">Predict<span>opia</span></a>
   <div class="nav">
     <a href="../index.html">Home</a>
-    <a href="../wiki/Home.html">Wiki</a>
+    <a href="Home.html">Wiki</a>
+    <a href="User-Journeys.html">Journeys</a>
+    <a href="Diagrams.html">Diagrams</a>
     <a href="../prototype.html">Prototype</a>
     <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
   </div>
 </nav>
 <main>
+<div class="wiki-toc">
+  <a href="Home.html">Home</a>
+  <a href="User-Journeys.html">Journeys</a>
+  <a href="User-Flows.html">Flows</a>
+  <a href="Diagrams.html">Diagrams</a>
+  <a href="Roadmap.html">Roadmap</a>
+  <a href="Feature-Map.html">Features</a>
+  <a href="Architecture.html">Architecture</a>
+</div>
 <h1>Predictopia</h1>
 <blockquote>
-<p>Multi-group sports prediction leagues that run themselves — schedule, picks, scoring, leaderboards, and prizes. Built for IPL 2026 family use; architected for any sport or league.</p>
+<p>Multi-group sports prediction leagues that run themselves — schedule, one-tap picks, scoring, leaderboards, and prize tracking. Built for IPL 2026 as a family side project; architected for any sport, any league, any group size.</p>
 </blockquote>
 <h2>What is Predictopia?</h2>
 <p>Running a prediction league by hand is a seasonal tax: Google Sheets, coloured cells, WhatsApp chaos, and manual score tallying across 70+ matches. Predictopia removes that work after pool setup.</p>
+<p>The product works in six stages:</p>
 <ol>
-<li><strong>Create a pool</strong> — name, buy-in (or free), commission, prize tiers  </li>
-<li><strong>Share one permanent join link</strong> — pin it in WhatsApp once  </li>
+<li><strong>Create a pool</strong> — name, buy-in (or free), commission, prize distribution  </li>
+<li><strong>Share one permanent join link</strong> — pin it once in WhatsApp  </li>
 <li><strong>One-tap predictions</strong> — Team A or Team B before cutoff  </li>
-<li><strong>Auto lock &amp; reveal</strong> — after cutoff, everyone’s picks are visible  </li>
+<li><strong>Auto lock &amp; reveal</strong> — after deadline, everyone’s picks are visible  </li>
 <li><strong>Scoring &amp; leaderboards</strong> — weekly / monthly / season  </li>
-<li><strong>Prize tracking</strong> — money stays offline (UPI/cash); app tracks who paid and who won  </li>
+<li><strong>Prize tracking</strong> — money stays offline (UPI/cash); the app tracks who paid and who won  </li>
 </ol>
 <p>As a portfolio project, Predictopia demonstrates:</p>
-<p><strong>Lived-problem product craft</strong> — designed from real family league ops, not abstract market research.</p>
-<p><strong>Access control under pressure</strong> — hybrid RLS + API enforcement after a recursive RLS failure and nuclear rewrite (migration 007).</p>
-<p><strong>Event-driven prediction rules</strong> — cutoff enforced at query time; no toss-detection cron for locks.</p>
-<p><strong>Commission-based prize engine</strong> — Nx distribution, live preview, rank-inversion guard for ties.</p>
-<p><strong>API thrift</strong> — CricketData schedule via daily cron; results on-demand with first-write-wins cache.</p>
+<p><strong>Lived-problem product craft</strong> — designed from real family league ops, not abstract market research. Scope is defended by one job: eliminate admin work after setup.</p>
+<p><strong>Access-control under pressure</strong> — hybrid RLS + API enforcement after a recursive RLS failure and nuclear rewrite (migration 007). A production-shaped lesson in security design, not a tutorial app.</p>
+<p><strong>Event-driven prediction rules</strong> — cutoff enforced at query time; no toss-detection cron for locks. Clear product rule → simple technical implementation.</p>
+<p><strong>Commission-based prize engine</strong> — Nx distribution, live preview, rank-inversion guard for ties. Transparent offline money without becoming a payments product (regulatory boundary).</p>
+<p><strong>API thrift as product strategy</strong> — CricketData schedule via daily cron; results on-demand with first-write-wins cache. Free-tier limits shaped the architecture deliberately.</p>
+<p><strong>Screenshot-native growth</strong> — every shareable card is an invite (QR + permanent link). Distribution is designed into the UX, not bolted on as “marketing later.”</p>
 <hr />
 <h2>What makes it technically interesting</h2>
 <h3>RLS nuclear fix (migration 007)</h3>
 <p>Early <code>pool_members</code> policies queried <code>pool_members</code> to prove membership → infinite recursion. Migration 007 drops all policies on 15 tables and rebuilds with: never self-query the same table in a policy; membership uses <code>auth.uid() = user_id</code> or <code>pools.created_by</code>; fine-grained rules live in API routes where time and role logic are clearer.</p>
 <h3>Cutoff-enforced prediction engine</h3>
-<p>Cutoff is ~30 minutes before scheduled start (stored as <code>cutoff_at</code>). Enforcement is <code>now() &lt; cutoff_at</code> in API routes — no background job. Before cutoff: only own pick visible. After: pool-wide reveal (Realtime-friendly). Upserts allow change-until-lock; last pick wins.</p>
+<p>Cutoff is ~30 minutes before scheduled start (<code>cutoff_at</code>). Enforcement is <code>now() &lt; cutoff_at</code> in API routes. Before cutoff: only own pick visible. After: pool-wide reveal. Upserts allow change-until-lock; last pick wins.</p>
 <h3>Commission prize engine</h3>
-<p>Admin sets buy-in and commission 0–50%. Prize pool = total buy-ins − commission. Distribution tiers (Winner Takes All → Top 50) use Nx shares from the bottom of the paid rank. Ties split pot shares with a guard so rank inversion cannot pay 2nd more than tied 1st.</p>
+<p>Admin sets buy-in and commission 0–50%. Prize pool = total buy-ins − commission. Distribution tiers (Winner Takes All → Top 50) use Nx shares. Ties split pot shares with a guard so rank inversion cannot pay 2nd more than tied 1st.</p>
 <h3>CricketData.org integration</h3>
 <ul>
 <li><strong>Schedule:</strong> Vercel Cron daily → <code>/api/cron/refresh-schedule</code> upsert  </li>
@@ -79,8 +95,8 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 <p>Predictions are scoped <code>(pool_id, user_id, match_id)</code>. One person can run different strategies in different family groups.</p>
 <h3>Join request + paid states</h3>
 <p>Paid pools: request → admin approve → admin marks <strong>Paid</strong> separately (async UPI/cash). Free pools: auto-join.</p>
-<h3>Screenshot-native sharing</h3>
-<p><code>navigator.share</code> on mobile; clipboard + image fallback on desktop. Cards for leaderboard / picks / unpaid nudges include join QR for viral distribution.</p>
+<h3>Native share + QR invites</h3>
+<p><code>navigator.share</code> on mobile; clipboard + image fallback on desktop. Cards embed join QR so every screenshot doubles as distribution.</p>
 <hr />
 <h2>Current status</h2>
 <table>
@@ -97,39 +113,43 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 </tr>
 <tr>
 <td>Build phases 1–5</td>
-<td>Complete (schema → polish)</td>
+<td>Complete</td>
 </tr>
 <tr>
 <td>Supabase</td>
-<td>Project live · migrations 001–007 applied</td>
+<td>Live · migrations 001–007</td>
 </tr>
 <tr>
-<td>IPL 2026 schedule</td>
+<td>IPL schedule</td>
 <td>Seeded (84 matches)</td>
 </tr>
 <tr>
 <td>Auth</td>
-<td>Google OAuth via Supabase</td>
+<td>Google OAuth</td>
 </tr>
 <tr>
 <td>Local build</td>
-<td><code>npm run build</code> green (2026-07-28)</td>
+<td>Green</td>
 </tr>
 <tr>
-<td>Production deploy</td>
-<td><strong>Reviving</strong> — re-deploy to Vercel</td>
+<td>Portfolio wiki</td>
+<td>This documentation set (PMRocket-style)</td>
 </tr>
 <tr>
-<td>Public portfolio wiki</td>
-<td><strong>This docs site</strong> (GitHub + Pages)</td>
+<td>Public docs site</td>
+<td>https://vcatreya-git.github.io/predictopia/</td>
+</tr>
+<tr>
+<td>App production</td>
+<td>Re-deploy when Vercel credentials available</td>
 </tr>
 <tr>
 <td>Next</td>
-<td>E2E family test · Vercel live · share join link</td>
+<td>Family E2E · production URL · WhatsApp share</td>
 </tr>
 </tbody>
 </table>
-<p>See <a href="Live-Status.html">Live Status</a> for the revive report.</p>
+<p>See <a href="Live-Status.html">Live Status</a> and <a href="Live-Features.html">Live Features</a>.</p>
 <hr />
 <h2>Stack</h2>
 <table>
@@ -144,12 +164,12 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 <tr>
 <td>Frontend + API</td>
 <td>Next.js 14 App Router on Vercel</td>
-<td>Serverless routes + cron</td>
+<td>Serverless + cron</td>
 </tr>
 <tr>
 <td>Database</td>
 <td>Supabase PostgreSQL</td>
-<td>15 tables · RLS + API hybrid</td>
+<td>15 tables · RLS hybrid</td>
 </tr>
 <tr>
 <td>Auth</td>
@@ -168,14 +188,15 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 </tr>
 <tr>
 <td>Sharing</td>
-<td>navigator.share + QR cards</td>
+<td>navigator.share + QR</td>
 <td>No WhatsApp Business API in V1</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Target cost at family scale: ~$0/mo</strong></p>
 <hr />
-<h2>Wiki map</h2>
+<h2>Wiki map (portfolio documentation)</h2>
+<p><strong>Start here if you are reviewing PM craft:</strong> <a href="User-Journeys.html">User Journeys</a> → <a href="User-Flows.html">User Flows</a> → <a href="Diagrams.html">Diagrams</a> → <a href="Roadmap.html">Roadmap</a>.</p>
 <table>
 <thead>
 <tr>
@@ -186,19 +207,47 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 <tbody>
 <tr>
 <td><a href="Home.html">Home</a></td>
-<td>This page</td>
+<td>This overview + PM craft narrative</td>
 </tr>
 <tr>
 <td><a href="Product-Overview.html">Product Overview</a></td>
 <td>Personas, pool model, scoring, prizes</td>
 </tr>
 <tr>
+<td><a href="User-Journeys.html">User Journeys</a></td>
+<td>Narrative journeys (admin, member, season) — <strong>persona craft</strong></td>
+</tr>
+<tr>
+<td><a href="User-Flows.html">User Flows</a></td>
+<td>Step tables + edge cases — <strong>interaction design</strong></td>
+</tr>
+<tr>
+<td><a href="Diagrams.html">Diagrams</a></td>
+<td>draw.io D1–D7 (system, sequences, journeys)</td>
+</tr>
+<tr>
 <td><a href="Feature-Map.html">Feature Map</a></td>
-<td>V1 / V1.1 / V2 + build status</td>
+<td>V1 / V1.1 / V2 with status</td>
+</tr>
+<tr>
+<td><a href="Roadmap.html">Roadmap</a></td>
+<td>Sequencing and release gates</td>
+</tr>
+<tr>
+<td><a href="Live-Features.html">Live Features</a></td>
+<td>What shipped in the build</td>
 </tr>
 <tr>
 <td><a href="Architecture.html">Architecture</a></td>
 <td>System design, tables, RLS, routes</td>
+</tr>
+<tr>
+<td><a href="Data-Model.html">Data Model</a></td>
+<td>Entities and relationships</td>
+</tr>
+<tr>
+<td><a href="Scoring-Engine.html">Scoring Engine</a></td>
+<td>Points, streaks, prizes</td>
 </tr>
 <tr>
 <td><a href="API-Reference.html">API Reference</a></td>
@@ -210,18 +259,64 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 </tr>
 <tr>
 <td><a href="Live-Status.html">Live Status</a></td>
-<td>Revive / deploy status (2026-07-28)</td>
+<td>Deploy / revive status</td>
 </tr>
 <tr>
 <td><a href="Contributing.html">Contributing</a></td>
-<td>Local setup &amp; standards</td>
+<td>Local setup</td>
 </tr>
 <tr>
 <td><a href="../prototype.html">Prototype</a></td>
-<td>Clickable UI prototype</td>
+<td>Clickable UI</td>
+</tr>
+<tr>
+<td><a href="../help/index.html">User guide</a></td>
+<td>Slim end-user help (not portfolio)</td>
 </tr>
 </tbody>
 </table>
+<hr />
+<h2>Diagrams (draw.io)</h2>
+<p>Source files live in <a href="../diagrams/README.html"><code>docs/diagrams/</code></a>:</p>
+<table>
+<thead>
+<tr>
+<th>Diagram</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1 System context</td>
+<td>Actors + Supabase + CricketData + WhatsApp</td>
+</tr>
+<tr>
+<td>D2 Components</td>
+<td>App modules (predict, score, prize)</td>
+</tr>
+<tr>
+<td>D3 Deployment</td>
+<td>Free-tier topology</td>
+</tr>
+<tr>
+<td>D4 Predict sequence</td>
+<td>Cutoff lock + reveal</td>
+</tr>
+<tr>
+<td>D5 Scoring sequence</td>
+<td>On-demand results</td>
+</tr>
+<tr>
+<td>D6 Admin journey</td>
+<td>Create → share → run season</td>
+</tr>
+<tr>
+<td>D7 Member journey</td>
+<td>Join → predict → leaderboard</td>
+</tr>
+</tbody>
+</table>
+<p>Open with <a href="https://app.diagrams.net/">diagrams.net</a> or the VS Code Draw.io extension.</p>
 <hr />
 <h2>Links</h2>
 <table>
@@ -233,12 +328,16 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 </thead>
 <tbody>
 <tr>
-<td><strong>GitHub</strong></td>
-<td>https://github.com/vcatreya-git/predictopia <em>(private repo)</em></td>
+<td><strong>Public portfolio docs</strong></td>
+<td>https://vcatreya-git.github.io/predictopia/</td>
 </tr>
 <tr>
-<td><strong>Public docs</strong></td>
-<td>https://vcatreya-git.github.io/predictopia/</td>
+<td><strong>User guide (slim)</strong></td>
+<td>https://vcatreya-git.github.io/predictopia/help/</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td>https://github.com/vcatreya-git/predictopia <em>(private)</em></td>
 </tr>
 <tr>
 <td><strong>Local</strong></td>
@@ -251,7 +350,7 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 </tbody>
 </table>
 <hr />
-<p><em>Wiki refreshed 2026-07-28 to match PMRocket-style portfolio documentation.</em></p>
+<p><em>Portfolio wiki aligned with PMRocket documentation standard · 2026-07-28</em></p>
 </main>
-<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+<div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
 </body></html>

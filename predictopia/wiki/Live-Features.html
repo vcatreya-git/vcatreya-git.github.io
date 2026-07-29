@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Live Features — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+ul, ol { padding-left: 1.35rem; }
+li { margin: 0.25rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+.wiki-toc { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; }
+.wiki-toc a { margin-right: 10px; }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="Home.html">Wiki</a>
+    <a href="User-Journeys.html">Journeys</a>
+    <a href="Diagrams.html">Diagrams</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<div class="wiki-toc">
+  <a href="Home.html">Home</a>
+  <a href="User-Journeys.html">Journeys</a>
+  <a href="User-Flows.html">Flows</a>
+  <a href="Diagrams.html">Diagrams</a>
+  <a href="Roadmap.html">Roadmap</a>
+  <a href="Feature-Map.html">Features</a>
+  <a href="Architecture.html">Architecture</a>
+</div>
+<h1>Live Features — What shipped</h1>
+<p>Build inventory for portfolio readers. Status: <strong>implemented in codebase</strong> (2026-03 build); production re-deploy tracked in <a href="Live-Status.html">Live Status</a>. Feature rationale and sequencing: <a href="Feature-Map.html">Feature Map</a>, <a href="Roadmap.html">Roadmap</a>.</p>
+<p>This page answers: “What can a reviewer click through today in the repo / local run?”</p>
+<hr />
+<h2>Auth &amp; identity</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google OAuth</td>
+<td>Supabase Auth</td>
+<td>Zero-friction family onboarding</td>
+</tr>
+<tr>
+<td>Onboarding</td>
+<td>Display name, avatar, favourite IPL team</td>
+<td>Personal attachment, not empty settings</td>
+</tr>
+<tr>
+<td>Team theming</td>
+<td>Accent tint from favourite team</td>
+<td>Emotion without copyrighted logos</td>
+</tr>
+</tbody>
+</table>
+<h2>Pools</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create pool wizard</td>
+<td>Buy-in, commission, distribution, league style</td>
+<td>Money rules before first join</td>
+</tr>
+<tr>
+<td>Permanent invite link</td>
+<td><code>/pools/join/[code]</code></td>
+<td>Anti-Sheets distribution</td>
+</tr>
+<tr>
+<td>Multi-admin WhatsApp model</td>
+<td>Creator / Admin / Member</td>
+<td>Real social permissions</td>
+</tr>
+<tr>
+<td>Join request + Paid</td>
+<td>Separate states</td>
+<td>Offline money state machine</td>
+</tr>
+<tr>
+<td>Max 100 members</td>
+<td>Hard cap</td>
+<td>Family scale, not stadium</td>
+</tr>
+<tr>
+<td>Multi-pool membership</td>
+<td>Predictions isolated</td>
+<td>Multi-tenant at social grain</td>
+</tr>
+<tr>
+<td>Pin / favourite pool cards</td>
+<td>Sort + winnings display</td>
+<td>Never show net losses</td>
+</tr>
+</tbody>
+</table>
+<h2>Predictions</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One-tap Team A/B</td>
+<td>No tie option</td>
+<td>Sport-true UX</td>
+</tr>
+<tr>
+<td>Change until cutoff</td>
+<td>Upsert last-write-wins</td>
+<td>Forgiving until lock</td>
+</tr>
+<tr>
+<td>Advance predictions</td>
+<td>Next fixtures</td>
+<td>Engagement on no-match days</td>
+</tr>
+<tr>
+<td>Post-cutoff reveal</td>
+<td>Grouped by team</td>
+<td>Banter content</td>
+</tr>
+<tr>
+<td>Cutoff enforcement</td>
+<td>API compares <code>now</code> vs <code>cutoff_at</code></td>
+<td>No toss cron</td>
+</tr>
+</tbody>
+</table>
+<h2>Match data</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPL schedule seed</td>
+<td>84 matches</td>
+<td>Season-ready</td>
+</tr>
+<tr>
+<td>Daily cron refresh</td>
+<td>Vercel → <code>/api/cron/refresh-schedule</code></td>
+<td>Ops automation</td>
+</tr>
+<tr>
+<td>On-demand results</td>
+<td>Cached first-write-wins</td>
+<td>API thrift as strategy</td>
+</tr>
+<tr>
+<td>Admin override</td>
+<td>Dispute path</td>
+<td>Human escape hatch</td>
+</tr>
+</tbody>
+</table>
+<h2>Scoring &amp; social proof</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Points 2 / 0 / 1 abandoned</td>
+<td>See <a href="Scoring-Engine.html">Scoring Engine</a></td>
+<td>Simple fairness</td>
+</tr>
+<tr>
+<td>Leaderboards</td>
+<td>Weekly / monthly / season</td>
+<td>Short + long loops</td>
+</tr>
+<tr>
+<td>Streaks</td>
+<td>Per-pool</td>
+<td>Multi-pool isolation</td>
+</tr>
+<tr>
+<td>Achievements</td>
+<td>Hot streak, perfect week, team loyalist</td>
+<td>Motivation without pay-to-win</td>
+</tr>
+<tr>
+<td>Share cards</td>
+<td>LB, picks, unpaid nudge + QR</td>
+<td>Growth designed into UX</td>
+</tr>
+</tbody>
+</table>
+<h2>Prizes</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commission slider</td>
+<td>0–50%, admin-only %</td>
+<td>Transparent ops, private tax</td>
+</tr>
+<tr>
+<td>Nx distribution</td>
+<td>Multiple tiers</td>
+<td>Fair prize math</td>
+</tr>
+<tr>
+<td>Live prize preview</td>
+<td>At create + as members pay</td>
+<td>Reduces money fights</td>
+</tr>
+<tr>
+<td>Budget tracker</td>
+<td>Admin-only</td>
+<td>Ops visibility</td>
+</tr>
+<tr>
+<td>Offline money</td>
+<td>Mark paid after UPI/cash</td>
+<td>Right product boundary</td>
+</tr>
+</tbody>
+</table>
+<h2>Platform</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PWA</td>
+<td>Manifest + service worker</td>
+<td>Add-to-home without app store</td>
+</tr>
+<tr>
+<td>Feature board</td>
+<td>Votes for V1.1 ideas</td>
+<td>In-product discovery loop</td>
+</tr>
+<tr>
+<td>Error / loading / 404</td>
+<td>Polish pass</td>
+<td>Production-minded</td>
+</tr>
+</tbody>
+</table>
+<h2>Security &amp; access (high signal)</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Notes</th>
+<th>Portfolio signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RLS hybrid (migration 007)</td>
+<td>No self-referential policies</td>
+<td>Production incident learned</td>
+</tr>
+<tr>
+<td>Time-gated reveal</td>
+<td>API enforces cutoff</td>
+<td>Security + product rule</td>
+</tr>
+<tr>
+<td>Role checks in routes</td>
+<td>Creator vs admin vs member</td>
+<td>Defence in depth</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Intentionally not live</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Why deferred</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>In-app payments</td>
+<td>Regulatory / complexity / support</td>
+</tr>
+<tr>
+<td>WhatsApp Business API</td>
+<td>V1 pin-one-link is enough</td>
+</tr>
+<tr>
+<td>Public discovery</td>
+<td>Private invite-only first</td>
+</tr>
+<tr>
+<td>Phone OTP</td>
+<td>Google covers family MVP</td>
+</tr>
+<tr>
+<td>Upset Caller</td>
+<td>No underdog data source</td>
+</tr>
+<tr>
+<td>Live fantasy / ball-by-ball</td>
+<td>Different product category</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>How to demo (local)</h2>
+<pre><code class="language-bash">cd ~/projects/predictopia
+npm install &amp;&amp; npm run dev
+# Google OAuth + Supabase + CricketData keys in .env.local
+# Path: create pool → share join → predict → open completed match → LB
+</code></pre>
+<p>See <a href="User-Journeys.html">User Journeys</a> for the narrative path and <a href="Contributing.html">Contributing</a> for setup.</p>
+<hr />
+<p><em>Inventory from Feature Map + Architecture · 2026-07-28</em></p>
+</main>
+<div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
+</body></html>

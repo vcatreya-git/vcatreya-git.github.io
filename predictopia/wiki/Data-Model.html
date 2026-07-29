@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Data Model — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+ul, ol { padding-left: 1.35rem; }
+li { margin: 0.25rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+.wiki-toc { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; }
+.wiki-toc a { margin-right: 10px; }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="Home.html">Wiki</a>
+    <a href="User-Journeys.html">Journeys</a>
+    <a href="Diagrams.html">Diagrams</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<div class="wiki-toc">
+  <a href="Home.html">Home</a>
+  <a href="User-Journeys.html">Journeys</a>
+  <a href="User-Flows.html">Flows</a>
+  <a href="Diagrams.html">Diagrams</a>
+  <a href="Roadmap.html">Roadmap</a>
+  <a href="Feature-Map.html">Features</a>
+  <a href="Architecture.html">Architecture</a>
+</div>
+<h1>Data Model — Predictopia</h1>
+<p>Schema is driven by four product concepts: <strong>pools (multi-tenant leagues)</strong>, <strong>membership + money states</strong>, <strong>per-pool predictions</strong>, and <strong>thrifty match results</strong>. Full SQL in <code>supabase/migrations/</code> (001–007). Companion: <a href="Architecture.html">Architecture</a>, <a href="Scoring-Engine.html">Scoring Engine</a>.</p>
+<p>This page is portfolio proof of <strong>product-shaped data design</strong>: every constraint encodes a product rule.</p>
+<hr />
+<h2>Core entity diagram</h2>
+<pre><code>users (UUID ← auth.users)
+  ├── pool_members (role, status, payment_status)
+  ├── predictions (per pool × match)
+  └── achievements (per pool)
+
+pools
+  ├── pool_members
+  ├── predictions
+  ├── prizes
+  ├── pool_budget
+  ├── leaderboard_cache
+  ├── competitions / season &amp; top4 predictions
+  └── feature_requests (optional board)
+
+matches (league schedule)
+  ├── match_results (winner, source)
+  └── predictions
+</code></pre>
+<hr />
+<h2>Core tables (001)</h2>
+<h3>users</h3>
+<p>Profile linked to Supabase <code>auth.users</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PK → auth.users</td>
+<td>Google OAuth subject</td>
+</tr>
+<tr>
+<td>display_name</td>
+<td>TEXT</td>
+<td>Shown on LB and share cards</td>
+</tr>
+<tr>
+<td>avatar_url / google_avatar_url</td>
+<td>TEXT</td>
+<td>Editable vs OAuth default</td>
+</tr>
+<tr>
+<td>favourite_team</td>
+<td>TEXT enum IPL teams</td>
+<td>Theme accents on onboarding</td>
+</tr>
+</tbody>
+</table>
+<h3>pools</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>join_code</td>
+<td>TEXT UNIQUE</td>
+<td>Permanent invite link identity</td>
+</tr>
+<tr>
+<td>created_by</td>
+<td>UUID</td>
+<td>Creator cannot be removed</td>
+</tr>
+<tr>
+<td>buy_in_amount</td>
+<td>INTEGER</td>
+<td>₹0 = free pool</td>
+</tr>
+<tr>
+<td>commission_pct</td>
+<td>0–50</td>
+<td>Admin-only visibility in UI</td>
+</tr>
+<tr>
+<td>distribution_tier</td>
+<td>winner…top50</td>
+<td>Drives Nx prize formula</td>
+</tr>
+<tr>
+<td>late_join_policy</td>
+<td>zero | prorated</td>
+<td>Fairness without refunds</td>
+</tr>
+<tr>
+<td>is_public</td>
+<td>boolean default false</td>
+<td>Discovery reserved for V2</td>
+</tr>
+<tr>
+<td>max_members</td>
+<td>default 100</td>
+<td>Hard social-scale cap</td>
+</tr>
+</tbody>
+</table>
+<h3>pool_members</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>role</td>
+<td>creator | admin | member</td>
+<td>WhatsApp permission model</td>
+</tr>
+<tr>
+<td>status</td>
+<td>pending…blocked</td>
+<td>Join lifecycle</td>
+</tr>
+<tr>
+<td>payment_status</td>
+<td>unpaid | paid</td>
+<td><strong>Separate from approve</strong></td>
+</tr>
+<tr>
+<td>is_pinned</td>
+<td>boolean</td>
+<td>My Pools sort</td>
+</tr>
+<tr>
+<td>UNIQUE(pool_id, user_id)</td>
+<td></td>
+<td>One membership row</td>
+</tr>
+</tbody>
+</table>
+<h3>matches</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>external_id</td>
+<td>TEXT UNIQUE</td>
+<td>CricketData identity</td>
+</tr>
+<tr>
+<td>team_a / team_b + names</td>
+<td>TEXT</td>
+<td>Abbreviations for UI</td>
+</tr>
+<tr>
+<td>scheduled_at / cutoff_at</td>
+<td>TIMESTAMPTZ</td>
+<td>Cutoff ~30m before start</td>
+</tr>
+<tr>
+<td>status</td>
+<td>upcoming…no_result</td>
+<td>Drives predict vs score UI</td>
+</tr>
+<tr>
+<td>match_type</td>
+<td>league…final</td>
+<td>Future weighted points</td>
+</tr>
+</tbody>
+</table>
+<h3>match_results</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>winner</td>
+<td>TEXT</td>
+<td>Null for abandoned</td>
+</tr>
+<tr>
+<td>result_type</td>
+<td>normal…abandoned</td>
+<td>Scoring 2/0/1 rules</td>
+</tr>
+<tr>
+<td>source</td>
+<td>api | admin_override</td>
+<td>Dispute audit trail</td>
+</tr>
+<tr>
+<td>UNIQUE(match_id)</td>
+<td></td>
+<td>One result; first-write-wins API thrift</td>
+</tr>
+</tbody>
+</table>
+<h3>predictions</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>predicted_team</td>
+<td>TEXT</td>
+<td>Team A or B code</td>
+</tr>
+<tr>
+<td>points_awarded</td>
+<td>INTEGER nullable</td>
+<td>Filled after result</td>
+</tr>
+<tr>
+<td>UNIQUE(pool_id, user_id, match_id)</td>
+<td></td>
+<td>Multi-pool strategies</td>
+</tr>
+</tbody>
+</table>
+<h3>leaderboard_cache</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Product note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timeframe</td>
+<td>weekly | monthly | overall</td>
+<td>Tabs in Pool Home</td>
+</tr>
+<tr>
+<td>period_key</td>
+<td>TEXT</td>
+<td>e.g. 2026-W12</td>
+</tr>
+<tr>
+<td>total_points, streaks, rank</td>
+<td></td>
+<td>Sync recompute after scores</td>
+</tr>
+</tbody>
+</table>
+<h3>prizes · pool_budget · achievements</h3>
+<ul>
+<li><strong>prizes:</strong> period amounts, winner, paid flag (offline settlement)  </li>
+<li><strong>pool_budget:</strong> collected / allocated / paid for admin tracker  </li>
+<li><strong>achievements:</strong> hot_streak, perfect_week, team_loyalist, upset_caller (latter deferred)</li>
+</ul>
+<hr />
+<h2>Later migrations</h2>
+<table>
+<thead>
+<tr>
+<th>Migration</th>
+<th>Adds</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>004</td>
+<td>feature_requests, feature_votes</td>
+<td>In-app idea board for V1.1 prioritisation</td>
+</tr>
+<tr>
+<td>005</td>
+<td>top4_predictions, period helpers</td>
+<td>One-off / period competitions</td>
+</tr>
+<tr>
+<td>006</td>
+<td>competitions, season_winner_predictions</td>
+<td>Auto-generated from league style</td>
+</tr>
+<tr>
+<td>007</td>
+<td>RLS nuclear rewrite</td>
+<td>Fix recursive policies; hybrid RLS + API</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Critical constraints (product → schema)</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Product rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UNIQUE (pool_id, user_id, match_id)</code> on predictions</td>
+<td>Different strategies per pool</td>
+</tr>
+<tr>
+<td><code>join_code</code> unique</td>
+<td>One permanent link</td>
+</tr>
+<tr>
+<td>Results unique per match + ON CONFLICT DO NOTHING</td>
+<td>One API call per match</td>
+</tr>
+<tr>
+<td><code>payment_status</code> independent of <code>status</code></td>
+<td>Approve ≠ Paid</td>
+</tr>
+<tr>
+<td>RLS: no self-referential policies (007)</td>
+<td>Membership checks without recursion</td>
+</tr>
+<tr>
+<td>commission 0–50 CHECK</td>
+<td>Guardrails on admin greed / typos</td>
+</tr>
+<tr>
+<td>max_members default 100</td>
+<td>Family scale, not stadium scale</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Multi-pool isolation</h2>
+<p>All competitive data keys include <code>pool_id</code>. Never assume global uniqueness of <code>(user_id, match_id)</code> alone. Portfolio skill: multi-tenancy at the grain that matches the social graph.</p>
+<hr />
+<h2>Membership state machine</h2>
+<pre><code>pending ──approve──► approved/active ──mark paid──► paid (payment_status)
+   │
+   └──reject / remove / block
+</code></pre>
+<p>Free pools skip pending (auto-join active).</p>
+<hr />
+<p><em>Details: Architecture.md + migrations 001–007 · 2026-07-28 portfolio refresh</em></p>
+</main>
+<div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
+</body></html>

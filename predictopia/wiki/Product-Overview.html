@@ -29,19 +29,34 @@ pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10p
 pre code { background: none; color: inherit; padding: 0; }
 blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
 hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+ul, ol { padding-left: 1.35rem; }
+li { margin: 0.25rem 0; }
 .footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+.wiki-toc { font-size: 13px; color: var(--slate-500); margin-bottom: 24px; }
+.wiki-toc a { margin-right: 10px; }
 </style>
 </head><body>
 <nav>
   <a class="logo" href="../index.html">Predict<span>opia</span></a>
   <div class="nav">
     <a href="../index.html">Home</a>
-    <a href="../wiki/Home.html">Wiki</a>
+    <a href="Home.html">Wiki</a>
+    <a href="User-Journeys.html">Journeys</a>
+    <a href="Diagrams.html">Diagrams</a>
     <a href="../prototype.html">Prototype</a>
     <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
   </div>
 </nav>
 <main>
+<div class="wiki-toc">
+  <a href="Home.html">Home</a>
+  <a href="User-Journeys.html">Journeys</a>
+  <a href="User-Flows.html">Flows</a>
+  <a href="Diagrams.html">Diagrams</a>
+  <a href="Roadmap.html">Roadmap</a>
+  <a href="Feature-Map.html">Features</a>
+  <a href="Architecture.html">Architecture</a>
+</div>
 <h1>Product Overview</h1>
 <h2>What Predictopia does</h2>
 <p>Predictopia is a mobile-first web app where anyone creates a prediction pool, shares a single permanent link, and the app runs the entire league automatically. No daily Google Sheets, no WhatsApp message chaos, no manual score tallying. The admin's job after initial setup: nothing.</p>
@@ -281,5 +296,5 @@ hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
 </table>
 <p>All free tiers: Supabase, Vercel, CricketData.org. No paid services until 1,000+ users.</p>
 </main>
-<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+<div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
 </body></html>

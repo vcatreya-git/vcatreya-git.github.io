@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Grok" version="22.1.0">
+  <diagram id="02-component-blocks" name="02-component-blocks">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="Predictopia — D2 Component Blocks — v1.0" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=15;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="700" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="fe" value="Web App&#xa;Landing · Auth · My Pools&#xa;Pool Home · Predict · Profile" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#ECFDF5;strokeColor=#0F766E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="api" value="API Routes&#xa;pools · predictions&#xa;leaderboard · prizes · cron" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#EEF2FF;strokeColor=#4338CA;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="120" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="authc" value="Auth module&#xa;Google OAuth&#xa;session cookies" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#F5F3FF;strokeColor=#6D28D9;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="pred" value="Prediction engine&#xa;cutoff lock&#xa;upsert picks · reveal" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#ECFDF5;strokeColor=#0F766E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="180" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="score" value="Scoring engine&#xa;2/0/1 points&#xa;streaks · achievements" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#ECFDF5;strokeColor=#0F766E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="280" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="prize" value="Prize engine&#xa;commission · Nx tiers&#xa;budget tracker" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#ECFDF5;strokeColor=#0F766E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="380" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="data" value="Match data&#xa;cron schedule&#xa;on-demand results" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#ECFDF5;strokeColor=#0F766E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="280" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="Supabase DB&#xa;15 tables · RLS 007" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ECFDF5;strokeColor=#047857;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="fe" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1_l" value="HTTPS" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e1">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="api" target="authc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2_l" value="JWT" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e2">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="api" target="pred">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3_l" value="" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e3">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="api" target="score">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4_l" value="" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e4">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="api" target="prize">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5_l" value="" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e5">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="api" target="data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6_l" value="" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e6">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="api" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7_l" value="SQL" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e7">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="pred" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8_l" value="" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e8">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeWidth=1.5;strokeColor=#374151;" edge="1" parent="1" source="score" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9_l" value="" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#374151;" vertex="1" connectable="0" parent="e9">
+          <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

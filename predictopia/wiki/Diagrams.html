@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Live Status — Predictopia</title>
+<title>Diagrams — Predictopia</title>
 <style>
 :root {
   --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
@@ -57,130 +57,114 @@ li { margin: 0.25rem 0; }
   <a href="Feature-Map.html">Features</a>
   <a href="Architecture.html">Architecture</a>
 </div>
-<h1>Live Status — Predictopia</h1>
-<p><strong>Status date:</strong> 2026-07-28<br />
-<strong>Phase:</strong> Post-build revive · <strong>portfolio wiki upgraded to PMRocket standard</strong><br />
-<strong>App:</strong> Built and verified locally · production re-deploy when Vercel credentials available  </p>
+<h1>Diagrams — Predictopia</h1>
+<p>Portfolio architecture and journey diagrams in <strong>draw.io</strong> (diagrams.net), same standard as <a href="https://github.com/vcatreya-git/pmrocket">PMRocket diagrams</a>.</p>
+<p><strong>Source folder:</strong> <a href="../diagrams/README.html"><code>docs/diagrams/</code></a><br />
+<strong>Tool:</strong> <a href="https://app.diagrams.net/">app.diagrams.net</a> or VS Code <strong>Draw.io Integration</strong> (<code>hediet.vscode-drawio</code>)</p>
+<p>Open any <code>.drawio</code> file from the table below. SVG/PNG exports (when refreshed) land in <code>docs/diagrams/export/</code>.</p>
 <hr />
-<h2>What was true at last full ship (2026-03-27)</h2>
-<ul>
-<li>All five feature build phases complete  </li>
-<li>Supabase project with migrations 001–007  </li>
-<li>IPL 2026 schedule seeded (84 matches)  </li>
-<li>Google OAuth configured  </li>
-<li>Wiki + prototype published in-repo  </li>
-<li>Next actions then: E2E test, Vercel deploy, family share  </li>
-</ul>
-<hr />
-<h2>Revive + portfolio docs (2026-07-28)</h2>
+<h2>Core set</h2>
 <table>
 <thead>
 <tr>
-<th>Check</th>
-<th>Result</th>
+<th>ID</th>
+<th>File</th>
+<th>What it shows</th>
+<th>PM skill on display</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>npm run build</code></td>
-<td>✓ Passes (Next.js 14.2.20)</td>
+<td>D1</td>
+<td><a href="../diagrams/01-system-context.drawio">01-system-context.drawio</a></td>
+<td>Actors + Supabase + CricketData + WhatsApp</td>
+<td>System context / external dependencies</td>
 </tr>
 <tr>
-<td>Wiki pages</td>
-<td>Full set: journeys, flows, roadmap, scoring, data model, diagrams</td>
+<td>D2</td>
+<td><a href="../diagrams/02-component-blocks.drawio">02-component-blocks.drawio</a></td>
+<td>App modules: predict, score, prize, admin</td>
+<td>Logical architecture</td>
 </tr>
 <tr>
-<td>draw.io</td>
-<td>D1–D7 under <code>docs/diagrams/</code></td>
+<td>D3</td>
+<td><a href="../diagrams/03-deployment.drawio">03-deployment.drawio</a></td>
+<td>Free-tier topology (Vercel + Supabase)</td>
+<td>Cost-aware deployment</td>
 </tr>
 <tr>
-<td>Public docs site</td>
-<td>https://vcatreya-git.github.io/predictopia/</td>
+<td>D4</td>
+<td><a href="../diagrams/04-sequence-predict.drawio">04-sequence-predict.drawio</a></td>
+<td>One-tap pick → cutoff → reveal</td>
+<td>Critical user sequence</td>
 </tr>
 <tr>
-<td>User guide (slim)</td>
-<td>https://vcatreya-git.github.io/predictopia/help/ <em>(end-user, not portfolio)</em></td>
+<td>D5</td>
+<td><a href="../diagrams/05-sequence-scoring.drawio">05-sequence-scoring.drawio</a></td>
+<td>On-demand result → score → LB</td>
+<td>Event / thrift sequence</td>
 </tr>
 <tr>
-<td>App production</td>
-<td>Needs <code>vercel login</code> + env (Supabase + CricketData)</td>
+<td>D6</td>
+<td><a href="../diagrams/06-user-journey-admin.drawio">06-user-journey-admin.drawio</a></td>
+<td>Create → share → approve → season end</td>
+<td>Admin journey map</td>
+</tr>
+<tr>
+<td>D7</td>
+<td><a href="../diagrams/07-user-journey-member.drawio">07-user-journey-member.drawio</a></td>
+<td>Invite → join → predict → leaderboard</td>
+<td>Member journey map</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>Portfolio wiki map (what hiring managers should open)</h2>
-<table>
-<thead>
-<tr>
-<th>Priority</th>
-<th>Page</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><a href="Home.html">Home</a></td>
-<td>Problem framing + technical narrative</td>
-</tr>
-<tr>
-<td>2</td>
-<td><a href="User-Journeys.html">User Journeys</a></td>
-<td>Persona-driven product craft</td>
-</tr>
-<tr>
-<td>3</td>
-<td><a href="User-Flows.html">User Flows</a></td>
-<td>Interaction design + edge cases</td>
-</tr>
-<tr>
-<td>4</td>
-<td><a href="Diagrams.html">Diagrams</a></td>
-<td>draw.io system + journey maps</td>
-</tr>
-<tr>
-<td>5</td>
-<td><a href="Feature-Map.html">Feature Map</a> + <a href="Roadmap.html">Roadmap</a></td>
-<td>Sequencing discipline</td>
-</tr>
-<tr>
-<td>6</td>
-<td><a href="Scoring-Engine.html">Scoring Engine</a> + <a href="Data-Model.html">Data Model</a></td>
-<td>Rules + schema as product</td>
-</tr>
-<tr>
-<td>7</td>
-<td><a href="Architecture.html">Architecture</a> + <a href="Decision-Log.html">Decision Log</a></td>
-<td>System + tradeoffs</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>How to run locally</h2>
-<pre><code class="language-bash">cd ~/projects/predictopia
-npm install
-# ensure .env.local has Supabase + CricketData keys
-npm run dev
-# → http://localhost:3000
-</code></pre>
-<h3>Deploy (Vercel)</h3>
-<pre><code class="language-bash">cd ~/projects/predictopia
-npx vercel login
-npx vercel --prod
-# set env vars in Vercel dashboard to match .env.local
-# Google OAuth redirect: https://&lt;deployment&gt;/auth/callback
-</code></pre>
-<hr />
-<h2>Known follow-ups</h2>
+<h2>How to open</h2>
 <ol>
-<li>Confirm Supabase project still active (no pause / key rotation)  </li>
-<li>Re-run schedule cron or seed if match data is stale  </li>
-<li>Production E2E: create pool → join → predict → leaderboard  </li>
-<li>Optional: export draw.io → SVG into <code>docs/diagrams/export/</code> for inline images  </li>
-<li>Upset Caller achievement deferred (no underdog data in V1)  </li>
+<li>Download or clone the repo (private) / open local <code>~/projects/predictopia/docs/diagrams/</code>  </li>
+<li>https://app.diagrams.net/ → <strong>Open Existing</strong> → pick file  </li>
+<li>Or open in VS Code with Draw.io extension  </li>
 </ol>
+<p>Published site keeps sources under:</p>
+<p><code>https://vcatreya-git.github.io/predictopia/diagrams/</code></p>
 <hr />
-<p><em>Status · 2026-07-28</em></p>
+<h2>Related wiki pages</h2>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User Journeys (narratives)</td>
+<td><a href="User-Journeys.html">User-Journeys</a></td>
+</tr>
+<tr>
+<td>User Flows (step tables)</td>
+<td><a href="User-Flows.html">User-Flows</a></td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td><a href="Architecture.html">Architecture</a></td>
+</tr>
+<tr>
+<td>Home</td>
+<td><a href="Home.html">Home</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Standards</h2>
+<ul>
+<li>Orthogonal connectors preferred; readable labels  </li>
+<li>One primary story per diagram  </li>
+<li>Version titles in diagram header (e.g. <code>D1 System Context — v1.0</code>)  </li>
+</ul>
+<p>Aligned with Obsidian project diagram standards used on PMRocket.</p>
+<hr />
+<p><em>Diagram set authored 2026-07-28 for portfolio wiki parity with PMRocket</em></p>
 </main>
 <div class="footer">Predictopia portfolio wiki · PMRocket-style · 2026-07-28 · <a href="Home.html">Wiki home</a></div>
 </body></html>
