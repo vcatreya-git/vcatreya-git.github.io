@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PMRocket — Career Intelligence for Aspiring PMs</title>
+<title>PMRocket — Career Navigation for Aspiring PMs</title>
 <style>
   :root {
     --teal: #0D9488;
@@ -14,6 +14,7 @@
     --slate-800: #1e293b;
     --slate-700: #334155;
     --slate-600: #475569;
+    --slate-500: #64748b;
     --slate-400: #94a3b8;
     --slate-200: #e2e8f0;
     --slate-100: #f1f5f9;
@@ -51,439 +52,343 @@
     justify-content: space-between;
     height: 60px;
   }
-  .nav-logo {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--slate-900);
-    letter-spacing: -0.3px;
-  }
+  .nav-logo { font-size: 18px; font-weight: 700; color: var(--slate-900); letter-spacing: -0.3px; }
   .nav-logo span { color: var(--teal); }
   .nav-links { display: flex; gap: 8px; align-items: center; }
   .nav-links a {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--slate-600);
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500; color: var(--slate-600);
+    padding: 6px 12px; border-radius: var(--radius-sm);
     transition: background 0.15s, color 0.15s;
   }
   .nav-links a:hover { background: var(--slate-100); color: var(--slate-900); text-decoration: none; }
-  .nav-links a.primary {
-    background: var(--teal);
-    color: white;
-  }
+  .nav-links a.primary { background: var(--teal); color: white; }
   .nav-links a.primary:hover { background: var(--teal-dark); }
 
   /* HERO */
   .hero {
-    background: linear-gradient(160deg, var(--teal-xlight) 0%, var(--white) 60%);
-    padding: 80px 24px 72px;
+    background: linear-gradient(160deg, var(--teal-xlight) 0%, var(--white) 55%);
+    padding: 88px 24px 80px;
     text-align: center;
   }
   .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--teal-light);
-    color: var(--teal-dark);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 14px;
-    border-radius: 100px;
-    margin-bottom: 24px;
-    letter-spacing: 0.2px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--teal-light); color: var(--teal-dark);
+    font-size: 12px; font-weight: 600; padding: 4px 14px;
+    border-radius: 100px; margin-bottom: 24px; letter-spacing: 0.2px;
   }
   .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--teal);
+    width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
     animation: pulse 2s infinite;
   }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
   .hero h1 {
-    font-size: clamp(32px, 5vw, 52px);
-    font-weight: 800;
-    color: var(--slate-900);
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-    max-width: 700px;
-    margin: 0 auto 20px;
+    font-size: clamp(30px, 4.5vw, 50px);
+    font-weight: 800; color: var(--slate-900); letter-spacing: -1.5px;
+    line-height: 1.1; max-width: 720px; margin: 0 auto 20px;
   }
   .hero h1 span { color: var(--teal); }
   .hero p {
-    font-size: clamp(15px, 2vw, 18px);
-    color: var(--slate-600);
-    max-width: 620px;
-    margin: 0 auto 36px;
-    line-height: 1.7;
+    font-size: clamp(15px, 2vw, 18px); color: var(--slate-600);
+    max-width: 640px; margin: 0 auto 36px; line-height: 1.7;
   }
   .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 24px;
-    border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 12px 24px; border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; text-decoration: none;
   }
   .btn-primary { background: var(--teal); color: white; box-shadow: 0 2px 12px rgba(13,148,136,0.3); }
   .btn-primary:hover { background: var(--teal-dark); box-shadow: 0 4px 20px rgba(13,148,136,0.4); transform: translateY(-1px); text-decoration: none; }
   .btn-secondary { background: white; color: var(--slate-800); border: 1.5px solid var(--slate-200); }
   .btn-secondary:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-xlight); text-decoration: none; }
+  .btn-ghost { background: transparent; color: var(--slate-600); border: 1.5px solid var(--slate-200); }
+  .btn-ghost:hover { background: var(--slate-100); color: var(--slate-800); text-decoration: none; }
 
   /* SECTION WRAPPER */
-  .section { padding: 72px 24px; }
+  .section { padding: 80px 24px; }
   .section-alt { background: var(--slate-50); }
+  .section-dark { background: var(--slate-900); }
   .container { max-width: 1060px; margin: 0 auto; }
   .section-label {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--teal);
-    margin-bottom: 10px;
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--teal); margin-bottom: 10px;
   }
+  .section-label-light { color: rgba(13,148,136,0.9); }
   .section-title {
-    font-size: clamp(24px, 3vw, 36px);
-    font-weight: 800;
-    color: var(--slate-900);
-    letter-spacing: -0.8px;
-    margin-bottom: 12px;
+    font-size: clamp(24px, 3vw, 36px); font-weight: 800;
+    color: var(--slate-900); letter-spacing: -0.8px; margin-bottom: 12px;
   }
+  .section-title-light { color: white; }
   .section-sub {
-    font-size: 16px;
-    color: var(--slate-600);
-    max-width: 560px;
-    margin-bottom: 48px;
-    line-height: 1.6;
+    font-size: 16px; color: var(--slate-600);
+    max-width: 580px; margin-bottom: 52px; line-height: 1.6;
   }
+  .section-sub-light { color: rgba(255,255,255,0.55); }
 
   /* STATS BAR */
-  .stats-bar {
-    background: var(--slate-900);
-    padding: 40px 24px;
-  }
+  .stats-bar { background: var(--slate-900); padding: 44px 24px; }
   .stats-grid {
-    max-width: 1060px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: rgba(255,255,255,0.08);
+    max-width: 1060px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.08);
   }
-  .stat-item {
-    background: var(--slate-900);
-    padding: 28px 32px;
-    text-align: center;
-  }
+  .stat-item { background: var(--slate-900); padding: 28px 32px; text-align: center; }
   .stat-number {
-    font-size: clamp(28px, 4vw, 40px);
-    font-weight: 800;
-    color: var(--teal);
-    letter-spacing: -1px;
-    display: block;
-    margin-bottom: 6px;
+    font-size: clamp(28px, 4vw, 42px); font-weight: 800; color: var(--teal);
+    letter-spacing: -1px; display: block; margin-bottom: 6px;
   }
-  .stat-label {
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.4;
-  }
+  .stat-label { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
 
   /* PROBLEM CARDS */
-  .problem-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-  }
+  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
   .problem-card {
-    background: white;
-    border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius);
-    padding: 28px;
-    box-shadow: var(--shadow-sm);
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm);
   }
   .problem-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--teal-xlight);
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-    font-size: 18px;
+    width: 40px; height: 40px; background: var(--teal-xlight);
+    border-radius: var(--radius-sm); display: flex; align-items: center;
+    justify-content: center; margin-bottom: 16px; font-size: 18px;
   }
-  .problem-card h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--slate-900);
-    margin-bottom: 8px;
-  }
-  .problem-card p {
-    font-size: 14px;
-    color: var(--slate-600);
-    line-height: 1.6;
-  }
+  .problem-card h3 { font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
+  .problem-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
 
-  /* PIPELINE */
-  .pipeline {
-    display: flex;
-    gap: 0;
-    position: relative;
-    flex-wrap: wrap;
-  }
+  /* PIPELINE - 7 STAGE */
+  .pipeline-7 { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
   .pipeline-step {
-    flex: 1;
-    min-width: 160px;
-    background: white;
-    border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    position: relative;
-    text-align: center;
+    flex: 1; min-width: 130px;
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 20px 16px;
+    position: relative; text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .pipeline-step.live { border-color: var(--teal); }
+  .pipeline-step.planned {
+    border-style: dashed; border-color: var(--slate-300);
+    background: var(--slate-50);
   }
   .pipeline-step:not(:last-child)::after {
     content: '→';
-    position: absolute;
-    right: -16px;
-    top: 50%;
+    position: absolute; right: -14px; top: 50%;
     transform: translateY(-50%);
-    color: var(--teal);
-    font-size: 20px;
-    font-weight: 700;
-    z-index: 1;
+    color: var(--teal); font-size: 18px; font-weight: 700; z-index: 1;
   }
+  .pipeline-step.planned:not(:last-child)::after { color: var(--slate-400); }
   .step-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background: var(--teal);
-    color: white;
-    border-radius: 50%;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; background: var(--teal); color: white;
+    border-radius: 50%; font-size: 12px; font-weight: 700; margin-bottom: 10px;
   }
-  .pipeline-step h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--slate-900);
-    margin-bottom: 6px;
+  .pipeline-step.planned .step-number { background: var(--slate-400); }
+  .step-badge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 100px; margin-bottom: 8px;
   }
-  .pipeline-step p {
-    font-size: 12px;
-    color: var(--slate-600);
-    line-height: 1.5;
+  .badge-live { background: var(--teal-light); color: var(--teal-dark); }
+  .badge-planned { background: var(--slate-200); color: var(--slate-600); }
+  .pipeline-step h3 { font-size: 13px; font-weight: 700; color: var(--slate-900); margin-bottom: 5px; }
+  .pipeline-step.planned h3 { color: var(--slate-600); }
+  .pipeline-step p { font-size: 11px; color: var(--slate-500); line-height: 1.5; }
+
+  /* DIAGRAM EMBED */
+  .diagram-embed {
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 24px;
+    box-shadow: var(--shadow-sm); margin-bottom: 12px; overflow: hidden;
+  }
+  .diagram-embed img { width: 100%; height: auto; display: block; }
+  .diagram-embed-label {
+    font-size: 12px; color: var(--slate-400); text-align: right; margin-top: 8px;
+  }
+  .diagram-embed-label a { color: var(--teal); font-size: 12px; }
+
+  /* JOURNEY MOMENTS */
+  .journey-moments {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px; margin-top: 40px;
+  }
+  .moment-card {
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 24px;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--teal);
+  }
+  .moment-stage {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
+  }
+  .moment-card h3 { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
+  .moment-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
+  .moment-quote {
+    margin-top: 10px; padding: 10px 14px;
+    background: var(--teal-xlight); border-radius: var(--radius-sm);
+    font-size: 13px; font-style: italic; color: var(--teal-dark);
   }
 
   /* TECH CARDS */
-  .tech-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  .tech-card {
-    background: var(--slate-900);
-    border-radius: var(--radius);
-    padding: 28px;
-    color: white;
-  }
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .tech-card { background: var(--slate-900); border-radius: var(--radius); padding: 28px; }
   .tech-card-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--teal);
-    margin-bottom: 10px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--teal); margin-bottom: 10px;
   }
-  .tech-card h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 12px;
-  }
+  .tech-card h3 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 12px; }
   .tech-code {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-left: 3px solid var(--teal);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 12px;
-    color: var(--teal-light);
-    margin-bottom: 14px;
-    white-space: pre-wrap;
-    word-break: break-all;
-    line-height: 1.6;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-left: 3px solid var(--teal); border-radius: var(--radius-sm);
+    padding: 12px 14px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px; color: var(--teal-light); margin-bottom: 14px;
+    white-space: pre; line-height: 1.6; overflow-x: auto;
   }
-  .tech-card p {
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-    line-height: 1.6;
-  }
+  .tech-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+  .tech-card code { color: #5eead4; font-family: monospace; }
 
-  /* STACK BADGES */
-  .stack-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
+  /* ROADMAP NOW / NEXT / LATER */
+  .roadmap-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
   }
-  .stack-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: white;
-    border: 1.5px solid var(--slate-200);
+  .roadmap-col {
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .roadmap-col-header {
+    padding: 16px 20px; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.3px; color: white;
+  }
+  .roadmap-col-header.now { background: var(--teal); }
+  .roadmap-col-header.next { background: #7C3AED; }
+  .roadmap-col-header.later { background: var(--slate-700); }
+  .roadmap-col-header .phase-label {
+    font-size: 10px; font-weight: 600; opacity: 0.75;
+    text-transform: uppercase; letter-spacing: 1px; display: block;
+    margin-bottom: 2px;
+  }
+  .roadmap-items { padding: 16px; }
+  .roadmap-item {
+    padding: 12px 14px; margin-bottom: 8px;
+    background: var(--slate-50); border-radius: var(--radius-sm);
+    border: 1px solid var(--slate-100);
+  }
+  .roadmap-item:last-child { margin-bottom: 0; }
+  .roadmap-item h4 { font-size: 13px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
+  .roadmap-item p { font-size: 12px; color: var(--slate-500); line-height: 1.5; }
+  .roadmap-item .benefit {
+    display: inline-block; margin-top: 6px;
+    font-size: 11px; font-weight: 600; color: var(--teal);
+    background: var(--teal-xlight); padding: 2px 8px;
     border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--slate-700);
+  }
+
+  /* STACK */
+  .stack-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .stack-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; background: white;
+    border: 1.5px solid var(--slate-200); border-radius: 100px;
+    font-size: 13px; font-weight: 600; color: var(--slate-700);
     box-shadow: var(--shadow-sm);
   }
-  .stack-badge .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--teal);
-  }
+  .stack-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
   .stack-note {
-    font-size: 13px;
-    color: var(--slate-500);
-    margin-top: 16px;
-    padding: 12px 16px;
-    background: var(--slate-100);
-    border-radius: var(--radius-sm);
-    border-left: 3px solid var(--teal);
+    font-size: 13px; color: var(--slate-500); margin-top: 16px;
+    padding: 12px 16px; background: var(--slate-100);
+    border-radius: var(--radius-sm); border-left: 3px solid var(--teal);
   }
 
-  /* DOCUMENTS GRID */
-  .docs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
+  /* PERSONAS */
+  .persona-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .persona-card {
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm);
   }
-  .doc-card {
-    background: white;
-    border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.15s;
-    text-decoration: none;
-    color: inherit;
-    display: block;
+  .persona-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 10px; border-radius: 100px; margin-bottom: 14px;
   }
-  .doc-card:hover {
-    border-color: var(--teal);
-    box-shadow: var(--shadow);
-    transform: translateY(-2px);
-    text-decoration: none;
-  }
-  .doc-icon {
-    font-size: 24px;
-    margin-bottom: 12px;
-    display: block;
-  }
-  .doc-card h3 {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--slate-900);
-    margin-bottom: 6px;
-  }
-  .doc-card p {
-    font-size: 13px;
-    color: var(--slate-500);
-    line-height: 1.5;
-  }
-  .doc-card .doc-arrow {
-    display: inline-block;
-    margin-top: 14px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--teal);
-  }
+  .persona-tag.primary { background: var(--teal-light); color: var(--teal-dark); }
+  .persona-tag.secondary { background: var(--slate-200); color: var(--slate-600); }
+  .persona-card h3 { font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px; }
+  .persona-card .persona-desc { font-size: 13px; color: var(--slate-500); margin-bottom: 12px; font-style: italic; }
+  .persona-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
 
-  /* DIAGRAMS GRID */
+  /* DIAGRAMS GALLERY */
   .diagrams-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
   }
   .diagram-item {
-    background: white;
-    border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.15s;
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm); transition: box-shadow 0.15s, transform 0.15s;
   }
-  .diagram-item:hover { box-shadow: var(--shadow); }
+  .diagram-item:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
   .diagram-item a { display: block; text-decoration: none; }
   .diagram-img-wrap {
-    background: var(--slate-50);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-    overflow: hidden;
+    background: var(--slate-50); padding: 16px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 160px; overflow: hidden;
   }
-  .diagram-img-wrap img {
-    max-width: 100%;
-    max-height: 220px;
-    object-fit: contain;
-  }
+  .diagram-img-wrap img { max-width: 100%; max-height: 180px; object-fit: contain; }
   .diagram-caption {
-    padding: 12px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--slate-700);
-    border-top: 1px solid var(--slate-200);
+    padding: 10px 14px; font-size: 12px; font-weight: 600;
+    color: var(--slate-700); border-top: 1px solid var(--slate-200);
+    background: white;
   }
-  .diagram-caption span {
-    font-weight: 400;
-    color: var(--slate-400);
-    margin-left: 6px;
-    font-size: 12px;
+  .diagram-caption span { font-weight: 400; color: var(--slate-400); margin-left: 4px; font-size: 11px; }
+  .diagram-item.featured { grid-column: span 2; }
+  .diagram-item.featured .diagram-img-wrap { min-height: 220px; }
+  .diagram-item.featured .diagram-img-wrap img { max-height: 260px; }
+
+  /* WIKI DOCS */
+  .wiki-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;
   }
+  .wiki-card {
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 22px 20px;
+    box-shadow: var(--shadow-sm); transition: all 0.15s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .wiki-card:hover { border-color: var(--teal); box-shadow: var(--shadow); transform: translateY(-2px); text-decoration: none; }
+  .wiki-icon { font-size: 22px; margin-bottom: 10px; display: block; }
+  .wiki-card h3 { font-size: 14px; font-weight: 700; color: var(--slate-900); margin-bottom: 5px; }
+  .wiki-card p { font-size: 12px; color: var(--slate-500); line-height: 1.5; }
+  .wiki-card .wiki-arrow { display: inline-block; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--teal); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--slate-200); margin: 0 24px; }
 
   /* FOOTER */
   footer {
-    background: var(--slate-900);
-    color: rgba(255,255,255,0.55);
-    padding: 40px 24px;
-    text-align: center;
-    font-size: 13px;
-    line-height: 1.7;
+    background: var(--slate-900); color: rgba(255,255,255,0.5);
+    padding: 48px 24px; text-align: center; font-size: 13px; line-height: 1.8;
   }
   footer a { color: var(--teal); }
   footer strong { color: white; font-weight: 600; }
+  .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); }
+  .footer-links a:hover { color: var(--teal); text-decoration: none; }
 
   /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .roadmap-grid { grid-template-columns: 1fr; }
+    .diagrams-grid { grid-template-columns: repeat(2, 1fr); }
+    .diagram-item.featured { grid-column: span 1; }
+  }
   @media (max-width: 768px) {
     .stats-grid { grid-template-columns: 1fr; gap: 0; }
     .stat-item { padding: 20px 24px; }
-    .pipeline { flex-direction: column; gap: 8px; }
+    .pipeline-7 { flex-direction: column; gap: 8px; }
     .pipeline-step::after { display: none; }
     .diagrams-grid { grid-template-columns: 1fr; }
     .nav-links .hide-mobile { display: none; }
   }
   @media (max-width: 480px) {
-    .section { padding: 48px 16px; }
-    .hero { padding: 56px 16px 48px; }
+    .section { padding: 52px 16px; }
+    .hero { padding: 60px 16px 52px; }
   }
 </style>
 </head>
@@ -493,11 +398,10 @@
 <nav>
   <div class="nav-logo">PM<span>Rocket</span></div>
   <div class="nav-links">
+    <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener" class="hide-mobile">Wiki</a>
     <a href="prototype.html" class="hide-mobile">Prototype</a>
-    <a href="prd.html" class="hide-mobile">PRD</a>
-    <a href="roadmap.html" class="hide-mobile">Roadmap</a>
-    <a href="architecture.html" class="hide-mobile">Architecture</a>
-    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener" class="primary">GitHub ↗</a>
+    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+    <a href="#" class="primary">Open app ↗</a>
   </div>
 </nav>
 
@@ -505,14 +409,14 @@
 <section class="hero">
   <div class="status-badge">
     <span class="status-dot"></span>
-    Alpha in progress · Free-tier stack
+    Live · Phase 7d complete · July 2026
   </div>
-  <h1>Career intelligence<br>for aspiring <span>PMs</span></h1>
-  <p>Maps your background to the right PM role — builds a personalised evidence roadmap calibrated against real job descriptions — and tells you, with market evidence, when you're ready to apply.</p>
+  <h1>Know your PM archetype.<br>Build your evidence.<br>Know when you're <span>ready</span>.</h1>
+  <p>PMRocket is the navigation layer every aspiring PM is missing. It tells you which role fits your background, what evidence to build for that specific role, and when you're genuinely ready to apply — grounded in real job descriptions, not invented rubrics.</p>
   <div class="hero-ctas">
-    <a href="help/" class="btn btn-primary">User guide →</a>
-    <a href="wiki/Home.html" class="btn btn-secondary">Portfolio wiki</a>
-    <a href="prototype.html" class="btn btn-secondary">Prototype</a>
+    <a href="#" class="btn btn-primary">Open app →</a>
+    <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener" class="btn btn-secondary">Read the wiki →</a>
+    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
   </div>
 </section>
 
@@ -525,36 +429,36 @@
     </div>
     <div class="stat-item">
       <span class="stat-number">40%</span>
-      <div class="stat-label">of candidates rejected at recruiter screen for domain depth<br><em>Mind the Product, 2025</em></div>
+      <div class="stat-label">of candidates rejected at recruiter screen<br>for insufficient domain depth<br><em>Mind the Product, 2025</em></div>
     </div>
     <div class="stat-item">
       <span class="stat-number">6–18 mo</span>
-      <div class="stat-label">average directionless prep loop<br><em>with no credible readiness signal</em></div>
+      <div class="stat-label">average directionless prep loop<br>with no credible readiness signal</div>
     </div>
   </div>
 </div>
 
-<!-- PROBLEM -->
+<!-- THE PROBLEM -->
 <section class="section section-alt">
   <div class="container">
     <div class="section-label">The problem</div>
-    <h2 class="section-title">The navigation gap</h2>
-    <p class="section-sub">Every major PM prep platform teaches frameworks and interview techniques. None solves the upstream problem.</p>
+    <h2 class="section-title">The navigation gap every aspiring PM faces</h2>
+    <p class="section-sub">Every major PM prep platform teaches frameworks and interview techniques. None solves the upstream problem: direction.</p>
     <div class="problem-grid">
       <div class="problem-card">
         <div class="problem-icon">🧭</div>
-        <h3>No role matching</h3>
-        <p>Platforms assume you already know which PM role to target. None maps your background to the right archetype — so candidates prepare generically for roles that don't fit them.</p>
+        <h3>Wrong direction</h3>
+        <p>Platforms assume you know which PM role to target. An engineer wants to build products differently than a consultant moving into PM. A growth PM in fintech faces a different bar than one in consumer. Existing tools treat them identically — no archetype matching, no personalisation.</p>
       </div>
       <div class="problem-card">
         <div class="problem-icon">📊</div>
         <h3>No market-grounded readiness signal</h3>
-        <p>Existing readiness scores use invented internal rubrics with no connection to what employers actually screen for. "You're at 62" means nothing without market grounding.</p>
+        <p>Existing readiness scores use invented internal rubrics with no connection to what employers actually screen for. Candidates prepare in the dark — no feedback loop, no signal, just silence until they apply and get rejected without knowing why.</p>
       </div>
       <div class="problem-card">
         <div class="problem-icon">🗂️</div>
-        <h3>No evidence practice</h3>
-        <p>Employers require portfolio evidence — PRDs with success metrics, A/B test documentation, domain analyses. Platforms teach frameworks to talk about evidence without building any.</p>
+        <h3>No honest gate</h3>
+        <p>There is no point at which the system tells you "you're ready." Bootcamp alumni confidently apply before they've shipped anything. Self-taught learners spend a year on case studies but never validate whether a company would care. PMRocket is that gate — grounded in real JD data.</p>
       </div>
     </div>
   </div>
@@ -564,33 +468,125 @@
 <section class="section">
   <div class="container">
     <div class="section-label">How it works</div>
-    <h2 class="section-title">A five-stage intelligence pipeline</h2>
-    <p class="section-sub">Each stage feeds the next. No stage is skippable.</p>
-    <div class="pipeline">
-      <div class="pipeline-step">
+    <h2 class="section-title">A seven-stage career intelligence pipeline</h2>
+    <p class="section-sub">Stages 1–5 are live. Each stage feeds the next. No stage is skippable. Stages 6–7 are on the roadmap.</p>
+
+    <div class="pipeline-7">
+      <div class="pipeline-step live">
         <div class="step-number">1</div>
+        <div class="step-badge badge-live">Live</div>
         <h3>Intake</h3>
-        <p>15 questions capturing background, skills, domain, geography, and PM experience signals</p>
+        <p>15 questions · 3 min · background, skills, domain, geography, goals</p>
       </div>
-      <div class="pipeline-step">
+      <div class="pipeline-step live">
         <div class="step-number">2</div>
-        <h3>Weighted Match</h3>
-        <p>4 PM archetypes scored across all 15 signals with admin-configurable weights</p>
+        <div class="step-badge badge-live">Live</div>
+        <h3>Archetype Match</h3>
+        <p>Weighted model · 4 archetypes · primary + runner-up + confidence %</p>
       </div>
-      <div class="pipeline-step">
+      <div class="pipeline-step live">
         <div class="step-number">3</div>
-        <h3>3-Layer Curriculum</h3>
-        <p>Universal AI literacy + archetype-specific + domain × geography artefact roadmap</p>
+        <div class="step-badge badge-live">Live</div>
+        <h3>3-Layer Roadmap</h3>
+        <p>Universal · Archetype-specific · Domain × Geography</p>
       </div>
-      <div class="pipeline-step">
+      <div class="pipeline-step live">
         <div class="step-number">4</div>
+        <div class="step-badge badge-live">Live</div>
         <h3>Evidence Log</h3>
-        <p>Self-attestation with progressive tiers: Learning → Practised → Mastered, auto-computed</p>
+        <p>Artefacts · Learning → Practised → Mastered · auto tier unlock</p>
       </div>
-      <div class="pipeline-step">
+      <div class="pipeline-step live">
         <div class="step-number">5</div>
-        <h3>RAG Gap Analysis</h3>
-        <p>Gap % vs real JD requirements. Ready-to-apply gate at ≤30% gap, no critical skill gaps</p>
+        <div class="step-badge badge-live">Live</div>
+        <h3>Readiness Gate</h3>
+        <p>Compared vs real job postings · top 3 gaps named · clear signal: ready or not yet</p>
+      </div>
+      <div class="pipeline-step planned">
+        <div class="step-number">6</div>
+        <div class="step-badge badge-planned">V3a</div>
+        <h3>Apply</h3>
+        <p>Paste a target JD · evidence-backed resume generated · export PDF</p>
+      </div>
+      <div class="pipeline-step planned">
+        <div class="step-number">7</div>
+        <div class="step-badge badge-planned">V3b</div>
+        <h3>Interview & Discover</h3>
+        <p>AI mock interview room · job matching for roles you're evidence-ready for</p>
+      </div>
+    </div>
+
+    <div class="diagram-embed">
+      <img src="diagrams/export/07-functional-architecture.svg" alt="Functional Architecture — 7-stage pipeline with infrastructure layer" loading="lazy">
+      <div class="diagram-embed-label">
+        Functional Architecture · D7 ·
+        <a href="https://app.diagrams.net/#Uhttps://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/07-functional-architecture.drawio" target="_blank" rel="noopener">open in draw.io ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER JOURNEYS -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">User journeys</div>
+    <h2 class="section-title">The Wanderer's path — confused to confident</h2>
+    <p class="section-sub">Sarah is a backend engineer 3 months into self-directed PM prep. She doesn't know which PM role fits her, what to build, or when to start applying. This is her journey.</p>
+
+    <div class="diagram-embed" style="margin-bottom:20px;">
+      <img src="diagrams/export/08-user-journey-wanderer.svg" alt="User Journey Timeline — from Sign Up to Readiness Gate" loading="lazy">
+      <div class="diagram-embed-label">
+        Wanderer Journey Timeline · D8 ·
+        <a href="https://app.diagrams.net/#Uhttps://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/08-user-journey-wanderer.drawio" target="_blank" rel="noopener">open in draw.io ↗</a>
+      </div>
+    </div>
+
+    <div class="diagram-embed">
+      <img src="diagrams/export/09-product-flow-swimlane.svg" alt="Product Flow Swimlane — User Actions, Platform Response, User Outcome" loading="lazy">
+      <div class="diagram-embed-label">Product Flow Swimlane · D9</div>
+    </div>
+
+    <div class="journey-moments">
+      <div class="moment-card">
+        <div class="moment-stage">Stage 2 — The match moment</div>
+        <h3>Direction in 3 minutes</h3>
+        <p>Sarah answers 15 questions during lunch. After 15 signals the system shows: <strong>Technical PM, 78% confidence</strong>. Reasoning displayed: strong technical depth, shipped code, but zero GTM experience — a gap, not a disqualifier.</p>
+        <div class="moment-quote">"I finally know which direction to point."</div>
+      </div>
+      <div class="moment-card">
+        <div class="moment-stage">Stage 4 — The evidence loop</div>
+        <h3>Real proof, not invented</h3>
+        <p>Over 3 months Sarah logs 13 artefacts — a shipped GitHub case study, an interview study as a Notion doc, a strategy memo from work. Her readiness score climbs from 22 to 61. Each log takes under 90 seconds and triggers a visible score bump.</p>
+        <div class="moment-quote">"I'm building things that actually count."</div>
+      </div>
+      <div class="moment-card">
+        <div class="moment-stage">Stage 5 — The readiness gate</div>
+        <h3>An honest signal</h3>
+        <p>At score 78 (above threshold of 75), with gap ≤ 30% and no critical missing skills, the system tells Sarah: <strong>✓ You're ready to apply for Technical PM roles in developer tools.</strong> Not before. Not for Growth PM. For this specific role, with this evidence.</p>
+        <div class="moment-quote">"I know I'm ready. And I know why."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Who it's for</div>
+    <h2 class="section-title">Built for two distinct users</h2>
+    <p class="section-sub">Every feature decision is defended through the lens of a specific persona. No feature creep from hypothetical users.</p>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <span class="persona-tag primary">Primary · V1</span>
+        <h3>The Wanderer</h3>
+        <p class="persona-desc">Aspiring PM, 3–6 months into self-directed preparation</p>
+        <p>Has read the books, watched the talks, built some case studies. Does not know if she is building the right things for the right role. Does not know when to start applying. PMRocket tells her: here is your archetype, here is what matters for your domain and market, here is what you still need.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-tag secondary">Secondary · V2a</span>
+        <h3>The Navigator</h3>
+        <p class="persona-desc">Existing PM levelling up, switching domain, or moving to a new market</p>
+        <p>Has proven she can do PM but needs to prove competence in a new area. PMRocket becomes a career progression tool — maps the specific gaps between where she is and where she wants to be, using real market data as the ground truth. Informed by existing seniority; retrieves only Senior PM JDs for gap analysis.</p>
       </div>
     </div>
   </div>
@@ -601,170 +597,321 @@
   <div class="container">
     <div class="section-label">Technical depth</div>
     <h2 class="section-title">Under the hood</h2>
-    <p class="section-sub">Production-grade design decisions — not a toy demo.</p>
+    <p class="section-sub">Production-grade design decisions at every layer — not a toy demo.</p>
     <div class="tech-grid">
       <div class="tech-card">
-        <div class="tech-card-label">Weighted matching</div>
-        <h3>15-signal archetype scoring</h3>
+        <div class="tech-card-label">Weighted archetype matching</div>
+        <h3>15-signal normalised scoring</h3>
         <div class="tech-code">score(A) = Σ[w(q,A) × raw(q,A,answer)]
-          ────────────────────────────
-                   Σ w(q,A)</div>
-        <p>15 intake signals weighted per archetype. Admin-configurable via <code style="color:#5eead4;font-family:monospace">question_weights</code> table — no code deploy to tune behaviour. Tie-breaking: Q12 (technical skills) absolute contribution decides.</p>
+─────────────────────────────
+         Σ w(q,A)</div>
+        <p>Every intake answer is a scored signal for every PM archetype. Weights are stored in <code>question_weights</code> table — admin-configurable at runtime, no code deploy required. Q12 (technical skills, weight 9) decides ties within 0.02 of each other. Deterministic and market-grounded, not editorial.</p>
       </div>
       <div class="tech-card">
-        <div class="tech-card-label">RAG gap analysis</div>
+        <div class="tech-card-label">pgvector HNSW gap analysis</div>
         <h3>JD-grounded readiness signal</h3>
-        <div class="tech-code">pgvector HNSW (m=16, ef=64)
-→ top-25 JDs by profile similarity
-→ LLM: gap_pct + top 3 skill gaps</div>
-        <p>On-demand, not auto-triggered. Corpus-gated: gap analysis hidden if fewer than 15 JDs exist for the user's archetype × domain × geography slice.</p>
+        <div class="tech-code">HNSW (m=16, ef=64) → K=25 JD retrieval
+profile embed → cosine similarity
+→ LLM narrative + gap_pct metric</div>
+        <p>On-demand, not auto-triggered. Gap analysis is hidden if fewer than 15 JDs exist for the user's archetype × domain × geography slice — the product never generates a signal from an insufficient corpus. <code>gap_pct = (1 − evidenced / total) × 100</code> is deterministic and computed separately from the LLM narrative.</p>
       </div>
       <div class="tech-card">
-        <div class="tech-card-label">LLM abstraction</div>
+        <div class="tech-card-label">LLM abstraction layer</div>
         <h3>Provider-agnostic inference</h3>
-        <div class="tech-code">ACTIVE_LLM_PROVIDER=groq|anthropic|google</div>
-        <p>Vercel AI SDK provider factory. Groq (Llama 3.3 70B, free tier) is the default. Swap provider with a single env var — zero code changes. Designed for Vercel → AWS Fargate portability from day one.</p>
+        <div class="tech-code">ACTIVE_LLM_PROVIDER=groq|anthropic|google
+ACTIVE_EMBED_PROVIDER=openai|...</div>
+        <p>All LLM calls route through a factory pattern — <code>getLLMModel()</code> reads the env var and returns the appropriate Vercel AI SDK model instance. Groq (Llama 3.3 70B, free tier) is the default. Swap providers with one environment variable — zero code changes. Designed for Vercel → AWS Fargate portability from day one.</p>
       </div>
       <div class="tech-card">
-        <div class="tech-card-label">ETL pipeline</div>
+        <div class="tech-card-label">Admin ETL pipeline</div>
         <h3>Market-current curriculum ops</h3>
-        <div class="tech-code">JD paste → Claude extract
-→ admin approve/reject
-→ pgvector embed</div>
-        <p>Vocabulary-constrained extraction prevents skill drift. Corpus minimum gates unlock gap analysis per slice. Admin reviews every skill before it touches the live curriculum.</p>
+        <div class="tech-code">JD paste → PII strip → LLM extract
+→ admin approve/reject per skill
+→ embed → jd_embeddings → skill_frequency</div>
+        <p>Extraction is vocabulary-constrained — the LLM maps JD text to existing taxonomy terms and cannot introduce new skill names. Curriculum Signals panel surfaces Trending (high JD frequency, not in curriculum), Stable, and Declining skills. No code deployment required to tune the curriculum or reweight matching.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">Now · Next · Later</h2>
+    <p class="section-sub">Sequenced by value delivered per user stage, not by technical convenience. Each gate exists because the next stage only has meaning after the previous one works.</p>
+    <div class="roadmap-grid">
+      <div class="roadmap-col">
+        <div class="roadmap-col-header now">
+          <span class="phase-label">Phase 7d · Live</span>
+          Now
+        </div>
+        <div class="roadmap-items">
+          <div class="roadmap-item">
+            <h4>Weighted archetype matching</h4>
+            <p>15 intake signals scored across 4 PM archetypes. Primary + runner-up with confidence %.</p>
+            <span class="benefit">Know which direction to point</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>3-layer personalised roadmap</h4>
+            <p>Universal · Archetype · Domain × Geography. Fintech NA ≠ Fintech India.</p>
+            <span class="benefit">Curriculum that's yours</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Evidence logging with tiers</h4>
+            <p>Learning → Practised → Mastered. Auto-computed from topic completion. Score updates synchronously.</p>
+            <span class="benefit">Progress you can see</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Readiness score</h4>
+            <p>Weighted across 5 dimensions: Technical (30%), Business (25%), Portfolio (25%), Domain (10%), Product (10%).</p>
+            <span class="benefit">Honest signal vs. wishful thinking</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-col-header next">
+          <span class="phase-label">Phase V2a · Building</span>
+          Next
+        </div>
+        <div class="roadmap-items">
+          <div class="roadmap-item">
+            <h4>JD corpus ETL — full intel</h4>
+            <p>Admin ETL seeding live JD corpus across all archetype × domain × geography slices.</p>
+            <span class="benefit">Gap analysis becomes available</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>RAG gap analysis</h4>
+            <p>pgvector K=25 retrieval + LLM narrative. Top 3 gaps named with specific artefacts to close them.</p>
+            <span class="benefit">Know exactly what's missing</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Ready-to-apply gate</h4>
+            <p>Score ≥ 75 + gap ≤ 30% + no critical missing skills → explicit "you're ready" signal.</p>
+            <span class="benefit">Confidence to apply, not hope</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Stripe paywall (live)</h4>
+            <p>Convert test-mode payment flow to live billing. Free: archetype match only. Paid: full roadmap + readiness.</p>
+            <span class="benefit">First revenue event</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-col-header later">
+          <span class="phase-label">Phase V3+ · Planned</span>
+          Later
+        </div>
+        <div class="roadmap-items">
+          <div class="roadmap-item">
+            <h4>Evidence-backed resume (V3a)</h4>
+            <p>Paste a JD → extract requirements → score vs your evidence → generate resume with real proof. No keyword stuffing.</p>
+            <span class="benefit">Apply with confidence</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Navigator flow (V2a.1)</h4>
+            <p>Existing PMs transitioning domain or seniority level. Weighted differently — background carries less, transition goal carries more.</p>
+            <span class="benefit">Expand market to working PMs</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>AI interview room (V3b)</h4>
+            <p>Archetype-specific mock interviews. Feedback tied to actual evidence logged, not generic PM coaching.</p>
+            <span class="benefit">Practice with your own proof</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Job matching (V3b)</h4>
+            <p>Surface open roles the user is evidence-ready for — not based on aspirations, based on logged proof.</p>
+            <span class="benefit">Compete on evidence, not hope</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- STACK -->
-<section class="section">
+<section class="section section-alt">
   <div class="container">
     <div class="section-label">Stack</div>
     <h2 class="section-title">Free-tier production-grade runtime</h2>
-    <p class="section-sub">~$0/mo until traction. Every architectural decision made for portability to AWS ECS Fargate when the time comes.</p>
+    <p class="section-sub">~$0/mo until traction. Every architectural decision made for portability to AWS ECS Fargate when the time comes. Docker from day one.</p>
     <div class="stack-grid">
+      <div class="stack-badge"><span class="dot"></span>Next.js 14 (App Router)</div>
       <div class="stack-badge"><span class="dot"></span>Vercel</div>
-      <div class="stack-badge"><span class="dot"></span>Next.js (App Router)</div>
       <div class="stack-badge"><span class="dot"></span>Neon (PostgreSQL + pgvector)</div>
       <div class="stack-badge"><span class="dot"></span>Clerk (Auth)</div>
       <div class="stack-badge"><span class="dot"></span>Vercel AI SDK</div>
-      <div class="stack-badge"><span class="dot"></span>Groq (Llama 3.3 70B)</div>
-      <div class="stack-badge"><span class="dot"></span>OpenAI Embeddings</div>
-      <div class="stack-badge"><span class="dot"></span>Stripe (paywall design)</div>
+      <div class="stack-badge"><span class="dot"></span>Groq · Llama 3.3 70B</div>
+      <div class="stack-badge"><span class="dot"></span>OpenAI text-embedding-3-small</div>
+      <div class="stack-badge"><span class="dot"></span>Stripe</div>
       <div class="stack-badge"><span class="dot"></span>PostHog</div>
       <div class="stack-badge"><span class="dot"></span>Resend</div>
     </div>
-    <div class="stack-note">Designed for Vercel → AWS ECS Fargate when traction justifies it. Docker from day one. Standard Node.js API routes only — no Edge Runtime primitives.</div>
+    <div class="stack-note">Standard Node.js API routes only — no Edge Runtime primitives. Ensures Vercel → AWS ECS Fargate portability without code changes when traction justifies the move.</div>
   </div>
 </section>
 
-<!-- DOCUMENTS -->
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-label">Project artefacts</div>
-    <h2 class="section-title">Documentation</h2>
-    <p class="section-sub">End-to-end product and technical thinking — from discovery to architecture.</p>
-    <div class="docs-grid">
-      <a href="prototype.html" class="doc-card">
-        <span class="doc-icon">🖥️</span>
-        <h3>Live Prototype</h3>
-        <p>13 screens, full hero flow — signup through gap analysis</p>
-        <span class="doc-arrow">Open prototype →</span>
-      </a>
-      <a href="prd.html" class="doc-card">
-        <span class="doc-icon">📄</span>
-        <h3>Product Requirements</h3>
-        <p>Full PRD v2.5 — problem, personas, features, acceptance criteria</p>
-        <span class="doc-arrow">Read PRD →</span>
-      </a>
-      <a href="roadmap.html" class="doc-card">
-        <span class="doc-icon">🗺️</span>
-        <h3>Roadmap</h3>
-        <p>Now / Next / Later delivery plan + historical phases</p>
-        <span class="doc-arrow">View roadmap →</span>
-      </a>
-      <a href="discovery-infographic.html" class="doc-card">
-        <span class="doc-icon">🔍</span>
-        <h3>Market Discovery</h3>
-        <p>Research findings, competitive landscape, demand signals</p>
-        <span class="doc-arrow">View discovery →</span>
-      </a>
-      <a href="architecture.html" class="doc-card">
-        <span class="doc-icon">🏗️</span>
-        <h3>Technical Architecture</h3>
-        <p>Stack decisions, data model, LLM abstraction, API contracts, migration strategy</p>
-        <span class="doc-arrow">Read architecture →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ARCHITECTURE DIAGRAMS -->
+<!-- DIAGRAMS -->
 <section class="section">
   <div class="container">
-    <div class="section-label">Architecture</div>
+    <div class="section-label">Architecture & flow diagrams</div>
     <h2 class="section-title">System diagrams</h2>
-    <p class="section-sub">draw.io source files in <code>docs/diagrams/</code>. Orthogonal connectors — no curves.</p>
+    <p class="section-sub">9 diagrams covering functional architecture, user journeys, system context, deployment, and key sequence flows. draw.io source in <code>docs/diagrams/</code>.</p>
     <div class="diagrams-grid">
+
+      <div class="diagram-item featured">
+        <a href="diagrams/export/07-functional-architecture.svg" target="_blank" rel="noopener">
+          <div class="diagram-img-wrap">
+            <img src="diagrams/export/07-functional-architecture.svg" alt="Functional Architecture — 7 stage pipeline" loading="lazy">
+          </div>
+          <div class="diagram-caption">D7 Functional Architecture <span>7-stage pipeline + infrastructure</span></div>
+        </a>
+      </div>
+
       <div class="diagram-item">
         <a href="diagrams/export/01-system-context.svg" target="_blank" rel="noopener">
           <div class="diagram-img-wrap">
-            <img src="diagrams/export/01-system-context.svg" alt="System Context diagram" loading="lazy">
+            <img src="diagrams/export/01-system-context.svg" alt="System Context" loading="lazy">
           </div>
           <div class="diagram-caption">D1 System Context <span>Actors + external systems</span></div>
         </a>
       </div>
+
+      <div class="diagram-item featured">
+        <a href="diagrams/export/08-user-journey-wanderer.svg" target="_blank" rel="noopener">
+          <div class="diagram-img-wrap">
+            <img src="diagrams/export/08-user-journey-wanderer.svg" alt="User Journey — Wanderer" loading="lazy">
+          </div>
+          <div class="diagram-caption">D8 Wanderer Journey <span>Milestone timeline — confused to ready</span></div>
+        </a>
+      </div>
+
       <div class="diagram-item">
         <a href="diagrams/export/02-component-blocks.svg" target="_blank" rel="noopener">
           <div class="diagram-img-wrap">
-            <img src="diagrams/export/02-component-blocks.svg" alt="Component Blocks diagram" loading="lazy">
+            <img src="diagrams/export/02-component-blocks.svg" alt="Component Blocks" loading="lazy">
           </div>
           <div class="diagram-caption">D2 Component Blocks <span>Logical modules</span></div>
         </a>
       </div>
+
+      <div class="diagram-item featured">
+        <a href="diagrams/export/09-product-flow-swimlane.svg" target="_blank" rel="noopener">
+          <div class="diagram-img-wrap">
+            <img src="diagrams/export/09-product-flow-swimlane.svg" alt="Product Flow Swimlane" loading="lazy">
+          </div>
+          <div class="diagram-caption">D9 Product Flow Swimlane <span>User actions · Platform response · Outcome</span></div>
+        </a>
+      </div>
+
       <div class="diagram-item">
         <a href="diagrams/export/03-deployment-free-tier.svg" target="_blank" rel="noopener">
           <div class="diagram-img-wrap">
-            <img src="diagrams/export/03-deployment-free-tier.svg" alt="Deployment diagram" loading="lazy">
+            <img src="diagrams/export/03-deployment-free-tier.svg" alt="Deployment (free tier)" loading="lazy">
           </div>
-          <div class="diagram-caption">D3 Deployment (free tier) <span>Vercel + Neon + Clerk + Groq</span></div>
+          <div class="diagram-caption">D3 Deployment <span>Vercel + Neon + Clerk + Groq</span></div>
         </a>
       </div>
+
       <div class="diagram-item">
         <a href="diagrams/export/04-sequence-auth.svg" target="_blank" rel="noopener">
           <div class="diagram-img-wrap">
-            <img src="diagrams/export/04-sequence-auth.svg" alt="Auth sequence diagram" loading="lazy">
+            <img src="diagrams/export/04-sequence-auth.svg" alt="Auth sequence" loading="lazy">
           </div>
           <div class="diagram-caption">D4 Auth + Provisioning <span>Clerk webhook flow</span></div>
         </a>
       </div>
+
       <div class="diagram-item">
         <a href="diagrams/export/05-sequence-gap-analysis.svg" target="_blank" rel="noopener">
           <div class="diagram-img-wrap">
-            <img src="diagrams/export/05-sequence-gap-analysis.svg" alt="Gap Analysis sequence diagram" loading="lazy">
+            <img src="diagrams/export/05-sequence-gap-analysis.svg" alt="Gap Analysis sequence" loading="lazy">
           </div>
           <div class="diagram-caption">D5 Gap Analysis (RAG) <span>pgvector → LLM → gap report</span></div>
         </a>
       </div>
+
       <div class="diagram-item">
         <a href="diagrams/export/06-sequence-etl.svg" target="_blank" rel="noopener">
           <div class="diagram-img-wrap">
-            <img src="diagrams/export/06-sequence-etl.svg" alt="ETL sequence diagram" loading="lazy">
+            <img src="diagrams/export/06-sequence-etl.svg" alt="Admin ETL sequence" loading="lazy">
           </div>
           <div class="diagram-caption">D6 Admin ETL <span>JD paste → extract → embed</span></div>
         </a>
       </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WIKI -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">Wiki</div>
+    <h2 class="section-title">Documentation</h2>
+    <p class="section-sub">End-to-end product and technical thinking — from problem framing through architecture. Full depth in the GitHub wiki.</p>
+    <div class="wiki-grid">
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">🏠</span>
+        <h3>Home</h3>
+        <p>Product overview, technical depth highlights, stack, current status, and navigation index</p>
+        <span class="wiki-arrow">Open wiki →</span>
+      </a>
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Product-Overview" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">🎯</span>
+        <h3>Product Overview</h3>
+        <p>The problem, goals, functional architecture, key capabilities, personas, and what's out of scope</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki/User-Journeys" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">🗺️</span>
+        <h3>User Journeys</h3>
+        <p>Six narrative walk-throughs with journey timeline and swimlane diagrams</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki/User-Flows" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">🔄</span>
+        <h3>User Flows</h3>
+        <p>Step-by-step flows: hero Wanderer flow, Navigator transition, admin ETL, evidence logging loop</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Feature-Map" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">📋</span>
+        <h3>Feature Map</h3>
+        <p>What's live, what's coming, phase gates, and non-goals — the scope boundary in plain English</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Roadmap" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">📅</span>
+        <h3>Roadmap</h3>
+        <p>Now / Next / Later with user benefits, business signals, and sequencing rationale</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
+      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Decision-Log" target="_blank" rel="noopener" class="wiki-card">
+        <span class="wiki-icon">📝</span>
+        <h3>Decision Log</h3>
+        <p>Key product decisions with reasoning — archetype taxonomy, scope, sequencing, evidence enrichment model</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
+      <a href="prd.html" class="wiki-card">
+        <span class="wiki-icon">📄</span>
+        <h3>PRD</h3>
+        <p>Full product requirements document — problem, personas, features, acceptance criteria</p>
+        <span class="wiki-arrow">Read →</span>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <strong>PMRocket</strong> · Built by Venkat ·
-  <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener">github.com/vcatreya-git/pmrocket</a>
-  <br><br>
-  Portfolio project — production-grade design, free-tier runtime until traction.
+  <strong>PMRocket</strong> — Career navigation for aspiring Product Managers<br>
+  Built by <strong>Venkat</strong> · Portfolio project — production-grade design, free-tier runtime until traction
+  <div class="footer-links">
+    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener">Wiki</a>
+    <a href="prototype.html">Prototype</a>
+  </div>
 </footer>
 
 </body>
