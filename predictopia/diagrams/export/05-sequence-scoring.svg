@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#475569"/>
+  </marker>
+  <marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#4338CA"/>
+  </marker>
+  <marker id="c" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#047857"/>
+  </marker>
+</defs>
+<style>
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .actor  { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .actor-g{ fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .actor-o{ fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .actor-s{ fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .life   { stroke:#CBD5E1; stroke-width:1.2; stroke-dasharray:5 3; fill:none; }
+  .seq    { stroke:#475569; stroke-width:1.5; fill:none; marker-end:url(#a); }
+  .seq-b  { stroke:#4338CA; stroke-width:1.5; fill:none; marker-end:url(#b); }
+  .seq-g  { stroke:#047857; stroke-width:1.5; fill:none; marker-end:url(#c); }
+  .note   { fill:#FFFBEB; stroke:#D97706; stroke-width:1; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .msg    { font:11px system-ui,sans-serif; fill:#334155; }
+  .step   { font:600 10px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">Predictopia — Result Fetch + Score Cascade</text>
+<text x="40" y="56" class="sub">On-demand result acquisition → 2/1/0 scoring → leaderboard → achievements</text>
+
+<!-- Actors -->
+<rect x="40"  y="72" width="90"  height="44" rx="10" class="actor-s"/>
+  <text x="85"  y="98" class="lab">Member</text>
+<rect x="185" y="72" width="90"  height="44" rx="10" class="actor"/>
+  <text x="230" y="98" class="lab">Frontend</text>
+<rect x="340" y="72" width="90"  height="44" rx="10" class="actor"/>
+  <text x="385" y="98" class="lab">API Route</text>
+<rect x="500" y="72" width="100" height="44" rx="10" class="actor-g"/>
+  <text x="550" y="98" class="lab">PostgreSQL</text>
+<rect x="680" y="72" width="110" height="44" rx="10" class="actor-o"/>
+  <text x="735" y="98" class="lab">CricketData</text>
+<rect x="860" y="72" width="80"  height="44" rx="10" class="actor"/>
+  <text x="900" y="98" class="lab">Realtime</text>
+
+<!-- Lifelines -->
+<line x1="85"  y1="116" x2="85"  y2="530" class="life"/>
+<line x1="230" y1="116" x2="230" y2="530" class="life"/>
+<line x1="385" y1="116" x2="385" y2="530" class="life"/>
+<line x1="550" y1="116" x2="550" y2="530" class="life"/>
+<line x1="735" y1="116" x2="735" y2="530" class="life"/>
+<line x1="900" y1="116" x2="900" y2="530" class="life"/>
+
+<!-- Steps -->
+<text x="20" y="148" class="step">1</text>
+<text x="20" y="188" class="step">2</text>
+<text x="20" y="236" class="step">3</text>
+<text x="20" y="284" class="step">4</text>
+<text x="20" y="332" class="step">5</text>
+<text x="20" y="384" class="step">6</text>
+<text x="20" y="432" class="step">7</text>
+<text x="20" y="480" class="step">8</text>
+
+<!-- 1: Open completed match -->
+<path d="M85,144 H230" class="seq"/>
+<text x="157" y="140" class="msg" text-anchor="middle">open completed match</text>
+
+<!-- 2: GET /matches/{id}/result -->
+<path d="M230,164 H385" class="seq-b"/>
+<text x="308" y="160" class="msg" text-anchor="middle">GET /matches/{id}/result</text>
+
+<!-- 3: Check match_results cache -->
+<path d="M385,184 H550" class="seq-b"/>
+<text x="468" y="180" class="msg" text-anchor="middle">SELECT match_results WHERE match_id</text>
+<path d="M550,200 H385" class="seq-g"/>
+<text x="468" y="212" class="msg" text-anchor="middle">cache miss → no row</text>
+
+<!-- 4: Fetch CricketData -->
+<path d="M385,228 H735" class="seq-b"/>
+<text x="560" y="224" class="msg" text-anchor="middle">GET /v1/match_result (one call per match)</text>
+<path d="M735,244 H385" class="seq-g"/>
+<text x="560" y="256" class="msg" text-anchor="middle">winner · result_type · summary</text>
+
+<!-- 5: Write result (first write wins) -->
+<path d="M385,272 H550" class="seq-b"/>
+<text x="468" y="268" class="msg" text-anchor="middle">INSERT INTO match_results ON CONFLICT DO NOTHING</text>
+
+<!-- 6: Score predictions -->
+<path d="M385,292 H550" class="seq-b"/>
+<text x="468" y="306" class="msg" text-anchor="middle">UPDATE predictions SET points_awarded (2/1/0)</text>
+<path d="M550,322 H385" class="seq-g"/>
+<text x="468" y="334" class="msg" text-anchor="middle">all pool members scored</text>
+
+<!-- 7: Recompute leaderboard -->
+<path d="M385,352 H550" class="seq-b"/>
+<text x="468" y="348" class="msg" text-anchor="middle">UPSERT leaderboard_cache (weekly · monthly · overall)</text>
+<path d="M550,368 H385" class="seq-g"/>
+<text x="468" y="380" class="msg" text-anchor="middle">ranks recomputed · streaks updated</text>
+
+<!-- 8: Check achievements -->
+<path d="M385,400 H550" class="seq-b"/>
+<text x="468" y="396" class="msg" text-anchor="middle">check achievement criteria (hot streak / perfect week)</text>
+<path d="M550,416 H385" class="seq-g"/>
+<text x="468" y="428" class="msg" text-anchor="middle">INSERT achievements (append-only)</text>
+
+<!-- 9: Push via Realtime -->
+<path d="M385,448 H900" class="seq-b"/>
+<text x="643" y="444" class="msg" text-anchor="middle">broadcast leaderboard update</text>
+<path d="M900,464 H230" class="seq-g"/>
+<text x="565" y="476" class="msg" text-anchor="middle">live leaderboard refresh</text>
+
+<!-- 10: Return to member -->
+<path d="M230,488 H85" class="seq-g"/>
+<text x="157" y="484" class="msg" text-anchor="middle">match result + new rank shown</text>
+
+<text x="40" y="548" style="font:11px system-ui,sans-serif; fill:#94A3B8">ON CONFLICT DO NOTHING = first fetch wins · concurrent race safe · sync at family scale</text>
+</svg>

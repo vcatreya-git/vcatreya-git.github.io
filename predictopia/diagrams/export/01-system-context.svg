@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box    { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g  { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o  { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p  { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .box-t  { fill:#F0FDFA; stroke:#0D9488; stroke-width:1.5; }
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2   { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .edge   { stroke:#CBD5E1; stroke-width:1.5; fill:none; marker-end:url(#a); }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; marker-end:url(#a); }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">Predictopia — System Context</text>
+<text x="40" y="56" class="sub">IPL prediction pool platform · Vercel + Supabase free-tier runtime</text>
+
+<!-- Actors (left) -->
+<rect x="30" y="130" width="130" height="56" rx="10" class="box-gray"/>
+  <text x="95" y="161" class="lab">Pool Admin</text>
+  <text x="95" y="176" class="lab2">creates & manages</text>
+
+<rect x="30" y="240" width="130" height="56" rx="10" class="box-gray"/>
+  <text x="95" y="271" class="lab">Pool Member</text>
+  <text x="95" y="286" class="lab2">predicts & tracks</text>
+
+<rect x="30" y="350" width="130" height="56" rx="10" class="box-gray"/>
+  <text x="95" y="381" class="lab">Casual Joiner</text>
+  <text x="95" y="396" class="lab2">via WhatsApp link</text>
+
+<!-- Core app (centre) -->
+<rect x="310" y="170" width="200" height="120" rx="14" class="box"/>
+  <text x="410" y="225" class="lab">Predictopia</text>
+  <text x="410" y="243" class="lab2">Next.js · App Router</text>
+  <text x="410" y="258" class="lab2">Vercel · free tier</text>
+
+<!-- External services (right) -->
+<rect x="650" y="80"  width="170" height="52" rx="10" class="box-g"/>
+  <text x="735" y="106" class="lab">Supabase</text>
+  <text x="735" y="121" class="lab2">PostgreSQL + RLS + Auth</text>
+
+<rect x="650" y="168" width="170" height="52" rx="10" class="box-g"/>
+  <text x="735" y="194" class="lab">Supabase Auth</text>
+  <text x="735" y="209" class="lab2">Google OAuth · JWT</text>
+
+<rect x="650" y="256" width="170" height="52" rx="10" class="box-o"/>
+  <text x="735" y="282" class="lab">CricketData.org</text>
+  <text x="735" y="297" class="lab2">IPL schedule + results</text>
+
+<rect x="650" y="344" width="170" height="52" rx="10" class="box-p"/>
+  <text x="735" y="370" class="lab">Vercel Cron</text>
+  <text x="735" y="385" class="lab2">daily schedule refresh</text>
+
+<rect x="650" y="432" width="170" height="52" rx="10" class="box-t"/>
+  <text x="735" y="458" class="lab">@vercel/og</text>
+  <text x="735" y="473" class="lab2">screenshot share cards</text>
+
+<!-- Actors → app -->
+<path d="M160,158 H240 V220 H310" class="edge-s"/>
+<path d="M160,268 H240 V250 H310" class="edge-s"/>
+<path d="M160,378 H240 V280 H310" class="edge-s"/>
+
+<!-- App → services (gutter x=570) -->
+<path d="M510,210 H570 V106 H650" class="edge"/>
+<path d="M510,225 H570 V194 H650" class="edge"/>
+<path d="M510,255 H570 V282 H650" class="edge"/>
+<path d="M510,270 H570 V370 H650" class="edge"/>
+<path d="M510,285 H570 V458 H650" class="edge"/>
+
+<text x="40" y="502" class="legend">No payments · no AI · sports API + Supabase only · family scale zero monthly cost</text>
+</svg>

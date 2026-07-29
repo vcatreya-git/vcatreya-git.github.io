@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .grp   { fill:none; stroke:#CBD5E1; stroke-width:1.5; stroke-dasharray:6 3; rx:14; }
+  .box   { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-t { fill:#F0FDFA; stroke:#0D9488; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub   { font:12px system-ui,sans-serif; fill:#64748B; }
+  .grp-l { font:700 11px system-ui,sans-serif; fill:#94A3B8; letter-spacing:.04em; }
+  .lab   { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2  { font:10px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .edge  { stroke:#CBD5E1; stroke-width:1.5; fill:none; marker-end:url(#a); }
+  .legend{ font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">Predictopia — Component Blocks</text>
+<text x="40" y="56" class="sub">Frontend · API modules · Database · Supabase services</text>
+
+<!-- VERCEL boundary -->
+<rect x="30" y="72" width="520" height="380" rx="14" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="6 3"/>
+<text x="46" y="94" class="grp-l">VERCEL</text>
+
+<!-- Frontend -->
+<rect x="50" y="105" width="140" height="52" rx="10" class="box"/>
+  <text x="120" y="131" class="lab">Next.js Frontend</text>
+  <text x="120" y="146" class="lab2">App Router · RSC + Client</text>
+
+<!-- Cron + OG -->
+<rect x="50" y="185" width="140" height="52" rx="10" class="box-p"/>
+  <text x="120" y="211" class="lab">Vercel Cron</text>
+  <text x="120" y="226" class="lab2">daily schedule refresh</text>
+
+<rect x="50" y="265" width="140" height="52" rx="10" class="box-t"/>
+  <text x="120" y="291" class="lab">@vercel/og</text>
+  <text x="120" y="306" class="lab2">screenshot cards · satori</text>
+
+<!-- API modules -->
+<rect x="245" y="105" width="130" height="44" rx="10" class="box"/>
+  <text x="310" y="128" class="lab">AuthModule</text>
+  <text x="310" y="141" class="lab2">OAuth · profile CRUD</text>
+
+<rect x="245" y="165" width="130" height="44" rx="10" class="box"/>
+  <text x="310" y="188" class="lab">PoolModule</text>
+  <text x="310" y="201" class="lab2">CRUD · join · members</text>
+
+<rect x="245" y="225" width="130" height="44" rx="10" class="box"/>
+  <text x="310" y="248" class="lab">MatchModule</text>
+  <text x="310" y="261" class="lab2">schedule · result fetch</text>
+
+<rect x="245" y="285" width="130" height="44" rx="10" class="box"/>
+  <text x="310" y="308" class="lab">PredictionModule</text>
+  <text x="310" y="321" class="lab2">submit · cutoff · reveal</text>
+
+<rect x="245" y="345" width="130" height="44" rx="10" class="box"/>
+  <text x="310" y="368" class="lab">ScoringModule</text>
+  <text x="310" y="381" class="lab2">2/1/0 · leaderboard · streaks</text>
+
+<rect x="400" y="225" width="130" height="44" rx="10" class="box"/>
+  <text x="465" y="248" class="lab">PrizeModule</text>
+  <text x="465" y="261" class="lab2">Nx formula · payout tracking</text>
+
+<rect x="400" y="285" width="130" height="44" rx="10" class="box"/>
+  <text x="465" y="308" class="lab">CardModule</text>
+  <text x="465" y="321" class="lab2">share card · QR embed</text>
+
+<!-- SUPABASE boundary -->
+<rect x="620" y="72" width="310" height="380" rx="14" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="6 3"/>
+<text x="636" y="94" class="grp-l">SUPABASE</text>
+
+<rect x="640" y="105" width="140" height="52" rx="10" class="box-g"/>
+  <text x="710" y="131" class="lab">PostgreSQL</text>
+  <text x="710" y="146" class="lab2">10 tables · pgvector-free</text>
+
+<rect x="640" y="185" width="140" height="52" rx="10" class="box-g"/>
+  <text x="710" y="211" class="lab">Row-Level Security</text>
+  <text x="710" y="226" class="lab2">15 tables · 007 nuclear fix</text>
+
+<rect x="640" y="265" width="140" height="52" rx="10" class="box-g"/>
+  <text x="710" y="291" class="lab">Supabase Auth</text>
+  <text x="710" y="306" class="lab2">Google OAuth · JWT</text>
+
+<rect x="640" y="345" width="140" height="52" rx="10" class="box-g"/>
+  <text x="710" y="371" class="lab">Supabase Realtime</text>
+  <text x="710" y="386" class="lab2">live score updates</text>
+
+<!-- EXTERNAL -->
+<rect x="640" y="468" width="140" height="52" rx="10" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5"/>
+  <text x="710" y="494" class="lab">CricketData.org</text>
+  <text x="710" y="509" class="lab2">100 calls/day · free tier</text>
+
+<!-- Frontend → API modules -->
+<path d="M190,128 H245" stroke="#4338CA" stroke-width="1.2" fill="none" marker-end="url(#a)"/>
+<path d="M190,148 H220 V187 H245" stroke="#4338CA" stroke-width="1.2" fill="none" marker-end="url(#a)"/>
+
+<!-- API modules → Supabase (via x=580) -->
+<path d="M375,127 H580 V131 H640" class="edge"/>
+<path d="M375,187 H580 V207 H640" class="edge"/>
+<path d="M375,247 H580 V291 H640" class="edge"/>
+<path d="M375,307 H580 V371 H640" class="edge"/>
+<path d="M530,247 H580 V494 H640" class="edge"/>
+
+<text x="40" y="498" class="legend">Zero-cost runtime · Google OAuth covers family · Supabase Realtime for live leaderboards</text>
+</svg>

@@ -834,47 +834,49 @@ prize_pool = sum(paid_buy_ins)
 <section id="diagrams" class="section section-alt">
   <div class="container">
     <div class="section-label">Diagrams</div>
-    <h2 class="section-title">7 draw.io diagrams — system through user journeys</h2>
-    <p class="section-sub">Source files in <code>docs/diagrams/</code>. Open with <a href="https://app.diagrams.net/" target="_blank" rel="noopener">diagrams.net</a> or the VS Code Draw.io extension.</p>
-    <div class="diagrams-grid">
-      <div class="diag-item">
-        <div class="diag-label">D1 · System Context</div>
-        <div class="diag-desc">Actors, Supabase, CricketData.org, WhatsApp — external integrations and system boundary</div>
-        <div class="diag-note">01-system-context.drawio</div>
-      </div>
-      <div class="diag-item">
-        <div class="diag-label">D2 · Component Blocks</div>
-        <div class="diag-desc">App modules — Pool, Predict, Score, Prize, Card — and their dependencies</div>
-        <div class="diag-note">02-component-blocks.drawio</div>
-      </div>
-      <div class="diag-item">
-        <div class="diag-label">D3 · Deployment (Free Tier)</div>
-        <div class="diag-desc">Vercel (Next.js + Cron) → Supabase (DB + Auth + Realtime) → CricketData topology</div>
-        <div class="diag-note">03-deployment.drawio</div>
-      </div>
-      <div class="diag-item">
-        <div class="diag-label">D4 · Predict Sequence</div>
-        <div class="diag-desc">Member → API → DB sequence for prediction submission, cutoff lock, and post-cutoff reveal</div>
-        <div class="diag-note">04-sequence-predict.drawio</div>
-      </div>
-      <div class="diag-item">
-        <div class="diag-label">D5 · Scoring Sequence</div>
-        <div class="diag-desc">On-demand result fetch → cache write → score cascade → leaderboard update flow</div>
-        <div class="diag-note">05-sequence-scoring.drawio</div>
-      </div>
-      <div class="diag-item">
-        <div class="diag-label">D6 · Admin Journey</div>
-        <div class="diag-desc">Pool create → share → mid-season ops → prize settlement across the full IPL season</div>
-        <div class="diag-note">06-user-journey-admin.drawio</div>
-      </div>
-      <div class="diag-item">
-        <div class="diag-label">D7 · Member Journey</div>
-        <div class="diag-desc">Join via link → first prediction → cutoff reveal → leaderboard → achievements</div>
-        <div class="diag-note">07-user-journey-member.drawio</div>
-      </div>
+    <h2 class="section-title">7 architecture &amp; flow diagrams</h2>
+    <p class="section-sub">System context through user journeys — the full technical picture.</p>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D1 · System Context</div>
+      <div class="diag-desc" style="margin-bottom:10px">Actors, Supabase, CricketData.org — external integrations and system boundary</div>
+      <img src="diagrams/export/01-system-context.svg" alt="D1 System Context" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
     </div>
-    <div class="stack-note" style="margin-top:16px">
-      Diagrams are draw.io source files. SVG exports will be added when the project moves to production re-deploy phase.
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D2 · Component Blocks</div>
+      <div class="diag-desc" style="margin-bottom:10px">App modules — Pool, Predict, Score, Prize, Card — and their Supabase dependencies</div>
+      <img src="diagrams/export/02-component-blocks.svg" alt="D2 Component Blocks" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D3 · Free-Tier Deployment</div>
+      <div class="diag-desc" style="margin-bottom:10px">Vercel (Next.js + Cron + OG) → Supabase (DB + Auth + Realtime) — zero monthly cost topology</div>
+      <img src="diagrams/export/03-deployment-free-tier.svg" alt="D3 Deployment" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D4 · Prediction Sequence</div>
+      <div class="diag-desc" style="margin-bottom:10px">Member → API → DB sequence for prediction submission, cutoff lock, and post-cutoff reveal</div>
+      <img src="diagrams/export/04-sequence-predict.svg" alt="D4 Prediction Sequence" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D5 · Scoring Cascade</div>
+      <div class="diag-desc" style="margin-bottom:10px">On-demand result fetch → cache write → 2/1/0 scoring → leaderboard → achievements</div>
+      <img src="diagrams/export/05-sequence-scoring.svg" alt="D5 Scoring Cascade" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D6 · Admin Journey</div>
+      <div class="diag-desc" style="margin-bottom:10px">Pool create → share → mid-season ops → prize settlement — swimlane across the full IPL season</div>
+      <img src="diagrams/export/06-user-journey-admin.svg" alt="D6 Admin Journey" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:8px">
+      <div class="diag-label" style="margin-bottom:8px">D7 · Member Journey</div>
+      <div class="diag-desc" style="margin-bottom:10px">Join via link → first prediction → cutoff reveal → leaderboard → achievements → multi-pool</div>
+      <img src="diagrams/export/07-user-journey-member.svg" alt="D7 Member Journey" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
     </div>
   </div>
 </section>

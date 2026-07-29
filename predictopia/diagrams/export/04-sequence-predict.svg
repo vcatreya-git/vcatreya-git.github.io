@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="580" viewBox="0 0 900 580">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#475569"/>
+  </marker>
+  <marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#4338CA"/>
+  </marker>
+  <marker id="c" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#047857"/>
+  </marker>
+</defs>
+<style>
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .actor  { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .actor-g{ fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .actor-s{ fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .life   { stroke:#CBD5E1; stroke-width:1.2; stroke-dasharray:5 3; fill:none; }
+  .seq    { stroke:#475569; stroke-width:1.5; fill:none; marker-end:url(#a); }
+  .seq-b  { stroke:#4338CA; stroke-width:1.5; fill:none; marker-end:url(#b); }
+  .seq-g  { stroke:#047857; stroke-width:1.5; fill:none; marker-end:url(#c); }
+  .note   { fill:#FFFBEB; stroke:#D97706; stroke-width:1; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2   { font:10px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .msg    { font:11px system-ui,sans-serif; fill:#334155; }
+  .step   { font:600 10px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">Predictopia — Prediction Submission + Cutoff + Reveal</text>
+<text x="40" y="56" class="sub">One-tap prediction with pre-cutoff lock and post-cutoff reveal</text>
+
+<!-- Actors -->
+<rect x="60"  y="72" width="100" height="44" rx="10" class="actor-s"/>
+  <text x="110" y="98" class="lab">Member</text>
+<rect x="250" y="72" width="100" height="44" rx="10" class="actor"/>
+  <text x="300" y="98" class="lab">Frontend</text>
+<rect x="450" y="72" width="100" height="44" rx="10" class="actor"/>
+  <text x="500" y="98" class="lab">API Route</text>
+<rect x="650" y="72" width="120" height="44" rx="10" class="actor-g"/>
+  <text x="710" y="98" class="lab">PostgreSQL</text>
+
+<!-- Lifelines -->
+<line x1="110" y1="116" x2="110" y2="540" class="life"/>
+<line x1="300" y1="116" x2="300" y2="540" class="life"/>
+<line x1="500" y1="116" x2="500" y2="540" class="life"/>
+<line x1="710" y1="116" x2="710" y2="540" class="life"/>
+
+<!-- Step labels -->
+<text x="20" y="152" class="step">1</text>
+<text x="20" y="196" class="step">2</text>
+<text x="20" y="244" class="step">3</text>
+<text x="20" y="288" class="step">4</text>
+<text x="20" y="336" class="step">5</text>
+<text x="20" y="384" class="step">6</text>
+<text x="20" y="432" class="step">7</text>
+<text x="20" y="480" class="step">8</text>
+
+<!-- Messages -->
+<!-- 1: Open match card -->
+<path d="M110,148 H300" class="seq"/>
+<text x="205" y="144" class="msg" text-anchor="middle">open match card</text>
+
+<!-- 2: GET /matches/{id} -->
+<path d="M300,172 H500" class="seq-b"/>
+<text x="400" y="168" class="msg" text-anchor="middle">GET /matches/{id}</text>
+<path d="M500,188 H300" class="seq-g"/>
+<text x="400" y="200" class="msg" text-anchor="middle">match + cutoff_at · countdown shown</text>
+
+<!-- 3: Predict (before cutoff) -->
+<path d="M110,220 H300" class="seq"/>
+<text x="205" y="216" class="msg" text-anchor="middle">tap Team A — one tap</text>
+
+<!-- 4: POST /predictions -->
+<path d="M300,244 H500" class="seq-b"/>
+<text x="400" y="240" class="msg" text-anchor="middle">POST /predictions</text>
+<path d="M500,260 H710" class="seq-b"/>
+<text x="605" y="256" class="msg" text-anchor="middle">check now() &lt; cutoff_at</text>
+<path d="M710,276 H500" class="seq-g"/>
+<text x="605" y="288" class="msg" text-anchor="middle">UPSERT prediction row · 200 OK</text>
+
+<!-- 5: Change mind (still before cutoff) -->
+<path d="M110,316 H300" class="seq"/>
+<text x="205" y="312" class="msg" text-anchor="middle">change to Team B</text>
+<path d="M300,332 H500" class="seq-b"/>
+<text x="400" y="328" class="msg" text-anchor="middle">POST /predictions (updated pick)</text>
+<path d="M500,348 H710" class="seq-b"/>
+<path d="M710,364 H500" class="seq-g"/>
+<text x="605" y="376" class="msg" text-anchor="middle">UPSERT — last pick wins</text>
+
+<!-- Note: cutoff fires -->
+<rect x="370" y="390" width="210" height="32" rx="6" class="note"/>
+<text x="475" y="410" class="msg" text-anchor="middle">⏱ cutoff_at reached — lock fires</text>
+
+<!-- 7: Try predict after cutoff -->
+<path d="M110,436 H300" class="seq"/>
+<text x="205" y="432" class="msg" text-anchor="middle">try to predict after cutoff</text>
+<path d="M300,452 H500" class="seq-b"/>
+<path d="M500,468 H300" fill="none" stroke="#C2410C" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="400" y="464" class="msg" text-anchor="middle">403 CUTOFF_PASSED</text>
+
+<!-- 8: Reveal after cutoff -->
+<path d="M110,494 H300" class="seq"/>
+<text x="205" y="490" class="msg" text-anchor="middle">view predictions (post-cutoff)</text>
+<path d="M300,510 H500" class="seq-b"/>
+<path d="M500,526 H300" class="seq-g"/>
+<text x="400" y="522" class="msg" text-anchor="middle">all members' picks revealed</text>
+
+<text x="40" y="562" style="font:11px system-ui,sans-serif; fill:#94A3B8">cutoff = scheduled_at − 30 min · enforced server-side · independent thinking before, banter after</text>
+</svg>

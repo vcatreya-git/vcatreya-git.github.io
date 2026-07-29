@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .row-lbl{ font:700 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .ua  { fill:#DBEAFE; stroke:#3B82F6; stroke-width:1.5; }
+  .pr  { fill:#DCFCE7; stroke:#22C55E; stroke-width:1.5; }
+  .uo  { fill:#FEF3C7; stroke:#F59E0B; stroke-width:1.5; }
+  .lab { font:600 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2{ font:10px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .arr { stroke:#94A3B8; stroke-width:2; fill:none; marker-end:url(#a); }
+  .legend{ font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">Predictopia — Admin Journey (Day 0 → Mid-Season → Season End)</text>
+<text x="40" y="56" class="sub">Pool creator: setup once, low-touch ops, transparent payout</text>
+
+<!-- Row labels -->
+<rect x="10" y="60"  width="110" height="120" rx="8" fill="#EFF6FF"/>
+  <text x="65" y="124" class="row-lbl">Admin</text>
+  <text x="65" y="138" class="row-lbl">Actions</text>
+<rect x="10" y="200" width="110" height="120" rx="8" fill="#F0FDF4"/>
+  <text x="65" y="264" class="row-lbl">Platform</text>
+  <text x="65" y="278" class="row-lbl">Response</text>
+<rect x="10" y="340" width="110" height="120" rx="8" fill="#FFF7ED"/>
+  <text x="65" y="404" class="row-lbl">Admin</text>
+  <text x="65" y="418" class="row-lbl">Outcome</text>
+
+<!-- Stage 1 — Pool Setup -->
+<rect x="130" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="240" y="110" class="lab">Signs in · creates pool</text>
+  <text x="240" y="125" class="lab2">Name · buy-in · commission</text>
+  <text x="240" y="140" class="lab2">distribution tier · league style</text>
+  <text x="240" y="155" class="lab2">copies permanent join link</text>
+<rect x="130" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="240" y="250" class="lab">Live prize preview</text>
+  <text x="240" y="265" class="lab2">adjusts with headcount</text>
+  <text x="240" y="280" class="lab2">pool created instantly</text>
+  <text x="240" y="295" class="lab2">one link — permanent</text>
+<rect x="130" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="240" y="390" class="lab">Pool live in &lt;10 min</text>
+  <text x="240" y="405" class="lab2">no sheets opened</text>
+  <text x="240" y="420" class="lab2">link pinned in WhatsApp</text>
+  <text x="240" y="435" class="lab2">prize amounts clear upfront</text>
+
+<!-- Stage 2 — Member Approval -->
+<rect x="370" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="480" y="110" class="lab">Reviews join requests</text>
+  <text x="480" y="125" class="lab2">approves / rejects</text>
+  <text x="480" y="140" class="lab2">marks Paid after UPI</text>
+  <text x="480" y="155" class="lab2">2 independent states</text>
+<rect x="370" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="480" y="250" class="lab">Approve ≠ Paid</text>
+  <text x="480" y="265" class="lab2">pending / approved / active</text>
+  <text x="480" y="280" class="lab2">unpaid/paid toggle</text>
+  <text x="480" y="295" class="lab2">commission stays hidden</text>
+<rect x="370" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="480" y="390" class="lab">Money tracked honestly</text>
+  <text x="480" y="405" class="lab2">offline UPI is first-class</text>
+  <text x="480" y="420" class="lab2">no payment rails needed</text>
+  <text x="480" y="435" class="lab2">no "tax" framing fights</text>
+
+<!-- Stage 3 — Match Day Ops -->
+<rect x="610" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="720" y="110" class="lab">Shares "who hasn't</text>
+  <text x="720" y="125" class="lab">predicted" nudge</text>
+  <text x="720" y="140" class="lab2">taps result refresh</text>
+  <text x="720" y="155" class="lab2">checks budget tracker</text>
+<rect x="610" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="720" y="250" class="lab">Result auto-cached</text>
+  <text x="720" y="265" class="lab2">ON CONFLICT DO NOTHING</text>
+  <text x="720" y="280" class="lab2">2/1/0 scoring runs</text>
+  <text x="720" y="295" class="lab2">leaderboard refreshed</text>
+<rect x="610" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="720" y="390" class="lab">Match-day time &lt;5 min</text>
+  <text x="720" y="405" class="lab2">no score entry needed</text>
+  <text x="720" y="420" class="lab2">budget: collected vs paid</text>
+  <text x="720" y="435" class="lab2">zero sheet opens</text>
+
+<!-- Stage 4 — Override if Needed -->
+<rect x="850" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="960" y="110" class="lab">Disputes arise</text>
+  <text x="960" y="125" class="lab2">result wrong per umpire</text>
+  <text x="960" y="140" class="lab2">taps admin override</text>
+  <text x="960" y="155" class="lab2">sets correct winner</text>
+<rect x="850" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="960" y="250" class="lab">Override recorded</text>
+  <text x="960" y="265" class="lab2">source = admin_override</text>
+  <text x="960" y="280" class="lab2">re-scores predictions</text>
+  <text x="960" y="295" class="lab2">audit trail preserved</text>
+<rect x="850" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="960" y="390" class="lab">Dispute resolved</text>
+  <text x="960" y="405" class="lab2">no WhatsApp argument</text>
+  <text x="960" y="420" class="lab2">everyone sees same result</text>
+  <text x="960" y="435" class="lab2">audit log proof</text>
+
+<!-- Stage 5 — Season End -->
+<rect x="1090" y="60"  width="290" height="120" rx="10" class="ua"/>
+  <text x="1235" y="110" class="lab">Season ends · checks prizes</text>
+  <text x="1235" y="125" class="lab2">Nx formula shows Top 3 amounts</text>
+  <text x="1235" y="140" class="lab2">pays winners offline (UPI)</text>
+  <text x="1235" y="155" class="lab2">marks prize rows Paid in app</text>
+<rect x="1090" y="200" width="290" height="120" rx="10" class="pr"/>
+  <text x="1235" y="250" class="lab">Prize engine settlement</text>
+  <text x="1235" y="265" class="lab2">pot = paid buy-ins × (1 − commission)</text>
+  <text x="1235" y="280" class="lab2">positions: 3× + 2× + 1× = 6 parts</text>
+  <text x="1235" y="295" class="lab2">Won ₹X shown — never net loss</text>
+<rect x="1090" y="340" width="290" height="120" rx="10" class="uo"/>
+  <text x="1235" y="390" class="lab">Fair transparent close</text>
+  <text x="1235" y="405" class="lab2">winners see amounts</text>
+  <text x="1235" y="420" class="lab2">no "the app stole my money"</text>
+  <text x="1235" y="435" class="lab2">17–35h of annual labour → ~0</text>
+
+<!-- Horizontal arrows -->
+<path d="M350,120 H370" class="arr"/>
+<path d="M590,120 H610" class="arr"/>
+<path d="M830,120 H850" class="arr"/>
+<path d="M1070,120 H1090" class="arr"/>
+
+<text x="40" y="500" class="legend">Admin labour per season: setup (~10 min) + approvals + share nudges + prize marks. Zero score entry. Zero sheets.</text>
+</svg>

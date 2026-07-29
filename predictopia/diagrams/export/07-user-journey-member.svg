@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .row-lbl{ font:700 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .ua  { fill:#EDE9FE; stroke:#8B5CF6; stroke-width:1.5; }
+  .pr  { fill:#DCFCE7; stroke:#22C55E; stroke-width:1.5; }
+  .uo  { fill:#FEF3C7; stroke:#F59E0B; stroke-width:1.5; }
+  .lab { font:600 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2{ font:10px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .arr { stroke:#94A3B8; stroke-width:2; fill:none; marker-end:url(#a); }
+  .legend{ font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">Predictopia — Member Journey (Join → Predict → Compete → Win)</text>
+<text x="40" y="56" class="sub">Casual uncle to multi-pool power user — all in one flow</text>
+
+<!-- Row labels -->
+<rect x="10" y="60"  width="110" height="120" rx="8" fill="#EFF6FF"/>
+  <text x="65" y="124" class="row-lbl">Member</text>
+  <text x="65" y="138" class="row-lbl">Actions</text>
+<rect x="10" y="200" width="110" height="120" rx="8" fill="#F0FDF4"/>
+  <text x="65" y="264" class="row-lbl">Platform</text>
+  <text x="65" y="278" class="row-lbl">Response</text>
+<rect x="10" y="340" width="110" height="120" rx="8" fill="#FFF7ED"/>
+  <text x="65" y="404" class="row-lbl">Member</text>
+  <text x="65" y="418" class="row-lbl">Outcome</text>
+
+<!-- Stage 1 — Join -->
+<rect x="130" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="240" y="100" class="lab">Taps WhatsApp link</text>
+  <text x="240" y="115" class="lab2">Sign in with Google</text>
+  <text x="240" y="130" class="lab2">display name · avatar</text>
+  <text x="240" y="145" class="lab2">picks favourite IPL team</text>
+  <text x="240" y="160" class="lab2">requests to join pool</text>
+<rect x="130" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="240" y="240" class="lab">Pool preview shown</text>
+  <text x="240" y="255" class="lab2">name · buy-in · member count</text>
+  <text x="240" y="270" class="lab2">(not full leaderboard yet)</text>
+  <text x="240" y="285" class="lab2">nav tinted in team colour</text>
+  <text x="240" y="300" class="lab2">request → pending</text>
+<rect x="130" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="240" y="380" class="lab">Joined without friction</text>
+  <text x="240" y="395" class="lab2">no app store install</text>
+  <text x="240" y="410" class="lab2">no new password</text>
+  <text x="240" y="425" class="lab2">pool feels "mine" (team colour)</text>
+  <text x="240" y="440" class="lab2">admin approval pending</text>
+
+<!-- Stage 2 — First Prediction -->
+<rect x="370" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="480" y="100" class="lab">Opens Predict tab</text>
+  <text x="480" y="115" class="lab2">large team tiles · 48px</text>
+  <text x="480" y="130" class="lab2">one tap on winner</text>
+  <text x="480" y="145" class="lab2">changes mind once</text>
+  <text x="480" y="160" class="lab2">countdown visible</text>
+<rect x="370" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="480" y="240" class="lab">Cutoff enforced server-side</text>
+  <text x="480" y="255" class="lab2">UPSERT — last pick wins</text>
+  <text x="480" y="270" class="lab2">locked 30 min before toss</text>
+  <text x="480" y="285" class="lab2">no tie option (IPL super over)</text>
+  <text x="480" y="300" class="lab2">other picks hidden until cutoff</text>
+<rect x="370" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="480" y="380" class="lab">First pick without help</text>
+  <text x="480" y="395" class="lab2">no call to the admin</text>
+  <text x="480" y="410" class="lab2">independent thinking</text>
+  <text x="480" y="425" class="lab2">reveal is group banter</text>
+  <text x="480" y="440" class="lab2">"CSK (8): … · MI (4): …"</text>
+
+<!-- Stage 3 — Result + Leaderboard -->
+<rect x="610" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="720" y="100" class="lab">Next morning</text>
+  <text x="720" y="115" class="lab2">opens leaderboard</text>
+  <text x="720" y="130" class="lab2">checks rank (mid-table)</text>
+  <text x="720" y="145" class="lab2">3 correct in a row</text>
+  <text x="720" y="160" class="lab2">sees streak badge appear</text>
+<rect x="610" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="720" y="240" class="lab">Scoring cascade ran</text>
+  <text x="720" y="255" class="lab2">2 pts correct · 0 wrong</text>
+  <text x="720" y="270" class="lab2">weekly + overall updated</text>
+  <text x="720" y="285" class="lab2">Hot Streak badge earned</text>
+  <text x="720" y="300" class="lab2">Won ₹X shown (never loss)</text>
+<rect x="610" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="720" y="380" class="lab">Social proof without tutorial</text>
+  <text x="720" y="395" class="lab2">progress visible and scored</text>
+  <text x="720" y="410" class="lab2">real competition, not vanity</text>
+  <text x="720" y="425" class="lab2">badge without explaining rules</text>
+  <text x="720" y="440" class="lab2">keeps coming back mid-season</text>
+
+<!-- Stage 4 — Multi-pool -->
+<rect x="850" y="60"  width="220" height="120" rx="10" class="ua"/>
+  <text x="960" y="100" class="lab">Joins college friends pool</text>
+  <text x="960" y="115" class="lab2">same account</text>
+  <text x="960" y="130" class="lab2">predicts CSK in family</text>
+  <text x="960" y="145" class="lab2">predicts MI in college</text>
+  <text x="960" y="160" class="lab2">different strategies</text>
+<rect x="850" y="200" width="220" height="120" rx="10" class="pr"/>
+  <text x="960" y="240" class="lab">Multi-tenant isolation</text>
+  <text x="960" y="255" class="lab2">UNIQUE(pool_id, user_id, match_id)</text>
+  <text x="960" y="270" class="lab2">My Pools: 2 cards, role badges</text>
+  <text x="960" y="285" class="lab2">achievements per-pool</text>
+  <text x="960" y="300" class="lab2">no cross-pool contamination</text>
+<rect x="850" y="340" width="220" height="120" rx="10" class="uo"/>
+  <text x="960" y="380" class="lab">Two strategies, zero confusion</text>
+  <text x="960" y="395" class="lab2">family vs college pools</text>
+  <text x="960" y="410" class="lab2">"which pool am I in?" — clear</text>
+  <text x="960" y="425" class="lab2">independent badges per group</text>
+  <text x="960" y="440" class="lab2">share card per pool</text>
+
+<!-- Stage 5 — Share + Win -->
+<rect x="1090" y="60"  width="290" height="120" rx="10" class="ua"/>
+  <text x="1235" y="100" class="lab">Shares leaderboard card</text>
+  <text x="1235" y="115" class="lab2">Instagram Stories / WhatsApp</text>
+  <text x="1235" y="130" class="lab2">season ends · sees Won ₹X</text>
+  <text x="1235" y="145" class="lab2">Venkat pays offline (UPI)</text>
+  <text x="1235" y="160" class="lab2">Paid marked in app</text>
+<rect x="1090" y="200" width="290" height="120" rx="10" class="pr"/>
+  <text x="1235" y="240" class="lab">Screenshot card + QR embed</text>
+  <text x="1235" y="255" class="lab2">every share = distribution</text>
+  <text x="1235" y="270" class="lab2">prize engine: 3/2/1× split</text>
+  <text x="1235" y="285" class="lab2">prize row → Paid after UPI</text>
+  <text x="1235" y="300" class="lab2">Won ₹X shown — sunk buy-in</text>
+<rect x="1090" y="340" width="290" height="120" rx="10" class="uo"/>
+  <text x="1235" y="380" class="lab">Season complete, no drama</text>
+  <text x="1235" y="395" class="lab2">won with evidence</text>
+  <text x="1235" y="410" class="lab2">no app stole my money</text>
+  <text x="1235" y="425" class="lab2">card = organic re-acquisition</text>
+  <text x="1235" y="440" class="lab2">next season join rate up</text>
+
+<!-- Horizontal arrows -->
+<path d="M350,120 H370" class="arr"/>
+<path d="M590,120 H610" class="arr"/>
+<path d="M830,120 H850" class="arr"/>
+<path d="M1070,120 H1090" class="arr"/>
+
+<text x="40" y="500" class="legend">Journeys 1-6 documented in wiki. Multi-pool is schema requirement (UNIQUE triple), not afterthought. Offline UPI is a first-class state machine.</text>
+</svg>
