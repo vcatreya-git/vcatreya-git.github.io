@@ -1,0 +1,297 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contributing — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Contributing</h1>
+<h2>Tech Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Framework</td>
+<td>Next.js 14+ (App Router)</td>
+<td>Standard Node.js API routes only — no Edge Runtime</td>
+</tr>
+<tr>
+<td>Language</td>
+<td>TypeScript (strict)</td>
+<td><code>noImplicitAny</code>, no <code>any</code> in committed code</td>
+</tr>
+<tr>
+<td>Styling</td>
+<td>Tailwind CSS</td>
+<td>Mobile-first, 390px base</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Neon (PostgreSQL + pgvector)</td>
+<td>Free tier, no pausing; HNSW index for JD similarity</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Clerk (<code>@clerk/nextjs</code>)</td>
+<td>Google OAuth + email/password; <code>publicMetadata.role</code> for admin</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>Vercel AI SDK + Groq (default)</td>
+<td><code>ACTIVE_LLM_PROVIDER</code> env var switches provider</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>Vercel AI SDK + OpenAI</td>
+<td><code>ACTIVE_EMBED_PROVIDER</code> env var switches provider</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Stripe (Checkout + Webhooks)</td>
+<td>Test mode for Alpha; live charges deferred</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Resend</td>
+<td>Free tier (3,000/mo)</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>PostHog Cloud</td>
+<td>Free tier (1M events/mo)</td>
+</tr>
+<tr>
+<td>Container</td>
+<td>Docker</td>
+<td>Written day one; enables Vercel → AWS ECS migration</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Prerequisites</h2>
+<ul>
+<li>Node.js 18+</li>
+<li>npm</li>
+<li>A <a href="https://neon.tech">Neon</a> account (free tier — create one project)</li>
+<li>A <a href="https://clerk.com">Clerk</a> account (free tier)</li>
+<li>A <a href="https://console.groq.com">Groq</a> API key (free tier)</li>
+<li>An <a href="https://platform.openai.com">OpenAI</a> API key (for embeddings — minimal cost at personal scale)</li>
+</ul>
+<hr />
+<h2>Local Dev Setup</h2>
+<pre><code class="language-bash"># Clone the repo
+git clone https://github.com/vcatreya-git/pmrocket.git
+cd pmrocket
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Fill in all required keys — see Environment Variables below
+
+# Run migrations against your Neon database
+npx tsx scripts/migrate.ts
+
+# Seed initial content
+npx tsx scripts/seed.ts
+
+# Start the development server
+npm run dev
+</code></pre>
+<p>The app will be available at <code>http://localhost:3000</code>.</p>
+<p><strong>Clerk webhook in local dev:</strong> Clerk webhooks require a publicly reachable URL. Use the Clerk CLI tunnel or <code>ngrok</code> to expose your local server:</p>
+<pre><code class="language-bash"># Option A: Clerk CLI tunnel
+npx @clerk/local-tunnel
+
+# Option B: ngrok
+ngrok http 3000
+</code></pre>
+<p>Point the Clerk webhook endpoint to <code>https://&lt;your-tunnel-url&gt;/api/webhooks/clerk</code>.</p>
+<hr />
+<h2>Running Migrations</h2>
+<p>The migration runner applies SQL files from <code>supabase/migrations/</code> in order. It tracks applied files in a <code>migrations</code> table and wraps each migration in a transaction. Re-running is safe — already-applied files are skipped.</p>
+<pre><code class="language-bash">npx tsx scripts/migrate.ts
+</code></pre>
+<p>If you add a new migration file, name it with the next sequential number prefix (e.g. <code>019_...sql</code>) and re-run the command. Only the new file will be applied.</p>
+<hr />
+<h2>Environment Variables</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td>Neon connection string</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code></td>
+<td>Clerk publishable key (frontend)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>CLERK_SECRET_KEY</code></td>
+<td>Clerk secret key (server-side)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>CLERK_WEBHOOK_SECRET</code></td>
+<td>Clerk webhook signing secret</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>GROQ_API_KEY</code></td>
+<td>Groq API key (default LLM provider)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>OPENAI_API_KEY</code></td>
+<td>OpenAI API key (default embed provider)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>ACTIVE_LLM_PROVIDER</code></td>
+<td><code>groq</code> | <code>anthropic</code> | <code>google</code> (defaults to <code>groq</code>)</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>ACTIVE_EMBED_PROVIDER</code></td>
+<td><code>openai</code> | <code>voyage</code> (defaults to <code>openai</code>)</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code></td>
+<td>Required only if <code>ACTIVE_LLM_PROVIDER=anthropic</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>STRIPE_SECRET_KEY</code></td>
+<td>Stripe secret key</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>STRIPE_WEBHOOK_SECRET</code></td>
+<td>Stripe webhook signing secret</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</code></td>
+<td>Stripe publishable key (frontend)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>RESEND_API_KEY</code></td>
+<td>Resend API key for transactional email</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_POSTHOG_KEY</code></td>
+<td>PostHog project API key</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Never put secrets in source code. Never commit <code>.env.local</code>. Use <code>.env.example</code> (committed, with placeholder values) as the canonical list.</p>
+<hr />
+<h2>Repo Structure</h2>
+<pre><code>pmrocket/
+  src/
+    app/
+      api/                    # Next.js API route handlers
+        compute-match/
+        gap-analysis/
+        extract-skills/
+        confirm-extraction/
+        aggregate-skill-frequency/
+        dashboard/
+        evidence-log/
+        artefacts/
+        intake-questions/
+        intake-responses/
+        user-profiles/
+        admin/                # Admin-only routes
+        webhooks/
+          clerk/              # User provisioning
+        stripe/               # Checkout, webhook, portal
+      (auth)/                 # Auth screens
+      (app)/                  # Authenticated app shell
+        intake/
+        match/
+        roadmap/
+        dashboard/
+        gap-analysis/
+        admin/
+    components/
+      ui/                     # Shared reusable components
+      features/               # Feature-specific components
+    lib/
+      db.ts                   # Neon SQL client
+      llm.ts                  # LLM + embed factory
+    hooks/                    # Custom React hooks
+    types/                    # TypeScript type definitions
+  supabase/
+    migrations/               # 18 SQL migration files
+  scripts/
+    migrate.ts                # Migration runner
+    seed.ts                   # Content seed runner
+  docs/
+    wiki/                     # GitHub Wiki source pages
+    diagrams/                 # draw.io source files
+      export/                 # SVG exports
+  .env.example                # Environment variable template
+  Dockerfile                  # Docker build (personal → product portability)
+</code></pre>
+<hr />
+<h2>Coding Standards</h2>
+<h3>TypeScript</h3>
+<p>Strict mode is enabled everywhere. No <code>any</code> in committed code. Prefer <code>interface</code> over <code>type</code> for object shapes. Use <code>const</code> assertions for static maps (e.g. archetype configurations).</p>
+<h3>Error handling</h3>
+<p>API errors always return <code>{ error: { code: string, message: string } }</code>. Validation errors include a <code>fields</code> map. LLM errors return <code>502</code> with code <code>LLM_ERROR</code> — never expose provider error details to the client. Log full context server-side; return a generic message to the client.</p>
+<h3>Logging</h3>
+<p>Structured JSON: <code>{ level, timestamp, message, context }</code>. Log at: API route invocations (input/output summary), all errors with stack traces, auth events, admin mutations, LLM calls (latency + token count — never prompt content or JD text).</p>
+<p>Never log: passwords, session tokens, full email addresses outside auth context, Stripe secrets, raw JD text, API keys.</p>
+<h3>Auth</h3>
+<p>Every protected route calls <code>auth()</code> from <code>@clerk/nextjs/server</code> before any database access. Missing session → <code>401</code> immediately. Ownership violations → <code>403</code>. Admin role check failures → <code>403</code> (not <code>404</code> — the route exists, the user just lacks permission). Include <code>WHERE user_id = $userId</code> on every user-scoped database query without exception.</p>
+<h3>No Vercel-specific primitives</h3>
+<p>Never import from <code>@vercel/edge</code>, <code>@vercel/kv</code>, <code>@vercel/blob</code>. Never use <code>export const runtime = 'edge'</code>. All routes must run identically on any Node.js host — this is the Docker portability guarantee.</p>
+<h3>File naming</h3>
+<p>Kebab-case for files, PascalCase for React components, camelCase for functions and variables.</p>
+<h3>Import order</h3>
+<p>React / Next → external libraries → internal modules → types → styles.</p>
+<hr />
+<h2>Key Architecture Constraints</h2>
+<p>These constraints exist for specific reasons. Changing them requires a <a href="Decision-Log.html">Decision Log</a> entry.</p>
+<ol>
+<li><strong><code>users.id</code> is TEXT, not UUID.</strong> Clerk user IDs are <code>user_2abc...</code> format. Every FK to <code>users.id</code> is TEXT.</li>
+<li><strong>No Vercel Edge Runtime.</strong> All routes use default Node.js for Docker portability.</li>
+<li><strong>LLM and embed calls go through <code>getLLMModel()</code> / <code>getEmbedModel()</code>.</strong> No direct SDK imports in route handlers.</li>
+<li><strong>Readiness score is computed synchronously on evidence log.</strong> <code>POST /api/evidence-log</code> awaits <code>computeAndSaveScore(userId)</code> before responding. No fire-and-forget async jobs.</li>
+<li><strong>gap_pct is computed by application code, not the LLM.</strong> The LLM provides qualitative output only. Formula: <code>(1 - evidenced_artefacts / total) × 100</code>.</li>
+<li><strong>No query returns another user's data.</strong> <code>WHERE user_id = $userId</code> is mandatory on all user-scoped queries, even with a valid session.</li>
+<li><strong>Artefact key_topics must be exactly 15 items.</strong> The evidence modal auto-splits into three equal tiers (5 topics each). Schema-enforced via migration.</li>
+<li><strong>Score self-heals on GET.</strong> If <code>readiness_scores</code> row is missing, <code>GET /api/readiness</code> computes on-demand. No "no score" state visible to users.</li>
+</ol></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

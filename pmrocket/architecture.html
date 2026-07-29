@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture — PMRocket</title>
+  <style>
+    :root {
+      --primary: #0D9488;
+      --primary-dark: #0F766E;
+      --primary-light: #CCFBF1;
+      --accent2: #0891B2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --subtext: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --code-text: #0f172a;
+      --sidebar-w: 248px;
+      --nav-h: 60px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+
+    /* ── Top nav ── */
+    .topnav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; gap: 24px; z-index: 100; }
+    .topnav-logo { font-weight: 700; font-size: 16px; color: var(--primary); text-decoration: none; }
+    .topnav-meta { font-size: 12px; color: var(--subtext); margin-left: 4px; }
+    .topnav-links { margin-left: auto; display: flex; gap: 20px; }
+    .topnav-links a { font-size: 13px; color: var(--subtext); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+    .topnav-links a:hover { color: var(--primary); }
+
+    /* ── Layout ── */
+    .layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; }
+    .sidebar { width: var(--sidebar-w); flex-shrink: 0; padding: 32px 0 32px 20px; position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto; border-right: 1px solid var(--border); }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-heading { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--subtext); margin-bottom: 8px; padding-left: 12px; }
+    .sidebar a { display: block; font-size: 13px; color: var(--subtext); text-decoration: none; padding: 5px 12px; border-radius: 6px; transition: all 0.12s; margin-bottom: 2px; }
+    .sidebar a:hover { color: var(--primary); background: var(--primary-light); }
+    .main { flex: 1; padding: 40px 48px 80px; max-width: 900px; }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    h1 { font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 6px; line-height: 1.2; }
+    h2 { font-size: 20px; font-weight: 700; color: var(--primary-dark); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-light); margin-top: 0; }
+    h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 24px 0 10px; }
+    h4 { font-size: 13px; font-weight: 700; color: var(--subtext); margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    p { margin-bottom: 14px; color: var(--text); }
+    ul { padding-left: 20px; margin-bottom: 14px; }
+    li { margin-bottom: 6px; color: var(--text); }
+
+    /* ── Tables ── */
+    .table-wrap { overflow-x: auto; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th { background: #f1f5f9; font-weight: 600; color: var(--text); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+    td code, th code { font-size: 12px; }
+
+    /* ── Code blocks ── */
+    pre { background: #0f172a; color: #e2e8f0; padding: 20px 24px; border-radius: 10px; overflow-x: auto; margin: 16px 0 20px; font-size: 12.5px; line-height: 1.65; }
+    code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; }
+    p code, li code, td code { background: var(--code-bg); color: var(--primary-dark); padding: 2px 6px; border-radius: 4px; font-size: 12.5px; }
+
+    /* ── Cards ── */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 16px; }
+    .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+    .card h3 { margin-top: 0; font-size: 14px; }
+    .card p { font-size: 13.5px; margin-bottom: 8px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ── Highlight boxes ── */
+    .callout { border-left: 3px solid var(--primary); background: var(--primary-light); padding: 14px 18px; border-radius: 0 8px 8px 0; margin-bottom: 20px; font-size: 13.5px; }
+    .callout strong { color: var(--primary-dark); }
+    .warning { border-left: 3px solid #d97706; background: #fffbeb; padding: 14px 18px; border-radius: 0 8px 8px 0; margin-bottom: 20px; font-size: 13.5px; }
+
+    /* ── Doc header ── */
+    .doc-header { margin-bottom: 40px; }
+    .doc-header h1 { font-size: 32px; margin-bottom: 8px; }
+    .doc-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 12px; }
+    .doc-meta span { font-size: 12px; color: var(--subtext); background: #f1f5f9; padding: 4px 10px; border-radius: 100px; font-weight: 500; }
+    .doc-meta span.status-badge { background: var(--primary-light); color: var(--primary-dark); }
+
+    /* ── Decision table ── */
+    .decision-row { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+    .decision-row:last-child { border-bottom: none; }
+    .decision-q { color: var(--subtext); font-weight: 600; min-width: 200px; flex-shrink: 0; }
+    .decision-a { color: var(--text); }
+
+    /* ── Diagram section ── */
+    .diagram-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px; }
+    .diagram-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: box-shadow 0.15s; }
+    .diagram-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .diagram-card a { display: block; text-decoration: none; }
+    .diagram-img { width: 100%; padding: 16px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; min-height: 200px; }
+    .diagram-img img { max-width: 100%; max-height: 240px; object-fit: contain; }
+    .diagram-label { padding: 10px 16px; }
+    .diagram-label strong { font-size: 13px; color: var(--text); display: block; }
+    .diagram-label span { font-size: 12px; color: var(--subtext); }
+
+    /* ── Phase comparison ── */
+    .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .phase-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .phase-card.active { border-color: var(--primary); border-width: 2px; }
+    .phase-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 12px; }
+    .phase-tag.now { background: var(--primary-light); color: var(--primary-dark); }
+    .phase-tag.later { background: #f1f5f9; color: var(--subtext); }
+    .phase-card h3 { margin: 0 0 12px; font-size: 15px; }
+
+    /* ── API route tag ── */
+    .route { display: inline-block; font-family: 'SF Mono', monospace; font-size: 12px; background: #0f172a; color: #7dd3fc; padding: 3px 8px; border-radius: 4px; margin-right: 6px; }
+    .method { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
+    .method.post { background: #dcfce7; color: #166534; }
+    .method.get { background: #dbeafe; color: #1d4ed8; }
+    .method.patch { background: #fef3c7; color: #92400e; }
+
+    /* ── Flow step ── */
+    .flow-steps { counter-reset: step; margin-bottom: 20px; }
+    .flow-step { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; counter-increment: step; }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-step::before { content: counter(step); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; min-width: 24px; background: var(--primary); color: white; border-radius: 50%; font-size: 11px; font-weight: 700; margin-top: 2px; }
+
+    /* ── Entity badge ── */
+    .entity-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .entity { font-size: 12px; font-family: monospace; background: #f1f5f9; border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; color: var(--primary-dark); }
+    .entity.new { background: var(--primary-light); border-color: rgba(13,148,136,0.3); }
+    .entity.deprecated { text-decoration: line-through; color: var(--subtext); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { padding: 24px 20px 60px; }
+      .card-grid, .diagram-grid, .phase-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .main { padding: 20px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top nav -->
+<nav class="topnav">
+  <a href="index.html" class="topnav-logo">PMRocket</a>
+  <span class="topnav-meta">/ Architecture</span>
+  <div class="topnav-links">
+    <a href="index.html">← Portfolio</a>
+    <a href="prd.html">PRD</a>
+    <a href="prototype.html" target="_blank">Prototype ↗</a>
+    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Overview</div>
+      <a href="#stack">Stack Decision</a>
+      <a href="#diagrams">Architecture Diagrams</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Design</div>
+      <a href="#components">System Components</a>
+      <a href="#llm">LLM Abstraction</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Implementation</div>
+      <a href="#api">API Surface</a>
+      <a href="#migrations">Migrations</a>
+      <a href="#deployment">Deployment</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Context</div>
+      <a href="#decisions">Key Decisions</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Header -->
+    <div class="doc-header">
+      <h1>Architecture V3.0</h1>
+      <p style="color: var(--subtext); font-size: 15px; margin-bottom: 0;">PMRocket — Vercel + Neon + Clerk + Vercel AI SDK</p>
+      <div class="doc-meta">
+        <span class="status-badge">V3.0 — Active</span>
+        <span>Updated 2026-07-18</span>
+        <span>Replaces Supabase-era V2.1</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>What changed from V2.1:</strong> Supabase replaced by Neon (database) + Clerk (auth) + Next.js API routes (backend logic). LLM calls abstracted via Vercel AI SDK — provider-swappable via env var. Docker from day one for Vercel → AWS portability. All business logic, data model, and API contracts are <strong>unchanged</strong>.
+    </div>
+
+    <!-- ── Section 1: Stack ── -->
+    <div class="section" id="stack">
+      <h2>Stack Decision</h2>
+      <p>PMRocket runs on free tiers until there is real traction. The personal phase stack is chosen for zero ongoing cost and maximum portability — the same Docker image runs on Vercel today and AWS ECS Fargate when scale demands it.</p>
+
+      <div class="phase-grid">
+        <div class="phase-card active">
+          <div class="phase-tag now">Now — Personal / Portfolio</div>
+          <h3>Vercel + Neon + Clerk</h3>
+          <div class="table-wrap" style="margin-bottom: 0;">
+            <table>
+              <tr><th>Layer</th><th>Tool</th><th>Free Tier</th></tr>
+              <tr><td>Frontend + API</td><td>Next.js on Vercel</td><td>100GB bandwidth/mo</td></tr>
+              <tr><td>Database</td><td>Neon PostgreSQL + pgvector</td><td>0.5 GB, no pausing</td></tr>
+              <tr><td>Auth</td><td>Clerk</td><td>10,000 MAU free</td></tr>
+              <tr><td>LLM</td><td>Groq (Llama 3.3 70B) via AI SDK</td><td>Free tier generous</td></tr>
+              <tr><td>Embeddings</td><td>OpenAI text-embedding-3-small</td><td>$0.02/1M tokens</td></tr>
+              <tr><td>Payments</td><td>Stripe (test mode)</td><td>2.9% + $0.30/txn</td></tr>
+              <tr><td>Email</td><td>Resend</td><td>3,000/mo free</td></tr>
+              <tr><td>Analytics</td><td>PostHog</td><td>1M events/mo free</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-tag later">Later — Product Phase</div>
+          <h3>AWS ECS Fargate + RDS</h3>
+          <div class="table-wrap" style="margin-bottom: 0;">
+            <table>
+              <tr><th>Personal Layer</th><th>Product Equivalent</th></tr>
+              <tr><td>Vercel</td><td>AWS ECS Fargate + CloudFront</td></tr>
+              <tr><td>Neon</td><td>AWS RDS PostgreSQL + pgvector</td></tr>
+              <tr><td>Clerk</td><td>Clerk (unchanged — cloud-agnostic)</td></tr>
+              <tr><td>Vercel AI SDK</td><td>Vercel AI SDK (unchanged)</td></tr>
+              <tr><td>—</td><td>AWS Batch (bulk ETL, re-embedding)</td></tr>
+              <tr><td>—</td><td>AWS EventBridge (scheduled jobs)</td></tr>
+              <tr><td>Resend</td><td>AWS SES (at scale)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <p style="font-size: 13.5px; color: var(--subtext);">Migration effort: push the same Docker image to ECR, configure task definition, restore DB from <code>pg_dump</code>. No code changes.</p>
+    </div>
+
+    <!-- ── Section 2: Diagrams ── -->
+    <div class="section" id="diagrams">
+      <h2>Architecture Diagrams</h2>
+      <p>Six draw.io diagrams covering all architectural views. Orthogonal connectors throughout. Source files in <code>docs/diagrams/</code>. Click any diagram to open full-size.</p>
+
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <a href="diagrams/export/01-system-context.svg" target="_blank">
+            <div class="diagram-img"><img src="diagrams/export/01-system-context.svg" alt="System Context Diagram"></div>
+            <div class="diagram-label"><strong>D1 — System Context</strong><span>Actors, external systems, trust boundaries</span></div>
+          </a>
+        </div>
+        <div class="diagram-card">
+          <a href="diagrams/export/02-component-blocks.svg" target="_blank">
+            <div class="diagram-img"><img src="diagrams/export/02-component-blocks.svg" alt="Component Blocks Diagram"></div>
+            <div class="diagram-label"><strong>D2 — Component Blocks</strong><span>Logical modules: match, roadmap, gap, ETL, admin</span></div>
+          </a>
+        </div>
+        <div class="diagram-card">
+          <a href="diagrams/export/03-deployment-free-tier.svg" target="_blank">
+            <div class="diagram-img"><img src="diagrams/export/03-deployment-free-tier.svg" alt="Deployment Diagram"></div>
+            <div class="diagram-label"><strong>D3 — Deployment (Free Tier)</strong><span>Vercel + Neon + Clerk + Groq free-tier topology</span></div>
+          </a>
+        </div>
+        <div class="diagram-card">
+          <a href="diagrams/export/04-sequence-auth.svg" target="_blank">
+            <div class="diagram-img"><img src="diagrams/export/04-sequence-auth.svg" alt="Auth Sequence Diagram"></div>
+            <div class="diagram-label"><strong>D4 — Auth + Provisioning</strong><span>Signup, Clerk webhook, user row creation</span></div>
+          </a>
+        </div>
+        <div class="diagram-card">
+          <a href="diagrams/export/05-sequence-gap-analysis.svg" target="_blank">
+            <div class="diagram-img"><img src="diagrams/export/05-sequence-gap-analysis.svg" alt="Gap Analysis Sequence Diagram"></div>
+            <div class="diagram-label"><strong>D5 — Gap Analysis (RAG)</strong><span>Profile embed → pgvector retrieval → LLM → result</span></div>
+          </a>
+        </div>
+        <div class="diagram-card">
+          <a href="diagrams/export/06-sequence-etl.svg" target="_blank">
+            <div class="diagram-img"><img src="diagrams/export/06-sequence-etl.svg" alt="ETL Sequence Diagram"></div>
+            <div class="diagram-label"><strong>D6 — Admin ETL Pipeline</strong><span>JD paste → extract → approve → embed → curriculum update</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section 3: Components ── -->
+    <div class="section" id="components">
+      <h2>System Components</h2>
+
+      <div class="card">
+        <h3>Next.js Frontend + API Routes</h3>
+        <p><strong>Role:</strong> Full-stack layer. Server-rendered React app for all user-facing screens. API routes handle all backend logic — replacing Supabase Edge Functions (Deno) and PostgREST.</p>
+        <p><strong>Key constraint:</strong> Standard Node.js API routes only — no Vercel Edge Runtime primitives. This keeps the codebase portable to any Node.js host (ECS Fargate, Fly.io, self-hosted).</p>
+        <p><strong>Auth integration:</strong> <code>@clerk/nextjs</code> — <code>auth()</code> in server components and API routes. JWT validation on every protected route.</p>
+        <p><strong>DB access:</strong> <code>@neondatabase/serverless</code> — HTTP-based driver, works in serverless without connection pool configuration.</p>
+      </div>
+
+      <div class="card">
+        <h3>Clerk Auth</h3>
+        <p><strong>Role:</strong> User registration, login (email + Google OAuth), session tokens, role management.</p>
+        <p><strong>Admin role:</strong> Set via Clerk Dashboard → User → <code>publicMetadata: &#123; role: "admin" &#125;</code>. Checked in every admin API route.</p>
+        <p><strong>User provisioning:</strong> Clerk fires <code>user.created</code> webhook on signup. Handler at <code>/api/webhooks/clerk</code> creates <code>users</code>, <code>user_profiles</code>, and <code>subscriptions</code> rows — replacing Supabase's <code>handle_new_user</code> trigger.</p>
+        <p><strong>User ID format:</strong> Clerk userIds (e.g. <code>user_2abc...</code>) are stored as TEXT PKs in all user tables. No UUID.</p>
+      </div>
+
+      <div class="card">
+        <h3>Neon PostgreSQL + pgvector</h3>
+        <p><strong>Role:</strong> All application data + vector embeddings for JD similarity search.</p>
+        <p><strong>Why Neon over Supabase:</strong> No pausing on the free tier (Supabase pauses after 7 days inactivity — breaks demo flows). pgvector is a first-class built-in extension. No lock-in to Supabase-specific APIs. Schema is pure PostgreSQL — identical on Neon, RDS, or any Postgres host.</p>
+        <p><strong>pgvector config:</strong> HNSW index <code>m=16, ef_construction=64</code> on <code>jd_embeddings.embedding</code>. Cosine similarity, K=25 retrieval for gap analysis. Sub-100ms ANN at V2a scale — no Pinecone required.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>LLM — Vercel AI SDK</h3>
+          <p>Provider-agnostic interface for all text generation and structured output. <code>ACTIVE_LLM_PROVIDER</code> env var selects provider at runtime.</p>
+          <p><strong>Default:</strong> Groq (Llama 3.3 70B) — free tier, strong structured output, fast inference.</p>
+          <p><strong>Fallback:</strong> Anthropic claude-sonnet-4-6 — paid, highest quality for gap analysis narratives.</p>
+        </div>
+        <div class="card">
+          <h3>Embeddings — Vercel AI SDK</h3>
+          <p>Provider-agnostic interface for JD and profile embedding. <code>ACTIVE_EMBED_PROVIDER</code> env var.</p>
+          <p><strong>Default:</strong> OpenAI text-embedding-3-small (1536 dims, $0.02/1M tokens).</p>
+          <p><strong>Constraint:</strong> All providers must output 1536-dim vectors. Changing dimensions requires a migration + full re-embed of all JDs.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Stripe Integration</h3>
+        <p><strong>Role:</strong> Subscription creation, paywall enforcement, cancellation. Test mode for Alpha — live charges activated after traction.</p>
+        <p><strong>Flow:</strong> Stripe Checkout redirect from frontend → webhook at <code>/api/stripe/webhook</code> → update <code>subscriptions</code> table.</p>
+        <p><strong>Paywall guard:</strong> <code>SubscriptionGuard</code> component checks <code>subscriptions.status</code> via <code>/api/subscriptions</code>. API routes also check subscription before serving paid content.</p>
+      </div>
+    </div>
+
+    <!-- ── Section 4: LLM Abstraction ── -->
+    <div class="section" id="llm">
+      <h2>LLM Abstraction</h2>
+      <p>All LLM and embedding calls go through a provider factory in <code>src/lib/llm.ts</code>. Switching provider requires changing a single env var — no code changes, no deploy of new logic.</p>
+
+<pre><code>// src/lib/llm.ts — provider factory
+
+import { createGroq }               from '@ai-sdk/groq'
+import { createAnthropic }          from '@ai-sdk/anthropic'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
+import { createOpenAI }             from '@ai-sdk/openai'
+
+export function getLLMModel() {
+  const provider = process.env.ACTIVE_LLM_PROVIDER ?? 'groq'
+  switch (provider) {
+    case 'anthropic': return createAnthropic()('claude-sonnet-4-6')
+    case 'google':    return createGoogleGenerativeAI()('gemini-2.0-flash')
+    case 'groq':
+    default:          return createGroq()('llama-3.3-70b-versatile')
+  }
+}
+
+export function getEmbedModel() {
+  const provider = process.env.ACTIVE_EMBED_PROVIDER ?? 'openai'
+  switch (provider) {
+    case 'voyage':
+      return createOpenAI({ baseURL: 'https://api.voyageai.com/v1' })
+               .textEmbeddingModel('voyage-3-lite')
+    case 'openai':
+    default:
+      return createOpenAI().textEmbeddingModel('text-embedding-3-small')
+  }
+}
+
+// Usage in any API route:
+// import { generateObject, generateText, embed } from 'ai'
+// import { getLLMModel, getEmbedModel } from '@/lib/llm'
+//
+// const { object } = await generateObject({ model: getLLMModel(), schema: z.object({...}), prompt })
+// const { embedding } = await embed({ model: getEmbedModel(), value: profileText })</code></pre>
+
+      <h3>Usage by route</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>API Route</th><th>AI SDK Call</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>/api/extract-skills</code></td><td><code>generateObject()</code></td><td>Structured skill extraction from JD text. Zod schema enforces output shape.</td></tr>
+            <tr><td><code>/api/gap-analysis</code></td><td><code>embed()</code> + <code>generateText()</code></td><td>Embed user profile → retrieve JDs → generate narrative gap report.</td></tr>
+            <tr><td><code>/api/confirm-extraction</code></td><td><code>embed()</code></td><td>Embed approved JD for pgvector storage.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Section 5: API Surface ── -->
+
+    <div class="section" id="api">
+      <h2>API Surface</h2>
+
+      <h3>Business logic routes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Auth</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><span class="method post">POST</span><code>/api/compute-match</code></td><td>Clerk user</td><td>Weighted scoring → archetype match result</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/gap-analysis</code></td><td>Clerk user + ownership</td><td>RAG pipeline → gap_pct + LLM narrative</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/extract-skills</code></td><td>Clerk admin</td><td>ETL: LLM skill extraction from JD text</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/confirm-extraction</code></td><td>Clerk admin</td><td>ETL: approve skills → embed JD → update curriculum</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/aggregate-skill-frequency</code></td><td>Clerk admin</td><td>Recalculate skill_frequency for a slice</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/send-email</code></td><td>Internal only</td><td>Transactional email via Resend</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/stripe/create-checkout</code></td><td>Clerk user</td><td>Create Stripe Checkout session</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/stripe/webhook</code></td><td>Stripe signature</td><td>Handle subscription events</td></tr>
+            <tr><td><span class="method post">POST</span><code>/api/webhooks/clerk</code></td><td>Clerk signature</td><td>Provision user on signup</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Data access routes (replaces PostgREST)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Methods</th><th>Data</th></tr></thead>
+          <tbody>
+            <tr><td><code>/api/intake-questions</code></td><td><span class="method get">GET</span></td><td>Question bank</td></tr>
+            <tr><td><code>/api/intake-responses</code></td><td><span class="method post">POST</span></td><td>Save user answers</td></tr>
+            <tr><td><code>/api/user-profiles</code></td><td><span class="method patch">PATCH</span></td><td>Update intake progress, onboarding state</td></tr>
+            <tr><td><code>/api/archetype-matches</code></td><td><span class="method get">GET</span></td><td>Active match result for user</td></tr>
+            <tr><td><code>/api/artefacts</code></td><td><span class="method get">GET</span></td><td>3-layer curriculum query (archetype + domain + geography)</td></tr>
+            <tr><td><code>/api/evidence-log</code></td><td><span class="method get">GET</span> <span class="method post">POST</span></td><td>Evidence entries + topic_progress JSONB</td></tr>
+            <tr><td><code>/api/dashboard</code></td><td><span class="method get">GET</span></td><td>dashboard_summary_v2 view</td></tr>
+            <tr><td><code>/api/gap-analyses</code></td><td><span class="method get">GET</span></td><td>Gap analysis history for user</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>POST /api/gap-analysis — key contract</h3>
+<pre><code>// Request
+{ user_id: string }  // must match authenticated userId
+
+// Processing
+1. Verify auth.userId === user_id (ownership check)
+2. Fetch active archetype_match
+3. Check corpus minimum (≥15 JDs for this archetype × domain × geography slice)
+4. Build profile text from intake_responses + evidence_log
+5. AI SDK embed() → 1536-dim profile vector
+6. pgvector cosine similarity K=25, pre-filtered by domain/geography/archetype
+7. Compute gap_pct (deterministic, app-side):
+   gap_pct = (1 − artefacts_with_evidence / total_roadmap_artefacts) × 100
+8. AI SDK generateText() → top_gaps + qualitative summary
+9. Write to gap_analyses table
+
+// Response (200)
+{ gap_analysis: { id, gap_pct, jds_used, top_gaps, summary, ready_to_apply } }
+
+// Errors
+401 UNAUTHORIZED · 403 FORBIDDEN · 422 NO_MATCH
+422 THIN_CORPUS · 422 NO_SUBSCRIPTION · 429 RATE_LIMIT_EXCEEDED
+502 LLM_ERROR · 500 INTERNAL_ERROR
+
+// Rate limit: 3 requests / 24 hours / user</code></pre>
+
+      <h3>POST /api/extract-skills — key contract</h3>
+<pre><code>// Request (admin only)
+{ jd_queue_id: string, domain: string, geography: string }
+
+// Processing
+1. Verify admin role from Clerk publicMetadata
+2. Read jd_ingestion_queue row (status must be 'pending')
+3. Set status = 'processing'
+4. AI SDK generateObject() with Zod schema:
+   z.object({ skills: z.array(z.object({
+     skill_name: z.string(),
+     skill_category: z.enum(['technical','product','business','domain'])
+   })) })
+   Prompt includes existing skill_frequency vocabulary list — prevents fragmentation
+5. Return preview only — NOT written to DB until admin approves
+
+// Response (200)
+{ jd_id, extracted: [{ skill_name, skill_category }] }
+
+// Approve via: POST /api/confirm-extraction
+// Reject: status = 'rejected', row stays in queue for review</code></pre>
+    </div>
+
+    <!-- ── Section 6: Migrations ── -->
+    <div class="section" id="migrations">
+      <h2>Migration Strategy</h2>
+      <p>18 migration files. All pure PostgreSQL SQL — no Supabase-specific syntax. Applied via a Node.js runner script; no Supabase CLI required.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>File</th><th>Description</th><th>Breaking?</th></tr></thead>
+          <tbody>
+            <tr><td><code>001_initial_schema.sql</code></td><td>V1 base schema (users, profiles, archetypes, intake…)</td><td>—</td></tr>
+            <tr><td><code>002_auth_user_hook.sql</code></td><td>Removed — replaced by Clerk webhook handler</td><td>—</td></tr>
+            <tr><td><code>003_artefact_key_topics.sql</code></td><td>key_topics array on artefacts</td><td>None</td></tr>
+            <tr><td><code>004_enable_pgvector.sql</code></td><td><code>CREATE EXTENSION IF NOT EXISTS vector</code></td><td>None</td></tr>
+            <tr><td><code>005_geography_type.sql</code></td><td>geography_type enum</td><td>None</td></tr>
+            <tr><td><code>006_artefacts_v2_columns.sql</code></td><td>layer, geography, skill_area, skill, ordering columns</td><td>None</td></tr>
+            <tr><td><code>007_geography_columns.sql</code></td><td>geography on archetype_matches + user_profiles</td><td>None</td></tr>
+            <tr><td><code>008_question_weights.sql</code></td><td>question_weights table</td><td>None</td></tr>
+            <tr><td><code>009_company_type_taxonomy.sql</code></td><td>company_type_taxonomy table + seed</td><td>None</td></tr>
+            <tr><td><code>010_company_type_migration.sql</code></td><td>company_type enum → text</td><td><strong>Yes</strong> — coordinated deploy</td></tr>
+            <tr><td><code>011_etl_tables.sql</code></td><td>jd_ingestion_queue, extracted_skills, skill_frequency</td><td>None</td></tr>
+            <tr><td><code>012_jd_embeddings.sql</code></td><td>jd_embeddings + HNSW index</td><td>None</td></tr>
+            <tr><td><code>013_gap_tables.sql</code></td><td>gap_analyses, gap_threshold</td><td>None</td></tr>
+            <tr><td><code>014_v2_rls_policies.sql</code></td><td>RLS policies (defined but disabled in V2a)</td><td>None</td></tr>
+            <tr><td><code>015_v2_dashboard_view.sql</code></td><td>dashboard_summary_v2 view</td><td>None</td></tr>
+            <tr><td><code>016_deprecate_v1_tables.sql</code></td><td>matching_rules set is_active = FALSE</td><td>None</td></tr>
+            <tr><td><code>017_seed_layer1_artefacts.sql</code></td><td>Layer 1 universal artefacts (AI literacy)</td><td>None</td></tr>
+            <tr><td><code>018_seed_question_weights.sql</code></td><td>Initial question_weights for all archetypes × questions</td><td>Coordinated</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Migration runner</h3>
+      <p>No Supabase CLI dependency. Tracks applied migrations in a <code>migrations</code> table. Each migration runs in a transaction — failure rolls back cleanly.</p>
+
+<pre><code>// scripts/migrate.ts
+import { neon }       from '@neondatabase/serverless'
+import { readFileSync, readdirSync } from 'fs'
+import { join }       from 'path'
+
+const sql = neon(process.env.DATABASE_URL!)
+
+async function migrate() {
+  await sql`CREATE TABLE IF NOT EXISTS migrations (
+    id          SERIAL PRIMARY KEY,
+    filename    TEXT   NOT NULL UNIQUE,
+    applied_at  TIMESTAMPTZ DEFAULT NOW()
+  )`
+
+  const applied    = await sql`SELECT filename FROM migrations`
+  const appliedSet = new Set(applied.map(r => r.filename))
+  const files      = readdirSync('./supabase/migrations').sort()
+
+  for (const file of files) {
+    if (appliedSet.has(file)) continue
+    const sql_text = readFileSync(join('./supabase/migrations', file), 'utf-8')
+    await sql.transaction(async tx => {
+      await tx(sql_text)
+      await tx`INSERT INTO migrations (filename) VALUES (${file})`
+    })
+    console.log(`Applied: ${file}`)
+  }
+}
+
+migrate().catch(console.error)
+
+// Run: npx tsx scripts/migrate.ts</code></pre>
+    </div>
+
+    <!-- ── Section 7: Deployment ── -->
+    <div class="section" id="deployment">
+      <h2>Deployment</h2>
+      <h3>Docker — written day one</h3>
+      <p>The same Dockerfile deploys to Vercel (from source or image) in the personal phase and to AWS ECS Fargate in the product phase. No code changes required at migration time.</p>
+
+<pre><code>FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+EXPOSE 3000
+CMD ["node", "server.js"]</code></pre>
+
+      <h3>Environment variables</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Variable</th><th>Purpose</th><th>Required</th></tr></thead>
+          <tbody>
+            <tr><td><code>DATABASE_URL</code></td><td>Neon connection string</td><td>Yes</td></tr>
+            <tr><td><code>NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code></td><td>Clerk frontend key</td><td>Yes</td></tr>
+            <tr><td><code>CLERK_SECRET_KEY</code></td><td>Clerk server key</td><td>Yes</td></tr>
+            <tr><td><code>CLERK_WEBHOOK_SECRET</code></td><td>Clerk webhook signature verification</td><td>Yes</td></tr>
+            <tr><td><code>ACTIVE_LLM_PROVIDER</code></td><td><code>groq</code> | <code>anthropic</code> | <code>google</code></td><td>No (defaults to groq)</td></tr>
+            <tr><td><code>GROQ_API_KEY</code></td><td>Groq inference API</td><td>If provider=groq</td></tr>
+            <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic API</td><td>If provider=anthropic</td></tr>
+            <tr><td><code>ACTIVE_EMBED_PROVIDER</code></td><td><code>openai</code> | <code>voyage</code></td><td>No (defaults to openai)</td></tr>
+            <tr><td><code>OPENAI_API_KEY</code></td><td>Embedding generation</td><td>If provider=openai</td></tr>
+            <tr><td><code>STRIPE_SECRET_KEY</code></td><td>Stripe API</td><td>Yes</td></tr>
+            <tr><td><code>STRIPE_WEBHOOK_SECRET</code></td><td>Stripe webhook signature</td><td>Yes</td></tr>
+            <tr><td><code>RESEND_API_KEY</code></td><td>Transactional email</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Vercel → AWS migration path</h3>
+      <div class="flow-steps">
+        <div class="flow-step">Build Docker image: <code>docker build -t pmrocket .</code></div>
+        <div class="flow-step">Push to AWS ECR: <code>docker push [account].dkr.ecr.[region].amazonaws.com/pmrocket</code></div>
+        <div class="flow-step">Provision RDS PostgreSQL + pgvector. Restore schema: <code>pg_dump</code> from Neon → RDS restore.</div>
+        <div class="flow-step">Update <code>DATABASE_URL</code> in ECS task definition environment. All other env vars unchanged.</div>
+        <div class="flow-step">Configure ECS Fargate task definition. CloudFront distribution in front of ALB. Done.</div>
+      </div>
+      <p style="font-size: 13.5px; color: var(--subtext);">Clerk and Vercel AI SDK run unchanged — both are cloud-agnostic. No provider-specific code in the application layer.</p>
+    </div>
+
+    <!-- ── Section 8: Key Decisions ── -->
+    <div class="section" id="decisions">
+      <h2>Key Design Decisions</h2>
+      <p>Decisions made during the 2026-07-18 infrastructure rethink. Full log in <code>08-Decision-Log.md</code>.</p>
+
+      <div class="decision-row"><div class="decision-q">Why Neon over Supabase?</div><div class="decision-a">Supabase free tier pauses after 7 days inactivity — breaks portfolio demos. Neon free tier never pauses. pgvector is built-in on Neon. Pure PostgreSQL schema means zero lock-in.</div></div>
+      <div class="decision-row"><div class="decision-q">Why Vercel AI SDK over direct API calls?</div><div class="decision-a">Provider abstraction — swap Groq → Anthropic → Gemini via one env var. No code changes, no redeploy. Critical for cost management: Groq free tier covers Alpha volume; upgrade to Anthropic for quality only when needed.</div></div>
+      <div class="decision-row"><div class="decision-q">Why Docker from day one?</div><div class="decision-a">Vercel → AWS ECS Fargate migration is infrastructure config only, not a rewrite. Writing the Dockerfile now means the migration path is proven before it's needed.</div></div>
+      <div class="decision-row"><div class="decision-q">Why application-level auth, not RLS?</div><div class="decision-a">RLS on Neon requires Clerk JWT template configuration — extra setup that's not needed until the product phase. API route enforcement (WHERE user_id = $userId) is simpler, explicit, and testable. RLS definitions are present in migrations and can be activated at the product phase.</div></div>
+      <div class="decision-row"><div class="decision-q">Why pgvector HNSW over Pinecone?</div><div class="decision-a">No additional service dependency. HNSW (m=16, ef=64) gives sub-100ms ANN at V2a scale (thousands of JDs, not millions). Avoids the $70/mo Pinecone Starter cost at zero users. Migrate to managed vector DB only if pgvector becomes a bottleneck at scale.</div></div>
+      <div class="decision-row"><div class="decision-q">Why Next.js API routes, not Edge Functions?</div><div class="decision-a">Edge Runtime primitives lock code to the Vercel/Cloudflare ecosystem. Standard Node.js API routes run anywhere. Full npm ecosystem available. Same code deploys to Vercel and ECS Fargate.</div></div>
+      <div class="decision-row" style="border-bottom: none;"><div class="decision-q">Why Groq as default LLM?</div><div class="decision-a">Free tier with generous rate limits covers Alpha volume entirely. Llama 3.3 70B has strong structured output capability — sufficient for ETL skill extraction and gap analysis narrative. Anthropic is available as a quality fallback for high-stakes outputs.</div></div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

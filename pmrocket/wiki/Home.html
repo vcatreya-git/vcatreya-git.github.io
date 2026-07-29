@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Home — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>PMRocket</h1>
+<blockquote>
+<p>A career navigation platform for aspiring Product Managers. Turns preparation into a market-grounded journey from confusion to confident readiness.</p>
+</blockquote>
+<h2>What is PMRocket?</h2>
+<p>PMRocket solves the navigation problem every aspiring PM faces: infinite content, zero direction.</p>
+<p>You've read the books. You've watched the videos. You've built case studies. But you don't know if you're building the right things for the role that fits you. You don't know when you're actually ready to apply. The existing platforms teach frameworks generically; PMRocket is a layer underneath: <strong>which role, what proof, when you're done.</strong></p>
+<p>The product works in five stages:</p>
+<ol>
+<li><strong>Intake (3 minutes)</strong>: Fifteen questions about your background, skills, and goals</li>
+<li><strong>Archetype match</strong>: Weighted scoring model reveals which PM role fits you best (Technical, Growth, Enterprise, AI)</li>
+<li><strong>Personalised roadmap</strong>: Three-layer curriculum (universal skills, archetype-specific, domain-specific)</li>
+<li><strong>Evidence logging</strong>: Track progress as you build artefacts through progressive tiers (Learning → Practised → Mastered)</li>
+<li><strong>Market-grounded readiness</strong>: Gap analysis against real job descriptions tells you where you stand</li>
+</ol>
+<p>As a portfolio project, PMRocket demonstrates:</p>
+<p><strong>Problem framing</strong>: The discovery phase validated that navigation, not content, is the unmet need. This wasn't assumed—it was researched, tested against alternatives, and defended against a discovery reviewer.</p>
+<p><strong>Persona-driven design</strong>: Every feature exists for one person—The Wanderer, an aspiring PM 3-6 months into self-directed prep. Scope is defended by that lens, not by feature lists.</p>
+<p><strong>Market-grounded product decisions</strong>: The readiness signal isn't invented—it's built from real job descriptions. The matching model is weighted, not editorial. The curriculum evolves from an ETL pipeline that reads actual hiring requirements.</p>
+<p><strong>Honest scope discipline</strong>: The roadmap explicitly states what's in v1 (matching + roadmap + readiness), what's deferred (interview practice, coaching), and why. No feature creep.</p>
+<p><strong>Production-grade SaaS thinking</strong>: Free-tier hosting doesn't mean toy shortcuts. Auth, ownership checks, migrations, error handling, and honest readiness metrics are built from day one. The roadmap shows a clear transition path to AWS when traction justifies it.</p>
+<h2>What makes it technically interesting</h2>
+<h3>Weighted archetype matching</h3>
+<p>The archetype matching model treats every intake response as a scored signal for every PM archetype. Fifteen signals are grouped into five categories — background, experience, skills, domain, and goals — and each signal carries a configurable weight per archetype stored in a <code>question_weights</code> table. The matching formula is a normalised weighted sum: <code>score(A) = Σ[weight × raw_score] / Σweight</code> across all answered signals. A software engineer answering Q1 scores 1.0 for Technical PM and 0.3 for Consumer PM; the same Q1 for a finance background inverts those scores. Q12 (technical skills self-rating) carries the highest weight (9) for Technical PM and Platform archetypes; Q13 (product skills) and Q14 (business skills) carry higher relative weight for Consumer and B2B archetypes. Tie-breaking uses Q12 absolute contribution when two archetypes score within 0.02 of each other. Weights are admin-configurable at runtime — no code deployment required. The model is deterministic and market-grounded, not editorial.</p>
+<h3>Progressive artefact tier unlocking with computed evidence</h3>
+<p>When a user logs evidence for an artefact, the system automatically splits the artefact's <code>key_topics[]</code> into three equal-size tiers (Learning/Practised/Mastered). The evidence modal presents progressive checkboxes for each tier; completing all checkboxes in Learning automatically unlocks Practised. This approach means no manual tier progression logic — the tier structure is derived from topic completion percentages. The <code>topic_progress</code> JSONB column tracks which topics the user has marked across all evidence logs for an artefact. Completion percentage triggers tier unlock: Learning (0–33%), Practised (34–66%), Mastered (67–100%). Tier animations celebrate promotion and unlock premium features.</p>
+<h3>Readiness score computation with self-healing</h3>
+<p>The system computes and updates readiness scores via a deterministic pipeline: <code>computeAndSaveScore(userId)</code> aggregates evidence, applies per-category rubrics (e.g., Technical artefacts worth 8 pts each, Portfolio artefacts worth 5 pts each), multiplies by completion tier (Learning = 0.5× multiplier, Practised = 0.8×, Mastered = 1.0×), and saves the total to <code>readiness_scores</code> via UPSERT. When a user logs evidence (<code>POST /api/evidence-log</code>), the route awaits score computation synchronously — no fire-and-forget callbacks. The <code>readiness GET</code> endpoint is self-healing: if no score row exists for a user, it computes on demand. This prevents stale or missing readiness data even if the webhook or async job fails. The radar chart on the Readiness page visualises the score breakdown by category.</p>
+<h3>pgvector HNSW gap analysis with deterministic gap_pct</h3>
+<p>Gap analysis uses a retrieval-augmented generation pipeline against a live corpus of embedded job descriptions. When a user triggers gap analysis, the system embeds their profile (archetype + domain + geography + skill signal) using <code>text-embedding-3-small</code> (1536 dimensions) and queries the <code>jd_embeddings</code> table via pgvector cosine similarity with K=25 retrieval. The HNSW index is built with <code>m=16, ef_construction=64</code> — sufficient for high recall at the JD corpus sizes PMRocket targets. Retrieved JDs are passed with the user's evidence log to the LLM, which produces a qualitative narrative and identifies the top three skill gaps with recommended artefacts from the curriculum. Alongside the narrative, a deterministic metric is computed: <code>gap_pct = (1 − evidenced_artefacts / total_artefacts) × 100</code>. The gap analysis button is hidden if fewer than 15 JDs exist for the user's archetype × domain × geography slice — the product never generates a signal from an insufficient corpus.</p>
+<h3>LLM abstraction layer</h3>
+<p>All LLM calls — ETL skill extraction and gap analysis narrative — route through a factory pattern that decouples the application from any specific provider. <code>getLLMModel()</code> reads the <code>ACTIVE_LLM_PROVIDER</code> environment variable and returns the appropriate Vercel AI SDK model instance: Groq (Llama 3.3 70B, free tier, default), Anthropic (Claude Sonnet 4.6), or Google (Gemini 2.0 Flash). <code>getEmbedModel()</code> follows the same pattern via <code>ACTIVE_EMBED_PROVIDER</code>. Switching providers requires one environment variable change and no code changes. This matters for a free-tier portfolio project: Groq runs inference free, but the abstraction means the same code runs in production on Anthropic or Google without modification. The ETL extraction prompt is constrained to the existing skill taxonomy vocabulary — the LLM cannot introduce new skill terms, only map JD text to known taxonomy entries.</p>
+<h3>Admin ETL pipeline</h3>
+<p>The admin surface is the editorial engine that keeps the curriculum market-grounded without requiring a code deployment. An admin pastes raw JD text into the ingestion UI; the system calls the LLM extraction endpoint (<code>POST /api/extract-skills</code>), which strips the JD of PII, identifies skills, and maps each to the existing taxonomy vocabulary. The admin reviews the extracted skills in a queue UI — accepting, rejecting, or editing each mapping — and approves the batch. On approval (<code>POST /api/confirm-extraction</code>), the system embeds the full JD via <code>text-embedding-3-small</code>, writes the embedding to <code>jd_embeddings</code>, updates the <code>artefacts</code> table where new skills warrant curriculum changes, and triggers <code>POST /api/aggregate-skill-frequency</code> to recalculate <code>skill_frequency</code> for the affected archetype × domain × geography slice. The admin Curriculum Signals panel surfaces Trending skills (high JD frequency, not yet in curriculum), Stable skills, and Declining skills — actionable without touching code.</p>
+<h3>Navigation system with UserMenu</h3>
+<p>The frontend now uses a unified <code>AppNav</code> component that renders the PMRocket logo, a personalized greeting with the user's first name ("Hi, {name} 👋"), and a three-dot UserMenu across all pages. The <code>UserMenu</code> component is a shared dropdown containing email, "Retake assessment," and "Sign out" — with an <code>extraItems</code> prop for page-specific menu additions. This centralised navigation reduces duplication and ensures consistent brand presence. The <code>BottomNav</code> component provides 4-tab navigation: Home | Roadmap | Readiness | Apply (locked). Archetype selection moved to the greeting click → Profile modal.</p>
+<h3>Node.js migration runner</h3>
+<p>The database schema is managed by 18 pure PostgreSQL SQL files applied in numeric order via a custom Node.js migration runner at <code>scripts/migrate.ts</code>. There is no Supabase CLI dependency, no ORM, and no framework magic. The runner connects to Neon via <code>@neondatabase/serverless</code>, creates a <code>migrations</code> table on first run to track applied filenames, reads all <code>.sql</code> files from the migrations directory, compares against the applied set, and runs each unapplied migration inside a transaction — failure rolls back the transaction and halts the runner with a clear error. This approach keeps the migration story portable: the same runner works against any PostgreSQL-compatible database, which matters for the planned Vercel → AWS ECS Fargate transition at product phase.</p>
+<h3>Clerk TEXT user IDs</h3>
+<p>The V3 architecture replaced Supabase Auth with Clerk, which required a non-obvious schema change: <code>users.id</code> is <code>TEXT</code>, not <code>UUID</code>. Clerk user IDs follow the format <code>user_2abc...</code> — they are not UUIDs. Every foreign key referencing <code>users.id</code> across the schema is therefore <code>TEXT</code>, and every <code>WHERE user_id = $userId</code> query in API routes uses the string value from Clerk's <code>auth()</code> call. User rows are provisioned via a Clerk <code>user.created</code> webhook (<code>POST /api/webhooks/clerk</code>) that inserts into <code>users</code>, <code>user_profiles</code>, and <code>subscriptions</code> in a single transaction. To handle the edge case where the webhook fires late or fails, every authenticated API route that touches user data includes a lazy provision check: if the user row is missing on a valid Clerk session, it is created before the business logic runs.</p>
+<hr />
+<h2>Current Status</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase</td>
+<td>7d — Deployment &amp; Polish ✓ Live</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>Complete (Problem validated, market scoped)</td>
+</tr>
+<tr>
+<td>PRD</td>
+<td>Approved (5-stage pipeline, persona map, monetisation)</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>Approved (Vercel + Neon, migrations, auth, free-tier stack)</td>
+</tr>
+<tr>
+<td>Build</td>
+<td>Complete (Navigation, scoring, dashboard, artefact curriculum)</td>
+</tr>
+<tr>
+<td>QA</td>
+<td>Passed (Manual E2E: intake → match → roadmap → evidence → readiness)</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>Live on Vercel + Neon (2026-07-28)</td>
+</tr>
+<tr>
+<td>Next</td>
+<td>V2a — Full Intelligence (multi-slice corpus, RAG gap, live paywall)</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="Phase-7d-Status.html">Phase 7d Status</a> for detailed build report.</p>
+<hr />
+<h2>Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tool</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend + API</td>
+<td>Next.js 14 (App Router) on Vercel</td>
+<td>Standard Node.js API routes only — no Edge Runtime (portability rule)</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Neon (PostgreSQL + pgvector)</td>
+<td>No pausing; HNSW index m=16, ef=64 for JD similarity</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Clerk</td>
+<td>Google OAuth + email/password; <code>publicMetadata.role</code> for admin</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>Vercel AI SDK — Groq default (Llama 3.3 70B)</td>
+<td><code>ACTIVE_LLM_PROVIDER</code> env var switches provider; zero code changes</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>OpenAI text-embedding-3-small (1536 dims)</td>
+<td><code>ACTIVE_EMBED_PROVIDER</code> env var; dimensions locked at schema level</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Stripe (test mode for Alpha)</td>
+<td>Paywall designed from day one; live charges after traction</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Resend</td>
+<td>Transactional; free tier (3K/month)</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>PostHog</td>
+<td>Product analytics + funnel tracking; free tier (1M events/month)</td>
+</tr>
+<tr>
+<td>Product phase</td>
+<td>AWS ECS Fargate + RDS + CloudFront + Batch</td>
+<td>Docker from day one; standard API routes ensure Vercel → AWS portability</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Estimated monthly cost at Alpha (personal use): $0</strong></p>
+<hr />
+<h2>Navigation index</h2>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="Product-Overview.html">Product Overview</a></td>
+<td>The problem, the solution, personas, archetype taxonomy, success metrics</td>
+</tr>
+<tr>
+<td><a href="User-Journeys.html">User Journeys</a></td>
+<td>Walk through the core flows as narratives (first-time, building evidence, ready to apply)</td>
+</tr>
+<tr>
+<td><a href="Feature-Map.html">Feature Map</a></td>
+<td>What's live today, what's coming next, and why sequencing matters</td>
+</tr>
+<tr>
+<td><a href="Roadmap.html">Roadmap</a></td>
+<td>Multi-year vision: Alpha, V2a (intelligence), V3a (apply), V3b (practice), V3c (coaching)</td>
+</tr>
+<tr>
+<td><a href="Decision-Log.html">Decision Log</a></td>
+<td>Key product decisions (personas, archetype taxonomy, scope, sequencing)</td>
+</tr>
+<tr>
+<td><a href="Contributing.html">Contributing</a></td>
+<td>Local setup, stack choices, development patterns</td>
+</tr>
+</tbody>
+</table></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

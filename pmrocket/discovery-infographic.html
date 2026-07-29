@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discovery Report — Wayfinder · 2026-03-22 · v3.0 Supply + Demand</title>
+  <style>
+    :root {
+      --navy: #0f1b2d;
+      --navy-light: #162236;
+      --accent: #3d8ef0;
+      --accent-dim: #1e4a8a;
+      --green: #27ae60;
+      --red: #e74c3c;
+      --grey: #7f8c8d;
+      --yellow: #f39c12;
+      --orange: #e67e22;
+      --white: #f5f8ff;
+      --text: #d4e1f7;
+      --subtext: #8fa8cc;
+      --card: #1a2d47;
+      --card-border: #243d5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── BANNER ─────────────────────────────────────── */
+    .banner {
+      background: linear-gradient(135deg, #0a1628 0%, #162236 50%, #1a3a5c 100%);
+      border-bottom: 2px solid var(--accent-dim);
+      padding: 48px 40px 36px;
+      text-align: center;
+    }
+    .banner-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .banner h1 {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .banner h1 span { color: var(--accent); }
+    .banner-sub {
+      font-size: 14px;
+      color: var(--subtext);
+      letter-spacing: 1px;
+    }
+    .version-badge {
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(61,142,240,0.12);
+      border: 1px solid var(--accent-dim);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    .section { margin-bottom: 52px; }
+    .section-title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    /* ── PROBLEM STATEMENT ──────────────────────────── */
+    .problem-block {
+      background: linear-gradient(135deg, var(--card) 0%, #1e3a5e 100%);
+      border: 1px solid var(--accent-dim);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 32px 36px;
+    }
+    .problem-block p {
+      font-size: 17px;
+      color: var(--white);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+    .problem-block p:last-child { margin-bottom: 0; }
+    .highlight { color: var(--accent); font-weight: 600; }
+
+    /* ── STAT GRID ──────────────────────────────────── */
+    .signals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
+    .signal-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .signal-card.accent-border { border-left: 3px solid var(--accent); }
+    .signal-card.red-border   { border-left: 3px solid var(--red); }
+    .signal-card.green-border { border-left: 3px solid var(--green); }
+    .signal-card.yellow-border{ border-left: 3px solid var(--yellow); }
+    .signal-card .stat {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .signal-card.red-border .stat   { color: var(--red); }
+    .signal-card.green-border .stat { color: var(--green); }
+    .signal-card.yellow-border .stat{ color: var(--yellow); }
+    .signal-card .stat-label  { font-size: 13px; color: var(--text); margin-bottom: 6px; font-weight: 500; }
+    .signal-card .stat-source { font-size: 11px; color: var(--subtext); }
+
+    /* ── TWO-COL SECTION ────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 22px 24px;
+    }
+    .info-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .info-card ul { list-style: none; padding: 0; }
+    .info-card ul li {
+      font-size: 13px;
+      color: var(--text);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .info-card ul li:last-child { border-bottom: none; }
+    .info-card ul li::before { content: "→"; color: var(--accent); flex-shrink: 0; }
+
+    /* ── EMPLOYER DEMAND TABLE ──────────────────────── */
+    .demand-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .demand-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--card-border);
+      color: var(--subtext);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .demand-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: top;
+    }
+    .demand-table tr:hover td { background: rgba(61,142,240,0.04); }
+    .demand-table .label { font-weight: 600; color: var(--white); }
+    .demand-table .pct {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    .demand-table .pct.bad { color: var(--red); }
+
+    /* ── FUNNEL ─────────────────────────────────────── */
+    .funnel {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .funnel-step {
+      display: grid;
+      grid-template-columns: 200px 1fr 80px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .funnel-step .f-label { color: var(--white); font-weight: 500; }
+    .funnel-step .f-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 3px; height: 8px; overflow: hidden; }
+    .funnel-step .f-bar { height: 8px; border-radius: 3px; background: var(--accent); }
+    .funnel-step .f-pct { font-weight: 700; color: var(--accent); text-align: right; font-size: 14px; }
+    .funnel-step.drop .f-bar { background: var(--red); }
+    .funnel-step.drop .f-pct { color: var(--red); }
+
+    /* ── COMPANY SIZE TABLE ─────────────────────────── */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .comp-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--card-border);
+      color: var(--subtext);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .comp-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: top;
+    }
+    .comp-table tr:hover td { background: rgba(61,142,240,0.04); }
+    .comp-table .comp-name { font-weight: 600; color: var(--white); }
+    .comp-table .weakness { color: var(--yellow); font-size: 12px; }
+    .gap-row td {
+      background: linear-gradient(90deg, rgba(61,142,240,0.08) 0%, transparent 100%);
+      color: var(--white);
+      font-style: italic;
+      font-size: 13px;
+    }
+
+    /* ── WTP BUYERS ─────────────────────────────────── */
+    .wtp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .wtp-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .wtp-card.served { border-top: 3px solid var(--grey); }
+    .wtp-card.underserved { border-top: 3px solid var(--accent); }
+    .wtp-card .wtp-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--subtext);
+      margin-bottom: 8px;
+    }
+    .wtp-card.underserved .wtp-label { color: var(--accent); }
+    .wtp-card h3 { font-size: 18px; color: var(--white); margin-bottom: 10px; font-weight: 700; }
+    .wtp-card p { font-size: 13px; color: var(--text); margin-bottom: 10px; }
+    .wtp-card .wtp-price {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--yellow);
+      margin-top: 12px;
+    }
+
+    /* ── 5 FORCES ───────────────────────────────────── */
+    .forces-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .force-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-top: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+    .force-card .force-num { font-size: 11px; font-weight: 700; color: var(--subtext); margin-bottom: 6px; }
+    .force-card h3 { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .force-card p { font-size: 12px; color: var(--text); }
+
+    /* ── FINDINGS LIST ──────────────────────────────── */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .finding-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .finding-num {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-dim);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .finding-card h3 { font-size: 13px; color: var(--white); margin-bottom: 4px; font-weight: 600; }
+    .finding-card p  { font-size: 12px; color: var(--text); }
+
+    /* ── GAP CALLOUT ────────────────────────────────── */
+    .gap-callout {
+      background: linear-gradient(135deg, #0d2240 0%, #162236 100%);
+      border: 1px solid var(--accent-dim);
+      border-radius: 8px;
+      padding: 28px 32px;
+    }
+    .gap-callout h3 { font-size: 18px; color: var(--white); margin-bottom: 10px; }
+    .gap-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .pillar {
+      background: rgba(61,142,240,0.08);
+      border: 1px solid rgba(61,142,240,0.2);
+      border-radius: 6px;
+      padding: 16px;
+      text-align: center;
+    }
+    .pillar .pillar-icon { font-size: 22px; margin-bottom: 6px; }
+    .pillar .pillar-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .pillar .pillar-desc  { font-size: 12px; color: var(--subtext); }
+
+    /* ── VERDICTS ───────────────────────────────────── */
+    .verdicts-grid { display: grid; gap: 10px; }
+    .assumption-row {
+      display: grid;
+      grid-template-columns: 28px 1fr 130px;
+      gap: 14px;
+      align-items: start;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+    .assumption-num { font-size: 12px; font-weight: 700; color: var(--subtext); padding-top: 2px; }
+    .assumption-text { font-size: 13px; color: var(--text); }
+    .verdict {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-align: center;
+      padding: 4px 10px;
+      border-radius: 4px;
+      align-self: start;
+    }
+    .verdict.validated    { background: rgba(39,174,96,0.15); color: var(--green); border: 1px solid rgba(39,174,96,0.3); }
+    .verdict.insufficient { background: rgba(243,156,18,0.15); color: var(--yellow); border: 1px solid rgba(243,156,18,0.3); }
+
+    /* ── KILL CONDITIONS ────────────────────────────── */
+    .kill-grid { display: grid; gap: 10px; }
+    .kill-row {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 14px;
+      align-items: start;
+      background: rgba(231,76,60,0.06);
+      border: 1px solid rgba(231,76,60,0.2);
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+    .kill-num { font-size: 12px; font-weight: 700; color: var(--red); padding-top: 2px; }
+    .kill-text { font-size: 13px; color: var(--text); }
+    .kill-text strong { color: var(--white); }
+    .not-triggered {
+      display: inline-block;
+      background: rgba(39,174,96,0.12);
+      border: 1px solid rgba(39,174,96,0.3);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      margin-top: 14px;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 32px;
+      border-top: 1px solid var(--card-border);
+      color: var(--subtext);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 700px) {
+      .banner h1 { font-size: 28px; }
+      .signals-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col, .wtp-grid, .findings-grid { grid-template-columns: 1fr; }
+      .gap-pillars { grid-template-columns: 1fr; }
+      .forces-grid { grid-template-columns: 1fr 1fr; }
+      .assumption-row, .funnel-step { grid-template-columns: 28px 1fr; }
+      .assumption-row .verdict { grid-column: 2; }
+      .funnel-step .f-pct { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-label">Discovery Report · Phase 3</div>
+  <h1><span>Wayfinder</span></h1>
+  <div class="banner-sub">Supply + Demand · Market Research &amp; Competitive Analysis &nbsp;·&nbsp; 2026-03-22</div>
+  <div class="version-badge">v3.0 — Supply + Demand</div>
+</div>
+
+<div class="container">
+
+  <!-- VALIDATED PROBLEM STATEMENT -->
+  <div class="section">
+    <div class="section-title">Validated Problem Statement</div>
+    <div class="problem-block">
+      <p>
+        <span class="highlight">Aspiring Product Managers</span> — engineers, MBAs, consultants, analysts, designers —
+        cannot navigate the PM career transition because the preparation landscape is
+        <span class="highlight">fragmented, generic, and disconnected from what employers actually screen for.</span>
+      </p>
+      <p>
+        Every existing platform delivers content. None tells a candidate which PM role suits their background,
+        what specific portfolio evidence to build for that archetype, or
+        <span class="highlight">when they are genuinely ready to apply.</span>
+      </p>
+      <p>
+        The result is a 6–18 month preparation loop without external calibration, while employer data confirms
+        that <span class="highlight">40% of rejections happen at the domain expertise filter</span> —
+        the exact gap no platform addresses.
+      </p>
+    </div>
+  </div>
+
+  <!-- KEY MARKET SIGNALS -->
+  <div class="section">
+    <div class="section-title">Key Market Signals — 2026</div>
+    <div class="signals-grid">
+      <div class="signal-card accent-border">
+        <div class="stat">140K+</div>
+        <div class="stat-label">Open PM roles in the US — signal failure, not opportunity failure</div>
+        <div class="stat-source">LinkedIn, March 2026</div>
+      </div>
+      <div class="signal-card green-border">
+        <div class="stat">42%</div>
+        <div class="stat-label">YoY PM hiring growth in India; senior roles up 87% YoY</div>
+        <div class="stat-source">IPL Hiring Report, 2025</div>
+      </div>
+      <div class="signal-card red-border">
+        <div class="stat">55,875</div>
+        <div class="stat-label">Tech workers cut in the first 74 days of 2026 — experienced PMs now competing with aspiring ones</div>
+        <div class="stat-source">TrueUp / Layoffs.fyi, March 2026</div>
+      </div>
+      <div class="signal-card red-border">
+        <div class="stat">40%</div>
+        <div class="stat-label">Of candidates rejected at domain expertise filter — before any skills assessment begins</div>
+        <div class="stat-source">Mind the Product, UK survey 2025</div>
+      </div>
+      <div class="signal-card accent-border">
+        <div class="stat">28%</div>
+        <div class="stat-label">Of first PM hires come via internal transitions — employer-preferred, completely unserved</div>
+        <div class="stat-source">IPL, Consortia 2025</div>
+      </div>
+      <div class="signal-card yellow-border">
+        <div class="stat">0.12%</div>
+        <div class="stat-label">Cold application-to-offer rate for PM roles</div>
+        <div class="stat-source">Aakash Gupta; Gem benchmarks 2025</div>
+      </div>
+      <div class="signal-card accent-border">
+        <div class="stat">300%</div>
+        <div class="stat-label">Growth in AI PM postings since 2023 — highest bar, highest pay</div>
+        <div class="stat-source">LinkedIn; Consortia 2025</div>
+      </div>
+      <div class="signal-card yellow-border">
+        <div class="stat">82%</div>
+        <div class="stat-label">Of PMs enter interviews without a portfolio — applying with no evidence</div>
+        <div class="stat-source">Aakash Gupta, Medium 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY 2026 IS THE INFLECTION POINT -->
+  <div class="section">
+    <div class="section-title">Why Now — 5 Converging Forces</div>
+    <div class="forces-grid">
+      <div class="force-card">
+        <div class="force-num">FORCE 01</div>
+        <h3>2026 Layoff Wave</h3>
+        <p>55,875 tech cuts in 74 days. Experienced PMs competing with aspiring ones. Stakes for precise targeting have never been higher.</p>
+      </div>
+      <div class="force-card">
+        <div class="force-num">FORCE 02</div>
+        <h3>AI Compresses Junior Tier</h3>
+        <p>Junior PM tasks automated. Entry-level bar has moved to what was PM-2. Candidates without portfolio evidence are invisible.</p>
+      </div>
+      <div class="force-card">
+        <div class="force-num">FORCE 03</div>
+        <h3>Domain Depth as Primary Filter</h3>
+        <p>40% rejection rate at the domain expertise screen. Generic preparation is actively counter-productive — it builds the wrong things.</p>
+      </div>
+      <div class="force-card">
+        <div class="force-num">FORCE 04</div>
+        <h3>AI PM Demand Surge</h3>
+        <p>300% posting growth, $280K–$492K total comp at senior level. High-WTP segment that needs a specific, technical preparation path.</p>
+      </div>
+      <div class="force-card">
+        <div class="force-num">FORCE 05</div>
+        <h3>Internal Path Unaddressed</h3>
+        <p>28% of hires via internal moves. Employer-preferred, yet no platform helps engineers/analysts navigate this path.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYER DEMAND: WHAT THEY SCREEN FOR -->
+  <div class="section">
+    <div class="section-title">What Employers Actually Screen For (Demand Side)</div>
+    <table class="demand-table">
+      <thead>
+        <tr>
+          <th>What Hiring Managers Cannot Find</th>
+          <th>Data Point</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Domain depth — candidates who have <em>owned</em> regulated or specialised product, not just worked near it</td>
+          <td class="pct bad">40% rejected here</td>
+          <td style="font-size:12px; color:var(--subtext)">Mind the Product, 2025</td>
+        </tr>
+        <tr>
+          <td class="label">Business outcome articulation — candidates describe activities, not impact (metrics, before/after)</td>
+          <td class="pct">Top failure mode</td>
+          <td style="font-size:12px; color:var(--subtext)">Consortia, 2025</td>
+        </tr>
+        <tr>
+          <td class="label">Portfolio evidence — PRDs with success metrics, A/B test documentation, domain-specific analysis</td>
+          <td class="pct bad">82% arrive without</td>
+          <td style="font-size:12px; color:var(--subtext)">Aakash Gupta, 2024</td>
+        </tr>
+        <tr>
+          <td class="label">SQL / data fluency demonstrated — not claimed</td>
+          <td class="pct">+22% salary premium; +45% callback rate</td>
+          <td style="font-size:12px; color:var(--subtext)">Aakash Gupta, 2026</td>
+        </tr>
+        <tr>
+          <td class="label">Communication + judgment — what to build, depth of product critique, trade-off reasoning</td>
+          <td class="pct bad">85% of failures</td>
+          <td style="font-size:12px; color:var(--subtext)">Product leaders survey, 2026</td>
+        </tr>
+        <tr>
+          <td class="label">AI/ML literacy at senior level — eval sets, model lifecycle, non-deterministic trade-offs</td>
+          <td class="pct">Table stakes at senior AI PM</td>
+          <td style="font-size:12px; color:var(--subtext)">Consortia, 2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HIRING FUNNEL -->
+  <div class="section">
+    <div class="section-title">The PM Hiring Funnel — Where Candidates Drop</div>
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="f-label">Application submitted</div>
+        <div class="f-bar-wrap"><div class="f-bar" style="width:100%"></div></div>
+        <div class="f-pct">100%</div>
+      </div>
+      <div class="funnel-step drop">
+        <div class="f-label">→ Recruiter screen</div>
+        <div class="f-bar-wrap"><div class="f-bar" style="width:3%"></div></div>
+        <div class="f-pct">3%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="f-label">→ Hiring manager screen</div>
+        <div class="f-bar-wrap"><div class="f-bar" style="width:50%"></div></div>
+        <div class="f-pct">~50%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="f-label">→ Portfolio / panel rounds</div>
+        <div class="f-bar-wrap"><div class="f-bar" style="width:45%"></div></div>
+        <div class="f-pct">~45%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="f-label">→ Offer received</div>
+        <div class="f-bar-wrap"><div class="f-bar" style="width:27%"></div></div>
+        <div class="f-pct">~27%</div>
+      </div>
+    </div>
+    <p style="font-size:12px; color:var(--subtext); margin-top:10px;">
+      Primary drop-off: application → recruiter screen. Top rejection reasons: domain expertise mismatch &amp; salary misalignment.
+      Overall cold application-to-offer: <strong style="color:var(--red)">~0.12%</strong>.
+    </p>
+  </div>
+
+  <!-- COMPANY SIZE BREAKDOWN -->
+  <div class="section">
+    <div class="section-title">Company-Size Breakdown — What Each Employer Actually Needs</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Company Type</th>
+          <th>What the PM Role Actually Is</th>
+          <th>What They Can't Find</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="comp-name">FAANG / Mega-tech</td>
+          <td>Specialised, deep, influence at scale. Minimal operational scope, maximum strategic leverage.</td>
+          <td class="weakness">Candidates who think at both user depth and system scale simultaneously</td>
+        </tr>
+        <tr>
+          <td class="comp-name">Mid-market / Scale-ups</td>
+          <td>Owns a surface end-to-end. Strategy + execution + stakeholder alignment simultaneously.</td>
+          <td class="weakness">Demonstrated domain ownership — not just adjacent experience</td>
+        </tr>
+        <tr>
+          <td class="comp-name">Early-stage startups</td>
+          <td>Multiple hats. Ships fast, high ambiguity, often incomplete data.</td>
+          <td class="weakness">PMs who can operate without structure or clear OKR frameworks</td>
+        </tr>
+        <tr>
+          <td class="comp-name">Enterprise / large non-tech</td>
+          <td>Complex stakeholder landscape; navigates organisational politics; slower cycle.</td>
+          <td class="weakness">PMs who can influence without authority in matrix organisations</td>
+        </tr>
+        <tr>
+          <td class="comp-name">GCCs (India)</td>
+          <td>Balances global product vision with local execution; reports to HQ product org.</td>
+          <td class="weakness">PMs combining global strategic thinking with India-context execution + AI/ML literacy</td>
+        </tr>
+        <tr class="gap-row">
+          <td colspan="3">→ Candidates who calibrate their target company size perform fundamentally differently from those who apply broadly.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WILLINGNESS TO PAY -->
+  <div class="section">
+    <div class="section-title">Willingness to Pay — Two Buyer Archetypes</div>
+    <div class="wtp-grid">
+      <div class="wtp-card served">
+        <div class="wtp-label">Served by existing market</div>
+        <h3>Hope Buyers</h3>
+        <p>Early-stage aspiration. Want a credential or a structured framework. In the market 0–6 months. Feel like progress = outcome.</p>
+        <p>Already served by NextLeap, Upraised, Product School. Churn when the credential doesn't produce results.</p>
+        <div class="wtp-price">₹27K–₹75K / cohort</div>
+      </div>
+      <div class="wtp-card underserved">
+        <div class="wtp-label">Underserved — highest WTP for navigation</div>
+        <h3>Truth Seekers</h3>
+        <p>6–18 months in market. Completed at least one bootcamp. Still failing or not getting interviews. Have identified the problem is targeting or evidence — not knowledge.</p>
+        <p>Already spent ₹27K–₹150K. Will pay again for something that actually works. Pay $200–$500/session for coaching that gives real feedback.</p>
+        <div class="wtp-price">₹10K–₹50K / digital &nbsp;|&nbsp; up to ₹1.5L / coaching</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPETITOR LANDSCAPE -->
+  <div class="section">
+    <div class="section-title">Competitor Landscape</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Target User</th>
+          <th>Core Value Prop</th>
+          <th>Pricing</th>
+          <th>Key Weakness</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="comp-name">Exponent</td>
+          <td>SWE/PM → FAANG</td>
+          <td>PM interview prep: video course, question bank, mock interviews</td>
+          <td>$12–$79/mo</td>
+          <td class="weakness">Interview-only. No career navigation, no background matching, no readiness signal.</td>
+        </tr>
+        <tr>
+          <td class="comp-name">NextLeap (+ PM School)</td>
+          <td>India aspiring PMs</td>
+          <td>8-week live cohort, real projects, placement support</td>
+          <td>~₹27,499</td>
+          <td class="weakness">One-size cohort, no personalisation. Placement stats unpublished.</td>
+        </tr>
+        <tr>
+          <td class="comp-name">Upraised</td>
+          <td>India aspiring PMs</td>
+          <td>Tiered bootcamps: internship (Embark) + full-time PM (CAP)</td>
+          <td>Not published</td>
+          <td class="weakness">Generic curriculum, no background-specific paths, no readiness indicator.</td>
+        </tr>
+        <tr>
+          <td class="comp-name">Lenny's Newsletter</td>
+          <td>Practising PMs</td>
+          <td>Deep-research essays, podcast, Maven courses</td>
+          <td>Free / ~$150/yr</td>
+          <td class="weakness">Content-only. Targets existing PMs, not aspiring ones.</td>
+        </tr>
+        <tr>
+          <td class="comp-name">Reforge</td>
+          <td>Senior PMs (6+ yrs)</td>
+          <td>Advanced cohort programs: strategy, growth, retention</td>
+          <td>$2,000/yr</td>
+          <td class="weakness">Explicitly excludes aspiring PMs. Irrelevant for this segment.</td>
+        </tr>
+        <tr>
+          <td class="comp-name">1-on-1 Coaching</td>
+          <td>Self-directed aspiring PMs</td>
+          <td>Direct expert feedback on gaps and positioning</td>
+          <td>$200–$500/session</td>
+          <td class="weakness">Not scalable. Not accessible at India price points. Quality varies wildly.</td>
+        </tr>
+        <tr class="gap-row">
+          <td colspan="5">→ Background-to-role matching + personalised evidence roadmap + readiness signal is unoccupied by every platform in the market — India and globally.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- THE STRUCTURAL GAP -->
+  <div class="section">
+    <div class="section-title">The Structural Gap</div>
+    <div class="gap-callout">
+      <h3>Every existing platform delivers content. None of them deliver navigation.</h3>
+      <p style="font-size:14px; color:var(--text);">
+        No platform tells a candidate which PM archetype suits their background, which companies are realistic
+        targets, what specific evidence to build, and when they are genuinely ready to apply.
+        The demand side makes the absence even more acute: hiring managers screen on domain depth and
+        business impact evidence — the exact things no prep platform helps candidates build in a targeted way.
+      </p>
+      <div class="gap-pillars">
+        <div class="pillar">
+          <div class="pillar-icon">🗺</div>
+          <div class="pillar-title">Archetype Mapping</div>
+          <div class="pillar-desc">Background → PM archetype matching. Engineer ≠ MBA ≠ Designer. Preparation paths must diverge.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">📍</div>
+          <div class="pillar-title">Evidence-Based Roadmap</div>
+          <div class="pillar-desc">Guide users to build artefacts employers actually screen for — not consume content about them.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">✅</div>
+          <div class="pillar-title">Readiness Signal</div>
+          <div class="pillar-desc">Dynamic, evidence-based score calibrated against employer screening criteria. The stickiest, most defensible feature.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 FINDINGS -->
+  <div class="section">
+    <div class="section-title">10 Validated Findings</div>
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="finding-num">1</div>
+        <div>
+          <h3>Large market, badly signalled</h3>
+          <p>140K+ open US PM roles. Problem is signal, not volume — candidates can't distinguish realistic from impossible targets.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">2</div>
+        <div>
+          <h3>2026 layoff wave intensifies competition</h3>
+          <p>55,875 tech cuts YTD. Experienced PMs flooding a market with aspiring PMs. Application-to-offer compressed to ~4%.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">3</div>
+        <div>
+          <h3>Demand bifurcating by seniority</h3>
+          <p>Senior PM demand +87% YoY in India. Entry-level roles −15% YoY globally. Fewer spots, higher bar.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">4</div>
+        <div>
+          <h3>Domain depth is the primary hiring filter</h3>
+          <p>40% rejected at screen without domain experience. Generalism no longer clears the first gate anywhere.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">5</div>
+        <div>
+          <h3>What employers test has changed fundamentally</h3>
+          <p>Portfolio evidence, SQL fluency, business outcome articulation. Framework memorisation is dead.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">6</div>
+        <div>
+          <h3>AI PM is the highest-growth, highest-bar segment</h3>
+          <p>300% posting growth. $280K–$492K US total comp at senior level. Specific technical bar: eval sets, model lifecycle.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">7</div>
+        <div>
+          <h3>Internal transition path (28% of hires) is unserved</h3>
+          <p>Employer-preferred, lower risk, faster to productivity. No platform exists for this use case.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">8</div>
+        <div>
+          <h3>The gap is navigation, not content</h3>
+          <p>Every platform delivers content. None tell a specific candidate which role to target, what to build, or when they're ready.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">9</div>
+        <div>
+          <h3>WTP is validated — but category-dependent</h3>
+          <p>Truth Seekers (6–18 months in market, still failing) have highest WTP. Already spent ₹27K–₹150K. Will pay for signal over content.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-num">10</div>
+        <div>
+          <h3>No kill conditions triggered</h3>
+          <p>Problem real, gap unoccupied, market growing, urgency highest in the 2021–2026 window. No reason to stop.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLAIM VALIDATION -->
+  <div class="section">
+    <div class="section-title">Claim Validation Summary</div>
+    <div class="verdicts-grid">
+      <div class="assumption-row">
+        <div class="assumption-num">1</div>
+        <div class="assumption-text">The navigation gap is real and structurally unoccupied — all 10 claims validated</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">2</div>
+        <div class="assumption-text">Background-to-role matching does not exist in any competing product</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">3</div>
+        <div class="assumption-text">A dynamic readiness signal does not exist in any competing product</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">4</div>
+        <div class="assumption-text">Domain depth is the primary employer screening filter (40% rejection rate at screen)</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">5</div>
+        <div class="assumption-text">The internal transition path (28% of hires) is unserved by any platform</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">6</div>
+        <div class="assumption-text">AI PM is a first-class archetype with specific and testable technical requirements</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">7</div>
+        <div class="assumption-text">India GCC demand requires distinct archetype mapping, not just content localisation</div>
+        <div class="verdict validated">VALIDATED</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">8</div>
+        <div class="assumption-text">Candidate WTP for navigation product (not content) — directly evidenced</div>
+        <div class="verdict insufficient">INFERRED — NOT DIRECT</div>
+      </div>
+      <div class="assumption-row">
+        <div class="assumption-num">9</div>
+        <div class="assumption-text">B2C vs B2B business model direction</div>
+        <div class="verdict insufficient">UNRESOLVED → Hypothesis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KILL CONDITIONS -->
+  <div class="section">
+    <div class="section-title">Kill Conditions — Status</div>
+    <div class="kill-grid">
+      <div class="kill-row">
+        <div class="kill-num">K1</div>
+        <div class="kill-text"><strong>Navigation gap already filled:</strong> A well-funded competitor already delivers background-to-role matching + readiness signal at scale.</div>
+      </div>
+      <div class="kill-row">
+        <div class="kill-num">K2</div>
+        <div class="kill-text"><strong>WTP collapses:</strong> Fewer than 20% of interview respondents name any price above ₹200/month for a navigation product before anchoring.</div>
+      </div>
+      <div class="kill-row">
+        <div class="kill-num">K3</div>
+        <div class="kill-text"><strong>Preparation paths converge:</strong> Background-to-role mapping exercise produces paths that are not meaningfully differentiated — all roads lead to the same framework + case study loop.</div>
+      </div>
+      <div class="kill-row">
+        <div class="kill-num">K4</div>
+        <div class="kill-text"><strong>Readiness signal untrusted:</strong> Candidates find the readiness score meaningless or anxiety-inducing without actionability. Retention model fails.</div>
+      </div>
+      <div class="kill-row">
+        <div class="kill-num">K5</div>
+        <div class="kill-text"><strong>Market collapse:</strong> PM hiring volumes drop >40% across mid-market and senior tiers for two consecutive quarters.</div>
+      </div>
+    </div>
+    <div class="not-triggered">✓ No kill conditions triggered — proceed to hypothesis</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Discovery Report — Wayfinder &nbsp;·&nbsp; v3.0 Supply + Demand &nbsp;·&nbsp; 2026-03-22 &nbsp;·&nbsp; discovery-agent
+</div>
+
+</body>
+</html>

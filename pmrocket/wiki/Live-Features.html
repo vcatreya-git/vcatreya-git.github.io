@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Live-Features — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Live Features — Phase 7d</h1>
+<p>This page documents what is currently live and working in PMRocket, deployed on Vercel. Everything below is running on the free tier (Vercel, Neon, Clerk, Groq).</p>
+<hr />
+<h2>Pages and Navigation</h2>
+<h3>AppNav (Global)</h3>
+<p>Appears at the top of every page:<br />
+- PMRocket logo (left)<br />
+- Personalized greeting: "Hi, {firstName} 👋" (center)<br />
+- Three-dot UserMenu (right)</p>
+<p>The UserMenu is a reusable component with:<br />
+- Display email<br />
+- "Retake assessment" link<br />
+- "Sign out" button<br />
+- <code>extraItems</code> prop for page-specific additions</p>
+<p>Clicking the greeting opens a Profile modal (see Profile page below).</p>
+<h3>BottomNav (Mobile-first)</h3>
+<p>Four-tab navigation bar at bottom of screen:<br />
+1. <strong>Home</strong> → <code>/dashboard</code><br />
+2. <strong>Roadmap</strong> → <code>/roadmap</code><br />
+3. <strong>Readiness</strong> → <code>/readiness</code><br />
+4. <strong>Apply</strong> → <code>/apply</code> (locked with icon; clicks show paywall teaser)</p>
+<p>On desktop, these tabs are available via sidebar or top navigation (Tailwind responsive classes).</p>
+<h3>Dashboard Page (<code>/dashboard</code>)</h3>
+<p>The home page after login. Shows:</p>
+<p><strong>Stats Grid</strong><br />
+- Readiness score (large number, category breakdown link)<br />
+- Evidence logged count<br />
+- Archetype match confidence</p>
+<p><strong>Archetype Panel</strong><br />
+- Current matched archetype + confidence<br />
+- Collapsible accordion showing all 8 archetypes<br />
+- "Switch to {archetype}" button on each archetype card<br />
+- Click to expand/collapse</p>
+<p><strong>Score Breakdown</strong><br />
+- Grid of clickable cards: Technical | Business | Portfolio | Domain | Product<br />
+- Each card shows current points / max points<br />
+- Click any card → navigates to Roadmap filtered to that category</p>
+<p><strong>Gamification Strip</strong><br />
+- Streak: "5 days in a row" (resets after 24h gap)<br />
+- Weekly: "Logged 3 artefacts this week"<br />
+- Milestone: "Reached 50% readiness"</p>
+<p><strong>Coming Soon Grid</strong><br />
+- Teaser cards for V2a+ features (disabled, locked)<br />
+- "AI Gap Narrative" (V2a teaser)<br />
+- "Ready-to-Apply Gate" (V2a teaser)</p>
+<hr />
+<h2>Roadmap Page (<code>/roadmap</code>)</h2>
+<p>The evidence-logging interface. Organized by category.</p>
+<p><strong>Browser-Tab Layer Navigation</strong><br />
+- Tabs: Technical | Business | Portfolio | Domain | Product<br />
+- Each tab shows all artefacts in that category</p>
+<p><strong>Artefact Cards (Grid, scrollable)</strong><br />
+- Title (e.g., "Write 10 SQL Queries")<br />
+- Brief description (50 chars)<br />
+- Layer badges: "Universal" | "Archetype-specific" | "Domain/Geography"<br />
+- Evidence status indicator:<br />
+  - Empty circle: not started<br />
+  - Partial: Learning logged<br />
+  - Filled circle: Practised or Mastered<br />
+- "Log evidence" button → opens EvidenceLogModal</p>
+<p><strong>EvidenceLogModal (Reusable popup)</strong></p>
+<p>When opened:<br />
+1. Displays artefact title + description<br />
+2. Shows <code>key_topics[]</code> split into three auto-calculated tiers:<br />
+   - Learning (topics 0–4 of 15)<br />
+   - Practised (topics 5–9 of 15)<br />
+   - Mastered (topics 10–14 of 15)<br />
+3. Progressive tier checkboxes:<br />
+   - Learning checkboxes always visible<br />
+   - Practised tier unlocks after 5/5 Learning checked<br />
+   - Mastered tier unlocks after 5/5 Practised checked<br />
+4. "Search to learn" keyword chips (from <code>search_keywords[]</code>) — clickable, opens Google search in new tab<br />
+5. Optional description field (200 chars, placeholder: "e.g., I wrote 10 queries against Postgres...")<br />
+6. Optional link field (auto-prefixed with <code>https://</code> if user omits scheme)<br />
+7. Save button:<br />
+   - Validates at least Learning tier started<br />
+   - Calls <code>POST /api/evidence-log</code><br />
+   - Awaits readiness score recomputation<br />
+   - Closes modal, shows tier unlock celebration animation<br />
+   - Dashboard stats update in real-time</p>
+<p><strong>Score Breakdown Sidebar</strong><br />
+- Shows current readiness breakdown by category<br />
+- Totals at bottom: "You're 62% ready"</p>
+<hr />
+<h2>Readiness Page (<code>/readiness</code>)</h2>
+<p>Quantitative readiness signal with visualization.</p>
+<p><strong>Radar Chart</strong><br />
+- 5-axis radar chart (Recharts)<br />
+- Axes: Technical | Business | Portfolio | Domain | Product<br />
+- User's current points on each axis<br />
+- Filled polygon shows overall coverage shape</p>
+<p><strong>Score Breakdown Bars</strong><br />
+- Technical: [████░░░░░] 6/8<br />
+- Business: [██░░░░░░░░] 2/6<br />
+- Portfolio: [█████░░░░░] 5/5 ✓<br />
+- Domain: [███░░░░░░░] 3/7<br />
+- Product: [████░░░░░░] 4/6<br />
+- <strong>Total: 20 / 32 points (62.5%)</strong></p>
+<p>Each bar is clickable → filters Roadmap to that category.</p>
+<p><strong>Locked AI Gap Narrative Preview (V2a)</strong><br />
+- Copy: "Unlock with subscription to see AI-powered gap analysis"<br />
+- Teaser: "Discover your top 3 skill gaps matched against real job descriptions"<br />
+- Link to checkout (paywall)</p>
+<p><strong>Ready-to-Apply Gate</strong><br />
+- Hidden if gap_pct ≤ threshold or corpus insufficient<br />
+- Shows: "You're ready to apply!" + "View matched roles" button (V3+)</p>
+<hr />
+<h2>Profile Page (<code>/profile</code>)</h2>
+<p>User settings and account management.</p>
+<p><strong>Header</strong><br />
+- Avatar: user initials in a circle<br />
+- Display name: {firstName} {lastName}</p>
+<p><strong>Current Plan</strong><br />
+- "Free" badge (or "Pro" if subscription active)<br />
+- "Upgrade" button → Stripe checkout</p>
+<p><strong>Archetype Summary</strong><br />
+- Current archetype: "{Archetype}" ({confidence}%)<br />
+- "Change archetype" link → opens Archetype switcher modal</p>
+<p><strong>Actions</strong><br />
+- "Retake assessment" button → starts new intake flow<br />
+- "Sign out" button → clears Clerk session</p>
+<p><strong>Preferences</strong> (V2a+)<br />
+- Email reminders toggle<br />
+- Notification preferences<br />
+- Theme toggle (dark/light mode — V2b+)</p>
+<hr />
+<h2>Intake Flow (Onboarding)</h2>
+<p>New users see a multi-step questionnaire:</p>
+<p><strong>Step 1–11:</strong> Single-select questions<br />
+- Background, experience, skills, domain, goals<br />
+- Questions load based on previous responses (some branching in design; currently linear for Alpha)<br />
+- Users can go back/edit previous answers<br />
+- Progress bar at top</p>
+<p><strong>Step 12–14:</strong> Skill grids<br />
+- Q12: Technical skills (rate 1–5)<br />
+- Q13: Product skills (rate 1–5)<br />
+- Q14: Business skills (rate 1–5)<br />
+- Slider UX; displays selected value</p>
+<p><strong>Step 15:</strong> Activity checklist<br />
+- Multi-select: which of these have you done?<br />
+- (Build an app, Write specs, Conduct interviews, etc.)<br />
+- Users can select multiple</p>
+<p><strong>Complete</strong><br />
+- Saves all responses to <code>intake_responses</code> table<br />
+- Calls <code>POST /api/compute-match</code> with all responses<br />
+- Computes weighted archetype scores<br />
+- Saves match result to <code>archetype_matches</code> table<br />
+- Redirects to Match Result page</p>
+<hr />
+<h2>Match Result Page (<code>/match</code>)</h2>
+<p>Displays intake archetype matching outcome.</p>
+<p><strong>Hero Match Card</strong><br />
+- Large archetype name: "Technical PM"<br />
+- Confidence: "92% match"<br />
+- Icon/visual for the archetype</p>
+<p><strong>Your match breakdown</strong><br />
+- Table showing contribution of each category:<br />
+  - Background: +18 pts<br />
+  - Experience: +22 pts<br />
+  - Skills: +25 pts<br />
+  - Domain: +15 pts<br />
+  - Goals: +12 pts</p>
+<p><strong>All Archetypes Accordion</strong><br />
+- List all 8 archetypes with scores<br />
+- Each expandable to show category breakdown<br />
+- "Switch to {archetype}" button on each — saves new primary and refreshes roadmap</p>
+<p><strong>Next Steps</strong><br />
+- "View your roadmap" button → navigates to <code>/roadmap</code><br />
+- Shows paywall teaser for evidence logging (if not subscribed)</p>
+<hr />
+<h2>Authentication</h2>
+<p><strong>Sign up / Sign in</strong><br />
+- Clerk-hosted auth UI<br />
+- Email + password OR Google OAuth<br />
+- Redirects to <code>/dashboard</code> on success<br />
+- Lazy provisioning: if Clerk webhook delays, first API call triggers DB row creation</p>
+<p><strong>Session validation</strong><br />
+- All routes call <code>auth()</code> from <code>@clerk/nextjs/server</code><br />
+- Invalid/expired session → <code>401</code> immediately<br />
+- Every user-scoped query includes <code>WHERE user_id = $userId</code></p>
+<hr />
+<h2>Admin Pages (Auth: <code>publicMetadata.role = 'admin'</code>)</h2>
+<p><strong>Admin Dashboard</strong> (<code>/admin</code>)<br />
+- JD ingestion queue<br />
+- Curriculum Signals panel (Trending/Stable/Declining)<br />
+- Weight editor (question × archetype matrix)<br />
+- User analytics (v2a+)</p>
+<p><strong>JD Ingestion Queue</strong> (<code>/admin/jd-ingestion</code>)<br />
+1. Paste raw JD text in textarea<br />
+2. Click "Extract skills" → calls <code>POST /api/extract-skills</code><br />
+3. LLM processes and returns extracted skills<br />
+4. Admin review UI:<br />
+   - Each skill shows: extracted term + suggested taxonomy match<br />
+   - Accept / Reject / Edit dropdown for each<br />
+5. Click "Approve batch" → calls <code>POST /api/confirm-extraction</code><br />
+6. System embeds JD, writes <code>jd_embeddings</code>, updates <code>skill_frequency</code></p>
+<p><strong>Weight Editor</strong> (<code>/admin/weights</code>)<br />
+- Table: Questions (rows) × Archetypes (columns)<br />
+- Each cell is editable (numeric weight)<br />
+- Changes take effect immediately (no deploy needed)<br />
+- Weights used in next <code>POST /api/compute-match</code> call</p>
+<p><strong>Curriculum Signals</strong> (<code>/admin/signals</code>)<br />
+- Three tabs: Trending | Stable | Declining<br />
+- Trending: skills in JDs but not yet in curriculum (recommend adding)<br />
+- Stable: skills already in curriculum, frequency consistent<br />
+- Declining: skills frequency dropping (recommend retiring)</p>
+<hr />
+<h2>Paywall and Subscription</h2>
+<p><strong>Free tier gates:</strong><br />
+- Intake + match result (free)<br />
+- Teaser of roadmap (see title + description, not logging)</p>
+<p><strong>Paid tier requires:</strong><br />
+- Full roadmap access + evidence logging<br />
+- Gap analysis (once corpus ready)<br />
+- Readiness score tracking</p>
+<p><strong>Subscription flow:</strong><br />
+1. Click "Upgrade" or try to log evidence without subscription<br />
+2. Redirects to Stripe checkout (test mode, no real charges in Alpha)<br />
+3. On success, Stripe webhook creates <code>subscriptions</code> row<br />
+4. User immediately gains access<br />
+5. Profile page shows "Pro" badge</p>
+<p><strong>Billing portal:</strong><br />
+- "Manage subscription" link in Profile<br />
+- Redirects to Stripe customer portal<br />
+- Users can upgrade/downgrade/cancel</p>
+<hr />
+<h2>Known Limitations (Phase 7d)</h2>
+<table>
+<thead>
+<tr>
+<th>Limitation</th>
+<th>Why</th>
+<th>When Fixed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single archetype × domain × geography slice seeded</td>
+<td>Thin vertical slice demonstrates architecture; expanding to all combinations is V2a</td>
+<td>V2a</td>
+</tr>
+<tr>
+<td>No RAG gap narrative</td>
+<td>Awaits &gt;15 JD corpus for the seeded slice</td>
+<td>V2a (when corpus ready)</td>
+</tr>
+<tr>
+<td>No historical gap_pct</td>
+<td>Readiness computed on-demand; history deferred</td>
+<td>V2b</td>
+</tr>
+<tr>
+<td>No email reminders</td>
+<td>Transactional email only (welcome); nudges deferred</td>
+<td>V2b</td>
+</tr>
+<tr>
+<td>No peer evidence review</td>
+<td>UX designed; functionality deferred</td>
+<td>V2b</td>
+</tr>
+<tr>
+<td>Navigator path (Q16–Q19)</td>
+<td>Intake questions specified; logic deferred</td>
+<td>V2a.1</td>
+</tr>
+<tr>
+<td>Live Stripe charges</td>
+<td>Test mode only; charges deferred until traction</td>
+<td>Traction signal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>See also</h2>
+<p><a href="Architecture.html">Architecture</a> · <a href="Scoring-Engine.html">Scoring Engine</a> · <a href="Feature-Map.html">Feature Map</a> · <a href="Contributing.html">Contributing</a></p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

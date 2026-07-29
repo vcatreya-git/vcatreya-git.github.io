@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD — PMRocket v2.5</title>
+<style>
+  :root {
+    --teal: #0D9488;
+    --teal-dark: #0F766E;
+    --teal-light: #CCFBF1;
+    --teal-xlight: #F0FDFA;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-400: #94a3b8;
+    --slate-300: #cbd5e1;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+    --white: #ffffff;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
+    --shadow: 0 4px 16px rgba(0,0,0,0.07);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--slate-50);
+    color: var(--slate-800);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 16px; }
+  .back-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--teal);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .back-link:hover { text-decoration: underline; }
+  .topbar-title {
+    font-size: 13px;
+    color: var(--slate-500);
+    border-left: 1px solid var(--slate-300);
+    padding-left: 16px;
+  }
+  .topbar-meta {
+    font-size: 12px;
+    color: var(--slate-400);
+    white-space: nowrap;
+  }
+
+  /* MOBILE NAV PILLS */
+  .mobile-nav {
+    display: none;
+    overflow-x: auto;
+    padding: 12px 16px;
+    gap: 8px;
+    background: white;
+    border-bottom: 1px solid var(--slate-200);
+    scrollbar-width: none;
+  }
+  .mobile-nav::-webkit-scrollbar { display: none; }
+  .mobile-nav a {
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 100px;
+    background: var(--slate-100);
+    color: var(--slate-600);
+    text-decoration: none;
+  }
+  .mobile-nav a:hover { background: var(--teal-light); color: var(--teal-dark); }
+
+  /* LAYOUT */
+  .layout {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: sticky;
+    top: 72px;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 20px 0;
+    box-shadow: var(--shadow-sm);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .sidebar-heading {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate-400);
+    padding: 0 16px 8px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 7px 16px;
+    font-size: 13px;
+    color: var(--slate-600);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.1s;
+    line-height: 1.4;
+  }
+  .sidebar a:hover {
+    color: var(--teal-dark);
+    background: var(--teal-xlight);
+    border-left-color: var(--teal);
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    min-width: 0;
+  }
+
+  /* DOC HEADER */
+  .doc-header {
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .doc-header-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+  .doc-header h1 {
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 800;
+    color: var(--slate-900);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .doc-header p {
+    font-size: 15px;
+    color: var(--slate-600);
+    margin-bottom: 16px;
+  }
+  .doc-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-size: 12px;
+    color: var(--slate-500);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .meta-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: #dcfce7;
+    color: #15803d;
+  }
+
+  /* SECTIONS */
+  .doc-section {
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    scroll-margin-top: 80px;
+  }
+  .section-number {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .doc-section h2 {
+    font-size: clamp(18px, 2.5vw, 22px);
+    font-weight: 800;
+    color: var(--slate-900);
+    letter-spacing: -0.3px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .doc-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin: 24px 0 10px;
+  }
+  .doc-section h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin: 18px 0 8px;
+  }
+  .doc-section p { margin-bottom: 14px; color: var(--slate-700); }
+  .doc-section p:last-child { margin-bottom: 0; }
+  .doc-section ul, .doc-section ol {
+    padding-left: 22px;
+    margin-bottom: 14px;
+  }
+  .doc-section li { margin-bottom: 6px; color: var(--slate-700); }
+
+  /* EXEC SUMMARY CARD */
+  .exec-card {
+    background: var(--teal-xlight);
+    border: 1.5px solid var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .exec-card dt {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--teal-dark);
+    margin-bottom: 4px;
+    margin-top: 14px;
+  }
+  .exec-card dt:first-child { margin-top: 0; }
+  .exec-card dd {
+    font-size: 14px;
+    color: var(--slate-700);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--teal);
+    display: block;
+    letter-spacing: -0.5px;
+  }
+  .stat-box .lbl {
+    font-size: 12px;
+    color: var(--slate-500);
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  /* PERSONA CARDS */
+  .persona-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .persona-card {
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--slate-50);
+  }
+  .persona-card.primary { border-color: var(--teal); background: var(--teal-xlight); }
+  .persona-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--teal);
+    color: white;
+    margin-bottom: 10px;
+  }
+  .persona-card.secondary .persona-tag { background: var(--slate-600); }
+  .persona-card h3 { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
+  .persona-card p { font-size: 13px; color: var(--slate-600); line-height: 1.5; margin: 0; }
+
+  /* PIPELINE STAGES */
+  .pipeline-stages { display: flex; flex-direction: column; gap: 12px; }
+  .stage {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    background: var(--slate-50);
+  }
+  .stage-num {
+    width: 32px;
+    height: 32px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .stage-col { }
+  .stage-col label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate-400);
+    margin-bottom: 4px;
+  }
+  .stage-col span {
+    font-size: 13px;
+    color: var(--slate-700);
+    line-height: 1.5;
+  }
+  .stage-col strong { color: var(--slate-900); }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--slate-200); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: var(--slate-800); }
+  thead th { color: white; padding: 11px 14px; text-align: left; font-weight: 600; font-size: 12px; }
+  tbody tr:nth-child(even) { background: var(--slate-50); }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--slate-200); color: var(--slate-700); vertical-align: top; line-height: 1.5; }
+  tbody tr:last-child td { border-bottom: none; }
+  .p0 { font-weight: 700; color: var(--teal-dark); }
+  .p1 { color: var(--slate-500); }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--slate-900);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    color: #5eead4;
+    line-height: 1.8;
+    margin: 16px 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    background: var(--slate-100);
+    color: var(--teal-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* PAYWALL TABLE */
+  .paywall-table { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--slate-200); border-radius: var(--radius); overflow: hidden; }
+  .pw-col { padding: 0; }
+  .pw-header { padding: 12px 16px; font-size: 13px; font-weight: 700; border-bottom: 1px solid var(--slate-200); }
+  .pw-col:first-child .pw-header { background: var(--slate-100); color: var(--slate-600); }
+  .pw-col:last-child .pw-header { background: var(--teal); color: white; }
+  .pw-item { padding: 10px 16px; font-size: 13px; color: var(--slate-700); border-bottom: 1px solid var(--slate-100); }
+  .pw-item:last-child { border-bottom: none; }
+  .pw-col:first-child .pw-item { background: var(--slate-50); }
+  .pw-col:last-child .pw-item { background: var(--teal-xlight); color: var(--slate-800); }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0 8px 28px;
+    border-bottom: 1px solid var(--slate-100);
+    color: var(--slate-700);
+    font-size: 14px;
+    position: relative;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '○';
+    position: absolute;
+    left: 0;
+    color: var(--slate-300);
+    font-size: 16px;
+  }
+
+  /* RISK CARDS */
+  .risk-grid { display: flex; flex-direction: column; gap: 16px; }
+  .risk-card { border: 1px solid var(--slate-200); border-radius: var(--radius); overflow: hidden; }
+  .risk-header { background: #fff7ed; border-bottom: 1px solid #fed7aa; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+  .risk-header h4 { font-size: 14px; font-weight: 700; color: #9a3412; margin: 0; }
+  .risk-body { padding: 16px 20px; }
+  .risk-body p { font-size: 13px; color: var(--slate-700); margin-bottom: 10px; }
+  .mitigation-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal-dark); margin-bottom: 6px; display: block; }
+  .mitigation { font-size: 13px; color: var(--slate-700); background: var(--teal-xlight); border-left: 3px solid var(--teal); padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+  /* FOOTER */
+  .doc-footer {
+    text-align: center;
+    padding: 32px 0 16px;
+    font-size: 13px;
+    color: var(--slate-400);
+  }
+  .doc-footer a { color: var(--teal); text-decoration: none; }
+  .doc-footer a:hover { text-decoration: underline; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding: 16px; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; }
+    .stage { grid-template-columns: 32px 1fr; }
+    .stage-col:nth-child(3), .stage-col:nth-child(4) { grid-column: 2; }
+    .persona-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr; }
+    .paywall-table { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .doc-section { padding: 20px 16px; }
+    .doc-header { padding: 20px 16px; }
+    .topbar { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="back-link">← Portfolio</a>
+    <span class="topbar-title">Product Requirements Document</span>
+  </div>
+  <span class="topbar-meta">v2.5 · 2026-07-18</span>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <a href="#exec-summary">Summary</a>
+  <a href="#problem">Problem</a>
+  <a href="#users">Users</a>
+  <a href="#solution">Solution</a>
+  <a href="#intake">Intake</a>
+  <a href="#matching">Matching</a>
+  <a href="#curriculum">Curriculum</a>
+  <a href="#gap">Gap Analysis</a>
+  <a href="#evidence">Evidence</a>
+  <a href="#admin">Admin</a>
+  <a href="#paywall">Paywall</a>
+  <a href="#stack">Stack</a>
+  <a href="#ethics">Risks</a>
+  <a href="#dod">Done</a>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-heading">Contents</div>
+    <a href="#exec-summary">Executive Summary</a>
+    <a href="#problem">Problem Statement</a>
+    <a href="#users">Target Users</a>
+    <a href="#solution">Solution Design</a>
+    <a href="#intake">Intake Questions</a>
+    <a href="#matching">Weighted Matching</a>
+    <a href="#curriculum">Curriculum</a>
+    <a href="#gap">Gap Analysis</a>
+    <a href="#evidence">Evidence Logging</a>
+    <a href="#admin">Admin Surface</a>
+    <a href="#paywall">Paywall</a>
+    <a href="#stack">Tech Stack</a>
+    <a href="#ethics">Ethical Risks</a>
+    <a href="#dod">Definition of Done</a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DOC HEADER -->
+    <div class="doc-header">
+      <div class="doc-header-label">Product Requirements Document</div>
+      <h1>PMRocket — Career Navigation for Aspiring PMs</h1>
+      <p>A market-grounded career navigation platform for Product Managers.</p>
+      <div class="doc-meta">
+        <span class="meta-item">Version 2.5</span>
+        <span class="meta-item">Updated 2026-07-18</span>
+        <span class="meta-item"><span class="meta-badge">Active</span></span>
+        <span class="meta-item">Stack: Vercel + Neon + Clerk + Vercel AI SDK (V3.0)</span>
+      </div>
+    </div>
+
+    <!-- 1. EXEC SUMMARY -->
+    <section class="doc-section" id="exec-summary">
+      <div class="section-number">Section 1</div>
+      <h2>Executive Summary</h2>
+      <dl class="exec-card">
+        <dt>Product</dt>
+        <dd>PMRocket</dd>
+        <dt>One-liner</dt>
+        <dd>A market-grounded career navigation platform that maps aspiring Product Managers to the right PM role, builds a personalised evidence roadmap calibrated against real job descriptions, and tells them — with market evidence — when they are ready to apply.</dd>
+        <dt>Problem in a nutshell</dt>
+        <dd>Aspiring PMs spend 6–18 months in a directionless preparation loop because no platform tells them which PM role fits their background, what specific evidence to build, or when they are ready to apply. 40% of candidates fail at the recruiter screen due to lack of domain depth — the exact gap every existing platform ignores.</dd>
+        <dt>Solution</dt>
+        <dd>A five-stage intelligence pipeline: (1) 15-question intake; (2) weighted scoring model matching to PM archetype; (3) three-layer curriculum kept current via JD-derived ETL; (4) RAG-powered gap analysis vs real JD requirements; (5) market-grounded readiness signal with ready-to-apply gate.</dd>
+        <dt>Target user</dt>
+        <dd>The Wanderer — aspiring PM, 3–6+ months prep, directionless. Secondary (V2a): The Navigator — existing PM levelling up or switching domain.</dd>
+        <dt>Key outcome</dt>
+        <dd>≥15% cold application-to-recruiter-screen conversion for users who apply to archetype-matched roles after completing a full PMRocket readiness pathway (vs ~3% cold application industry baseline — a 5× improvement).</dd>
+        <dt>Market</dt>
+        <dd>North America first (personal use, alpha); India second.</dd>
+      </dl>
+    </section>
+
+    <!-- 2. PROBLEM -->
+    <section class="doc-section" id="problem">
+      <div class="section-number">Section 2</div>
+      <h2>Problem Statement</h2>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="num">140K+</span>
+          <div class="lbl">open PM roles in the US<br><em>LinkedIn, March 2026</em></div>
+        </div>
+        <div class="stat-box">
+          <span class="num">42%</span>
+          <div class="lbl">YoY PM hiring growth in India</div>
+        </div>
+        <div class="stat-box">
+          <span class="num">−15%</span>
+          <div class="lbl">YoY entry-level PM roles globally</div>
+        </div>
+      </div>
+
+      <h3>The Core Problem</h3>
+      <p>Aspiring PMs cannot navigate the PM career transition because the preparation landscape is fragmented, generic, and disconnected from what employers actually screen for. No existing platform tells a candidate which PM role fits their specific background, what domain-specific evidence to build for that archetype, or when they are genuinely ready to apply.</p>
+
+      <h3>Root Causes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Root Cause</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Supply calibrated to old hiring bar</strong></td><td>40% rejected at recruiter screen for domain depth (Mind the Product, 2025). All major prep platforms teach PM frameworks that companies used to test for. Employers have moved; platforms haven't.</td></tr>
+            <tr><td><strong>No navigation layer</strong></td><td>Every platform assumes the candidate already knows which PM role to target. None performs background-to-role matching.</td></tr>
+            <tr><td><strong>No credible readiness signal</strong></td><td>Existing readiness scores use internal rubrics with no connection to what employers actually require. "You're at 62" means nothing without market grounding.</td></tr>
+            <tr><td><strong>Evidence-building not taught</strong></td><td>Employers require portfolio evidence: PRDs with success metrics, A/B test documentation, domain analyses. Platforms teach frameworks to talk about evidence without building any.</td></tr>
+            <tr><td><strong>Geography-blind preparation</strong></td><td>Fintech PM in India needs UPI/RBI/NPCI knowledge. Fintech PM in US needs ACH/OCC/Dodd-Frank. No platform adapts preparation to target geography.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Why Now</h3>
+      <ul>
+        <li><strong>AI compression at junior tier</strong> — Entry-level PM tasks are being automated; the floor for real evidence over framework familiarity is rising.</li>
+        <li><strong>India GCC expansion</strong> — 1,750+ GCCs in India, 75%+ managing AI/digital products by 2026 (Zinnov). Specific archetype with no platform support.</li>
+        <li><strong>Post-layoff talent flow</strong> — 55,875 US tech layoffs YTD March 2026. Engineering-to-PM transitions are accelerating.</li>
+        <li><strong>AI PM role explosion</strong> — 300% growth in AI PM postings since 2023. Specific, testable technical bar — no platform prepares candidates.</li>
+      </ul>
+    </section>
+
+    <!-- 3. USERS -->
+    <section class="doc-section" id="users">
+      <div class="section-number">Section 3</div>
+      <h2>Target Users</h2>
+      <div class="persona-grid">
+        <div class="persona-card primary">
+          <span class="persona-tag">Primary</span>
+          <h3>The Wanderer</h3>
+          <p>Aspiring PM, 3–6+ months prep, has consumed significant content, still can't answer: Which role? What to build? When ready? Engineering, MBA, consulting, PO, or BA background. Self-preparing without structured direction.</p>
+        </div>
+        <div class="persona-card secondary">
+          <span class="persona-tag" style="background:var(--slate-600)">Secondary — V2a</span>
+          <h3>The Navigator</h3>
+          <p>Existing PM (1–5+ years) wanting to level up, switch domain or archetype, or move geography. Has PM experience but lacks market signal on what their target role specifically requires vs what they already have.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SOLUTION DESIGN -->
+    <section class="doc-section" id="solution">
+      <div class="section-number">Section 4</div>
+      <h2>Solution Design</h2>
+      <p>A five-stage intelligence pipeline. Each stage is dependent on the previous; no stage is skippable.</p>
+      <div class="pipeline-stages">
+        <div class="stage">
+          <div class="stage-num">1</div>
+          <div class="stage-col"><label>Stage</label><strong>Intake Assessment</strong></div>
+          <div class="stage-col"><label>Input → Output</label><span>15 user responses → structured signal set</span></div>
+          <div class="stage-col"><label>Technical note</label><span>JSONB storage; Q11–Q15 multi-value compound answers; auto-advance single-select</span></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">2</div>
+          <div class="stage-col"><label>Stage</label><strong>Weighted Archetype Match</strong></div>
+          <div class="stage-col"><label>Input → Output</label><span>15 signals + question_weights table → primary archetype, confidence %, adjacent archetype</span></div>
+          <div class="stage-col"><label>Technical note</label><span><code>score(A) = Σ[w×raw] / Σw</code> across all signals; admin-configurable weights</span></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">3</div>
+          <div class="stage-col"><label>Stage</label><strong>Three-Layer Curriculum</strong></div>
+          <div class="stage-col"><label>Input → Output</label><span>Archetype + domain + geography → ordered artefact roadmap</span></div>
+          <div class="stage-col"><label>Technical note</label><span>Layer 1 universal, Layer 2 archetype, Layer 3 domain × geography</span></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">4</div>
+          <div class="stage-col"><label>Stage</label><strong>Evidence Log</strong></div>
+          <div class="stage-col"><label>Input → Output</label><span>User self-attestation, topic checkboxes → completion level (auto-computed), gap_pct inputs</span></div>
+          <div class="stage-col"><label>Technical note</label><span><code>topic_progress JSONB</code>; progressive tier unlock; completion auto-computed from tier coverage</span></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">5</div>
+          <div class="stage-col"><label>Stage</label><strong>RAG Gap Analysis</strong></div>
+          <div class="stage-col"><label>Input → Output</label><span>User profile + evidence_log + JD corpus → gap_pct, top 3 gaps, recommendations</span></div>
+          <div class="stage-col"><label>Technical note</label><span>pgvector HNSW → top-25 JDs → LLM narrative; corpus-gated (&lt;15 JDs hides button)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. INTAKE -->
+    <section class="doc-section" id="intake">
+      <div class="section-number">Section 5</div>
+      <h2>Intake Question Specification</h2>
+      <p>15 questions for the Wanderer path, 18 for Navigator. Q1–Q10 are single-select with auto-advance. Q11–Q13 are skill self-rating grids. Q14–Q15 are PM activity checklists. Q16 branches the Navigator path.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Q#</th><th>Question</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Q1</td><td>Professional background</td><td>Single-select</td><td>SWE, MBA, Consultant, PO, BA</td></tr>
+            <tr><td>Q2</td><td>Experience level</td><td>Single-select</td><td>0–2yr, 2–5yr, 5–10yr, 10yr+</td></tr>
+            <tr><td>Q3</td><td>Industry / domain experience</td><td>Single-select</td><td>B2B SaaS, Fintech, Consumer, Healthcare, Other</td></tr>
+            <tr><td>Q4</td><td>Technical depth</td><td>Single-select</td><td>None / Basic / Practised / Expert</td></tr>
+            <tr><td>Q5</td><td>Target geography</td><td>Single-select</td><td>India / United States / Canada</td></tr>
+            <tr><td>Q6</td><td>Target company type</td><td>Single-select</td><td>Loaded dynamically by geography (e.g. enterprise_gcc for India)</td></tr>
+            <tr><td>Q7</td><td>Target domain</td><td>Single-select</td><td>B2B SaaS / Consumer / Fintech</td></tr>
+            <tr><td>Q8</td><td>Timeline to application</td><td>Single-select</td><td>&lt;3mo / 3–6mo / 6–12mo / 12mo+</td></tr>
+            <tr><td>Q9</td><td>Archetype awareness</td><td>Single-select</td><td>Self-awareness signal</td></tr>
+            <tr><td>Q10</td><td>Existing PM experience</td><td>Single-select</td><td>E2E / Supported / Observed / Never</td></tr>
+            <tr><td>Q11</td><td>Prep stage</td><td>Single-select</td><td>Just starting / Active prep / Ready soon</td></tr>
+            <tr><td>Q12</td><td>Technical skills (self-rating)</td><td>Multi-value grid</td><td>SQL, APIs, System design, A/B testing, Data dashboards</td></tr>
+            <tr><td>Q13</td><td>Product skills (self-rating)</td><td>Multi-value grid</td><td>PRD writing, User research, Roadmap, Metrics, Stakeholders</td></tr>
+            <tr><td>Q14</td><td>Business skills (self-rating)</td><td>Multi-value grid</td><td>Market sizing, Business case, Competitive analysis, GTM</td></tr>
+            <tr><td>Q15</td><td>PM activity checklist</td><td>Multi-select</td><td>11 activities, Learning / Practised / E2E scale</td></tr>
+            <tr style="background:#fff7ed"><td>Q16</td><td>Currently working as a PM?</td><td>Branching</td><td>Yes → Q17–Q18 (Navigator); No → Wanderer path ends</td></tr>
+            <tr style="background:#fff7ed"><td>Q17</td><td>Current PM level</td><td>Single-select</td><td>APM / PM / Senior PM / Lead or Principal PM</td></tr>
+            <tr style="background:#fff7ed"><td>Q18</td><td>Primary goal</td><td>Single-select</td><td>Level up / Switch domain / Switch archetype / Geography / Expand skills</td></tr>
+            <tr style="background:#fff7ed"><td>Q19</td><td>Skill area to develop</td><td>Multi-select (up to 3)</td><td>Shown only if Q18 = "Expand skills"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--slate-500);margin-top:8px;">Rows shaded amber = Navigator path only (Q16–Q19).</p>
+    </section>
+
+    <!-- 6. WEIGHTED MATCHING -->
+    <section class="doc-section" id="matching">
+      <div class="section-number">Section 6</div>
+      <h2>Weighted Matching Model</h2>
+      <p>V2 replaces the V1 decision table with a weighted scoring model. Every intake signal contributes a score for every archetype; the archetype with the highest total weighted score wins.</p>
+
+      <h3>Formula</h3>
+      <div class="code-block">score(A) = Σ [ weight(q, A) × raw_score(q, A, answer(q)) ]
+          ─────────────────────────────────────────────────────
+                          Σ weight(q, A)
+          for all questions q where the user has answered</div>
+
+      <h3>Example — Technical PM archetype</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Question</th><th>Weight</th><th>Answer</th><th>Raw Score</th><th>Contribution</th></tr></thead>
+          <tbody>
+            <tr><td>Q1 background</td><td>8</td><td>"Software Engineer / Backend"</td><td>1.0</td><td>8.0</td></tr>
+            <tr><td>Q12 tech skills (avg of 5 sub-skills)</td><td>9</td><td>avg(Strong, Expert, Practised…) = 0.8</td><td>0.8</td><td>7.2</td></tr>
+            <tr><td>Q7 domain</td><td>4</td><td>"B2B SaaS"</td><td>0.8</td><td>3.2</td></tr>
+            <tr style="background:#f0fdfa;font-weight:600"><td></td><td>Σ = 21</td><td></td><td></td><td>score = 18.4 / 21 = <strong>0.876</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Weights are admin-configurable via the <code>question_weights</code> table — no code deployment required. <strong>Tie-breaking:</strong> if two archetypes score within 0.02, Q12 (technical skills) absolute contribution decides. The runner-up becomes <code>adjacent_archetype_id</code>.</p>
+    </section>
+
+    <!-- 7. CURRICULUM -->
+    <section class="doc-section" id="curriculum">
+      <div class="section-number">Section 7</div>
+      <h2>Three-Layer Curriculum</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Scope</th><th>Who sees it</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Layer 1 — Universal</strong></td><td>AI literacy + core PM skills. <code>archetype_id = NULL, domain = NULL, geography = NULL</code></td><td>Every user, regardless of archetype</td></tr>
+            <tr><td><strong>Layer 2 — Archetype</strong></td><td>Archetype-specific artefacts. <code>archetype_id</code> set.</td><td>Users matched to that archetype</td></tr>
+            <tr><td><strong>Layer 3 — Domain × Geography</strong></td><td>Domain + regulatory + company-type specific. <code>domain</code> and <code>geography</code> set.</td><td>Users with that domain/geography combination</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Evidence Levels</h3>
+      <p>Completion level is <strong>auto-computed</strong> from <code>topic_progress JSONB</code> — never manually selected:</p>
+      <ul>
+        <li><strong>Learning</strong> — any Learning-tier topic checked</li>
+        <li><strong>Practised</strong> — all Learning topics complete + any Practised topic checked</li>
+        <li><strong>Mastered</strong> — all Practised topics complete + any Mastered topic checked</li>
+      </ul>
+      <p>Tier unlock triggers a celebration animation. The Mastered tier is portfolio-quality: the user could teach the skill.</p>
+    </section>
+
+    <!-- 8. GAP ANALYSIS -->
+    <section class="doc-section" id="gap">
+      <div class="section-number">Section 8</div>
+      <h2>Gap Analysis (RAG Pipeline)</h2>
+      <p>On-demand RAG pipeline. User taps "Analyse my gaps." System retrieves the top-25 JDs from the pgvector HNSW index matching their archetype × domain × geography profile. LLM generates:</p>
+      <ul>
+        <li><strong>gap_pct</strong> — artefacts with evidence / total artefacts in roadmap</li>
+        <li><strong>Top 3 skill gaps</strong> — with recommended artefacts from the curriculum</li>
+        <li><strong>Qualitative narrative</strong> — "Based on 23 Fintech PM JDs in the US, here are your top 3 gaps…"</li>
+      </ul>
+
+      <h3>Corpus Gate</h3>
+      <p>Gap analysis button is hidden if fewer than 15 JDs exist for the user's archetype × domain × geography slice. Placeholder: <em>"We're building the JD corpus for your market — check back soon."</em></p>
+
+      <h3>Ready-to-Apply Gate</h3>
+      <div class="code-block">gap_pct &lt;= 30% AND no critical skill gaps
+→ "Your gap analysis shows you're ready to apply."</div>
+    </section>
+
+    <!-- 9. EVIDENCE -->
+    <section class="doc-section" id="evidence">
+      <div class="section-number">Section 9</div>
+      <h2>Evidence Logging</h2>
+      <ol class="doc-section" style="border:none;box-shadow:none;padding:0;background:none;list-style:none;display:flex;flex-direction:column;gap:10px;">
+        <li style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 18px;font-size:14px;color:var(--slate-700)"><strong>1.</strong> User selects artefact from roadmap or Evidence picker (bottom nav)</li>
+        <li style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 18px;font-size:14px;color:var(--slate-700)"><strong>2.</strong> Modal opens — progressive topic tiers: Learning (open), Practised (locked until Learning complete), Mastered (locked until Practised complete)</li>
+        <li style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 18px;font-size:14px;color:var(--slate-700)"><strong>3.</strong> Completion level auto-computed from tier coverage — user never selects a level manually</li>
+        <li style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 18px;font-size:14px;color:var(--slate-700)"><strong>4.</strong> Optional: description (200 chars) + supporting link (auto-prefixed with https://)</li>
+        <li style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 18px;font-size:14px;color:var(--slate-700)"><strong>5.</strong> Save → <code>topic_progress</code> JSONB updated → gap analysis re-runnable → activity timeline entry appended</li>
+      </ol>
+      <br>
+      <p><strong>Self-attestation evolution:</strong> V2a is self-reported (gap analysis communicates this clearly). V2b adds peer evidence review. V3 adds AI artefact critique against the archetype rubric.</p>
+    </section>
+
+    <!-- 10. ADMIN -->
+    <section class="doc-section" id="admin">
+      <div class="section-number">Section 10</div>
+      <h2>Admin Surface</h2>
+      <p>The admin surface is the editorial engine of PMRocket. Zero code deployments for content changes.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Req ID</th><th>Requirement</th><th>Priority</th></tr></thead>
+          <tbody>
+            <tr><td>ADM-01</td><td>Edit question_weights matrix — view and update weight + score_map for any question × archetype pair</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-02</td><td>Edit intake question text, response options, and branching rules — no code deploy</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-03</td><td>Add, edit, and retire artefacts per layer/skill_area/skill with geography scope</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-04</td><td>JD ingestion: paste raw JD → trigger extraction → preview extracted skills → approve or reject before curriculum update</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-05</td><td>Curriculum Signals panel: Trending (high frequency, not in curriculum) / Stable / Declining tabs with skill name, frequency %, delta, action buttons</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-06</td><td>Edit gap_pct threshold and critical_skill_floor in gap_threshold table — affects next gap analysis run for all users</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-07</td><td>Read-only dashboards: active users, paywall conversion, gap runs/day, skill frequency trends — filterable by geography and date range</td><td class="p1">P1</td></tr>
+            <tr><td>ADM-08</td><td>Auth-gated: non-admin users receive 404, not 403. No admin data exposed to non-admin users.</td><td class="p0">P0</td></tr>
+            <tr><td>ADM-09</td><td>Intake funnel analytics: completion rate per question, drop-off by question, unsupported combinations log with frequency</td><td class="p1">P1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 11. PAYWALL -->
+    <section class="doc-section" id="paywall">
+      <div class="section-number">Section 11</div>
+      <h2>Paywall Boundary</h2>
+      <p>Freemium model. Free tier converts to intake + match teaser. Paid tier unlocks the full product.</p>
+      <br>
+      <div class="paywall-table">
+        <div class="pw-col">
+          <div class="pw-header">Free</div>
+          <div class="pw-item">Intake (all 15 questions)</div>
+          <div class="pw-item">Archetype match result + confidence %</div>
+          <div class="pw-item">Match summary + archetype description</div>
+          <div class="pw-item">Teaser: "You have X artefacts to build and Y critical gaps"</div>
+        </div>
+        <div class="pw-col">
+          <div class="pw-header">Paid</div>
+          <div class="pw-item">Full evidence roadmap (all artefacts, key_topics, effort)</div>
+          <div class="pw-item">Gap analysis ("Your top 3 gaps vs N JDs in [geography]")</div>
+          <div class="pw-item">Readiness signal + ready-to-apply gate</div>
+          <div class="pw-item">Evidence log (logging work, tracking progress)</div>
+        </div>
+      </div>
+      <br>
+      <p style="font-size:13px;color:var(--slate-500);background:var(--slate-100);padding:10px 14px;border-radius:var(--radius-sm);">Stripe in test mode for Alpha. Live charges activated after traction. Paywall is designed from day one — not added later.</p>
+    </section>
+
+    <!-- 12. TECH STACK -->
+    <section class="doc-section" id="stack">
+      <div class="section-number">Section 12</div>
+      <h2>Tech Stack (V3 — updated 2026-07-18)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Choice</th><th>Rationale</th></tr></thead>
+          <tbody>
+            <tr><td>Frontend + API</td><td>Next.js (App Router) on Vercel</td><td>Full-stack; standard Node.js API routes only (no Edge Runtime — portability rule)</td></tr>
+            <tr><td>Styling</td><td>Tailwind CSS</td><td>Utility-first; matches design system</td></tr>
+            <tr><td>Database</td><td>Neon (PostgreSQL + pgvector, no pausing)</td><td>HNSW index (m=16, ef=64) for JD similarity; replaces Supabase</td></tr>
+            <tr><td>Auth</td><td>Clerk</td><td>Managed auth; Google OAuth + email/password; <code>publicMetadata.role</code> for admin check</td></tr>
+            <tr><td>LLM abstraction</td><td>Vercel AI SDK — Groq default (Llama 3.3 70B, free)</td><td>Provider switches via <code>ACTIVE_LLM_PROVIDER</code> env var — zero code changes; Anthropic fallback</td></tr>
+            <tr><td>Embeddings</td><td>OpenAI text-embedding-3-small (1536 dims)</td><td><code>ACTIVE_EMBED_PROVIDER</code> env var; dimensions locked at 1536</td></tr>
+            <tr><td>Payments</td><td>Stripe (test mode for Alpha)</td><td>B2C subscription management; paywall designed, not yet activated</td></tr>
+            <tr><td>Email</td><td>Resend</td><td>Transactional email; free tier (3K/month)</td></tr>
+            <tr><td>Analytics</td><td>PostHog</td><td>Product analytics; funnel tracking; free tier (1M events/month)</td></tr>
+            <tr><td>Product phase</td><td>AWS ECS Fargate + RDS + CloudFront + Batch</td><td>Docker from day one; standard API routes ensure Vercel → AWS portability</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 13. ETHICAL RISKS -->
+    <section class="doc-section" id="ethics">
+      <div class="section-number">Section 13</div>
+      <h2>Ethical Risks &amp; Mitigations</h2>
+      <div class="risk-grid">
+        <div class="risk-card">
+          <div class="risk-header"><h4>⚠ Risk 1 — Readiness signal miscalibration</h4></div>
+          <div class="risk-body">
+            <p>If the JD corpus for a given archetype × domain × geography slice is small or skewed, the gap percentage may over- or under-represent actual market requirements. A user could be told they are "ready to apply" when their evidence is insufficient for the broader market — or the reverse.</p>
+            <span class="mitigation-label">Mitigation</span>
+            <div class="mitigation">Gap analysis only available when corpus ≥20 JDs per slice (increased from display threshold of 15). Admin dashboard shows corpus size per slice. Gap analysis output always shows "Based on N JDs" — user sees the evidence base. Admin can pause gap analysis for any suspect slice.</div>
+          </div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-header"><h4>⚠ Risk 2 — Archetype matching bias</h4></div>
+          <div class="risk-body">
+            <p>Initial weights are editorial estimates, not empirically calibrated. The model may systematically favour one archetype over others until user data validates the weights.</p>
+            <span class="mitigation-label">Mitigation</span>
+            <div class="mitigation">Archetype distribution monitored as a success metric — no single archetype should capture &gt;50% of active users. If any archetype exceeds 60%, a weight calibration review is triggered. Admin can adjust weights at any time. Users can switch archetypes freely via the Archetype Explorer.</div>
+          </div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-header"><h4>⚠ Risk 3 — Self-attestation gaming</h4></div>
+          <div class="risk-body">
+            <p>Users can check all topic checkboxes to reach "Mastered" without actually building the evidence. This drives gap_pct to zero through dishonest logging.</p>
+            <span class="mitigation-label">Mitigation</span>
+            <div class="mitigation">This is an explicit V2a design choice. The incentive structure works in the user's favour — gaming only harms their own preparation. The UI communicates clearly: "Gap analysis is based on your self-reported evidence against real JD requirements." V2b adds peer evidence review; V3 adds AI artefact critique. The product never claims verified readiness.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. DEFINITION OF DONE -->
+    <section class="doc-section" id="dod">
+      <div class="section-number">Section 14</div>
+      <h2>Definition of Done (Alpha — thin demo slice)</h2>
+      <p>The Alpha targets one archetype × one domain × North America on the free-tier V3 stack. Done when:</p>
+      <ul class="checklist">
+        <li>New user can complete the full hero flow: sign-up → intake → archetype match → roadmap → evidence log → readiness signal — without error</li>
+        <li>Intake state is saved on exit; user resumes from the correct question on return</li>
+        <li>Evidence logging updates the readiness signal immediately and displays the delta</li>
+        <li>Archetype switch recalibrates roadmap and readiness signal without data loss</li>
+        <li>Admin can edit seed artefact content and matching weights without a code deployment</li>
+        <li>Migrations run clean on a fresh Neon database (migration runner tested end-to-end)</li>
+        <li>Local: <code>npm run dev</code> serves the full hero flow with real auth and real data</li>
+      </ul>
+    </section>
+
+    <div class="doc-footer">
+      PMRocket PRD v2.5 · 2026-07-18 · <a href="index.html">← Portfolio</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

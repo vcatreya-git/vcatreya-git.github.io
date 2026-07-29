@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>PMRocket — Dashboard (functional prototype v2)</title>
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --dim: #94a3b8;
+    --border: #e2e8f0;
+    --border-2: #cbd5e1;
+    --teal: #0d9488;
+    --teal-dark: #0f766e;
+    --teal-soft: #ccfbf1;
+    --teal-xsoft: #f0fdfa;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --red: #e11d48;
+    --red-soft: #fff1f2;
+    --violet: #7c3aed;
+    --violet-soft: #f5f3ff;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15,23,42,0.04), 0 4px 16px rgba(15,23,42,0.04);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .app {
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+    padding-bottom: 88px;
+  }
+
+  /* Nav */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .logo { font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
+  .logo span { color: var(--teal); }
+  .nav-right { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 500; }
+  .nav-btn {
+    border: 1px solid var(--border); background: #fff; border-radius: 8px;
+    width: 32px; height: 32px; cursor: pointer; color: var(--muted);
+  }
+
+  .page { padding: 14px 14px 0; display: flex; flex-direction: column; gap: 12px; }
+
+  /* Identity — one line context only */
+  .context {
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    font-size: 12px;
+  }
+  .chip {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 10px; font-weight: 600; color: var(--muted);
+  }
+  .chip.primary { background: var(--teal-soft); border-color: #99f6e4; color: var(--teal-dark); }
+
+  /* ── STANDING: one job = where am I? ── */
+  .standing {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .standing-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--muted); margin-bottom: 6px;
+  }
+  .standing-headline {
+    font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 14px;
+  }
+  .standing-headline em {
+    font-style: normal; color: var(--teal-dark); font-weight: 800;
+  }
+  .progress-block { margin-bottom: 12px; }
+  .progress-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .progress-top .big {
+    font-size: 28px; font-weight: 800; letter-spacing: -0.8px; color: var(--text);
+  }
+  .progress-top .of { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .bar {
+    height: 10px; border-radius: 99px; background: #f1f5f9; overflow: hidden;
+  }
+  .bar > span {
+    display: block; height: 100%; width: 43%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
+  }
+  .standing-note {
+    font-size: 12.5px; color: var(--muted); margin-top: 10px;
+    padding: 8px 10px; background: var(--amber-soft);
+    border-radius: 8px; border-left: 3px solid var(--amber);
+  }
+  .standing-note strong { color: #92400e; }
+
+  /* layers compact */
+  .layers {
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+    display: grid; gap: 8px;
+  }
+  .layer-line {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+    font-size: 12px;
+  }
+  .layer-line .name { color: var(--muted); font-weight: 500; }
+  .layer-line .nums { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .layer-bar {
+    grid-column: 1 / -1; height: 4px; background: #f1f5f9; border-radius: 99px; overflow: hidden;
+  }
+  .layer-bar i { display: block; height: 100%; border-radius: 99px; background: var(--teal); }
+  .layer-bar.l2 i { background: #0284c7; }
+  .layer-bar.l3 i { background: #7c3aed; width: 17% !important; }
+
+  /* ── DO NEXT: one job = what do I do right now? ── */
+  .do-next {
+    background: #fff;
+    border: 2px solid #0d9488;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(13, 148, 136, 0.12);
+  }
+  .do-next-label {
+    font-size: 11px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.7px; color: var(--teal); margin-bottom: 8px;
+  }
+  .do-next h2 {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.3px;
+    margin-bottom: 6px; line-height: 1.25;
+  }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
+  }
+  .tag {
+    font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px;
+    background: #f1f5f9; color: var(--muted);
+  }
+  .tag.tech { background: var(--red-soft); color: #be123c; }
+  .why {
+    font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.5;
+  }
+  .why strong { color: var(--text); }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; border: none; border-radius: 12px; padding: 13px 14px;
+    font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+  }
+  .btn-primary { background: var(--teal); color: #fff; }
+  .btn-primary:active { background: var(--teal-dark); }
+  .btn-secondary {
+    background: #fff; color: var(--text); border: 1.5px solid var(--border-2);
+    margin-top: 8px;
+  }
+  .btn-link {
+    width: auto; background: none; color: var(--teal); padding: 8px 0 0;
+    font-size: 12px; font-weight: 600;
+  }
+
+  /* ── HABIT: one job = am I showing up? (once, not duplicated) ── */
+  .habit {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .habit-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--muted); margin-bottom: 10px;
+  }
+  .habit-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .habit-item .k { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 2px; }
+  .habit-item .v { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+  .habit-item .hint { font-size: 11px; color: var(--dim); margin-top: 2px; }
+  .habit-bar {
+    height: 6px; background: #f1f5f9; border-radius: 99px; overflow: hidden; margin-top: 6px;
+  }
+  .habit-bar span { display: block; height: 100%; width: 67%; background: var(--amber); border-radius: 99px; }
+
+  /* ── MILESTONES: one job = what's unlocked / next reward ── */
+  .milestones {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .ms-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--muted); margin-bottom: 10px;
+  }
+  .ms-next {
+    font-size: 13px; font-weight: 600; margin-bottom: 10px;
+    padding: 10px; background: var(--amber-soft); border-radius: 10px;
+    color: #92400e;
+  }
+  .ms-next span { font-weight: 500; color: #b45309; }
+  .ms-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ms {
+    font-size: 11px; font-weight: 600; padding: 5px 9px; border-radius: 999px;
+    border: 1px solid var(--border); color: var(--dim); background: #f8fafc;
+  }
+  .ms.done {
+    border-color: #86efac; background: #f0fdf4; color: #15803d;
+  }
+
+  /* ── TRACKS: one job = which skill area is lagging ── */
+  .tracks {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .tracks-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--muted); margin-bottom: 4px;
+  }
+  .tracks-sub { font-size: 12px; color: var(--dim); margin-bottom: 12px; }
+  .track {
+    display: grid; grid-template-columns: 1fr 40px; gap: 8px; align-items: center;
+    padding: 10px 0; border-top: 1px solid #f1f5f9; cursor: pointer;
+  }
+  .track:first-of-type { border-top: none; }
+  .track .n { font-size: 13px; font-weight: 600; }
+  .track .d { font-size: 11px; color: var(--dim); margin-top: 1px; }
+  .track .s { font-size: 14px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+  .track.priority .n { color: #be123c; }
+  .track.priority .s { color: #e11d48; }
+  .track.priority .d { color: #e11d48; font-weight: 500; }
+
+  /* Later — one line, not a wall */
+  .later {
+    font-size: 12px; color: var(--dim); text-align: center; padding: 8px 4px 4px;
+  }
+  .later button {
+    background: none; border: none; color: var(--teal); font-weight: 600;
+    font-size: 12px; cursor: pointer; font-family: inherit;
+  }
+
+  /* Bottom nav */
+  .bnav {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: 0; width: 100%; max-width: 440px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: #fff; border-top: 1px solid var(--border);
+    padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+    z-index: 30;
+  }
+  .bnav a {
+    text-align: center; text-decoration: none; color: var(--dim);
+    font-size: 10px; font-weight: 600; padding: 6px;
+  }
+  .bnav a.active { color: var(--teal); }
+  .bnav .ico { display: block; font-size: 16px; margin-bottom: 2px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 72px; transform: translateX(-50%) translateY(12px);
+    background: #134e4a; color: #ccfbf1; padding: 10px 14px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; opacity: 0; transition: 0.2s; z-index: 40;
+    max-width: 90%; text-align: center; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .key {
+    max-width: 440px; margin: 0 auto; padding: 16px 14px 32px;
+    font-size: 12px; color: var(--muted); line-height: 1.55;
+  }
+  .key h3 { font-size: 12px; color: var(--text); margin-bottom: 6px; }
+  .key ul { padding-left: 18px; }
+  .key li { margin-bottom: 4px; }
+
+  @media (min-width: 480px) {
+    body { background: #e2e8f0; padding: 24px 0; }
+    .app {
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 8px 40px rgba(15,23,42,0.1);
+      min-height: auto; border: 1px solid var(--border);
+    }
+    .bnav { position: sticky; bottom: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <nav class="nav">
+      <div class="logo">PM<span>Rocket</span></div>
+      <div class="nav-right">
+        <span>Hi, Venkat</span>
+        <button class="nav-btn" type="button" aria-label="Menu">···</button>
+      </div>
+    </nav>
+
+    <div class="page">
+
+      <!-- Context only: who am I preparing as? -->
+      <div class="context">
+        <span class="chip primary">Technical PM</span>
+        <span class="chip">Fintech · NA</span>
+        <span class="chip">72% match</span>
+      </div>
+
+      <!-- 1. STANDING: Where am I overall? (no streak/evidence here) -->
+      <section class="standing" aria-labelledby="standing-label">
+        <p class="standing-label" id="standing-label">Where you stand</p>
+        <p class="standing-headline">
+          You’ve covered <em>12 of 28</em> roadmap artefacts for this path.
+        </p>
+        <div class="progress-block">
+          <div class="progress-top">
+            <div><span class="big">43%</span> <span class="of">roadmap covered</span></div>
+          </div>
+          <div class="bar" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"><span></span></div>
+        </div>
+        <p class="standing-note">
+          <strong>What this means:</strong> less than half of the prep path for Technical PM × Fintech is evidenced. You’re not “behind” — you’re mid-path. The score only moves when you log artefacts.
+        </p>
+
+        <div class="layers">
+          <div class="layer-line">
+            <span class="name">Universal (AI literacy)</span>
+            <span class="nums">3 / 5</span>
+            <div class="layer-bar"><i style="width:60%"></i></div>
+          </div>
+          <div class="layer-line">
+            <span class="name">Technical PM craft</span>
+            <span class="nums">2 / 7</span>
+            <div class="layer-bar l2"><i style="width:29%"></i></div>
+          </div>
+          <div class="layer-line">
+            <span class="name">Fintech × NA domain</span>
+            <span class="nums">1 / 6</span>
+            <div class="layer-bar l3"><i style="width:17%"></i></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. DO NEXT: What do I do right now? -->
+      <section class="do-next" aria-labelledby="donext-label">
+        <p class="do-next-label" id="donext-label">Do this next</p>
+        <h2>System Design Case Study</h2>
+        <div class="meta-row">
+          <span class="tag">Layer 2 · Archetype</span>
+          <span class="tag tech">Closes Technical gap</span>
+          <span class="tag">~2–3 hrs</span>
+        </div>
+        <p class="why">
+          <strong>Why this one:</strong> Technical is your weakest track (28/100). This is the next incomplete artefact in that track on your roadmap — not a random suggestion.
+        </p>
+        <button class="btn btn-primary" type="button" onclick="toast('Opens evidence log for: System Design Case Study')">
+          Log evidence for this artefact
+        </button>
+        <button class="btn btn-secondary" type="button" onclick="toast('Opens roadmap · filtered to incomplete Technical')">
+          Choose a different artefact
+        </button>
+        <button class="btn btn-link" type="button" onclick="toast('Opens full roadmap')">
+          View full roadmap →
+        </button>
+      </section>
+
+      <!-- 3. HABIT: Am I showing up? (ONLY place for streak + weekly) -->
+      <section class="habit" aria-labelledby="habit-label">
+        <p class="habit-title" id="habit-label">This week’s rhythm</p>
+        <div class="habit-grid">
+          <div class="habit-item">
+            <div class="k">Streak</div>
+            <div class="v">3 days</div>
+            <div class="hint">Days with ≥1 evidence log</div>
+          </div>
+          <div class="habit-item">
+            <div class="k">Weekly goal</div>
+            <div class="v">2 / 3</div>
+            <div class="hint">1 more log to clear the week</div>
+            <div class="habit-bar"><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. MILESTONES: What's the next unlock? -->
+      <section class="milestones" aria-labelledby="ms-label">
+        <p class="ms-title" id="ms-label">Milestones</p>
+        <p class="ms-next">
+          Next unlock: <span>Log 1 more artefact → hit weekly goal + progress toward “10 artefacts” badge (currently 12? wait — demo: 8/10)</span>
+        </p>
+        <!-- fix copy for consistency: 12 covered but badge 10 - use 8 for demo consistency -->
+        <div class="ms-list">
+          <span class="ms done">✓ First evidence</span>
+          <span class="ms done">✓ 5 artefacts</span>
+          <span class="ms done">✓ Match locked</span>
+          <span class="ms">10 artefacts</span>
+          <span class="ms">Gap analysis</span>
+          <span class="ms">Ready to apply</span>
+        </div>
+      </section>
+
+      <!-- 5. TRACKS: Which area is lagging (drives "why this next") -->
+      <section class="tracks" aria-labelledby="tracks-label">
+        <p class="tracks-title" id="tracks-label">Skill tracks</p>
+        <p class="tracks-sub">Scores from evidenced artefacts by category. Tap a weak track to see related roadmap items.</p>
+        <div class="track priority" onclick="toast('Filter roadmap: Technical incomplete')">
+          <div>
+            <div class="n">Technical</div>
+            <div class="d">Priority · feeds today’s mission</div>
+          </div>
+          <div class="s">28</div>
+        </div>
+        <div class="track" onclick="toast('Filter roadmap: Domain')">
+          <div>
+            <div class="n">Domain</div>
+            <div class="d">Payments / fintech artefacts</div>
+          </div>
+          <div class="s">41</div>
+        </div>
+        <div class="track" onclick="toast('Filter roadmap: Business')">
+          <div>
+            <div class="n">Business</div>
+            <div class="d">Stakeholder / case write-ups</div>
+          </div>
+          <div class="s">55</div>
+        </div>
+        <div class="track" onclick="toast('Filter roadmap: Portfolio')">
+          <div>
+            <div class="n">Portfolio</div>
+            <div class="d">Strongest track so far</div>
+          </div>
+          <div class="s">62</div>
+        </div>
+      </section>
+
+      <p class="later">
+        Later: gap analysis, apply pack, interview room ·
+        <button type="button" onclick="toast('Expand later features (collapsed by default)')">show</button>
+      </p>
+    </div>
+
+    <nav class="bnav">
+      <a class="active" href="#"><span class="ico">⌂</span>Home</a>
+      <a href="#"><span class="ico">☰</span>Roadmap</a>
+      <a href="#"><span class="ico">◎</span>Signal</a>
+      <a href="#"><span class="ico">✦</span>Explore</a>
+    </nav>
+  </div>
+
+  <div class="key">
+    <h3>How to read this layout (each block = one job)</h3>
+    <ul>
+      <li><strong>Where you stand</strong> — progress only (X of Y, % covered, layers). No streak/evidence counters here.</li>
+      <li><strong>Do this next</strong> — the single action. Name, why, log CTA. Border emphasis = primary job of the screen.</li>
+      <li><strong>This week’s rhythm</strong> — only place for streak + weekly goal (habit, not identity).</li>
+      <li><strong>Milestones</strong> — next unlock + earned checklist.</li>
+      <li><strong>Skill tracks</strong> — why the mission was chosen (weakest track).</li>
+    </ul>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script>
+    function toast(m) {
+      var el = document.getElementById('toast');
+      el.textContent = m;
+      el.classList.add('show');
+      clearTimeout(window.__t);
+      window.__t = setTimeout(function () { el.classList.remove('show'); }, 2000);
+    }
+    // Fix milestone copy consistency (12 artefacts covered vs badge path)
+    document.querySelector('.ms-next').innerHTML =
+      'Next unlock: <span>1 more log this week clears the weekly goal. Then push toward <strong>stronger Technical coverage</strong> (still 2/7 on L2).</span>';
+  </script>
+</body>
+</html>

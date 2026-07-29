@@ -1,0 +1,353 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>User-Flows — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>User Flows — PMRocket</h1>
+<hr />
+<h2>1. Hero Flow — Wanderer (Aspiring PM)</h2>
+<p><strong>Goal:</strong> Turn "lost in preparation" → "confident I'm ready to apply"</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What the user sees</th>
+<th>What they do</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>PMRocket landing page: "Know your PM archetype. Build your evidence. Know when you're ready."</td>
+<td>Clicks "Get started" or "Sign up with Google"</td>
+<td>Redirected to Clerk auth (email or OAuth)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Onboarding splash: "15 questions. 3 minutes. Your navigation starts here."</td>
+<td>Clicks "Begin intake"</td>
+<td>Lands on Q1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Q1–Q4 (Background): Single-select questions. Role history, education, geographic location. Feels like a career assessment.</td>
+<td>Answers each question (1 answer per Q). Can go back.</td>
+<td>State saved to <code>user_intake</code> row after each answer. Green checkmark appears.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Q5–Q11 (Domain signals): Company size, stage, domain interest, timeline to apply, location preference, salary expectations, PM function focus.</td>
+<td>Single-select answers.</td>
+<td>Questions build up a profile in real time. "Your interests: B2B SaaS, Series B–C stage, North America" summary appears.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Q12–Q14 (Skills): "Rate your technical depth 1–10," "Rate your product thinking 1–10," "Rate your business acumen 1–10." Skill grid with 1–5 radio buttons.</td>
+<td>Completes grids.</td>
+<td>Skills profile surfaces: "Your strength: technical foundation. Area to develop: business acumen."</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Q15 (Activities): Multi-select checklist. "Which PM prep activities have you done? Customer interviews, case studies, shipped features, competitive analysis, metrics frameworks..."</td>
+<td>Checks 5–7 activities.</td>
+<td>Checklist saves. Summary: "You've built foundation in {areas}."</td>
+</tr>
+<tr>
+<td>7</td>
+<td>"Computing your match..." Loading state with 2-second animation.</td>
+<td>Waits.</td>
+<td>System runs <code>computeArchetypeMatch()</code> against 15-signal weighted model.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Match Result Hero Card:</strong> "You're a Technical PM (78% confidence). Your backup: Growth PM (64%)." Breakdown shows which signals were strongest (technical depth scored highest; domain signals nudged toward B2B). "Your evidence roadmap is waiting—log in to see it." Teaser: "You have 24 artefacts to build. Get started to unlock your roadmap."</td>
+<td>Clicks "See my roadmap" or "Sign in"</td>
+<td>Free users hit paywall. Paid/invited users proceed to Evidence Roadmap.</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Paywall screen (if not subscribed):</strong> Pricing card ($5/mo or invite code). "Full roadmap + evidence tracking + readiness score + gap analysis. See what you need to build." Monthly or annual billing.</td>
+<td>Enters card details OR pastes invite code.</td>
+<td>Stripe checkout flow (test mode in Alpha). Subscription row created in <code>subscriptions</code> table. Redirects to Evidence Roadmap.</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Evidence Roadmap:</strong> Three tabs (Technical, Business, Portfolio, Domain, Product). 24 artefacts listed. "Customer interview study," "shipped feature," "strategy memo," "competitive analysis." Each shows: title, layer badge (Universal / Archetype / Domain), Learning/Practised/Mastered progress bar. "Search to learn" keyword chips (clickable → Google search).</td>
+<td>Clicks an artefact card.</td>
+<td>Evidence Log Modal opens.</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Evidence Log Modal:</strong> "Log {artefact name}." Shows 15 key_topics split into 3 tiers. Learning tier shows 5 topics as checkboxes: "Customer pain identification," "Segmentation logic," "Interview script prep," "Data collection," "Documentation." User checks off 2 topics. Optional description field (200 chars): "Did 8 interviews with fintech users re: ACH payments." Link field: "https://docs.google.com/..."</td>
+<td>Checks 2 Learning topics. Adds description + link. Clicks "Save evidence."</td>
+<td>POST /api/evidence-log fires. Score recalculation triggered synchronously. User sees "Score updated! +7 pts." Tier unlock animation if Learning → Practised triggered. Returns to Roadmap.</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>Dashboard:</strong> Grid shows Readiness 23/100, Evidence logged 1/24, Archetype Technical PM (78%). Below: "Next artefact: Metrics framework design. 3 people logged this this week." Gamification strip: "3-day streak! Milestone: 50% readiness (22 pts to go)." "Gap analysis not yet available (seeding JD corpus for your slice)." Coming-soon teasers: "Ready-to-apply gate (V2a)" and "Interview practice (V3)."</td>
+<td>User explores roadmap or clicks "Analyse my gaps."</td>
+<td>Roadmap re-renders filtered. Gap button shows placeholder (not yet live for this slice).</td>
+</tr>
+<tr>
+<td>13 (Loop)</td>
+<td>User logs evidence regularly. Dashboard updates each time. After 12+ artefacts logged and readiness ≥75 (V2a+), gap analysis becomes available.</td>
+<td>Clicks "Analyse my gaps."</td>
+<td>RAG gap analysis triggered (K=25 JD retrieval + LLM narrative). Returns top 3 skill gaps + recommended artefacts to close them fastest.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key moments:</strong><br />
+- Match result is the free → paid conversion point. User sees their archetype and a teaser roadmap size, then is asked to subscribe to see the full roadmap.<br />
+- Evidence log is the core return-visit mechanic. User returns to log artefacts, watch score climb, and unlock tiers.<br />
+- Gap analysis is on-demand, not automatic. User clicks "Analyse" → runs RAG → receives narrative + ready-to-apply gate.</p>
+<hr />
+<h2>2. Navigator Flow — Existing PM (V2a.1)</h2>
+<p><strong>Goal:</strong> Transition from one PM role / domain / archetype to another using market-grounded gap analysis.</p>
+<p><strong>Branching at Q16:</strong> After Q15, intake shows "Are you currently a PM?" If No → continue as Wanderer. If Yes:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What they see</th>
+<th>What they do</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q16 (Branch)</td>
+<td>"Are you currently a PM?" (Yes / No)</td>
+<td>Selects Yes</td>
+<td>Proceeds to Q17 (Navigator branch)</td>
+</tr>
+<tr>
+<td>Q17</td>
+<td>"What's your current PM level? IC1 / IC2 / IC3 / IC4 / Staff / Director / VP+"</td>
+<td>Selects "IC2 (Senior PM)"</td>
+<td>Signal saved. Match algorithm gives less weight to background (Q1–Q4) because they already know their PM type.</td>
+</tr>
+<tr>
+<td>Q18</td>
+<td>"What's your primary transition goal?" Multi-select: Level up / Switch domain / Switch archetype / Move geography / Expand skills</td>
+<td>Selects "Switch domain (fintech → B2B SaaS) + Expand skills"</td>
+<td>Branching logic activated. Q19 shown (multi-select skills).</td>
+</tr>
+<tr>
+<td>Q19 (conditional)</td>
+<td>"Which skill areas do you want to focus on? (select up to 3)" Options: Monetisation frameworks, enterprise sales cycles, integrations complexity, data infrastructure...</td>
+<td>Selects "Monetisation" and "Enterprise sales cycles"</td>
+<td>Skill-area signals inform roadmap filtering downstream.</td>
+</tr>
+<tr>
+<td>Match result</td>
+<td>Same as Wanderer, but archetype weights adjusted. E.g., if Growth PM but Q18 = "Switch to Enterprise PM," Enterprise signals get boost.</td>
+<td>Sees match result.</td>
+<td>Proceeds to Evidence Roadmap (paid).</td>
+</tr>
+<tr>
+<td>Evidence Roadmap</td>
+<td>Same 3-layer structure, but filtered. Layer 1 (Universal) shown fully. Layer 2 and Layer 3 filtered to Q19 skill areas and Q18 transition goal. "You're skipping Engagement metrics (not your focus) but need Customer success models (transition-relevant)."</td>
+<td>Logs evidence as usual.</td>
+<td>Score computation adjusted: Navigator users get credit for existing PM experience (can skip some foundational artefacts).</td>
+</tr>
+<tr>
+<td>Gap analysis</td>
+<td>Roadmap filtered to gaps only. LLM narrative includes "You know X already (IC2 fintech PM). The gap: Y (B2B SaaS Enterprise skills)." JD retrieval uses seniority_level filter. Only Senior PM JDs retrieved (not entry-level).</td>
+<td>Clicks "Analyse gaps."</td>
+<td>Gap narrative is role-transition-specific: "Your Enterprise PM gap: multi-year contract negotiation, deployment complexity, customer success ops. Try these artefacts: {X, Y, Z}."</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key differences from Wanderer:</strong><br />
+- Background signals (Q1–Q4) carry less weight — they already know their PM type.<br />
+- Q17 (level) and Q18 (goal) carry more weight in match algorithm.<br />
+- Roadmap is filtered, not full. Transition-relevant artefacts only.<br />
+- Gap analysis retrieves JDs at their target seniority level (e.g., Senior PM JDs, not IC1).<br />
+- Score computation recognises existing PM experience; doesn't force re-learning foundational artefacts.</p>
+<hr />
+<h2>3. Admin Editorial Flow (V2a)</h2>
+<p><strong>Goal:</strong> Keep curriculum market-grounded without code deploys.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What they see</th>
+<th>What they do</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Admin ETL panel: "Paste a job description." Large text area.</td>
+<td>Pastes raw JD text from LinkedIn, company career page, or email.</td>
+<td>JD saved to temporary <code>pending_extractions</code> row.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Metadata form: "Domain (B2B SaaS / Fintech / Consumer)?" "Geography (North America / India)?" "Seniority (IC1 / IC2 / Staff / Director)?" "Archetype hint (Technical / Growth / Enterprise)?"</td>
+<td>Selects metadata tags.</td>
+<td>Tags attached to JD.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Button: "Extract skills." System calls <code>POST /api/extract-skills</code>.</td>
+<td>Waits.</td>
+<td>LLM extracts skills from JD (PII scrubbed). Output limited to existing <code>skill_frequency.skill_name</code> vocabulary (no new skills invented).</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Preview panel:</strong> Extracted skills shown as checkboxes. "Stakeholder management," "Roadmap prioritisation," "SQL query analysis," etc. Each with a confidence label (High, Medium). Admin can uncheck skills to reject them.</td>
+<td>Reviews skills. Unchecks any that seem wrong (e.g., "SQL query analysis" is probably dev, not PM).</td>
+<td>Checkbox state captured in UI.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Button: "Approve selected."</td>
+<td>Clicks button.</td>
+<td>POST /api/confirm-extraction fires. LLM narrative generated. JD embedded via text-embedding-3-small (1536 dims). Embedding written to <code>jd_embeddings</code> table. Skill frequencies updated: skill_frequency rows incremented for the selected skills (domain + geography slice).</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Curriculum Signals panel</strong> (auto-updated): Three tabs: Trending / Stable / Declining. Trending shows "Multi-year contracts (appeared in 4 recent JDs, not yet in curriculum)" with "Add to curriculum" button. Declining shows "Agile ceremonies (was in curriculum 6 months ago, now in 2/last-20 JDs)" with "Archive" button.</td>
+<td>Clicks "Add to curriculum" for trending "Multi-year contracts" skill.</td>
+<td>Modal: "Create artefact: Multi-year contract negotiation. Layer (Universal / Archetype / Domain)? Archetype (Enterprise PM only). Key topics?" Admin fills in 15 key topics.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Admin dashboard shows JD ingestion velocity: "12 JDs this week, 180 skills extracted, 2 new artefacts created, 3 declining skills archived."</td>
+<td>Periodically reviews trends.</td>
+<td>Curriculum stays aligned with real hiring patterns without manual research.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key principle:</strong> Nothing updates the live curriculum without explicit admin approval. The LLM extracts and suggests — the human decides. Vocabulary constraint prevents skill name fragmentation.</p>
+<hr />
+<h2>4. Evidence Logging Loop (Core retention mechanic)</h2>
+<p><strong>Goal:</strong> User logs artefact → score updates → dashboard shows progress → motivation to log next one.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Time</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>T+0</td>
+<td>User opens Dashboard. Sees gap_pct and "Next artefact: Metrics framework design."</td>
+</tr>
+<tr>
+<td>2</td>
+<td>T+10s</td>
+<td>Clicks "Roadmap" tab. Sees 24 artefacts. Filters to "Business" category. Clicks "Metrics framework design" card.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>T+20s</td>
+<td>Evidence Log Modal opens. Shows 15 key_topics split into 3 tiers. Learning tier shows 5 topics. User checks 3 of 5 (e.g., "Framework selection," "Key metrics selection," "Dashboard design").</td>
+</tr>
+<tr>
+<td>4</td>
+<td>T+30s</td>
+<td>User types description: "Built a metrics dashboard for fintech app. Tracked onboarding funnel, churn, and revenue per user."</td>
+</tr>
+<tr>
+<td>5</td>
+<td>T+40s</td>
+<td>User pastes link: "https://docs.google.com/spreadsheets/abc123"</td>
+</tr>
+<tr>
+<td>6</td>
+<td>T+45s</td>
+<td>Clicks "Save evidence." Optimistic UI update: card shows 3/5 topics checked. Button disables briefly.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>T+50s</td>
+<td>POST /api/evidence-log completes. Score recomputed synchronously: Technical artefacts already have 3, now +1 = 4. Points = 4 × 7 (Business artefact) × 0.5 (Learning tier) = 14 pts. Total score now 37/100 (was 23). Tier unlock check: Learning 3/5 = 60% → Practised 0/5 = 0%. Practised not yet unlocked.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>T+51s</td>
+<td>Celebration animation: card glows green. "Score updated! +14 pts. Learning tier: 3/5 (60%). Practised tier locked until Learning complete." User sees new total: 37/100. Streak increments to 4-day.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>T+55s</td>
+<td>Modal closes. Roadmap re-renders. "Metrics framework design" card now shows Learning progress (3/5) with "Practised tier locked" hint.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>T+60s</td>
+<td>User clicks another artefact. OR closes app. OR clicks Dashboard to see new score.</td>
+</tr>
+</tbody>
+</table>
+<p>This loop is the product's core retention mechanic. Each evidence log is a micro-win: visible progress, score bump, tier unlock animation, streak continuation.</p>
+<hr />
+<h2>5. Upskill Flow (Navigator + Q19)</h2>
+<p><strong>Goal:</strong> User targeting skill area doesn't see full roadmap—sees focused curriculum for their goal.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What they see</th>
+<th>What they do</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (Q18)</td>
+<td>"What's your primary transition goal?" Multi-select options.</td>
+<td>Selects "Expand skills" (not "Level up" or "Switch domain").</td>
+<td>Q19 shown next.</td>
+</tr>
+<tr>
+<td>2 (Q19)</td>
+<td>"Which skill areas? (select up to 3)" Options: Customer research, monetisation frameworks, enterprise sales, data infrastructure, design thinking, AI/LLM product thinking.</td>
+<td>Selects "Monetisation frameworks" and "Data infrastructure."</td>
+<td>Skill-area tags saved to <code>user_intake.Q19_skills</code>.</td>
+</tr>
+<tr>
+<td>3 (Match)</td>
+<td>Match proceeds normally.</td>
+<td>Receives archetype match.</td>
+<td>Proceeds to Evidence Roadmap.</td>
+</tr>
+<tr>
+<td>4 (Roadmap)</td>
+<td>Evidence Roadmap filtered. Layer 1 (Universal) shown fully. Layer 2 and 3 filtered: only artefacts tagged with "monetisation" or "data" skill areas shown. "Hiding: 8 artefacts outside your focus areas. View full roadmap?"</td>
+<td>Sees focused list. ~12 artefacts instead of 24. Feels less overwhelming.</td>
+<td>Evidence logging proceeds normally.</td>
+</tr>
+<tr>
+<td>5 (Gap)</td>
+<td>Gap analysis available but positioned as secondary. Primary navigation is filtered curriculum ("Your next artefact: CAC/LTV frameworks").</td>
+<td>Optionally clicks "Analyse gaps" for broader view.</td>
+<td>RAG pulls JDs, but narrative is skill-area-filtered: "Top gaps in monetisation: churn analysis, expansion revenue calculation, pricing strategies. Try these artefacts: {X, Y}."</td>
+</tr>
+</tbody>
+</table>
+<p>The upskill path is a focused learning menu, not a gap-closing checklist. It removes decision fatigue and keeps the user on track for their transition goal.</p>
+<hr />
+<h2>See also</h2>
+<p><a href="Product-Overview">Product Overview</a> • <a href="Feature-Map">Feature Map</a> • <a href="Architecture">Architecture</a></p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

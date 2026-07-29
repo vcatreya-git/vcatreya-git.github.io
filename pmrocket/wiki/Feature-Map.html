@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Feature-Map — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Feature Map — PMRocket</h1>
+<p>What's live today, what's coming, and why the sequencing matters. Every deferred feature is explicitly placed in its phase—there's no "maybe later."</p>
+<h2>High-level roadmap</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>User promise</th>
+<th>Readiness gate</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Alpha (Live)</strong></td>
+<td>Match your archetype + see your roadmap</td>
+<td>No gate—explore freely</td>
+<td>Now</td>
+</tr>
+<tr>
+<td><strong>V2a</strong></td>
+<td>Know your gaps vs market reality</td>
+<td>Gap ≤ 30% with no critical missing skills</td>
+<td>Q3 2026</td>
+</tr>
+<tr>
+<td><strong>V3a</strong></td>
+<td>Package your proof for a target job</td>
+<td>Resume draft from evidence</td>
+<td>Q4 2026</td>
+</tr>
+<tr>
+<td><strong>V3b</strong></td>
+<td>Practice for interviews + discover roles</td>
+<td>Interview mock with feedback</td>
+<td>Q1 2027</td>
+</tr>
+<tr>
+<td><strong>V3c</strong></td>
+<td>Stay on track with coaching</td>
+<td>Personalised nudges by channel</td>
+<td>Q2 2027</td>
+</tr>
+</tbody>
+</table>
+<h2>Alpha (Live now)</h2>
+<p><strong>What it does:</strong> Intake + archetype match + personalised roadmap + evidence logging + readiness score.</p>
+<p><strong>Why this phase:</strong> Validates the core navigation insight—does matching work? Do users build evidence? Does readiness signal resonate? All features are free to remove adoption friction and focus on signal.</p>
+<p><strong>In scope:</strong><br />
+- 15-question intake (Wanderer path only; Navigator deferred)<br />
+- Weighted archetype matching across 15 signals<br />
+- Seeded 3-layer curriculum (one domain, two archetypes for demo)<br />
+- Evidence logging with progressive tiers<br />
+- Readiness score via curriculum coverage<br />
+- Archetype switcher to test match confidence</p>
+<p><strong>Out of scope:</strong><br />
+- Multiple geography slices (North America only)<br />
+- RAG gap analysis (insufficient JD corpus)<br />
+- Paywall enforcement (free for portfolio)<br />
+- Navigator path (existing PMs)<br />
+- Interview practice, coaching, resume builder</p>
+<h2>V2a — Market-grounded intelligence</h2>
+<p><strong>What it does:</strong> Gap analysis grounded in real job descriptions. The system reads your evidence against 80+ actual job postings for your role and tells you the three biggest gaps with recommended artefacts to close them.</p>
+<p><strong>Why after Alpha:</strong> Alpha must prove the navigation works before adding intelligence. Gap analysis is only valuable once users have logged evidence and the curriculum is trusted.</p>
+<p><strong>Sequencing logic:</strong> Intelligence must come before Apply packaging. You can't build an honest resume without knowing the gaps. You can't practice interviews without knowing what the market cares about.</p>
+<p><strong>In scope:</strong><br />
+- Expanded curriculum (all archetypes, multiple domains, NA + India geography paths)<br />
+- ETL pipeline: paste JD → LLM extract skills → admin review → embed for retrieval<br />
+- RAG gap analysis: match user profile to 80+ JDs, retrieve top 25 similar, identify gaps<br />
+- Ready-to-apply gate: gap ≤ 30% + no critical missing skills<br />
+- Admin ETL interface: paste, extract, review, approve<br />
+- Paywall enforcement: match free, roadmap + gap paid</p>
+<h2>V3a — Package proof for a target job</h2>
+<p><strong>What it does:</strong> Paste a specific job description. Get a resume draft built from your logged evidence, re-framed for that JD.</p>
+<p><strong>Why here:</strong> Only makes sense after gap analysis exists. You draft a resume once you know the specific gaps between you and the role.</p>
+<p><strong>In scope:</strong><br />
+- Paste target JD or upload PDF<br />
+- Extract JD requirements<br />
+- Generate resume sections using logged evidence<br />
+- Highlight strong areas, call out weak areas honestly (not invented)<br />
+- Export as PDF</p>
+<p><strong>Out of scope:</strong> ATS keyword stuffing, auto-apply, multi-job campaign management.</p>
+<h2>V3b — Practice and discover</h2>
+<p><strong>What it does:</strong> Interview room for mock practice. Job matching to find open roles aligned with your evidence level.</p>
+<p><strong>Why here:</strong> Practice is only valuable after you've packaged your proof. Mockinterview feedback should be specific to how you'd present your evidence.</p>
+<h2>V3c — Channels and coaching</h2>
+<p><strong>What it does:</strong> In-app coach chat grounded in your roadmap and evidence. Telegram micro-doses (spaced repetition for PM concepts) if you set the frequency.</p>
+<p><strong>Why here:</strong> Channels without value delivery are overhead. Once the core navigation, intelligence, and apply flows are validated, coaching channels have real purpose.</p>
+<h2>Sequencing principle (locked)</h2>
+<p>Evidence → Intelligence → Apply → Practice → Channels.</p>
+<p>Don't add conversational chrome before the product delivers value. Don't build interview practice before gap analysis exists. Don't ship coaching before the navigation and apply flows are proven. This sequencing defends against feature creep and keeps the product focused on the core insight: navigation is the bottleneck.<br />
+| Readiness / gap history chart | P1 |<br />
+| Email nudges (weekly next artefact + gap delta) | P1 |<br />
+| Shareable portfolio page | P1 |<br />
+| LinkedIn / CV enrichment (import existing evidence) | P1 |<br />
+| Peer evidence review | P1 |<br />
+| Admin analytics dashboard (active users, conversion, funnel) | P1 |<br />
+| Extra archetypes / domains (Data PM, health tech, etc.) | P1 |</p>
+<hr />
+<h2>V3 — Apply layer</h2>
+<p><strong>Trigger:</strong> Meaningful paid or active cohort.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Target &amp; Apply — role-specific gap analysis against a specific job posting</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AI interview room (archetype-specific question bank + coaching)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Job matching (RAG — surface roles the user is ready for)</td>
+<td>P1</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>V4 — Network</h2>
+<p><strong>Trigger:</strong> Large active base.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Archetype-matched job board</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Recruiter / alumni network (PM-to-PM connections by archetype)</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>B2B institutional features (bootcamps, universities)</td>
+<td>P2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Explicit non-goals (near term)</h2>
+<table>
+<thead>
+<tr>
+<th>Not building</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mock interview marketplace / generic community</td>
+<td>Saturated; not navigation territory</td>
+</tr>
+<tr>
+<td>Employer dashboard</td>
+<td>B2C-first; employer side requires different GTM</td>
+</tr>
+<tr>
+<td>Mobile native app</td>
+<td>Web + PWA first</td>
+</tr>
+<tr>
+<td>Full AWS ops as day-one runtime</td>
+<td>Free-tier until traction</td>
+</tr>
+<tr>
+<td>Automated CV / resume generation</td>
+<td>Out of scope for navigation phase</td>
+</tr>
+</tbody>
+</table></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

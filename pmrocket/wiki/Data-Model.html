@@ -1,0 +1,893 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Data-Model — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Data Model</h1>
+<p>The PMRocket schema is driven by three core concepts: user profiles, artefact curricula (three-layer), and evidence logs. This page documents the key tables and relationships.</p>
+<hr />
+<h2>Core Entity Diagram</h2>
+<pre><code>users (TEXT id from Clerk)
+  ├── user_profiles (user_id TEXT FK)
+  ├── archetype_matches (user_id TEXT FK)
+  ├── intake_responses (user_id TEXT FK)
+  ├── evidence_log (user_id TEXT FK → artefacts.id)
+  ├── readiness_scores (user_id TEXT FK)
+  ├── gap_analyses (user_id TEXT FK → jd_embeddings)
+  └── subscriptions (user_id TEXT FK)
+
+archetypes
+  └── question_weights (archetype_id FK, question_id FK)
+
+artefacts (layer, category, geography)
+  └── skill_frequency (artefact_id FK, archetype_id FK, geography_type)
+
+jd_embeddings (vector column, HNSW indexed)
+  └── extracted_skills (jd_id FK, skill_name)
+</code></pre>
+<hr />
+<h2>Users and Profiles</h2>
+<h3>users</h3>
+<p>Primary user table; ID is Clerk's user ID format (<code>user_2abc...</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>TEXT PRIMARY KEY</td>
+<td>Clerk user ID, never UUID</td>
+</tr>
+<tr>
+<td>email</td>
+<td>TEXT UNIQUE</td>
+<td>Provisioned via Clerk webhook</td>
+</tr>
+<tr>
+<td>first_name</td>
+<td>TEXT</td>
+<td>Used in greeting: "Hi, {first_name} 👋"</td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>TEXT</td>
+<td>—</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>user_profiles</h3>
+<p>Extended user data; one row per user.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>TEXT PRIMARY KEY FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>avatar_url</td>
+<td>TEXT</td>
+<td>User-uploaded or initials placeholder</td>
+</tr>
+<tr>
+<td>primary_archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>Matched during intake</td>
+</tr>
+<tr>
+<td>primary_archetype_confidence</td>
+<td>NUMERIC</td>
+<td>0.0–100.0 %, e.g., 92.5</td>
+</tr>
+<tr>
+<td>secondary_archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>Runner-up match</td>
+</tr>
+<tr>
+<td>intake_completed_at</td>
+<td>TIMESTAMPTZ</td>
+<td>NULL until first intake finish</td>
+</tr>
+<tr>
+<td>intake_started_at</td>
+<td>TIMESTAMPTZ</td>
+<td>Tracks session begin time</td>
+</tr>
+<tr>
+<td>geography</td>
+<td>TEXT</td>
+<td>'North America' | 'India' | ... (from Q5)</td>
+</tr>
+<tr>
+<td>job_title_goal</td>
+<td>TEXT</td>
+<td>User's target role; from Q11</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Intake and Matching</h2>
+<h3>intake_responses</h3>
+<p>Responses to all 15 assessment questions; one row per question per user.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>SERIAL PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>TEXT FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>question_id</td>
+<td>INTEGER</td>
+<td>1–15</td>
+</tr>
+<tr>
+<td>response</td>
+<td>TEXT or JSONB</td>
+<td>Single value or array depending on Q type</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Q1–Q11 and Q15:</strong> <code>response</code> is TEXT (single choice or checklist as JSON array)<br />
+<strong>Q12–Q14:</strong> <code>response</code> is NUMERIC (1–5 rating)</p>
+<h3>archetype_matches</h3>
+<p>Match result from <code>POST /api/compute-match</code>; one row per user per computation.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>TEXT FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>primary_archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>Highest-scoring archetype</td>
+</tr>
+<tr>
+<td>primary_score</td>
+<td>NUMERIC</td>
+<td>Weighted sum, 0–100</td>
+</tr>
+<tr>
+<td>secondary_archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>Runner-up</td>
+</tr>
+<tr>
+<td>secondary_score</td>
+<td>NUMERIC</td>
+<td>—</td>
+</tr>
+<tr>
+<td>signal_breakdown</td>
+<td>JSONB</td>
+<td><code>{ "background": 18, "experience": 22, "skills": 25, "domain": 15, "goals": 12 }</code></td>
+</tr>
+<tr>
+<td>computed_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>question_weights</h3>
+<p>Weights for each question × archetype pair; configurable at runtime by admin.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>SERIAL PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>question_id</td>
+<td>INTEGER</td>
+<td>1–15</td>
+</tr>
+<tr>
+<td>archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>NUMERIC</td>
+<td>Typically 1–10</td>
+</tr>
+<tr>
+<td>score_map</td>
+<td>JSONB</td>
+<td>Maps response choice → raw_score (0.0–1.0)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Example <code>score_map</code> for Q1 (background):</p>
+<pre><code class="language-json">{
+  &quot;Software Engineer&quot;: { &quot;Technical PM&quot;: 1.0, &quot;Consumer PM&quot;: 0.3, &quot;Data PM&quot;: 0.9 },
+  &quot;Product Manager&quot;: { &quot;Technical PM&quot;: 0.7, &quot;Consumer PM&quot;: 0.95, &quot;Data PM&quot;: 0.6 },
+  &quot;Finance/Analyst&quot;: { &quot;Technical PM&quot;: 0.2, &quot;Consumer PM&quot;: 0.5, &quot;Data PM&quot;: 0.8 }
+}
+</code></pre>
+<hr />
+<h2>Artefacts and Curriculum (Three-Layer)</h2>
+<h3>archetypes</h3>
+<p>Eight PM archetypes; static seed data.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>name</td>
+<td>TEXT</td>
+<td>'Technical PM' | 'Consumer PM' | ...</td>
+</tr>
+<tr>
+<td>description</td>
+<td>TEXT</td>
+<td>2–3 sentence description of the archetype</td>
+</tr>
+<tr>
+<td>icon</td>
+<td>TEXT</td>
+<td>emoji or image path</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>artefacts</h3>
+<p>The core curriculum; every artefact is tagged with layer, category, and geography.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>title</td>
+<td>TEXT</td>
+<td>e.g., "Write 10 SQL Queries"</td>
+</tr>
+<tr>
+<td>description</td>
+<td>TEXT</td>
+<td>50 chars; e.g., "Practice SQL SELECT, JOIN, GROUP BY on a toy dataset"</td>
+</tr>
+<tr>
+<td>layer</td>
+<td>TEXT</td>
+<td>'Universal' | 'Archetype' | 'Domain'</td>
+</tr>
+<tr>
+<td>archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>NULL if layer = 'Universal'</td>
+</tr>
+<tr>
+<td>geography</td>
+<td>TEXT</td>
+<td>'North America' | 'India' | NULL (all geographies)</td>
+</tr>
+<tr>
+<td>category</td>
+<td>TEXT</td>
+<td>'Technical' | 'Business' | 'Portfolio' | 'Domain' | 'Product'</td>
+</tr>
+<tr>
+<td>max_points</td>
+<td>INTEGER</td>
+<td>Points awarded at Mastered tier: 8 (Technical), 5 (Portfolio), etc.</td>
+</tr>
+<tr>
+<td>key_topics</td>
+<td>TEXT[]</td>
+<td>Array of 15 topics; auto-split into 3 tiers of 5 each</td>
+</tr>
+<tr>
+<td>search_keywords</td>
+<td>TEXT[]</td>
+<td>5 keywords; clickable in evidence modal for "Search to learn"</td>
+</tr>
+<tr>
+<td>skill_area</td>
+<td>TEXT</td>
+<td>e.g., 'SQL', 'Python', 'Go-to-market', 'Case studies'</td>
+</tr>
+<tr>
+<td>skill</td>
+<td>TEXT</td>
+<td>Specific skill; e.g., 'Database Querying'</td>
+</tr>
+<tr>
+<td>tier_unlock_celebration</td>
+<td>BOOLEAN</td>
+<td>Show animation on tier unlock (default true)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>key_topics structure (example for "Write 10 SQL Queries"):</strong></p>
+<pre><code>[
+  &quot;Learn SELECT with WHERE clause&quot;,
+  &quot;Practice INNER and LEFT JOINs&quot;,
+  &quot;Understand GROUP BY and aggregates&quot;,
+  &quot;Write subqueries&quot;,
+  &quot;Study indexes and query optimization&quot;,
+
+  &quot;Query a real production schema&quot;,
+  &quot;Debug slow queries with EXPLAIN&quot;,
+  &quot;Optimize queries for performance&quot;,
+  &quot;Handle NULL values correctly&quot;,
+  &quot;Write reusable views&quot;,
+
+  &quot;Debug complex edge cases&quot;,
+  &quot;Teach SQL querying to a peer&quot;,
+  &quot;Optimize queries under load&quot;,
+  &quot;Contribute to data modeling discussions&quot;,
+  &quot;Mentor junior analyst on SQL&quot;
+]
+</code></pre>
+<p>Tiers:<br />
+- <strong>Learning:</strong> topics 0–4 (SELECT, JOINs, GROUP BY, subqueries, indexing)<br />
+- <strong>Practised:</strong> topics 5–9 (production schema, EXPLAIN, optimization, NULL, views)<br />
+- <strong>Mastered:</strong> topics 10–14 (edge cases, teaching, load optimization, data modeling, mentoring)</p>
+<hr />
+<h2>Evidence and Readiness</h2>
+<h3>evidence_log</h3>
+<p>Every artefact logged by a user creates one row per tier progression.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>TEXT FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>artefact_id</td>
+<td>UUID FK → artefacts.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>tier</td>
+<td>TEXT</td>
+<td>'Learning' | 'Practised' | 'Mastered'</td>
+</tr>
+<tr>
+<td>description</td>
+<td>TEXT</td>
+<td>Optional; 200 char max user description</td>
+</tr>
+<tr>
+<td>link</td>
+<td>TEXT</td>
+<td>Optional; auto-prefixed with https://</td>
+</tr>
+<tr>
+<td>topic_progress</td>
+<td>JSONB</td>
+<td><code>{ "0": true, "1": true, "3": false, ... }</code> — topic checkboxes</td>
+</tr>
+<tr>
+<td>unlocked_at</td>
+<td>TIMESTAMPTZ</td>
+<td>When this tier was unlocked</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Multiple evidence rows for one artefact means the user progressed through tiers (first Learning, then Practised, then Mastered).</p>
+<h3>readiness_scores</h3>
+<p>Computed score snapshot; one row per user, UPSERTed on every evidence log.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>TEXT PRIMARY KEY FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>total_score</td>
+<td>NUMERIC</td>
+<td>Sum of all artefact_maxpoints × tier_multiplier</td>
+</tr>
+<tr>
+<td>category_breakdown</td>
+<td>JSONB</td>
+<td><code>{ "Technical": 6, "Business": 2, "Portfolio": 5, "Domain": 3, "Product": 4 }</code></td>
+</tr>
+<tr>
+<td>computed_at</td>
+<td>TIMESTAMPTZ</td>
+<td>When the score was last updated</td>
+</tr>
+</tbody>
+</table>
+<p>The score is deterministic: same evidence set always yields the same total.</p>
+<hr />
+<h2>Gap Analysis and JDs</h2>
+<h3>jd_embeddings</h3>
+<p>Embedded job descriptions for RAG retrieval.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>jd_text</td>
+<td>TEXT</td>
+<td>Full original job description</td>
+</tr>
+<tr>
+<td>source_url</td>
+<td>TEXT</td>
+<td>URL where JD was sourced (admin metadata)</td>
+</tr>
+<tr>
+<td>company_name</td>
+<td>TEXT</td>
+<td>e.g., "Stripe" (metadata for context)</td>
+</tr>
+<tr>
+<td>archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>Categorized by archetype</td>
+</tr>
+<tr>
+<td>geography</td>
+<td>TEXT</td>
+<td>'North America' | 'India'</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>TEXT</td>
+<td>'Fintech' | 'B2B SaaS' | ...</td>
+</tr>
+<tr>
+<td>embedding</td>
+<td>vector (1536 dims)</td>
+<td>OpenAI <code>text-embedding-3-small</code> output</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HNSW index:</strong> <code>CREATE INDEX idx_jd_embeddings_vector ON jd_embeddings USING hnsw (embedding vector_cosine_ops) WITH (m=16, ef_construction=64)</code></p>
+<h3>extracted_skills</h3>
+<p>Skills extracted from a JD by the LLM; used to update <code>skill_frequency</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>SERIAL PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>jd_id</td>
+<td>UUID FK → jd_embeddings.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>skill_name</td>
+<td>TEXT</td>
+<td>Must match vocabulary in <code>skill_frequency</code></td>
+</tr>
+<tr>
+<td>frequency</td>
+<td>INTEGER</td>
+<td>1</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>gap_analyses</h3>
+<p>Gap analysis results; one row per user per analysis request.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>TEXT FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>gap_pct</td>
+<td>NUMERIC</td>
+<td><code>(1 - evidenced_artefacts / total) × 100</code></td>
+</tr>
+<tr>
+<td>top_gaps</td>
+<td>JSONB</td>
+<td>Top 3 skill gaps with recommended artefacts</td>
+</tr>
+<tr>
+<td>narrative</td>
+<td>TEXT</td>
+<td>LLM-generated qualitative analysis</td>
+</tr>
+<tr>
+<td>jd_references</td>
+<td>JSONB</td>
+<td>Array of retrieved JD IDs (K=25 nearest)</td>
+</tr>
+<tr>
+<td>computed_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Admin and Taxonomy</h2>
+<h3>skill_frequency</h3>
+<p>Aggregated skill occurrence across JDs for a given slice (archetype × domain × geography).</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>SERIAL PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>skill_name</td>
+<td>TEXT</td>
+<td>e.g., "SQL", "GTM Strategy", "User interviews"</td>
+</tr>
+<tr>
+<td>archetype_id</td>
+<td>UUID FK → archetypes.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>domain</td>
+<td>TEXT</td>
+<td>'Fintech' | 'B2B SaaS' | ...</td>
+</tr>
+<tr>
+<td>geography</td>
+<td>TEXT</td>
+<td>—</td>
+</tr>
+<tr>
+<td>frequency</td>
+<td>INTEGER</td>
+<td>Count of JDs containing this skill</td>
+</tr>
+<tr>
+<td>trending</td>
+<td>BOOLEAN</td>
+<td>Frequency increased &gt;10% in past month (admin dashboard)</td>
+</tr>
+<tr>
+<td>in_curriculum</td>
+<td>BOOLEAN</td>
+<td>Skill already in artefacts for this slice</td>
+</tr>
+<tr>
+<td>recommended_artefacts</td>
+<td>UUID[]</td>
+<td>Artefacts that teach this skill (populated by admin)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>jd_ingestion_queue</h3>
+<p>Admin queue for reviewing extracted skills before approval.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID PRIMARY KEY</td>
+<td>—</td>
+</tr>
+<tr>
+<td>jd_text</td>
+<td>TEXT</td>
+<td>Original JD pasted by admin</td>
+</tr>
+<tr>
+<td>extracted_skills</td>
+<td>JSONB</td>
+<td><code>[{ "term": "SQL", "confidence": 0.95, "status": "pending" }]</code></td>
+</tr>
+<tr>
+<td>admin_review</td>
+<td>JSONB</td>
+<td>Admin's accept/reject/edit decisions</td>
+</tr>
+<tr>
+<td>status</td>
+<td>TEXT</td>
+<td>'pending' | 'approved' | 'rejected'</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>completed_at</td>
+<td>TIMESTAMPTZ</td>
+<td>NULL until approval/rejection</td>
+</tr>
+</tbody>
+</table>
+<h3>subscriptions</h3>
+<p>User subscription status for paywall enforcement.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>TEXT PRIMARY KEY FK → users.id</td>
+<td>—</td>
+</tr>
+<tr>
+<td>stripe_customer_id</td>
+<td>TEXT</td>
+<td>Stripe customer ID</td>
+</tr>
+<tr>
+<td>stripe_subscription_id</td>
+<td>TEXT</td>
+<td>Stripe subscription ID</td>
+</tr>
+<tr>
+<td>status</td>
+<td>TEXT</td>
+<td>'active' | 'past_due' | 'canceled'</td>
+</tr>
+<tr>
+<td>current_period_end</td>
+<td>TIMESTAMPTZ</td>
+<td>When subscription renews (or ends if canceled)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMPTZ</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Views</h2>
+<h3>dashboard_summary_v2</h3>
+<p>Composite view joining multiple tables for efficient dashboard load.</p>
+<pre><code class="language-sql">SELECT
+  u.id,
+  u.email,
+  u.first_name,
+  up.primary_archetype_id,
+  up.primary_archetype_confidence,
+  (SELECT COUNT(*) FROM evidence_log WHERE user_id = u.id) AS evidence_count,
+  rs.total_score,
+  rs.category_breakdown,
+  s.status AS subscription_status
+FROM users u
+JOIN user_profiles up ON u.id = up.user_id
+LEFT JOIN readiness_scores rs ON u.id = rs.user_id
+LEFT JOIN subscriptions s ON u.id = s.user_id
+</code></pre>
+<p>Single query loads all data for the Dashboard page — avoids N+1 queries.</p>
+<hr />
+<h2>See also</h2>
+<p><a href="Scoring-Engine.html">Scoring Engine</a> · <a href="Architecture.html">Architecture</a> · <a href="Live-Features.html">Live Features</a></p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

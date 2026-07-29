@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Product-Overview — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Product Overview — PMRocket</h1>
+<h2>The Problem</h2>
+<p>Aspiring Product Managers are drowning in content but lost on navigation.</p>
+<p>There are hundreds of "how to become a PM" guides, thousands of YouTube videos, dozens of prep courses. Bootcamps teach frameworks. Twitter teaches hot takes. LinkedIn teaches success stories. The problem isn't content scarcity—it's that all the content is generic.</p>
+<p>An aspiring engineer wanting to build products doesn't need the same evidence as someone from consulting moving into PM. A growth PM candidate in fintech faces a different technical bar than one in consumer. Someone in India competing against 10,000 other aspiring PMs needs a different confidence threshold than someone in North America.</p>
+<p>Existing platforms ignore this segmentation. They teach frameworks to everyone equally. They celebrate "become a PM" as if there were only one archetype. They measure success by engagement, not readiness. Candidates build the wrong things, on the wrong timeline, toward the wrong goal.</p>
+<p>The deeper problem: <strong>no feedback loop.</strong> You prepare in the dark. Bootcamp alumni confidently apply before they have shipped anything. Self-taught learners spend a year building case studies but never validate that a company would actually care about them. The system has no signal for readiness—just silence.</p>
+<h2>The Solution</h2>
+<p>PMRocket is a navigation layer. It doesn't teach PM concepts—it tells you which role fits you, what proof you need to build, and when you're genuinely ready to apply.</p>
+<p>The product is built around a five-stage pipeline that takes aspiring PMs from confusion to confidence:</p>
+<p><strong>Stage 1: Intake assessment (3 minutes)</strong><br />
+Fifteen questions about your background, skills, goals, and geography. The questions capture: background (SWE, MBA, consultant, etc.), technical and business comfort, domain interests, company type preferences, and what PM activities you've tried.</p>
+<p><strong>Stage 2: Weighted archetype match</strong><br />
+Every answer is a signal for every PM archetype. A software engineer background scores highest for Technical PM but also has signal for AI/Platform. A consultant background is strong for Enterprise PM but has relevant growth skills. The matching model uses configurable weights—it's not editorial opinion, it's calibrated from hiring patterns. You get a primary archetype (confidence %), a runner-up, and reasoning for each.</p>
+<p><strong>Stage 3: Personalised three-layer roadmap</strong><br />
+The curriculum is built in three layers that compose into your roadmap:<br />
+- <strong>Layer 1 (Universal)</strong>: AI literacy and core PM skills every archetype needs<br />
+- <strong>Layer 2 (Archetype)</strong>: Skills specific to your matched archetype<br />
+- <strong>Layer 3 (Domain × Geography)</strong>: Requirements specific to your target domain and market</p>
+<p>A Technical PM in fintech in North America gets different Layer 3 content (Dodd-Frank, banking regulations, payment rails) than one in India (RBI requirements, UPI, Indian banking stack). The roadmap is personalized, not templated.</p>
+<p><strong>Stage 4: Evidence logging with progressive tiers</strong><br />
+You log artefacts as you build them. "Customer interview study," "shipped feature," "strategy doc," "launch plan." Each artefact has three tiers: Learning (foundational), Practised (applied), Mastered (expert). The tiers unlock automatically as you check off topics. The system celebrates your progress with animations and streak tracking. Your dashboard shows exactly where you're strong and where you have gaps.</p>
+<p><strong>Stage 5: Market-grounded readiness signal</strong><br />
+The system reads real job descriptions for your archetype, domain, and geography. It identifies what the market actually cares about. It compares your evidence against those requirements and tells you the three biggest gaps, with specific artefacts that would close them fastest. You get a readiness score and an honest gate: when your gap analysis shows you're ready (gap ≤ 30%, no critical missing skills), you know it's time to apply. This isn't invented—it's grounded in market data.</p>
+<h2>Who it's for</h2>
+<h3>The Wanderer (Primary)</h3>
+<p>An aspiring PM, 3-6+ months into self-directed preparation. She's read the books, watched talks, built some case studies. But she doesn't know if she's building the right things. She doesn't know if she's doing enough. She doesn't know when to start applying.</p>
+<p>The pain is acute. She's self-funded, time-boxing herself, uncertainty is demoralizing. Existing bootcamps feel too slow or too generic. Existing communities feel like echo chambers. PMRocket tells her: here's your archetype, here's what matters for your domain, here's what you still need. It gives her navigation and an honest readiness gate.</p>
+<h3>The Navigator (Secondary, V2a)</h3>
+<p>An existing PM levelling up, switching domains, or moving to a new archetype. She's proven she can do PM—but she needs to prove competence in a new domain or market. PMRocket becomes a career progression tool: it maps the specific gaps between where she is and where she wants to be, using market data as the ground truth.</p>
+<h2>Success metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it means</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Completion rate</strong></td>
+<td>% of users who finish intake</td>
+<td>&gt;80%</td>
+</tr>
+<tr>
+<td><strong>Evidence adoption</strong></td>
+<td>% of matched users who log first artefact</td>
+<td>&gt;60%</td>
+</tr>
+<tr>
+<td><strong>Gap usage</strong></td>
+<td>% of users who trigger gap analysis</td>
+<td>&gt;40%</td>
+</tr>
+<tr>
+<td><strong>Ready-to-apply conversion</strong></td>
+<td>% of users who hit readiness score &gt;75</td>
+<td>Tracked for signal</td>
+</tr>
+<tr>
+<td><strong>Paid conversion (v2)</strong></td>
+<td>% who subscribe to paywall</td>
+<td>&gt;10% (post-traction)</td>
+</tr>
+</tbody>
+</table>
+<p>The north star is readiness conversion: did users reach a point where they believe they're ready? Business metrics come later.</p>
+<h2>Archetype taxonomy</h2>
+<table>
+<thead>
+<tr>
+<th>Archetype</th>
+<th>Core mission</th>
+<th>Who fits</th>
+<th>Evidence path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Technical PM</strong></td>
+<td>Ship software where complexity is technical</td>
+<td>Engineers, architects</td>
+<td>Architecture decisions, technical trade-offs, shipped systems</td>
+</tr>
+<tr>
+<td><strong>Growth PM</strong></td>
+<td>Drive acquisition/engagement through experimentation</td>
+<td>Analysts, marketers</td>
+<td>Metrics frameworks, experiment designs, data storytelling</td>
+</tr>
+<tr>
+<td><strong>Enterprise PM</strong></td>
+<td>Sell to large orgs, manage complex deployments</td>
+<td>Consultants, solutions engineers</td>
+<td>Customer ROI narratives, deployment complexity handling</td>
+</tr>
+<tr>
+<td><strong>AI PM</strong></td>
+<td>Shape PM role in AI/LLM products</td>
+<td>ML engineers, research scientists</td>
+<td>Model evals, prompt iteration, hallucination handling</td>
+</tr>
+</tbody>
+</table>
+<p>Each archetype has a distinct preparation path. A Technical PM proves competence differently than a Growth PM. PMRocket personalizes the roadmap and matching weights for each.</p>
+<h2>What's not in scope (v1)</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Why deferred</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Interview practice</strong></td>
+<td>Gap analysis must exist first. Once we know gaps, interview prep has a target. V3b.</td>
+</tr>
+<tr>
+<td><strong>In-app coaching</strong></td>
+<td>Channels without value creation are overhead. V3c.</td>
+</tr>
+<tr>
+<td><strong>Job matching</strong></td>
+<td>Requires large corpus and proven quality. V3b.</td>
+</tr>
+<tr>
+<td><strong>Resume builder</strong></td>
+<td>Can't build honest resumes without knowing gaps. V3a.</td>
+</tr>
+<tr>
+<td><strong>Peer review</strong></td>
+<td>Trust in evidence quality must be proven first. V2b.</td>
+</tr>
+<tr>
+<td><strong>Employer dashboard</strong></td>
+<td>B2C-first. B2B features only if demand emerges. V4.</td>
+</tr>
+</tbody>
+</table>
+<h2>Monetisation (deferred)</h2>
+<p>The product is free for the learning phase and portfolio demo. Paywall design for v2:</p>
+<ul>
+<li><strong>Free tier</strong>: Intake + archetype match (teaser of roadmap size and gaps)</li>
+<li><strong>Paid tier</strong>: Full roadmap, evidence log, gap analysis, readiness signal</li>
+</ul>
+<p>The reasoning: matching alone is useless without knowing what to build. The gap between "I'm a Technical PM" and "here's my roadmap" creates genuine willingness to pay.</p>
+<p>When to monetise? After traction validates product-market fit. Paying customers will tell us if we're solving the real problem. Until then, the focus is learning and portfolio demonstration.</p>
+<h2>See also</h2>
+<p><a href="User-Journeys.html">User Journeys</a> • <a href="Feature-Map.html">Feature Map</a> • <a href="Roadmap.html">Roadmap</a> • <a href="Decision-Log.html">Decision Log</a></p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

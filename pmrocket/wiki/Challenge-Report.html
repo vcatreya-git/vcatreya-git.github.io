@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Challenge-Report — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>QA &amp; Blockers Report</h1>
+<p>Status of Alpha (Phase 7d) deployment quality and known issues.</p>
+<hr />
+<h2>Phase 7d Build Quality (Deployment &amp; Polish) — PASSED</h2>
+<p><strong>Overall verdict:</strong> APPROVED FOR DEPLOYMENT. Live on Vercel + Neon since 2026-07-28.</p>
+<h3>What was tested</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Coverage</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intake flow (Q1–Q15)</td>
+<td>Full Wanderer path end-to-end</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Archetype matching</td>
+<td>15-signal weighting, tie-breaking, confidence % display</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Evidence roadmap</td>
+<td>3-layer curriculum, category filtering, layer badges</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Evidence logging</td>
+<td>Modal save, topic tracking, tier unlock, score update</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Readiness scoring</td>
+<td>Per-category points, tier multipliers, self-healing fetch</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Paywall (test mode)</td>
+<td>Free/paid boundary, Stripe checkout, subscription rows</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Admin actions</td>
+<td>Seed data editing, manual artefact/weight updates</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Migrations</td>
+<td>18 SQL files applied cleanly on fresh Neon DB</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Auth &amp; provisioning</td>
+<td>Clerk sign-up/sign-in, webhook provisioning, lazy fallback</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Dashboard load &lt;1s, evidence save &lt;500ms, no N+1 queries</td>
+<td>Pass</td>
+</tr>
+</tbody>
+</table>
+<h3>No blockers</h3>
+<p>All critical path items resolved before deployment:<br />
+- B1: Migration 001 rewritten to use <code>TEXT PRIMARY KEY</code> for Clerk user IDs. Enforced in migration 001.<br />
+- B2: Embed dimensions locked to OpenAI 1536-dimension vectors at schema level (migration 008).<br />
+- B3: Paywall mode: Stripe test mode + Clerk <code>publicMetadata.role = admin</code> for invite gating.<br />
+- B4: Clerk webhook + lazy user provisioning (fallback on first authenticated request).<br />
+- B5: Full migration sequence validated against fresh Neon DB. All 18 migrations applied cleanly and in order.</p>
+<hr />
+<h2>Known Limitations (Alpha scope, not bugs)</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Impact</th>
+<th>Workaround</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single seeded slice (B2B SaaS, Technical PM, North America)</td>
+<td>Other archetype × domain combinations show "coming soon" on roadmap</td>
+<td>Expand corpus in V2a. Users can still switch to any archetype to test.</td>
+</tr>
+<tr>
+<td>Gap analysis hidden (JD corpus &lt; 15 for slice)</td>
+<td>Users see "Gap analysis coming soon" button, disabled</td>
+<td>Explain in UI: corpus seeding required. Activates in V2a when 20+ JDs per slice.</td>
+</tr>
+<tr>
+<td>Navigator path (Q16–Q19) not shipped</td>
+<td>Existing PMs cannot branch on Q16</td>
+<td>Data collected in V2a; logic ships in V2a.1 (~2 weeks post-V2a launch).</td>
+</tr>
+<tr>
+<td>Email notifications not shipped</td>
+<td>No weekly nudges or churn alerts</td>
+<td>Deferred to V2b (retention phase, triggered at 50+ active users).</td>
+</tr>
+<tr>
+<td>Peer evidence review not shipped</td>
+<td>Users cannot validate each other's evidence claims</td>
+<td>Deferred to V2b. Trust model requires scale.</td>
+</tr>
+<tr>
+<td>Analytics dashboard minimal</td>
+<td>PostHog integrated but no admin UI</td>
+<td>Analytics for traction analysis (V2b+). Builder inspects PostHog directly.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Previous phase reviews (historical context)</h2>
+<h3>V2a Pre-Build Review (2026-03-25)</h3>
+<p>Solution-agent challenge pass: <strong>PROCEED WITH MITIGATIONS.</strong></p>
+<p>0 blockers. 6 risks. 9 observations.</p>
+<p><strong>Key pre-build decisions:</strong><br />
+- gap_pct: artefact-level (not skill-level). <code>1 - (evidenced / total_artefacts) × 100</code>. Deterministic and LLM-independent.<br />
+- Navigator: V2a.1 (not V2a). Q16 ships in V2a for data collection; Q17–Q19 logic deferred to reduce scope.<br />
+- Minimum Viable Corpus: 4 slices, 80 JDs. Gap analysis hidden for unseeded slices (honest placeholder).</p>
+<p><strong>Mitigated risks:</strong><br />
+| Risk | Mitigation |<br />
+|---|---|<br />
+| JD corpus cold-start | Scoped to 4 slices. Sourcing in parallel with build. |<br />
+| Skill name fragmentation (LLM outputs non-vocabulary skills) | Extraction constrained to existing <code>skill_frequency.skill_name</code> list. Admin normalises during preview. |<br />
+| Weighted matching is editorial guessing | Alpha is calibration phase. Archetype distribution monitored. Weights admin-editable at runtime. |<br />
+| Navigator scope creep (demand unknown) | Deferred to V2a.1. Q16 collects data; if &gt;20% say Yes, accelerate. |<br />
+| ETL extraction inconsistency | Vocabulary constraint + admin review gates each extraction. |<br />
+| Multi-select intake breaks schema | Reverted to single-select. Multi-select (Q15 activities) stays for flexibility. |</p>
+<p><strong>Observations:</strong><br />
+- Radar chart (V1) traded for gap_pct (V2a+). Visual richness for accuracy. Monitor user feedback.<br />
+- pgvector HNSW performant at &lt;1K JDs (Alpha–V2a scale). Revisit query patterns at 10K+ corpus.<br />
+- 8–10 week solo build timeline mitigated by: 4-slice MVC, Navigator deferral, parallel content seeding.</p>
+<hr />
+<h2>See also</h2>
+<p><a href="Feature-Map">Feature Map</a> · <a href="Decision-Log">Decision Log</a> · <a href="User-Flows">User Flows</a></p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

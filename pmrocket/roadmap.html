@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delivery Roadmap — Wayfinder · v1.1 · 2026-03-23</title>
+  <style>
+    :root {
+      --navy: #0f1b2d;
+      --navy-light: #162236;
+      --accent: #3d8ef0;
+      --accent-dim: #1e4a8a;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --amber: #d97706;
+      --amber-light: #fffbeb;
+      --red: #dc2626;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --grey: #64748b;
+      --white: #f5f8ff;
+      --text: #d4e1f7;
+      --subtext: #8fa8cc;
+      --card: #1a2d47;
+      --card-border: #243d5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── BANNER ─────────────────────────────────────── */
+    .banner {
+      background: linear-gradient(135deg, #0a1628 0%, #162236 50%, #1a3a5c 100%);
+      border-bottom: 2px solid var(--accent-dim);
+      padding: 52px 40px 40px;
+      text-align: center;
+    }
+    .banner-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .banner h1 {
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .banner h1 span { color: var(--accent); }
+    .banner-sub {
+      font-size: 14px;
+      color: var(--subtext);
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-badge {
+      background: rgba(61,142,240,0.12);
+      border: 1px solid var(--accent-dim);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── LAYOUT ──────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+    section { padding: 48px 0; }
+    section + section { border-top: 1px solid var(--card-border); }
+
+    h2 {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    p { color: var(--subtext); font-size: 14px; line-height: 1.7; }
+
+    /* ── PHASE TIMELINE ──────────────────────────────── */
+    .timeline-track {
+      display: grid;
+      grid-template-columns: 5fr 4fr 3fr 2fr;
+      gap: 4px;
+      margin-bottom: 40px;
+    }
+    .tl-phase {
+      border-radius: 8px;
+      padding: 16px 20px;
+      position: relative;
+    }
+    .tl-phase.v1 { background: linear-gradient(135deg, #1e3a6e, #1a2d47); border: 1px solid #2d5aa0; }
+    .tl-phase.v2 { background: linear-gradient(135deg, #1e3a30, #1a2d47); border: 1px solid #1f6b4a; }
+    .tl-phase.v3 { background: linear-gradient(135deg, #2d1e5a, #1a2d47); border: 1px solid #4c2a9e; }
+    .tl-phase.v4 { background: linear-gradient(135deg, #2d1e1e, #1a2d47); border: 1px solid #6b2020; }
+    .tl-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .v1 .tl-label { color: #60a5fa; }
+    .v2 .tl-label { color: #34d399; }
+    .v3 .tl-label { color: #a78bfa; }
+    .v4 .tl-label { color: #f87171; }
+    .tl-title { font-size: 15px; font-weight: 700; color: var(--white); }
+    .tl-target { font-size: 12px; color: var(--subtext); margin-top: 4px; }
+    .tl-count {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      font-size: 28px;
+      font-weight: 800;
+      opacity: 0.15;
+    }
+    .v1 .tl-count { color: #60a5fa; }
+    .v2 .tl-count { color: #34d399; }
+    .v3 .tl-count { color: #a78bfa; }
+    .v4 .tl-count { color: #f87171; }
+
+    /* ── PHASE CARDS ─────────────────────────────────── */
+    .phase-block { margin-bottom: 48px; }
+    .phase-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .phase-tag {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .tag-v1 { background: rgba(96,165,250,0.15); color: #60a5fa; }
+    .tag-v2 { background: rgba(52,211,153,0.15); color: #34d399; }
+    .tag-v3 { background: rgba(167,139,250,0.15); color: #a78bfa; }
+    .tag-v4 { background: rgba(248,113,113,0.15); color: #f87171; }
+    .phase-goal {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-left: 3px solid;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--subtext);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .phase-goal.v1 { border-left-color: #60a5fa; }
+    .phase-goal.v2 { border-left-color: #34d399; }
+    .phase-goal.v3 { border-left-color: #a78bfa; }
+    .phase-goal.v4 { border-left-color: #f87171; }
+
+    /* ── FEATURE TABLE ───────────────────────────────── */
+    .feature-grid { display: flex; flex-direction: column; gap: 6px; }
+    .feature-row {
+      display: grid;
+      grid-template-columns: 32px 1fr auto auto;
+      align-items: start;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      transition: border-color 0.2s;
+    }
+    .feature-row:hover { border-color: #3d5a80; }
+    .feature-row.infra {
+      background: rgba(30,58,110,0.4);
+      border-color: #2d5aa0;
+    }
+    .feature-icon {
+      font-size: 16px;
+      padding-top: 1px;
+      text-align: center;
+    }
+    .feature-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+    .feature-why {
+      font-size: 12px;
+      color: var(--subtext);
+      line-height: 1.5;
+    }
+    .priority-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      height: fit-content;
+    }
+    .p0 { background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3); }
+    .p1 { background: rgba(217,119,6,0.15); color: #fbbf24; border: 1px solid rgba(217,119,6,0.3); }
+    .p2 { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+    .parallel-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(61,142,240,0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(61,142,240,0.2);
+      white-space: nowrap;
+      height: fit-content;
+    }
+
+    /* ── SECTION LABEL ───────────────────────────────── */
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--subtext);
+      margin: 20px 0 10px;
+    }
+
+    /* ── CALLOUT ─────────────────────────────────────── */
+    .callout {
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout.warning {
+      background: rgba(217,119,6,0.1);
+      border: 1px solid rgba(217,119,6,0.3);
+      color: #fbbf24;
+    }
+    .callout.info {
+      background: rgba(61,142,240,0.08);
+      border: 1px solid rgba(61,142,240,0.2);
+      color: var(--subtext);
+    }
+    .callout-icon { font-size: 16px; flex-shrink: 0; }
+    .callout strong { color: var(--white); }
+
+    /* ── DEFINITION OF DONE ──────────────────────────── */
+    .dod-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .dod-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+    .dod-check {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #34d399;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── DEPENDENCIES ────────────────────────────────── */
+    .dep-item {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--subtext);
+      line-height: 1.5;
+    }
+    .dep-item strong { color: var(--white); }
+    .dep-arrow {
+      color: var(--accent);
+      font-weight: 700;
+      margin: 0 6px;
+    }
+
+    /* ── OPEN QUESTIONS ──────────────────────────────── */
+    .oq-item {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-left: 3px solid #60a5fa;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .oq-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .oq-text { font-size: 13px; color: var(--subtext); line-height: 1.6; }
+
+    /* ── DEFERRED TABLE ──────────────────────────────── */
+    .deferred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .deferred-item {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .deferred-name { font-size: 13px; font-weight: 600; color: var(--subtext); margin-bottom: 3px; }
+    .deferred-reason { font-size: 12px; color: #526070; line-height: 1.4; }
+
+    /* ── RATIONALE ───────────────────────────────────── */
+    .rationale-box {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-size: 14px;
+      color: var(--subtext);
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: #0a1628;
+      border-top: 1px solid var(--card-border);
+      padding: 28px 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #526070;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 720px) {
+      .timeline-track { grid-template-columns: 1fr 1fr; }
+      .deferred-grid { grid-template-columns: 1fr; }
+      .feature-row { grid-template-columns: 28px 1fr; }
+      .priority-badge, .parallel-badge { display: none; }
+      .banner h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-label">Wayfinder · Product Roadmap</div>
+  <h1>Delivery <span>Roadmap</span></h1>
+  <div class="banner-sub">Phased delivery plan · Parallel build model · 2026-03-23</div>
+  <div class="meta-row">
+    <span class="meta-badge">v1.1 · Approved</span>
+    <span class="meta-badge">Solo + Subagents</span>
+    <span class="meta-badge">v1 Target: ~4–5 weeks</span>
+    <span class="meta-badge">4 Phases</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PHASE OVERVIEW TIMELINE -->
+  <section>
+    <h2>Phase Overview</h2>
+    <div class="timeline-track">
+      <div class="tl-phase v1">
+        <div class="tl-count">13</div>
+        <div class="tl-label">Phase 1</div>
+        <div class="tl-title">v1 — Foundation</div>
+        <div class="tl-target">~4–5 weeks · Hero flow + core loop</div>
+      </div>
+      <div class="tl-phase v2">
+        <div class="tl-count">9</div>
+        <div class="tl-label">Phase 2</div>
+        <div class="tl-title">v2 — Growth</div>
+        <div class="tl-target">~6 weeks post-Beta · Retention + reach</div>
+      </div>
+      <div class="tl-phase v3">
+        <div class="tl-count">5</div>
+        <div class="tl-label">Phase 3</div>
+        <div class="tl-title">v3 — Scale</div>
+        <div class="tl-target">1,000+ users · AI + application layer</div>
+      </div>
+      <div class="tl-phase v4">
+        <div class="tl-count">4</div>
+        <div class="tl-label">Phase 4</div>
+        <div class="tl-title">v4 — Network</div>
+        <div class="tl-target">PMF at scale · Platform + B2B</div>
+      </div>
+    </div>
+
+    <!-- SEQUENCING RATIONALE -->
+    <div class="rationale-box">
+      Wayfinder is built using the <strong style="color:var(--white)">feature-agent pattern</strong> — parallel subagents per independent feature — not a solo-sequential build. Once the foundation (Supabase schema, auth, shared types) is in place in week 1, all independent features can be developed in parallel and integrated in a dedicated final week. v1 is scoped to the minimum functional system that can complete the full hero flow and sustain the evidence-logging return loop — the only scope that makes the North Star metric measurable at all. External dependencies are sequenced last: <strong style="color:var(--white)">Stripe ships at the tail of v1</strong> after all core surfaces are stable, and OpenAI is a v3 dependency only.
+    </div>
+  </section>
+
+  <!-- V1 FOUNDATION -->
+  <section>
+    <h2>v1 — Foundation</h2>
+    <div class="phase-header">
+      <span class="phase-tag tag-v1">v1</span>
+      <h3>Foundation — Hero flow + core loop</h3>
+    </div>
+    <div class="phase-goal v1">
+      Ship the minimum functional product that takes a user from zero to archetype match, evidence roadmap, and live readiness score — and sustains weekly return visits through the evidence-logging loop. v1 is the product that makes every success metric measurable for the first time.<br>
+      <strong style="color:var(--white)">Target: ~4–5 weeks</strong> (foundation 1 week · parallel feature dev 2–3 weeks · integration + QA 1 week)
+    </div>
+
+    <div class="section-label">Infrastructure — ships first, gates everything</div>
+    <div class="feature-grid">
+      <div class="feature-row infra">
+        <div class="feature-icon">🏗️</div>
+        <div>
+          <div class="feature-name">Supabase setup — auth, DB schema, RBAC</div>
+          <div class="feature-why">Auth and data model gate every feature. Users, profiles, intake responses, roadmap state, evidence log, admin roles.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span></span>
+      </div>
+      <div class="feature-row infra">
+        <div class="feature-icon">⚙️</div>
+        <div>
+          <div class="feature-name">Next.js + Tailwind scaffold on Vercel</div>
+          <div class="feature-why">All frontend work depends on this. Environment variables, CI/CD pipeline, staging + production environments.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span></span>
+      </div>
+      <div class="feature-row infra">
+        <div class="feature-icon">🗄️</div>
+        <div>
+          <div class="feature-name">Core data schema + content seed</div>
+          <div class="feature-why">Intake responses, archetype match output, evidence artefacts (12 variants), readiness score, admin tables. Must be stable before any feature work begins.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <span class="callout-icon">⚠️</span>
+      <div><strong>Content-seeding bottleneck (highest-risk v1 item):</strong> The 12-variant evidence roadmap, archetype matching decision table (15 base rules + confidence modifiers), and readiness score rubric must all be seeded with real content before the hero flow can be tested end-to-end. Allocate content-seeding time explicitly before integration testing begins.</div>
+    </div>
+
+    <div class="section-label">Features — parallel once foundation is complete</div>
+    <div class="feature-grid">
+      <div class="feature-row">
+        <div class="feature-icon">🏠</div>
+        <div>
+          <div class="feature-name">Landing page</div>
+          <div class="feature-why">Value prop · "Find my PM archetype" CTA · social proof strip. First touchpoint; required for Alpha recruitment.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🔐</div>
+        <div>
+          <div class="feature-name">Auth — email + Google OAuth</div>
+          <div class="feature-why">Gates all personalised functionality. Required before intake can save state.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">👋</div>
+        <div>
+          <div class="feature-name">Onboarding flow</div>
+          <div class="feature-why">Welcome screen, value prop, intake CTA. First session must orient the user and convert to intake start.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📋</div>
+        <div>
+          <div class="feature-name">Intake assessment — 10 questions</div>
+          <div class="feature-why">Progressive disclosure, state saved on exit. Sole input to archetype matching and initial readiness score.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🎯</div>
+        <div>
+          <div class="feature-name">Archetype match output</div>
+          <div class="feature-why">Primary archetype, confidence, rationale, adjacent option. The first activation moment — the product's core promise delivered.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🗺️</div>
+        <div>
+          <div class="feature-name">Evidence roadmap — 12 variants</div>
+          <div class="feature-why">Archetype + domain + company-type specific artefact list. Directly resolves the evidence gap — the "what to build" answer.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📊</div>
+        <div>
+          <div class="feature-name">Readiness signal — 0–100 score</div>
+          <div class="feature-why">Dynamic score, 4-category breakdown, "What to do next". Directly resolves readiness blindness — the "when am I ready" answer.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">✅</div>
+        <div>
+          <div class="feature-name">Evidence log — self-attestation form</div>
+          <div class="feature-why">3-field modal, score updates on submission. The core recurring action; drives the return-visit loop.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📈</div>
+        <div>
+          <div class="feature-name">Progress dashboard</div>
+          <div class="feature-why">Archetype chip, readiness dial, roadmap progress, next artefact CTA. Home screen post-intake — orients every return visit.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🔧</div>
+        <div>
+          <div class="feature-name">Admin surface — CRUD, no-code edits</div>
+          <div class="feature-why">Edit matching table, artefact library, scoring rubric, Apply threshold, intake questions. Content iteration requires zero code deployments.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🧭</div>
+        <div>
+          <div class="feature-name">Archetype Explorer</div>
+          <div class="feature-why">Browse all 4 archetypes with background fit rationale, switch target archetype. Users need to understand why they were matched — without this, match output feels like a black box and trust breaks.</div>
+        </div>
+        <span class="priority-badge p1">P1</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📧</div>
+        <div>
+          <div class="feature-name">Transactional email (Resend)</div>
+          <div class="feature-why">Sign-up confirmation, intake resume reminder. Lightweight trust signal; resume email recovers abandoned sessions.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📉</div>
+        <div>
+          <div class="feature-name">PostHog analytics instrumentation</div>
+          <div class="feature-why">Intake completion rate, D14 return rate, readiness progression are unmeasurable without instrumentation. Ships with each screen.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span class="parallel-badge">Parallel</span>
+      </div>
+    </div>
+
+    <div class="section-label">Tail of v1 — after all core screens are stable</div>
+    <div class="feature-grid">
+      <div class="feature-row">
+        <div class="feature-icon">💳</div>
+        <div>
+          <div class="feature-name">Stripe subscription</div>
+          <div class="feature-why">Monthly/annual plan, payment, cancellation. Ships last — no payment integration wasted on a flow that may still change. Can slip to v1.5 if pricing model is still unvalidated at launch without blocking core loop validation.</div>
+        </div>
+        <span class="priority-badge p0">P0</span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="section-label">v1 Definition of Done</div>
+    <div class="dod-grid">
+      <div class="dod-item"><div class="dod-check"></div>New user completes full hero flow (sign-up → intake → archetype match → readiness score → dashboard) without error</div>
+      <div class="dod-item"><div class="dod-check"></div>User who exits intake mid-flow can resume from the correct question on return</div>
+      <div class="dod-item"><div class="dod-check"></div>Evidence logging updates the readiness score immediately and displays the delta</div>
+      <div class="dod-item"><div class="dod-check"></div>Archetype switch recalibrates roadmap and score without data loss</div>
+      <div class="dod-item"><div class="dod-check"></div>Archetype Explorer allows browsing all 4 archetypes and switching target archetype</div>
+      <div class="dod-item"><div class="dod-check"></div>Admin can edit matching table, artefact content, and scoring rubric without a code deployment</div>
+      <div class="dod-item"><div class="dod-check"></div>Stripe subscription, webhook confirmation, and cancellation all function end-to-end</div>
+      <div class="dod-item"><div class="dod-check"></div>All 20 PRD test cases pass · Zero P0 bugs in staging</div>
+      <div class="dod-item"><div class="dod-check"></div>PostHog events firing for: intake start, intake complete, archetype match accepted, evidence logged, dashboard viewed</div>
+      <div class="dod-item"><div class="dod-check"></div>Alpha cohort (10–20 peer users from personal network + TPF community) recruited and onboarded</div>
+    </div>
+  </section>
+
+  <!-- V2 GROWTH -->
+  <section>
+    <h2>v2 — Growth</h2>
+    <div class="phase-header">
+      <span class="phase-tag tag-v2">v2</span>
+      <h3>Growth — Retention depth + segment expansion</h3>
+    </div>
+    <div class="phase-goal v2">
+      Deepen the retention loop, expand reach, and add the segment and operational features that are only valuable once the core loop is proven. Ships after Alpha/Beta validates that the core flow works and the North Star metric is tracking.<br>
+      <strong style="color:var(--white)">Target: ~6 weeks post-v1 Beta sign-off</strong> · Trigger: Alpha → Beta go/no-go criteria met
+    </div>
+    <div class="feature-grid">
+      <div class="feature-row">
+        <div class="feature-icon">📈</div>
+        <div><div class="feature-name">Readiness score history — progression chart</div><div class="feature-why">Creates long-term return motivation. Only meaningful once users have been logging for weeks.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📚</div>
+        <div><div class="feature-name">Evidence artefact library — curated examples</div><div class="feature-why">Answers "what does good look like?". Only credible after v1 artefact templates are live and tested.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">✔️</div>
+        <div><div class="feature-name">"Already have this" flag</div><div class="feature-why">Mark existing work as evidence from roadmap view. Serves BA/PO users who have pre-existing domain evidence.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🔔</div>
+        <div><div class="feature-name">Email nudges — weekly score update</div><div class="feature-why">Retention mechanic. Only useful once D14 return-rate data from Alpha shows where users drop off.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">👥</div>
+        <div><div class="feature-name">Peer Evidence Review</div><div class="feature-why">Share evidence artefacts with peers for structured feedback. Closes the "does this count?" validation gap. Only valuable once users have evidence artefacts to share — requires v1 evidence log adoption first.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📊</div>
+        <div><div class="feature-name">Admin analytics (ADM-05/06/07)</div><div class="feature-why">Intake funnel, unsupported combination log, discrepancy flags. Operational intelligence for content iteration — useful once user volume generates meaningful signal.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🔄</div>
+        <div><div class="feature-name">Internal transition path</div><div class="feature-why">Distinct JTBD for career-movers within their current company (Internal Mover persona). Dependency: v1 ADM-02 (intake branching rule edit) already supports the intake changes required — no v1 rework anticipated.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📊</div>
+        <div><div class="feature-name">Data PM archetype — split from Growth PM</div><div class="feature-why">Growth PM currently absorbs Data PM. Split requires dedicated artefact content to be differentiated.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🏥</div>
+        <div><div class="feature-name">Health tech domain — third domain expansion</div><div class="feature-why">Regulatory complexity (HIPAA, DPDP) deferred from v1. Domain content requires specialist sourcing.</div></div>
+        <span class="priority-badge p1">P1</span><span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- V3 SCALE -->
+  <section>
+    <h2>v3 — Scale</h2>
+    <div class="phase-header">
+      <span class="phase-tag tag-v3">v3</span>
+      <h3>Scale — AI layer + application surface</h3>
+    </div>
+    <div class="phase-goal v3">
+      Add AI-powered personalisation and the application surface features that require significant user volume to be valuable.<br>
+      <strong style="color:var(--white)">Trigger: 1,000+ active users</strong> · ≥60% of Apply-ready users express intent to apply within 30 days
+    </div>
+    <div class="feature-grid">
+      <div class="feature-row">
+        <div class="feature-icon">🤖</div>
+        <div><div class="feature-name">AI-assisted artefact feedback (OpenAI)</div><div class="feature-why">LLM critique against archetype rubric. Requires evidence upload infrastructure and significant prompt engineering. Not a v1 or v2 dependency.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">💼</div>
+        <div><div class="feature-name">Archetype-matched job identification</div><div class="feature-why">Surfaced open roles — a curated signal layer, not a full job board. Requires job data partnerships.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🎤</div>
+        <div><div class="feature-name">Mock interview prep — archetype-specific</div><div class="feature-why">Technical PM, Growth PM interview formats. High effort, high value — only differentiated once archetype pathways are proven at scale.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📖</div>
+        <div><div class="feature-name">Contextual framework guides (AARRR for Growth PM, etc.)</div><div class="feature-why">Deferred from PRD V2 to roadmap v3 — framework guides have no value until the evidence roadmap has been validated as the right content model; adding them before that validation creates content overhead without signal.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📱</div>
+        <div><div class="feature-name">Mobile app (React Native)</div><div class="feature-why">Web-first is the correct v1 and v2 strategy. Mobile adds distribution reach at v3.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- V4 NETWORK -->
+  <section>
+    <h2>v4 — Network</h2>
+    <div class="phase-header">
+      <span class="phase-tag tag-v4">v4</span>
+      <h3>Network — Platform + B2B</h3>
+    </div>
+    <div class="phase-goal v4">
+      Add the network-effect features and institutional buyer layer that require PMF at scale and strategic partnerships.<br>
+      <strong style="color:var(--white)">Trigger: PMF signal at scale</strong> · Strategic partnership conversations with GCCs or MBA programs
+    </div>
+    <div class="feature-grid">
+      <div class="feature-row">
+        <div class="feature-icon">🗂️</div>
+        <div><div class="feature-name">Full archetype-matched job board</div><div class="feature-why">Owned listings. Requires recruiter network relationships — strategic, not tactical.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🤝</div>
+        <div><div class="feature-name">Recruiter network connections</div><div class="feature-why">Network effect product. Requires scale before it has value.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🏆</div>
+        <div><div class="feature-name">Alumni outcome tracking</div><div class="feature-why">Application-to-offer conversion by archetype/domain. Requires multi-month cohort data — the most powerful credibility signal when it exists.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🏛️</div>
+        <div><div class="feature-name">B2B institutional features</div><div class="feature-why">MBA cohort management, placement tracking. B2C-first is the stated position. Requires institutional buyer validation interviews first.</div></div>
+        <span class="priority-badge p2">P2</span><span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPENDENCIES -->
+  <section>
+    <h2>Dependencies Map</h2>
+    <div class="section-label">Cross-feature sequencing within v1</div>
+    <div class="dep-item">🏗️ <strong>Supabase setup</strong><span class="dep-arrow">→</span>gates all parallel feature work (week-1 gate)</div>
+    <div class="dep-item">🔐 <strong>Auth</strong><span class="dep-arrow">→</span>required before intake can save state or any personalised screen can load</div>
+    <div class="dep-item">🗄️ <strong>Archetype matching decision table (seeded in DB)</strong><span class="dep-arrow">→</span>required before archetype match output screen can be built</div>
+    <div class="dep-item">🗄️ <strong>Evidence artefact library (seeded in DB)</strong><span class="dep-arrow">→</span>required before evidence roadmap screen can be built</div>
+    <div class="dep-item">🗄️ <strong>Readiness scoring rubric (seeded in DB)</strong><span class="dep-arrow">→</span>required before readiness signal screen can be built</div>
+    <div class="dep-item">✅ <strong>Evidence log complete</strong><span class="dep-arrow">→</span>required before readiness score can update dynamically</div>
+    <div class="dep-item">🎯 <strong>Archetype match output defined</strong><span class="dep-arrow">→</span>Archetype Explorer browses and switches the same archetype model</div>
+    <div class="dep-item">📱 <strong>All core screens stable + integrated</strong><span class="dep-arrow">→</span>Stripe (tail of v1) — avoid integrating payments into a flow that may still change</div>
+
+    <div class="section-label" style="margin-top:20px">External dependencies</div>
+    <div class="dep-item">Supabase — managed service, no external approval. <strong>Start here.</strong></div>
+    <div class="dep-item">Stripe — no external gate. Integration straightforward. Sequence after core flow is stable.</div>
+    <div class="dep-item">Resend — minimal integration. Set up when auth is complete.</div>
+    <div class="dep-item">PostHog — set up per-screen as screens are built. Not bolted on at the end.</div>
+    <div class="dep-item">OpenAI API — <strong>v3 only.</strong> Not a v1 or v2 dependency.</div>
+  </section>
+
+  <!-- OPEN QUESTIONS -->
+  <section>
+    <h2>Open Questions</h2>
+    <div class="oq-item">
+      <div class="oq-label">1. Pricing model final decision</div>
+      <div class="oq-text">Freemium vs paid-upfront is deferred to Alpha WTP interviews (5–8 interviews + landing page price test at ₹999/₹1,999/₹2,999). Stripe must support both models. This decision gates Beta pricing, not Alpha — Alpha is free access for all users regardless of model.</div>
+    </div>
+    <div class="oq-item">
+      <div class="oq-label">2. Admin surface implementation</div>
+      <div class="oq-text">Retool vs custom Next.js admin route. Retool is faster to build; custom admin route keeps the tech stack simpler. Decision belongs in the architecture phase.</div>
+    </div>
+    <div class="oq-item">
+      <div class="oq-label">3. Archetype Explorer UX guard</div>
+      <div class="oq-text">The Explorer (now in v1) lets users browse all 4 archetypes and switch their target. Design must ensure it does not create a shortcut path that bypasses the structured intake — the intake match should remain the primary activation path. Needs UX design thinking before v1 feature dev begins.</div>
+    </div>
+    <div class="oq-item">
+      <div class="oq-label">4. AI PM content expertise</div>
+      <div class="oq-text">AI PM is a first-class v1 archetype. The evidence-building curriculum (eval set design, model lifecycle documentation) requires domain-expert input. Source this before v1 content is seeded.</div>
+    </div>
+    <div class="oq-item">
+      <div class="oq-label">5. Score credibility calibration</div>
+      <div class="oq-text">Does the 75/100 Apply threshold hold in Alpha? This is the most critical number to validate early. Admin tooling to change it without code deployment is already in scope — instrument it from day one.</div>
+    </div>
+  </section>
+
+  <!-- EXPLICITLY DEFERRED -->
+  <section>
+    <h2>Explicitly Deferred — Non-Goals for v1</h2>
+    <p style="margin-bottom:16px">These items appear in the PRD non-goals or are structural decisions in the decision log. They are not re-evaluated here — they stay deferred.</p>
+    <div class="deferred-grid">
+      <div class="deferred-item"><div class="deferred-name">Mock interviews / peer practice</div><div class="deferred-reason">Saturated market; not Wayfinder's territory</div></div>
+      <div class="deferred-item"><div class="deferred-name">Community features / mentorship marketplace</div><div class="deferred-reason">High effort, low differentiation at MVP; requires user volume</div></div>
+      <div class="deferred-item"><div class="deferred-name">Job board</div><div class="deferred-reason">Requires data partnerships and recruiter relationships; v4 scope</div></div>
+      <div class="deferred-item"><div class="deferred-name">Employer-facing dashboard</div><div class="deferred-reason">B2B is Phase 2; no employer-side features in v1</div></div>
+      <div class="deferred-item"><div class="deferred-name">B2B institutional buyer features</div><div class="deferred-reason">B2C-first decision; institutional buyer interviews not yet run</div></div>
+      <div class="deferred-item"><div class="deferred-name">Health tech domain</div><div class="deferred-reason">Regulatory complexity; v2 scope per PRD decision</div></div>
+      <div class="deferred-item"><div class="deferred-name">Data PM as separate archetype</div><div class="deferred-reason">Growth PM absorbs Data PM at MVP; v2 split per PRD decision</div></div>
+      <div class="deferred-item"><div class="deferred-name">Mobile app</div><div class="deferred-reason">Web-first; v3 scope per PRD decision</div></div>
+      <div class="deferred-item"><div class="deferred-name">OpenAI API</div><div class="deferred-reason">v3 feature — AI feedback on artefacts; not a v1 or v2 dependency</div></div>
+      <div class="deferred-item"><div class="deferred-name">Employer data automation pipeline</div><div class="deferred-reason">Manual quarterly rubric updates sufficient at MVP scale</div></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Wayfinder · Delivery Roadmap v1.1 · 2026-03-23 · Status: Approved ·
+  <a href="https://github.com/vcatreya-git/wayfinder">GitHub</a> ·
+  <a href="https://vcatreya-git.github.io/wayfinder/docs/discovery-infographic.html">Discovery Report</a>
+</footer>
+
+</body>
+</html>

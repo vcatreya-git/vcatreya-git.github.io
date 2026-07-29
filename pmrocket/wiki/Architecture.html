@@ -1,0 +1,621 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Architecture — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Architecture</h1>
+<h2>System Diagram</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Vercel
+        FE[Next.js Frontend -- App Router]
+        API[Next.js API Routes -- Node.js]
+    end
+
+    subgraph Neon
+        DB[(PostgreSQL + pgvector)]
+    end
+
+    subgraph External
+        CLERK[Clerk Auth]
+        LLM[LLM -- Groq / Anthropic / Google]
+        EMBED[Embeddings -- OpenAI / Voyage]
+        STRIPE[Stripe]
+        RESEND[Resend]
+        POSTHOG[PostHog]
+    end
+
+    USER[User Browser] --&gt;|HTTPS| FE
+    FE --&gt;|Auth session| CLERK
+    FE --&gt;|API calls| API
+    FE --&gt;|Analytics| POSTHOG
+    FE --&gt;|Checkout redirect| STRIPE
+
+    API --&gt;|SQL via neon driver| DB
+    API --&gt;|JWT validation| CLERK
+    API --&gt;|generateObject / generateText| LLM
+    API --&gt;|embed| EMBED
+    API --&gt;|send| RESEND
+    API --&gt;|webhooks| STRIPE
+
+    CLERK --&gt;|user.created webhook| API
+</code></pre>
+<p>Draw.io source files with full sequence and component detail are in <code>docs/diagrams/</code>. See <a href="#architecture-diagrams">Architecture Diagrams</a> below.</p>
+<hr />
+<h2>Stack Decision</h2>
+<p>The stack is split into two phases that share identical application code. The switch from personal to product phase is infrastructure configuration only — no code changes — because the app is Dockerised from day one and uses no Vercel-specific primitives.</p>
+<h3>Personal / Portfolio Phase</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tool</th>
+<th>Free Tier</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend + API</td>
+<td>Next.js on Vercel (Hobby)</td>
+<td>100 GB bandwidth/mo, unlimited deploys</td>
+<td>App Router, standard Node.js API routes only</td>
+</tr>
+<tr>
+<td>Database + pgvector</td>
+<td>Neon (free)</td>
+<td>0.5 GB storage, no pausing</td>
+<td>Serverless PostgreSQL; pgvector built-in</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Clerk (free)</td>
+<td>10,000 MAU</td>
+<td><code>@clerk/nextjs</code>; Google OAuth + email</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>Vercel AI SDK + Groq</td>
+<td>Groq free tier</td>
+<td><code>ACTIVE_LLM_PROVIDER</code> env var switches provider</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>Vercel AI SDK + OpenAI</td>
+<td>$0.02 / 1M tokens</td>
+<td><code>ACTIVE_EMBED_PROVIDER</code> env var switches provider</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Stripe</td>
+<td>2.9% + $0.30/txn</td>
+<td>No monthly fee; paywall designed, live charges deferred</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Resend</td>
+<td>3,000 emails/mo</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>PostHog Cloud</td>
+<td>1M events/mo</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Container</td>
+<td>Docker</td>
+<td>Free</td>
+<td>Written day one; same image for Vercel and ECS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Estimated cost at personal scale (&lt;100 users): ~$0/mo</strong></p>
+<h3>Product Phase (when traction warrants it)</h3>
+<table>
+<thead>
+<tr>
+<th>Personal Layer</th>
+<th>Product Equivalent</th>
+<th>Migration Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vercel</td>
+<td>AWS ECS Fargate + CloudFront</td>
+<td>Push Docker image to ECR; configure task definition</td>
+</tr>
+<tr>
+<td>Neon</td>
+<td>AWS RDS PostgreSQL + pgvector extension</td>
+<td><code>pg_dump</code> → RDS restore</td>
+</tr>
+<tr>
+<td>Clerk</td>
+<td>Clerk (unchanged)</td>
+<td>Zero — cloud-agnostic</td>
+</tr>
+<tr>
+<td>Vercel AI SDK</td>
+<td>Vercel AI SDK (unchanged)</td>
+<td>Zero — runs on any Node.js host</td>
+</tr>
+<tr>
+<td>—</td>
+<td>AWS Batch (Fargate)</td>
+<td>Add for bulk ETL, re-embedding, weekly email batch</td>
+</tr>
+<tr>
+<td>—</td>
+<td>AWS EventBridge</td>
+<td>Scheduled triggers for Batch jobs</td>
+</tr>
+<tr>
+<td>—</td>
+<td>AWS SES</td>
+<td>Replace Resend at scale</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Component Modules</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+<th>Key Routes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AuthModule</td>
+<td>User provisioning via Clerk webhook; session validation</td>
+<td><code>POST /api/webhooks/clerk</code></td>
+</tr>
+<tr>
+<td>IntakeModule</td>
+<td>Intake question delivery, response persistence, geography-dependent company type loading</td>
+<td><code>GET /api/intake-questions</code>, <code>POST /api/intake-responses</code>, <code>PATCH /api/user-profiles</code></td>
+</tr>
+<tr>
+<td>MatchingModule</td>
+<td>Compute archetype match using weighted scoring model</td>
+<td><code>POST /api/compute-match</code></td>
+</tr>
+<tr>
+<td>RoadmapModule</td>
+<td>Serve artefacts via three-pass query (universal + archetype + domain × geography)</td>
+<td><code>GET /api/artefacts</code>, <code>GET /api/evidence-log</code></td>
+</tr>
+<tr>
+<td>EvidenceModule</td>
+<td>Log evidence artefacts; persist topic_progress JSONB; compute and update readiness</td>
+<td><code>POST /api/evidence-log</code></td>
+</tr>
+<tr>
+<td>ReadinessModule</td>
+<td>Compute and retrieve readiness scores; self-heal missing scores on demand</td>
+<td><code>GET /api/readiness</code>, internal <code>computeAndSaveScore(userId)</code></td>
+</tr>
+<tr>
+<td>GapAnalysisModule</td>
+<td>RAG pipeline — embed profile, retrieve JDs, compute gap_pct, call LLM</td>
+<td><code>POST /api/gap-analysis</code>, <code>GET /api/gap-analyses</code></td>
+</tr>
+<tr>
+<td>ETLModule</td>
+<td>JD ingestion, LLM skill extraction, frequency aggregation (admin only)</td>
+<td><code>POST /api/extract-skills</code>, <code>POST /api/confirm-extraction</code>, <code>POST /api/aggregate-skill-frequency</code></td>
+</tr>
+<tr>
+<td>AdminModule</td>
+<td>CRUD on all admin tables; ETL triggers; matching weight panels</td>
+<td>All <code>/api/admin/...</code> routes</td>
+</tr>
+<tr>
+<td>DashboardModule</td>
+<td>Composite dashboard via <code>dashboard_summary_v2</code> view; stats grid + artefact counts + streak</td>
+<td><code>GET /api/dashboard</code></td>
+</tr>
+<tr>
+<td>StripeModule</td>
+<td>Subscription management, paywall enforcement</td>
+<td><code>POST /api/stripe/create-checkout</code>, <code>POST /api/stripe/webhook</code>, <code>POST /api/stripe/create-portal</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Frontend Component Hierarchy</h2>
+<p>The UI is organised around three-layer navigation: page shell, reusable components, and feature-specific UI.</p>
+<pre><code>RootLayout
+  ├── ClerkProvider
+  └── AppNav (persistent across all routes)
+      ├── PMRocket logo + branding
+      ├── &quot;Hi, {firstName} 👋&quot; greeting (click → Profile modal)
+      └── UserMenu (three-dot dropdown)
+          ├── Email
+          ├── Retake assessment
+          └── Sign out
+          └── extraItems (page-specific additions)
+
+AppShell (for authenticated routes)
+  ├── BottomNav
+  │   ├── Home (Dashboard)
+  │   ├── Roadmap
+  │   ├── Readiness
+  │   └── Apply (locked icon)
+  └── Page content
+
+Dashboard (/dashboard)
+  ├── Stats grid: Readiness | Evidence | Match scores
+  ├── Archetype panel (collapsible via greeting click)
+  ├── Score breakdown → Roadmap link
+  ├── Gamification strip: Streak | Weekly | Milestone
+  └── Coming-soon grid: V2a+ features
+
+Roadmap (/roadmap)
+  ├── Browser-tab layer navigation: Technical | Business | Portfolio | Domain | Product
+  ├── Artefact cards (scrollable grid)
+  │   ├── Artefact title + description
+  │   ├── Layer badges: Universal | Archetype | Domain/Geography
+  │   ├── Evidence status indicator
+  │   └── Log evidence button → EvidenceLogModal
+  ├── EvidenceLogModal (reusable)
+  │   ├── Progressive tier checklist (auto-split by key_topics thirds)
+  │   ├── &quot;Search to learn&quot; keyword chips
+  │   ├── Description + link fields
+  │   └── Save button (computes and updates readiness)
+  └── Score breakdown sidebar
+
+Readiness (/readiness)
+  ├── Radar chart (category breakdown)
+  ├── Score breakdown bars
+  ├── Locked AI Gap Narrative preview (V2a)
+  └── Ready-to-apply gate (hidden if gap_pct &gt; threshold)
+
+Profile (/profile)
+  ├── User avatar (initials)
+  ├── Current plan
+  ├── Archetype summary + &quot;Change →&quot; link
+  ├── Retake + sign-out shortcuts
+  └── Preferences (V2a+)
+
+---
+
+## LLM Abstraction
+
+All LLM and embedding calls go through a provider factory in `src/lib/llm.ts`. Switching providers requires no code changes — only the `ACTIVE_LLM_PROVIDER` or `ACTIVE_EMBED_PROVIDER` environment variable changes. This avoids lock-in to any single provider as the free-tier landscape evolves.
+
+```typescript
+// src/lib/llm.ts
+import { createGroq } from '@ai-sdk/groq'
+import { createAnthropic } from '@ai-sdk/anthropic'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
+import { createOpenAI } from '@ai-sdk/openai'
+
+export function getLLMModel() {
+  const provider = process.env.ACTIVE_LLM_PROVIDER ?? 'groq'
+  switch (provider) {
+    case 'anthropic':
+      return createAnthropic()('claude-sonnet-4-6')
+    case 'google':
+      return createGoogleGenerativeAI()('gemini-2.0-flash')
+    case 'groq':
+    default:
+      return createGroq()('llama-3.3-70b-versatile')
+  }
+}
+
+export function getEmbedModel() {
+  const provider = process.env.ACTIVE_EMBED_PROVIDER ?? 'openai'
+  switch (provider) {
+    case 'voyage':
+      return createOpenAI({ baseURL: 'https://api.voyageai.com/v1' })
+               .textEmbeddingModel('voyage-3-lite')
+    case 'openai':
+    default:
+      return createOpenAI().textEmbeddingModel('text-embedding-3-small')
+  }
+}
+</code></pre>
+<p>Usage pattern in any API route:</p>
+<pre><code class="language-typescript">import { generateObject, generateText, embed } from 'ai'
+import { getLLMModel, getEmbedModel } from '@/lib/llm'
+
+const { object } = await generateObject({ model: getLLMModel(), schema: SkillSchema, prompt })
+const { embedding } = await embed({ model: getEmbedModel(), value: profileText })
+</code></pre>
+<hr />
+<h2>ETL Pipeline</h2>
+<p>The admin JD ingestion pipeline keeps the curriculum grounded in real job description requirements without requiring code deployments.</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Admin pastes JD text] --&gt; B[POST /api/admin/jd-ingestion-queue]
+    B --&gt; C[POST /api/extract-skills]
+    C --&gt;|generateObject with vocabulary constraint| D[LLM Provider]
+    D --&gt; E[Extracted skills preview]
+    E --&gt; F[Admin reviews in jd_ingestion_queue UI]
+    F --&gt; G[POST /api/confirm-extraction]
+    G --&gt; H[Approve + embed JD + update skill_frequency]
+    H --&gt; I[POST /api/aggregate-skill-frequency]
+    I --&gt; J[Recalculate frequency weights for slice]
+</code></pre>
+<p>The LLM extraction prompt includes the existing <code>skill_frequency.skill_name</code> vocabulary list. This constrains output to known taxonomy terms, preventing skill name fragmentation. New skills surface as outliers for admin review rather than auto-creating new vocabulary entries.</p>
+<p>Nothing writes to the live curriculum until the admin explicitly approves at step F. At product scale, the inline API route is replaced by an AWS Batch job that returns a <code>{ jobId, status: 'queued' }</code> response — the business logic is identical.</p>
+<hr />
+<h2>Architecture Diagrams</h2>
+<p>Source <code>.drawio</code> files are in <code>docs/diagrams/</code>. Open in <a href="https://app.diagrams.net/">draw.io</a> or VS Code with the Draw.io Integration extension (<code>hediet.vscode-drawio</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Diagram</th>
+<th>Description</th>
+<th>View</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1 System Context</td>
+<td>Actors and external systems</td>
+<td><img alt="D1" src="https://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/export/01-system-context.svg" /></td>
+</tr>
+<tr>
+<td>D2 Component Blocks</td>
+<td>Logical modules — match, roadmap, gap, ETL</td>
+<td><img alt="D2" src="https://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/export/02-component-blocks.svg" /></td>
+</tr>
+<tr>
+<td>D3 Deployment</td>
+<td>Vercel + Neon + Clerk + Groq free-tier deploy</td>
+<td><img alt="D3" src="https://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/export/03-deployment-free-tier.svg" /></td>
+</tr>
+<tr>
+<td>D4 Auth Sequence</td>
+<td>Signup, Clerk webhook, lazy provision</td>
+<td><img alt="D4" src="https://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/export/04-sequence-auth.svg" /></td>
+</tr>
+<tr>
+<td>D5 Gap Analysis Sequence</td>
+<td>RAG pipeline + deterministic gap_pct</td>
+<td><img alt="D5" src="https://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/export/05-sequence-gap-analysis.svg" /></td>
+</tr>
+<tr>
+<td>D6 ETL Sequence</td>
+<td>Admin JD paste → extract → approve → embed</td>
+<td><img alt="D6" src="https://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/export/06-sequence-etl.svg" /></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Migration Strategy</h2>
+<p>All 18 migration files are pure PostgreSQL SQL with no Supabase-specific syntax. They run against Neon (or any PostgreSQL host) via a Node.js migration runner — no Supabase CLI required.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>File</th>
+<th>Purpose</th>
+<th>Breaking?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>001</td>
+<td><code>001_initial_schema.sql</code></td>
+<td>V1 base schema — users, archetypes, intake, evidence, subscriptions</td>
+<td>—</td>
+</tr>
+<tr>
+<td>002</td>
+<td><code>002_auth_user_hook.sql</code></td>
+<td>Removed — replaced by Clerk webhook</td>
+<td>—</td>
+</tr>
+<tr>
+<td>003</td>
+<td><code>003_artefact_key_topics.sql</code></td>
+<td><code>key_topics</code> array on artefacts</td>
+<td>None</td>
+</tr>
+<tr>
+<td>004</td>
+<td><code>004_enable_pgvector.sql</code></td>
+<td><code>CREATE EXTENSION IF NOT EXISTS vector</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td>005</td>
+<td><code>005_geography_type.sql</code></td>
+<td><code>geography_type</code> enum</td>
+<td>None</td>
+</tr>
+<tr>
+<td>006</td>
+<td><code>006_artefacts_v2_columns.sql</code></td>
+<td><code>layer</code>, <code>geography</code>, <code>skill_area</code>, <code>skill</code> columns</td>
+<td>None</td>
+</tr>
+<tr>
+<td>007</td>
+<td><code>007_geography_columns.sql</code></td>
+<td>Geography on <code>archetype_matches</code> + <code>user_profiles</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td>008</td>
+<td><code>008_question_weights.sql</code></td>
+<td><code>question_weights</code> table</td>
+<td>None</td>
+</tr>
+<tr>
+<td>009</td>
+<td><code>009_company_type_taxonomy.sql</code></td>
+<td><code>company_type_taxonomy</code> table + seed</td>
+<td>None</td>
+</tr>
+<tr>
+<td>010</td>
+<td><code>010_company_type_migration.sql</code></td>
+<td><code>company_type</code> enum → text</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>011</td>
+<td><code>011_etl_tables.sql</code></td>
+<td><code>jd_ingestion_queue</code>, <code>extracted_skills</code>, <code>skill_frequency</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td>012</td>
+<td><code>012_jd_embeddings.sql</code></td>
+<td><code>jd_embeddings</code> + HNSW index (m=16, ef_construction=64)</td>
+<td>None</td>
+</tr>
+<tr>
+<td>013</td>
+<td><code>013_gap_tables.sql</code></td>
+<td><code>gap_analyses</code>, <code>gap_threshold</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td>014</td>
+<td><code>014_v2_rls_policies.sql</code></td>
+<td>RLS policy definitions (defined but disabled in V2a)</td>
+<td>None</td>
+</tr>
+<tr>
+<td>015</td>
+<td><code>015_v2_dashboard_view.sql</code></td>
+<td><code>dashboard_summary_v2</code> view</td>
+<td>None</td>
+</tr>
+<tr>
+<td>016</td>
+<td><code>016_deprecate_v1_tables.sql</code></td>
+<td>V1 <code>matching_rules</code> set <code>is_active = FALSE</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td>017</td>
+<td><code>017_seed_layer1_artefacts.sql</code></td>
+<td>Layer 1 universal artefacts (AI literacy)</td>
+<td>None</td>
+</tr>
+<tr>
+<td>018</td>
+<td><code>018_seed_question_weights.sql</code></td>
+<td>Initial <code>question_weights</code> for all archetypes × questions</td>
+<td>Coordinated</td>
+</tr>
+</tbody>
+</table>
+<p>The migration runner tracks applied files in a <code>migrations</code> table and applies each in a transaction. It is safe to re-run — already-applied files are skipped.</p>
+<pre><code class="language-typescript">// scripts/migrate.ts
+import { neon } from '@neondatabase/serverless'
+import { readFileSync, readdirSync } from 'fs'
+import { join } from 'path'
+
+const sql = neon(process.env.DATABASE_URL!)
+
+async function migrate() {
+  await sql`CREATE TABLE IF NOT EXISTS migrations (
+    id SERIAL PRIMARY KEY,
+    filename TEXT NOT NULL UNIQUE,
+    applied_at TIMESTAMPTZ DEFAULT NOW()
+  )`
+
+  const applied = await sql`SELECT filename FROM migrations`
+  const appliedSet = new Set(applied.map(r =&gt; r.filename))
+
+  const files = readdirSync('./supabase/migrations').sort()
+  for (const file of files) {
+    if (appliedSet.has(file)) continue
+    const sqlText = readFileSync(join('./supabase/migrations', file), 'utf-8')
+    await sql.transaction(async tx =&gt; {
+      await tx(sqlText)
+      await tx`INSERT INTO migrations (filename) VALUES (${file})`
+    })
+    console.log(`Applied: ${file}`)
+  }
+}
+
+migrate().catch(console.error)
+</code></pre>
+<p>Run with: <code>npx tsx scripts/migrate.ts</code></p>
+<hr />
+<h2>Deployment</h2>
+<h3>Vercel</h3>
+<p>Zero-config Next.js deployment. Connect the GitHub repo in the Vercel dashboard and set environment variables. Vercel ignores the Dockerfile and builds from source for personal phase deployments.</p>
+<h3>Neon</h3>
+<ol>
+<li>Create a Neon project at neon.tech. Enable "no pausing" to prevent the database from suspending between sessions.</li>
+<li>Copy <code>DATABASE_URL</code> (connection string) to Vercel environment variables.</li>
+<li>Run migrations: <code>npx tsx scripts/migrate.ts</code></li>
+<li>Run seed: <code>npx tsx scripts/seed.ts</code></li>
+</ol>
+<p>The Neon serverless driver (<code>@neondatabase/serverless</code>) uses HTTP — no connection pool configuration is needed in a serverless environment.</p>
+<h3>Clerk</h3>
+<ol>
+<li>Create a Clerk application at clerk.com. Enable Google OAuth.</li>
+<li>Add <code>CLERK_SECRET_KEY</code> and <code>NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code> to environment variables.</li>
+<li>Wrap the root layout with <code>&lt;ClerkProvider&gt;</code>.</li>
+<li>Configure a webhook in the Clerk dashboard pointing to <code>POST /api/webhooks/clerk</code>, selecting the <code>user.created</code> event. The webhook handler provisions <code>users</code>, <code>user_profiles</code>, and <code>subscriptions</code> rows — replacing the Supabase <code>handle_new_user</code> trigger.</li>
+<li>Set admin role: Clerk Dashboard → Users → select user → <code>publicMetadata: { "role": "admin" }</code>.</li>
+</ol>
+<h3>Docker (for AWS ECS migration)</h3>
+<p>The Dockerfile is maintained from day one. Vercel ignores it during personal phase deploys. When migrating to AWS ECS Fargate, push the same image to ECR and configure a task definition — no application code changes required.</p>
+<hr />
+<h2>Key Design Decisions</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>users.id</code> is TEXT, not UUID</td>
+<td>Clerk user IDs have the format <code>user_2abc...</code> — not UUID-compatible. Storing them as TEXT is the only correct choice; all FK references to <code>users.id</code> are TEXT.</td>
+</tr>
+<tr>
+<td>Application-level auth over RLS (V2a)</td>
+<td>Stripe subscription status is asynchronous; RLS cannot reliably enforce "has active subscription." Clerk JWT + <code>WHERE user_id = $userId</code> in every route is simpler and equally correct at personal scale. RLS policies are defined in migration 014 for product phase activation.</td>
+</tr>
+<tr>
+<td>Vercel AI SDK over direct LLM APIs</td>
+<td>Provider-agnostic from day one. Switching from Groq to Anthropic, Google, or any future provider requires only an env var change — no code changes. Critical for a project whose LLM cost profile will evolve.</td>
+</tr>
+<tr>
+<td>HNSW over IVFFlat for pgvector</td>
+<td>Better recall at K=25, supports incremental inserts without reindexing. IVFFlat requires a full reindex when new JDs are added — unacceptable for an admin-operated ETL pipeline.</td>
+</tr>
+<tr>
+<td>Node.js migration runner over Supabase CLI</td>
+<td>Neon is not a Supabase project — the Supabase CLI cannot manage it. A Node.js runner using <code>@neondatabase/serverless</code> is self-contained, needs no local CLI, and runs in CI.</td>
+</tr>
+<tr>
+<td>Groq as default LLM</td>
+<td>Free tier with generous rate limits and strong structured output on Llama 3.3 70B. The <code>ACTIVE_LLM_PROVIDER</code> abstraction means this can be changed without touching code when the free-tier landscape shifts.</td>
+</tr>
+<tr>
+<td>Docker-first packaging</td>
+<td>Vercel personal deploy and AWS ECS Fargate product deploy use the same Docker image. Personal → product migration is a one-day infrastructure config task, not a code rewrite.</td>
+</tr>
+</tbody>
+</table></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

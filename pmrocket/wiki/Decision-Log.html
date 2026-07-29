@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Decision-Log — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>Decision Log — PMRocket</h1>
+<p>Key product decisions that shaped the strategy, scope, and sequencing. These are the choices that best demonstrate product thinking: problem framing, trade-off reasoning, and scope discipline.</p>
+<h2>Key decisions</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Decision</th>
+<th>Reasoning</th>
+<th>Made By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-18</td>
+<td>Primary market: North America first, India second</td>
+<td>Builder uses the product personally in North America. India remains a core market for product design, corpus, and portfolio narrative — but North America seeds first. Supersedes India-only primary framing in earlier documents.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-07-18</td>
+<td>Build strategy: thin vertical slice on free stack before full V2a surface</td>
+<td>One geography × domain × archetype slice runnable end-to-end is more valuable than partial V2a features across many slices. Full V2a docs remain design targets, not the next sprint backlog.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-07-18</td>
+<td>Stripe / live paywall deferred for Alpha</td>
+<td>Invite-only or flag-gated access is sufficient for personal use and portfolio demo. Paywall boundary is fully designed and present in the product; live charges are deferred until real traction.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-07-18</td>
+<td>Production-grade SaaS craft; free-tier runtime until traction</td>
+<td>Portfolio goal is to demonstrate PM-level product thinking and production build quality — not a toy demo. Free tiers govern cost and runtime only. Auth, ownership, migrations, paywall design, admin ops, and honest metrics are always present.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>Paywall boundary: match result free, roadmap + gap analysis paid</td>
+<td>Free: intake + archetype match + teaser ("you have X artefacts, Y gaps — locked"). Paid: full evidence roadmap, gap analysis, evidence log, readiness signal. Match result alone is useless without the roadmap — the gap creates genuine pull toward paid.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>Navigator (existing PM path) deferred to V2a.1</td>
+<td>Q16 ("Are you currently a PM?") ships in V2a for data collection only. Q17–Q19, level-filtered JDs, and goal-adjusted weights ship in V2a.1. Reduces 5+ conditional code paths from the V2a critical path. Accelerate if &gt;20% of V2a users answer Q16 = Yes.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>Minimum Viable Corpus: 4 slices, 80 JDs at Alpha</td>
+<td>Technical PM + Enterprise PM × Fintech + B2B SaaS × India = 4 slices × 20 JDs. Gap analysis is hidden for unseeded slices with an honest placeholder. Expand to Growth PM and Consumer domain post-Alpha.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>ETL vocabulary constraint</td>
+<td>LLM extraction prompt includes the existing <code>skill_frequency.skill_name</code> vocabulary list. Prevents skill name fragmentation in frequency counts. New skills surface as outliers for admin review rather than auto-creating new taxonomy entries.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-25</td>
+<td>Admin is a decision queue, not a workbench</td>
+<td>Admin interface surfaces system recommendations; admin accepts or rejects. No manual weight research, no direct JD paste workflow. Every admin screen shows a recommendation with Accept/Reject. The system originates the analysis; the admin governs it.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-22</td>
+<td>Product territory: navigation layer, not content</td>
+<td>PMRocket must own background-to-role matching + personalised roadmap + readiness signal. Building another content or curriculum platform enters saturated territory with no differentiation.</td>
+<td>discovery-agent</td>
+</tr>
+<tr>
+<td>2026-03-23</td>
+<td>Business model: B2C-first</td>
+<td>Pain is individual, not institutional. Existing candidates already pay individually for prep products. B2B institutional buyer (MBA programs, bootcamps) has misaligned incentive metrics. B2B is Phase 2.</td>
+<td>hypothesis-agent</td>
+</tr>
+<tr>
+<td>2026-07-19</td>
+<td>Feature sequencing: Intelligence → Apply → Practice → Channels</td>
+<td>Evidence is source of truth. ETL + RAG gap must exist before job packaging (Apply). Interview practice only makes sense after resume is packaged. Coaching channels last. This defends against feature creep.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-07-19</td>
+<td>Free tier vs paid boundary deferred</td>
+<td>All features free until traction justifies monetisation. Paywall is designed but not enforced. Historic candidate: match free, roadmap+gap paid. Actual enforcement waits for product-market fit signal.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-07-18</td>
+<td>Production-grade SaaS craft; free-tier runtime until traction</td>
+<td>Portfolio goal is SaaS craft at scale (problem framing, persona design, scope discipline), not toy shortcuts. Free tiers govern cost only. Auth, ownership, migrations, paywall design, and honest metrics are always present.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>Paywall boundary: match result free, roadmap + gap analysis paid</td>
+<td>Free: intake + archetype match + teaser. Paid: full roadmap, gap, evidence log, readiness signal. Match result alone is useless—the gap creates genuine willingness to pay.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>Navigator (existing PM path) deferred to V2a.1</td>
+<td>Q16 ("Are you currently a PM?") ships in V2a for data collection only. Q17–Q19, level-filtered JDs, and goal-adjusted weights arrive in V2a.1. Reduces 5+ conditional code paths from V2a. Data will trigger acceleration if needed.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-24</td>
+<td>Minimum Viable Corpus: 4 slices, 80 JDs</td>
+<td>Technical PM + Enterprise PM × Fintech + B2B SaaS × India = 4 slices × 20 JDs. Gap analysis hidden for unseeded slices (honest placeholder). Expand post-Alpha based on demand, not calendar.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-03-25</td>
+<td>Admin philosophy: decision-maker, not researcher</td>
+<td>Admin interface surfaces system recommendations; admin accepts or rejects. System originates analysis; admin governs. This scales admin work without growing headcount.</td>
+<td>Venkat</td>
+</tr>
+<tr>
+<td>2026-07-18</td>
+<td>Primary market: North America first, India second</td>
+<td>Builder uses product personally in NA. India is core for design and portfolio narrative but launches second. Updated from earlier India-first framing.</td>
+<td>Venkat</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>See also</h2>
+<p><a href="Product-Overview.html">Product Overview</a> • <a href="Roadmap.html">Roadmap</a> • <a href="Feature-Map.html">Feature Map</a></p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>

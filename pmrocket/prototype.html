@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMRocket V2 — Polished Prototype (Phase 7c)</title>
+<style>
+  :root {
+    --primary: #0D9488;
+    --primary-dark: #0F766E;
+    --accent: #14B8A6;
+    --primary-light: #CCFBF1;
+    --success: #059669;
+    --success-bg: #D1FAE5;
+    --warning: #D97706;
+    --warning-bg: #FEF3C7;
+    --error: #DC2626;
+    --error-bg: #FEE2E2;
+    --zinc-50: #FAFAF9;
+    --zinc-100: #F4F4F5;
+    --zinc-200: #E4E4E7;
+    --zinc-300: #D4D4D8;
+    --zinc-400: #A1A1AA;
+    --zinc-500: #71717A;
+    --zinc-600: #52525B;
+    --zinc-700: #3F3F46;
+    --zinc-800: #27272A;
+    --zinc-900: #18181B;
+    --white: #FFFFFF;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-xl: 20px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+    --shadow-lg: 0 20px 48px rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.05);
+    --gradient-cta: linear-gradient(135deg, #0D9488 0%, #0891B2 100%);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--zinc-50);
+    color: var(--zinc-900);
+    min-height: 100vh;
+  }
+
+  .proto-banner {
+    background: var(--primary-light);
+    color: var(--primary);
+    text-align: center;
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(13,148,136,0.15);
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--white);
+    position: relative;
+    padding-bottom: 64px;
+  }
+  @media (min-width: 560px) {
+    body { background: linear-gradient(150deg, #EEEEFF 0%, #F5F0FF 50%, #EEF2FF 100%); }
+    .app { max-width: 390px; min-height: 100vh; box-shadow: 0 0 0 1px rgba(13,148,136,0.08), 0 24px 64px rgba(13,148,136,0.1), 0 8px 24px rgba(0,0,0,0.06); }
+  }
+
+  .screen { display: none; min-height: calc(100vh - 96px); opacity: 0; transition: opacity 0.25s ease; }
+  .screen.active { display: flex; flex-direction: column; opacity: 1; }
+
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--zinc-100);
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+    position: sticky; top: 32px; z-index: 50;
+  }
+  .nav-logo { font-size: 18px; font-weight: 700; color: var(--zinc-900); letter-spacing: -0.02em; }
+  .nav-logo span { background: var(--gradient-cta); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-back { font-size: 14px; font-weight: 500; color: var(--primary); cursor: pointer; background: none; border: none; font-family: inherit; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 14px 28px; border-radius: 100px; font-size: 15px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.18s ease; text-decoration: none;
+    width: 100%; letter-spacing: -0.01em; font-family: inherit;
+  }
+  .btn-primary { background: var(--gradient-cta); color: var(--white); box-shadow: 0 2px 12px rgba(13,148,136,0.28); }
+  .btn-primary:hover { box-shadow: 0 4px 20px rgba(13,148,136,0.38); transform: translateY(-1px); }
+  .btn-primary:disabled { background: var(--zinc-200); color: var(--zinc-400); cursor: not-allowed; box-shadow: none; transform: none; }
+  .btn-secondary { background: var(--white); color: var(--primary); border: 1.5px solid var(--zinc-200); box-shadow: var(--shadow); }
+  .btn-secondary:hover { background: var(--primary-light); border-color: var(--primary); }
+  .btn-ghost { background: transparent; color: var(--zinc-500); font-weight: 500; font-size: 14px; }
+  .btn-sm { padding: 8px 18px; font-size: 13px; width: auto; }
+  .btn-google { background: var(--white); color: var(--zinc-700); border: 1.5px solid var(--zinc-200); font-weight: 500; box-shadow: var(--shadow); }
+  .btn-accept { background: var(--success); color: white; border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-accept:hover { background: #047857; }
+  .btn-dismiss { background: var(--zinc-100); color: var(--zinc-500); border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-dismiss:hover { background: var(--zinc-200); }
+  .btn-adjust { background: var(--warning-bg); color: var(--warning); border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-retire { background: var(--error-bg); color: var(--error); border: none; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+  .card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--zinc-200); padding: 20px; box-shadow: var(--shadow-md); }
+  .card-highlight { background: var(--primary-light); border-color: #C4B5FD; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--zinc-700); margin-bottom: 6px; }
+  .form-input, .form-textarea, .form-select {
+    width: 100%; padding: 12px 14px; border: 1.5px solid var(--zinc-200); border-radius: var(--radius-sm);
+    font-size: 15px; font-family: inherit; color: var(--zinc-900); transition: border-color 0.15s; background: var(--white);
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; background: var(--primary-light); color: var(--primary); }
+  .chip-success { background: var(--success-bg); color: var(--success); }
+  .chip-amber { background: var(--warning-bg); color: var(--warning); }
+  .chip-error { background: var(--error-bg); color: var(--error); }
+
+  .progress-bar { height: 6px; background: var(--zinc-100); border-radius: 100px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gradient-cta); border-radius: 100px; transition: width 0.3s ease; }
+
+  .page { padding: 24px 20px; flex: 1; }
+  .page-tight { padding: 16px 20px; flex: 1; }
+
+  .h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+  .h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .h3 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .body { font-size: 15px; line-height: 1.65; color: var(--zinc-700); }
+  .small { font-size: 13px; color: var(--zinc-500); }
+  .caption { font-size: 12px; color: var(--zinc-400); }
+
+  .divider { height: 1px; background: var(--zinc-100); margin: 20px 0; }
+  .divider-text { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--zinc-400); font-size: 13px; }
+  .divider-text::before, .divider-text::after { content: ''; flex: 1; height: 1px; background: var(--zinc-200); }
+
+  .bottom-bar { padding: 16px 20px 24px; border-top: 1px solid var(--zinc-100); background: var(--white); position: sticky; bottom: 64px; }
+
+  .bottom-nav {
+    display: none; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 390px; background: var(--white); border-top: 1px solid var(--zinc-200);
+    z-index: 100; padding: 6px 0 env(safe-area-inset-bottom, 8px);
+  }
+  .bottom-nav.visible { display: flex; }
+  .bottom-nav-inner { display: flex; width: 100%; }
+  .nav-tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 8px 4px; font-size: 10px; font-weight: 500; color: var(--zinc-400);
+    cursor: pointer; border: none; background: none; transition: color 0.15s; font-family: inherit;
+  }
+  .nav-tab.active { color: var(--primary); font-weight: 700; }
+  .nav-tab.active svg { stroke-width: 2.5; }
+  .nav-tab svg { width: 22px; height: 22px; }
+
+  .tab-bar { display: flex; border-bottom: 1px solid var(--zinc-200); background: var(--white); overflow-x: auto; }
+  .tab-item {
+    flex: 1; padding: 12px 8px; text-align: center; font-size: 13px; font-weight: 500;
+    color: var(--zinc-500); cursor: pointer; border-bottom: 2px solid transparent;
+    white-space: nowrap; transition: all 0.15s;
+  }
+  .tab-item.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+  .intake-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .intake-option {
+    display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 14px;
+    border: 1.5px solid var(--zinc-200); border-radius: var(--radius-sm); cursor: pointer;
+    text-align: left; font-size: 14px; font-weight: 500; background: var(--white);
+    color: var(--zinc-700); transition: all 0.15s ease; font-family: inherit;
+  }
+  .intake-option:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+  .intake-option.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+  .intake-check {
+    width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--zinc-300);
+    display: flex; align-items: center; justify-content: center; font-size: 11px;
+    font-weight: 700; flex-shrink: 0; color: transparent; background: var(--white); transition: all 0.15s ease;
+  }
+  .intake-option.selected .intake-check { background: var(--primary); border-color: var(--primary); color: white; }
+
+  .skill-row { padding: 12px 0; border-bottom: 1px solid var(--zinc-100); }
+  .skill-row:last-child { border-bottom: none; }
+  .skill-name { font-size: 14px; font-weight: 500; color: var(--zinc-700); margin-bottom: 8px; }
+  .skill-levels { display: flex; gap: 6px; }
+  .skill-btn {
+    flex: 1; padding: 7px 4px; border-radius: 8px; font-size: 11px; font-weight: 600; text-align: center;
+    border: 1.5px solid var(--zinc-200); background: var(--white); color: var(--zinc-500);
+    cursor: pointer; transition: all 0.12s ease; font-family: inherit;
+  }
+  .skill-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+  .skill-btn.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+
+  .artefact-card {
+    background: var(--white); border: 1px solid var(--zinc-200); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s;
+  }
+  .artefact-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+  .artefact-card .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .artefact-card .status-dot.logged { background: var(--success); }
+  .artefact-card .status-dot.not-logged { background: var(--zinc-300); }
+
+  .effort-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; background: var(--zinc-100); color: var(--zinc-500); }
+
+  .layer-header {
+    border-radius: 12px; padding: 14px 16px;
+    margin-bottom: 12px; margin-top: 24px;
+  }
+  .layer-header:first-child { margin-top: 0; }
+  .layer-header h3 { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  .layer-header p { font-size: 12px; opacity: 0.8; }
+  .layer-header.layer-1 { background: linear-gradient(135deg, #eef2ff, #e0e7ff); border-left: 4px solid #6366f1; }
+  .layer-header.layer-1 h3 { color: #4338ca; }
+  .layer-header.layer-1 p { color: #6366f1; }
+  .layer-header.layer-2 { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-left: 4px solid #22c55e; }
+  .layer-header.layer-2 h3 { color: #15803d; }
+  .layer-header.layer-2 p { color: #22c55e; }
+  .layer-header.layer-3 { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-left: 4px solid #f97316; }
+  .layer-header.layer-3 h3 { color: #c2410c; }
+  .layer-header.layer-3 p { color: #f97316; }
+
+  .gap-card {
+    background: var(--white); border: 1px solid var(--zinc-200); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 10px;
+  }
+  .gap-card.gap-high { border-left: 4px solid var(--error); }
+  .gap-card.gap-medium { border-left: 4px solid var(--warning); }
+  .gap-card.gap-low { border-left: 4px solid var(--success); }
+
+  .radar-container { position: relative; width: 100%; max-width: 260px; margin: 0 auto; }
+  .radar-container svg { width: 100%; height: auto; }
+
+  .decision-card {
+    background: var(--white); border: 1px solid var(--zinc-200); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow);
+  }
+  .decision-type {
+    display: inline-flex; font-size: 10px; font-weight: 700; padding: 3px 8px;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;
+  }
+  .type-etl { background: #DBEAFE; color: #1D4ED8; }
+  .type-skill { background: #D1FAE5; color: #059669; }
+  .type-weight { background: #FEF3C7; color: #D97706; }
+  .type-retire { background: #FEE2E2; color: #DC2626; }
+
+  .sparkline { display: inline-block; vertical-align: middle; }
+
+  .curriculum-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 10px 0;
+    border-bottom: 1px solid var(--zinc-100); cursor: pointer;
+  }
+  .curriculum-row:last-child { border-bottom: none; }
+
+  .decisions-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--error-bg); color: var(--error); font-size: 13px; font-weight: 600;
+    padding: 6px 14px; border-radius: 100px;
+  }
+
+  .badge-earned {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; padding: 4px 10px; border-radius: 100px; font-weight: 600;
+  }
+  .badge-locked {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; padding: 4px 10px; border-radius: 100px; font-weight: 500;
+    border: 1px dashed var(--zinc-300); background: var(--zinc-50); color: var(--zinc-400);
+  }
+
+  .settings-dropdown {
+    display: none; background: white; border: 1px solid var(--zinc-200); border-radius: 10px;
+    padding: 4px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: absolute; right: 20px; top: 52px; z-index: 60; min-width: 180px;
+  }
+  .settings-dropdown.show { display: block; }
+  .settings-dropdown button {
+    display: block; width: 100%; text-align: left; padding: 10px 14px; background: none;
+    border: none; cursor: pointer; font-size: 13px; color: var(--zinc-700); border-radius: 8px; font-family: inherit;
+  }
+  .settings-dropdown button:hover { background: var(--zinc-50); }
+
+  .hero-section {
+    background: radial-gradient(ellipse at 10% 0%, rgba(139,92,246,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 40%, rgba(99,102,241,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(167,139,250,0.06) 0%, transparent 50%), #FAFAF9;
+    padding: 44px 24px 40px;
+  }
+  .hero-headline { font-size: 36px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.12; color: var(--zinc-900); margin-bottom: 16px; }
+  .hero-subtext { font-size: 15px; line-height: 1.65; color: var(--zinc-500); }
+
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; background: rgba(17,24,39,0.6);
+    backdrop-filter: blur(4px); z-index: 500; align-items: flex-end; justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--white); border-radius: 16px 16px 0 0; padding: 24px 20px 32px;
+    width: 100%; max-width: 390px; max-height: 85vh; overflow-y: auto; animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--zinc-400); padding: 4px; }
+
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--zinc-900); color: var(--white); padding: 10px 18px; border-radius: 100px;
+    font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.3s ease; z-index: 600; white-space: nowrap;
+    max-width: 360px; text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { width: 48px; height: 48px; border: 3px solid var(--primary-light); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+
+  .section-header {
+    font-size: 11px; font-weight: 700; color: var(--zinc-400); letter-spacing: 0.06em;
+    text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--zinc-100);
+  }
+
+  .pricing-toggle {
+    display: flex; background: var(--zinc-100); border-radius: 100px; padding: 3px; margin: 0 auto; width: fit-content;
+  }
+  .pricing-toggle-btn {
+    padding: 8px 24px; border-radius: 100px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; background: transparent; color: var(--zinc-500); transition: all 0.15s; font-family: inherit;
+  }
+  .pricing-toggle-btn.active { background: var(--white); color: var(--zinc-900); box-shadow: var(--shadow); }
+
+  .feature-check { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
+  .feature-check .check-icon { color: var(--success); font-weight: 700; flex-shrink: 0; font-size: 16px; }
+
+  @keyframes confettiFall { 0% { top:-30px; opacity:1; transform:rotate(0deg); } 100% { top:110%; opacity:0; transform:rotate(360deg); } }
+  @keyframes popIn { 0% { transform:translate(-50%,-50%) scale(0.5); opacity:0; } 100% { transform:translate(-50%,-50%) scale(1); opacity:1; } }
+</style>
+</head>
+<body>
+
+<div class="proto-banner">PMRocket V2 Polished Prototype &mdash; Phase 7c &mdash; clickable demo, no real data</div>
+
+<div class="app" id="app">
+
+<!-- ========== SCREEN: LANDING ========== -->
+<div class="screen active" id="s-landing">
+  <nav class="nav">
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <button class="nav-back" onclick="go('s-auth-signin')">Sign in</button>
+  </nav>
+  <div class="hero-section">
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:var(--primary-light);border:1px solid rgba(13,148,136,0.18);border-radius:100px;font-size:12px;font-weight:600;color:var(--primary);margin-bottom:20px;">Career Navigation for PMs</div>
+    <div class="hero-headline">Stop wandering.<br>Start navigating.</div>
+    <p class="hero-subtext">Know exactly which PM role to target, what to build, and when you're ready &mdash; grounded in what employers actually require.</p>
+  </div>
+  <div class="page" style="display:flex;flex-direction:column;gap:16px;padding-top:24px;">
+    <div style="font-size:11px;font-weight:700;color:var(--zinc-400);letter-spacing:0.06em;text-transform:uppercase;">How it works</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">1</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--zinc-800);">Intake</div><div class="caption">5-7 min assessment about your background and skills</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">2</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--zinc-800);">Match</div><div class="caption">Get your PM archetype with confidence scoring</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">3</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--zinc-800);">Roadmap</div><div class="caption">Personalised evidence roadmap across 3 curriculum layers</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">4</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--zinc-800);">Gap Analysis</div><div class="caption">Market-grounded gap % powered by real JD data</div></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--zinc-400);text-align:center;margin-top:8px;">Built for SWEs, MBAs, Consultants, POs, and BAs</p>
+    <div class="divider"></div>
+    <div style="text-align:center;">
+      <div class="caption" style="margin-bottom:8px;">[Competitor comparison table placeholder]</div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:16px;padding:12px 0;">
+      <span class="caption">Privacy</span>
+      <span class="caption">Terms</span>
+    </div>
+  </div>
+  <div class="bottom-bar" style="bottom:0;">
+    <button class="btn btn-primary" onclick="go('s-auth')">Find my PM archetype</button>
+    <div style="margin-top:10px;text-align:center;">
+      <span class="small">Already have an account? </span>
+      <button class="btn-ghost btn" style="display:inline;width:auto;padding:0;font-size:14px;color:var(--primary);" onclick="go('s-auth-signin')">Sign in</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: AUTH (SIGN UP) ========== -->
+<div class="screen" id="s-auth">
+  <nav class="nav">
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <button class="nav-back" onclick="go('s-landing')">Back</button>
+  </nav>
+  <div class="page">
+    <div class="tab-bar" style="margin:-24px -20px 24px;">
+      <div class="tab-item active" id="tab-signup">Create account</div>
+      <div class="tab-item" id="tab-signin" onclick="go('s-auth-signin')">Sign in</div>
+    </div>
+    <button class="btn btn-google" style="margin-bottom:16px;" onclick="go('s-onboarding')">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+    <div class="divider-text">or</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" placeholder="email@example.com" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" placeholder="8+ characters" />
+    </div>
+    <div class="form-group" style="display:flex;align-items:flex-start;gap:10px;">
+      <input type="checkbox" style="margin-top:3px;accent-color:var(--primary);" checked/>
+      <span class="small" style="color:var(--zinc-500);">I agree to the Terms of Service and Privacy Policy</span>
+    </div>
+    <button class="btn btn-primary" onclick="go('s-onboarding')">Sign Up</button>
+  </div>
+</div>
+
+<!-- ========== SCREEN: AUTH (SIGN IN) ========== -->
+<div class="screen" id="s-auth-signin">
+  <nav class="nav">
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <button class="nav-back" onclick="go('s-landing')">Back</button>
+  </nav>
+  <div class="page">
+    <div class="tab-bar" style="margin:-24px -20px 24px;">
+      <div class="tab-item" onclick="go('s-auth')">Create account</div>
+      <div class="tab-item active">Sign in</div>
+    </div>
+    <button class="btn btn-google" style="margin-bottom:16px;" onclick="showBottomNav();go('s-dashboard')">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+    <div class="divider-text">or</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" placeholder="email@example.com" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" placeholder="Your password" />
+    </div>
+    <button class="btn btn-primary" onclick="showBottomNav();go('s-dashboard')">Sign In</button>
+  </div>
+</div>
+
+<!-- ========== SCREEN: ONBOARDING ========== -->
+<div class="screen" id="s-onboarding">
+  <nav class="nav">
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <span></span>
+  </nav>
+  <div class="page" style="display:flex;flex-direction:column;gap:28px;">
+    <div>
+      <p class="small" style="margin-bottom:8px;color:var(--primary);font-weight:600;">Welcome, Alex</p>
+      <h1 class="h1" style="margin-bottom:12px;">Your PM career navigation starts here</h1>
+      <p class="body">Five to seven minutes is all it takes to get your archetype match, personalised roadmap, and market-grounded gap analysis.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      <div style="display:flex;gap:14px;align-items:flex-start;padding-bottom:18px;position:relative;">
+        <div style="width:30px;height:30px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;z-index:1;">1</div>
+        <div style="padding-top:3px;"><div class="h3" style="margin-bottom:3px;">Take the intake</div><div class="small">15 questions (up to 19 for existing PMs). No wrong answers.</div></div>
+        <div style="position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--zinc-100);"></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start;padding-bottom:18px;position:relative;">
+        <div style="width:30px;height:30px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;z-index:1;">2</div>
+        <div style="padding-top:3px;"><div class="h3" style="margin-bottom:3px;">Get your archetype match</div><div class="small">We map your background to your best-fit PM archetype.</div></div>
+        <div style="position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--zinc-100);"></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start;padding-bottom:18px;position:relative;">
+        <div style="width:30px;height:30px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;z-index:1;">3</div>
+        <div style="padding-top:3px;"><div class="h3" style="margin-bottom:3px;">Build your roadmap</div><div class="small">Personalised evidence roadmap with 3 curriculum layers.</div></div>
+        <div style="position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--zinc-100);"></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:30px;height:30px;background:var(--gradient-cta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">4</div>
+        <div style="padding-top:3px;"><div class="h3" style="margin-bottom:3px;">Close your gaps</div><div class="small">Market-grounded gap analysis powered by real JD data.</div></div>
+      </div>
+    </div>
+    <div class="card card-highlight">
+      <p class="small" style="color:var(--primary-dark);">Your answers are saved automatically. Pause and resume anytime.</p>
+    </div>
+  </div>
+  <div class="bottom-bar" style="bottom:0;">
+    <button class="btn btn-primary" onclick="intakeStart()">Start my intake</button>
+    <button class="btn btn-ghost" style="margin-top:8px;" onclick="showToast('Progress saved. You\'ll resume here on next login.');setTimeout(function(){go('s-landing')},1500)">I'll do this later</button>
+  </div>
+</div>
+
+<!-- ========== SCREEN: INTAKE ========== -->
+<div class="screen" id="s-intake">
+  <div style="padding:12px 20px 14px;background:white;border-bottom:1px solid var(--zinc-100);position:sticky;top:32px;z-index:50;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <button id="intake-back-btn" onclick="intakeBack()" style="font-size:13px;font-weight:500;color:var(--primary);background:none;border:none;cursor:pointer;visibility:hidden;font-family:inherit;">Back</button>
+      <span class="small" id="intake-counter" style="font-weight:500;">Q1 of 16</span>
+      <button class="nav-back" style="font-size:13px;" onclick="showToast('Saved at Q' + (intakeStep+1) + '. Dashboard locked until intake + subscription complete.')">Save &amp; exit</button>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="intake-progress" style="width:6%;"></div></div>
+  </div>
+  <div class="page" id="intake-body"></div>
+  <div class="bottom-bar" style="bottom:0;">
+    <button class="btn btn-primary" id="intake-next" disabled onclick="intakeNext()">Next</button>
+  </div>
+</div>
+
+<!-- ========== SCREEN: COMPUTING ========== -->
+<div class="screen" id="s-computing">
+  <nav class="nav">
+    <span></span>
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <span></span>
+  </nav>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px 20px;">
+    <div class="spinner"></div>
+    <p class="h3" style="color:var(--zinc-800);">Computing your match...</p>
+    <p class="small">Analysing your responses against market data</p>
+    <button class="btn btn-ghost" style="margin-top:16px;font-size:12px;" onclick="go('s-match');setTimeout(showMatchResult,100);">[ auto-advance in real app ]</button>
+  </div>
+</div>
+
+<!-- ========== SCREEN: MATCH RESULT ========== -->
+<div class="screen" id="s-match">
+  <div id="match-loading" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px 20px;">
+    <div class="spinner"></div>
+    <p class="small">Computing your archetype match...</p>
+  </div>
+  <div id="match-result" style="display:none;flex-direction:column;flex:1;">
+    <div style="background: radial-gradient(ellipse at 20% 60%, rgba(13,148,136,0.18) 0%, transparent 60%), radial-gradient(ellipse at 85% 10%, rgba(13,148,136,0.12) 0%, transparent 55%), var(--primary-light); padding:32px 20px 28px; border-bottom: 1px solid rgba(13,148,136,0.12);">
+      <p style="font-size:12px;font-weight:600;color:var(--primary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.04em;">Your PM archetype</p>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+        <div style="font-size:30px;font-weight:700;color:var(--zinc-900);letter-spacing:-0.02em;">Technical PM</div>
+        <div style="background:var(--primary);color:white;padding:6px 14px;border-radius:100px;font-size:13px;font-weight:600;flex-shrink:0;box-shadow:0 2px 8px rgba(13,148,136,0.3);">87% match</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:10px;">
+        <span style="font-size:20px;">&#127470;&#127475;</span>
+        <span class="small" style="font-weight:600;color:var(--primary-dark);">For PM roles in India</span>
+      </div>
+    </div>
+    <div class="page" style="flex:1;">
+      <div class="card card-highlight" style="margin-bottom:16px;">
+        <div class="h3" style="margin-bottom:8px;">Why this matches you</div>
+        <p class="small" style="color:var(--zinc-700);line-height:1.6;">Your engineering background and technical depth make you a strong fit for Technical PM roles, particularly in B2B SaaS companies.</p>
+      </div>
+      <div class="card" style="background:var(--zinc-50);margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;">
+            <div class="small" style="font-weight:600;margin-bottom:2px;">Also consider: AI PM</div>
+            <div class="caption">62% match</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--warning-bg);border:1.5px solid #FCD34D;border-radius:var(--radius);padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:var(--zinc-900);margin-bottom:4px;">18 <span style="font-size:15px;font-weight:500;color:var(--zinc-500);">artefacts</span> &nbsp; 12 <span style="font-size:15px;font-weight:500;color:var(--zinc-500);">critical gaps</span></div>
+        <p class="small" style="margin-bottom:16px;color:var(--zinc-600);">Unlock your full roadmap and gap analysis</p>
+        <button class="btn btn-primary" onclick="go('s-paywall')">See my roadmap</button>
+      </div>
+      <button class="btn btn-secondary" style="margin-top:12px;" onclick="go('s-explorer')">Explore all archetypes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: PAYWALL ========== -->
+<div class="screen" id="s-paywall">
+  <nav class="nav">
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <button class="nav-back" onclick="go('s-match');showMatchResult()">Back</button>
+  </nav>
+  <div class="page" style="display:flex;flex-direction:column;gap:20px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="chip">Technical PM</span>
+      <span class="chip" style="background:var(--zinc-100);color:var(--zinc-600);">India</span>
+    </div>
+    <div>
+      <h2 class="h2" style="margin-bottom:8px;">Your roadmap to Technical PM in India is ready</h2>
+      <p class="small">Everything you need to go from aspiring to applying.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="feature-check"><span class="check-icon">&#10003;</span><span class="small" style="color:var(--zinc-700);">18 artefacts across 3 curriculum layers</span></div>
+      <div class="feature-check"><span class="check-icon">&#10003;</span><span class="small" style="color:var(--zinc-700);">Gap analysis powered by real JDs</span></div>
+      <div class="feature-check"><span class="check-icon">&#10003;</span><span class="small" style="color:var(--zinc-700);">Evidence logging + market-grounded readiness signal</span></div>
+    </div>
+    <div class="pricing-toggle" id="pricing-toggle">
+      <button class="pricing-toggle-btn active" onclick="setPricing('monthly')">Monthly</button>
+      <button class="pricing-toggle-btn" onclick="setPricing('annual')">Annual</button>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <div class="card" style="flex:1;text-align:center;padding:16px;">
+        <div style="font-size:11px;font-weight:600;color:var(--zinc-400);text-transform:uppercase;margin-bottom:8px;">Monthly</div>
+        <div style="font-size:28px;font-weight:700;color:var(--zinc-900);">$X<span style="font-size:14px;color:var(--zinc-500);font-weight:400;">/mo</span></div>
+        <div class="caption" style="margin-top:4px;">Most flexible</div>
+      </div>
+      <div class="card" style="flex:1;text-align:center;padding:16px;border-color:var(--primary);">
+        <div style="font-size:11px;font-weight:600;color:var(--primary);text-transform:uppercase;margin-bottom:8px;">Annual</div>
+        <div style="font-size:28px;font-weight:700;color:var(--zinc-900);">$X<span style="font-size:14px;color:var(--zinc-500);font-weight:400;">/yr</span></div>
+        <div class="caption" style="margin-top:4px;color:var(--success);font-weight:600;">Best value &mdash; save Y%</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="showBottomNav();go('s-roadmap')">Subscribe (Stripe Checkout)</button>
+    <button class="btn btn-ghost" onclick="go('s-match');showMatchResult()">Not ready to commit?</button>
+    <div style="display:flex;justify-content:center;gap:16px;">
+      <span class="caption">Cancel anytime</span>
+      <span class="caption">Your data is always yours</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: ROADMAP ========== -->
+<div class="screen" id="s-roadmap">
+  <nav class="nav">
+    <div class="nav-logo">My Roadmap</div>
+    <button class="nav-back" onclick="go('s-dashboard')">Dashboard</button>
+  </nav>
+  <div style="padding:10px 20px;background:var(--primary-light);border-bottom:1px solid rgba(13,148,136,0.12);">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="chip" style="font-size:11px;">Technical PM</span>
+        <span class="chip" style="font-size:11px;background:var(--zinc-100);color:var(--zinc-600);">B2B SaaS</span>
+        <span style="font-size:16px;">&#127470;&#127475;</span>
+      </div>
+      <span class="small" style="color:var(--primary);font-weight:600;">5 / 18 done</span>
+    </div>
+  </div>
+  <div style="padding:12px 20px;">
+    <button class="btn btn-primary" style="font-size:14px;padding:12px;" onclick="go('s-gap')">Analyse my gaps</button>
+  </div>
+  <div style="padding:0 20px 8px;">
+    <div class="progress-bar" style="height:8px;"><div class="progress-fill" style="width:28%;"></div></div>
+    <div class="caption" style="margin-top:4px;">5 of 18 artefacts complete</div>
+  </div>
+  <div class="page-tight" style="overflow-y:auto;padding-top:0;">
+    <!-- Layer 1 -->
+    <div class="layer-header layer-1">
+      <h3>Layer 1 &mdash; Universal Skills</h3>
+      <p>Every PM needs these regardless of archetype</p>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('AI Literacy Primer','AI Literacy Primer')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">AI Literacy Primer</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">LLMs, prompt engineering, AI ethics</p>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <span style="font-size:10px;padding:2px 6px;background:var(--zinc-100);border-radius:100px;color:var(--zinc-500);">LLMs</span>
+            <span style="font-size:10px;padding:2px 6px;background:var(--zinc-100);border-radius:100px;color:var(--zinc-500);">Prompt design</span>
+          </div>
+        </div>
+        <span class="effort-badge">2h</span>
+      </div>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('Metrics Framework','Metrics Framework')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">Metrics Framework</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">North star, input/output metrics, dashboards</p>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <span style="font-size:10px;padding:2px 6px;background:var(--zinc-100);border-radius:100px;color:var(--zinc-500);">KPIs</span>
+            <span style="font-size:10px;padding:2px 6px;background:var(--zinc-100);border-radius:100px;color:var(--zinc-500);">North Star</span>
+          </div>
+        </div>
+        <span class="effort-badge">3h</span>
+      </div>
+    </div>
+    <div class="artefact-card" style="background:var(--zinc-50);border-color:var(--success);opacity:0.7;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="status-dot logged"></div>
+        <span style="font-size:14px;font-weight:600;color:var(--zinc-500);">Communication Doc</span>
+        <span class="caption" style="margin-left:auto;">Completed &middot; Strong</span>
+      </div>
+    </div>
+
+    <!-- Layer 2 -->
+    <div class="layer-header layer-2">
+      <h3>Layer 2 &mdash; Technical PM Skills</h3>
+      <p>Core to your Technical PM path</p>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('System Design Case Study','System Design Case Study')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">System Design Case Study</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">Scalability, API design, trade-offs</p>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <span style="font-size:10px;padding:2px 6px;background:var(--zinc-100);border-radius:100px;color:var(--zinc-500);">Architecture</span>
+            <span style="font-size:10px;padding:2px 6px;background:var(--zinc-100);border-radius:100px;color:var(--zinc-500);">Trade-offs</span>
+          </div>
+        </div>
+        <span class="effort-badge">5h</span>
+      </div>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('Technical Spec Document','Technical Spec Document')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">Technical Spec Document</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">RFC format, scope, dependencies</p>
+        </div>
+        <span class="effort-badge">4h</span>
+      </div>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('Data Pipeline Analysis','Data Pipeline Analysis')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">Data Pipeline Analysis</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">ETL, data quality, monitoring</p>
+        </div>
+        <span class="effort-badge">3h</span>
+      </div>
+    </div>
+
+    <!-- Layer 3 -->
+    <div class="layer-header layer-3">
+      <h3>Layer 3 &mdash; Fintech in India</h3>
+      <p>Specific to Fintech PM roles in India</p>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('UPI Integration Case Study','UPI Integration Case Study')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">UPI Integration Case Study</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">UPI, payment flows, RBI compliance</p>
+        </div>
+        <span class="effort-badge">4h</span>
+      </div>
+    </div>
+    <div class="artefact-card" onclick="openEvidenceModal('KYC Flow Redesign','KYC Flow Redesign')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="status-dot not-logged"></div>
+            <span style="font-size:14px;font-weight:600;">KYC Flow Redesign</span>
+          </div>
+          <p class="caption" style="margin-bottom:8px;">eKYC, conversion, regulatory</p>
+        </div>
+        <span class="effort-badge">3h</span>
+      </div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: GAP ANALYSIS ========== -->
+<div class="screen" id="s-gap">
+  <nav class="nav">
+    <div class="nav-logo">Gap Analysis</div>
+    <button class="nav-back" onclick="go('s-dashboard')">Dashboard</button>
+  </nav>
+  <div class="page-tight" style="overflow-y:auto;">
+    <!-- Gap % hero -->
+    <div class="card" style="text-align:center;padding:24px 20px;margin-bottom:16px;background:linear-gradient(135deg, rgba(217,119,6,0.06) 0%, rgba(217,119,6,0.02) 100%);">
+      <div style="font-size:56px;font-weight:800;color:var(--warning);letter-spacing:-0.04em;line-height:1;">38%</div>
+      <div style="font-size:14px;color:var(--zinc-600);margin-top:6px;font-weight:500;">gap remaining</div>
+      <div style="font-size:12px;color:var(--success);margin-top:6px;font-weight:600;">Closed 7% since last analysis (was 45%)</div>
+    </div>
+
+    <!-- Corpus credibility -->
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--primary-light);padding:8px 16px;border-radius:100px;border:1px solid rgba(13,148,136,0.15);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span style="font-size:12px;font-weight:600;color:var(--primary);">Based on 47 Technical PM JDs in Fintech in India</span>
+      </div>
+    </div>
+
+    <!-- Skills conquered + Critical countdown -->
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div class="card" style="flex:1;text-align:center;padding:14px;">
+        <div class="caption" style="text-transform:uppercase;letter-spacing:0.04em;font-weight:600;margin-bottom:4px;">Skills Demonstrated</div>
+        <div style="font-size:24px;font-weight:800;color:var(--zinc-800);">12 / 18</div>
+        <div style="background:var(--zinc-100);border-radius:100px;height:6px;margin-top:6px;overflow:hidden;">
+          <div style="width:67%;height:100%;background:var(--success);border-radius:100px;"></div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;text-align:center;padding:14px;">
+        <div class="caption" style="text-transform:uppercase;letter-spacing:0.04em;font-weight:600;margin-bottom:4px;">Critical Skills Left</div>
+        <div style="font-size:24px;font-weight:800;color:var(--error);">3</div>
+        <div class="caption" style="margin-top:6px;">Must close before "Ready to Apply"</div>
+      </div>
+    </div>
+
+    <!-- Top 3 gaps -->
+    <div class="h3" style="margin-bottom:12px;">Top 3 Gaps</div>
+    <div class="gap-card gap-high">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:15px;font-weight:600;">System Design Case Study</span>
+        <span class="chip chip-error" style="font-size:11px;">87% of JDs</span>
+      </div>
+      <div class="caption" style="margin-bottom:6px;">Skill: System Design | No evidence</div>
+      <div class="small" style="color:var(--zinc-600);margin-bottom:10px;">Build a system design case study to demonstrate this skill</div>
+      <button class="btn btn-sm btn-secondary" onclick="go('s-roadmap')">Start this artefact</button>
+    </div>
+    <div class="gap-card gap-high">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:15px;font-weight:600;">Data Pipeline Analysis</span>
+        <span class="chip chip-error" style="font-size:11px;">72% of JDs</span>
+      </div>
+      <div class="caption" style="margin-bottom:6px;">Skill: Data Engineering | No evidence</div>
+      <div class="small" style="color:var(--zinc-600);margin-bottom:10px;">Build a data pipeline analysis to demonstrate this skill</div>
+      <button class="btn btn-sm btn-secondary" onclick="go('s-roadmap')">Start this artefact</button>
+    </div>
+    <div class="gap-card gap-medium">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:15px;font-weight:600;">UPI Integration Case Study</span>
+        <span class="chip chip-amber" style="font-size:11px;">65% of JDs</span>
+      </div>
+      <div class="caption" style="margin-bottom:6px;">Skill: Payment Systems | No evidence</div>
+      <div class="small" style="color:var(--zinc-600);margin-bottom:10px;">Build a UPI case study to demonstrate domain expertise</div>
+      <button class="btn btn-sm btn-secondary" onclick="go('s-roadmap')">Start this artefact</button>
+    </div>
+
+    <!-- Ready-to-apply checklist -->
+    <div class="card" style="margin-top:16px;border-left:4px solid var(--error);">
+      <div class="caption" style="text-transform:uppercase;letter-spacing:0.04em;font-weight:600;margin-bottom:6px;">Ready-to-Apply Status</div>
+      <div style="font-size:13px;font-weight:600;color:var(--zinc-800);margin-bottom:8px;">Not yet &mdash; 2 conditions remaining:</div>
+      <div style="font-size:12px;color:var(--error);margin-bottom:4px;">&#10007; Gap must be &le; 30% (currently 38%)</div>
+      <div style="font-size:12px;color:var(--error);margin-bottom:4px;">&#10007; 3 critical skills need at least basic evidence</div>
+      <div class="caption" style="margin-top:8px;">Close your top 3 gaps to unlock the "Ready to Apply" badge</div>
+    </div>
+
+    <p style="font-size:11px;color:var(--zinc-400);margin-top:16px;text-align:center;">Gap analysis is based on your self-reported evidence against real JD requirements.</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+      <button class="btn btn-sm btn-secondary" onclick="showToast('Refreshing analysis...')">Refresh analysis</button>
+      <span class="caption">Last analysed: 26 Mar 2026</span>
+    </div>
+    <button class="btn btn-ghost" style="margin-top:8px;font-size:13px;" onclick="go('s-roadmap')">View roadmap</button>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: DASHBOARD ========== -->
+<div class="screen" id="s-dashboard">
+  <nav class="nav" style="position:relative;">
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <span style="font-size:13px;font-weight:500;color:var(--zinc-500);">Dashboard</span>
+    <button onclick="toggleSettings()" style="background:none;border:1px solid var(--zinc-200);border-radius:8px;cursor:pointer;padding:4px 8px;display:flex;align-items:center;gap:4px;font-size:11px;color:var(--zinc-500);font-weight:500;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+    <div class="settings-dropdown" id="settings-dropdown">
+      <button onclick="hideSettings();retakeAssessment();">Retake assessment</button>
+      <button onclick="hideSettings();go('s-explorer');">Change archetype</button>
+    </div>
+  </nav>
+  <div class="page-tight" style="overflow-y:auto;">
+    <!-- Archetype chips -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+      <span class="chip" style="font-size:11px;">Technical PM</span>
+      <span class="chip" style="font-size:11px;background:var(--zinc-100);color:var(--zinc-600);">B2B SaaS</span>
+      <span style="font-size:16px;">&#127470;&#127475;</span>
+      <button class="nav-back" style="font-size:11px;margin-left:auto;" onclick="go('s-explorer')">[change]</button>
+    </div>
+
+    <!-- Streak + Weekly Goal + Badges row -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div class="card" style="flex:1;text-align:center;padding:12px 8px;">
+        <div style="font-size:20px;">&#128293;</div>
+        <div style="font-size:18px;font-weight:800;color:var(--zinc-800);">3</div>
+        <div class="caption">day streak</div>
+      </div>
+      <div class="card" style="flex:1;text-align:center;padding:12px 8px;">
+        <div style="font-size:20px;">&#127919;</div>
+        <div style="font-size:18px;font-weight:800;color:var(--zinc-800);">2/3</div>
+        <div class="caption">weekly goal</div>
+      </div>
+      <div class="card" style="flex:1;text-align:center;padding:12px 8px;">
+        <div style="font-size:20px;">&#11088;</div>
+        <div style="font-size:18px;font-weight:800;color:var(--zinc-800);">4</div>
+        <div class="caption">badges earned</div>
+      </div>
+    </div>
+
+    <!-- Milestone badges (earned + locked) -->
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;">
+      <span class="badge-earned" style="border:1px solid var(--success);background:var(--success-bg);color:#15803d;">&#127793; First Evidence</span>
+      <span class="badge-earned" style="border:1px solid #f59e0b;background:#fffbeb;color:#b45309;">&#9889; 5 Artefacts</span>
+      <span class="badge-earned" style="border:1px solid #6366f1;background:#eef2ff;color:#4338ca;">&#128202; First Gap Analysis</span>
+      <span class="badge-earned" style="border:1px solid #8b5cf6;background:#f5f3ff;color:#6d28d9;">&#127942; Gap &lt; 50%</span>
+      <span class="badge-locked">&#128274; Gap &lt; 30%</span>
+      <span class="badge-locked">&#128274; Ready to Apply</span>
+    </div>
+
+    <!-- Next milestone -->
+    <div style="font-size:12px;color:var(--zinc-600);margin-bottom:16px;padding:8px 12px;background:var(--zinc-50);border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;">
+      <strong>Next milestone:</strong> Log 1 more artefact to earn "Active Builder" badge &#127959;
+    </div>
+
+    <!-- Gap % hero -->
+    <div class="card" style="margin-bottom:20px;text-align:center;padding:24px 20px;background:linear-gradient(135deg, rgba(217,119,6,0.06) 0%, rgba(217,119,6,0.02) 100%);">
+      <div style="font-size:56px;font-weight:800;color:var(--warning);letter-spacing:-0.04em;line-height:1;">38%</div>
+      <div style="font-size:15px;color:var(--zinc-600);margin-top:6px;font-weight:500;">gap remaining</div>
+      <div style="margin-top:8px;"><span class="chip chip-amber">Significant gaps remain</span></div>
+      <button class="btn btn-primary" style="margin-top:18px;font-size:14px;padding:12px;" onclick="go('s-gap')">Analyse my gaps</button>
+    </div>
+
+    <!-- Radar chart -->
+    <div class="h3" style="margin-bottom:12px;">Skill profile</div>
+    <div class="card" style="margin-bottom:20px;padding:16px;">
+      <div class="radar-container" id="dashboard-radar"></div>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:10px;">
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:2px;background:rgba(13,148,136,0.3);"></div><span class="caption">You</span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:2px;border-top:2px dashed var(--zinc-400);"></div><span class="caption">Ideal</span></div>
+      </div>
+    </div>
+
+    <!-- Top gaps -->
+    <div class="h3" style="margin-bottom:10px;">Top gaps</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--zinc-50);border-radius:var(--radius-sm);">
+        <span style="font-size:13px;font-weight:500;color:var(--zinc-700);">System Design Case Study</span>
+        <span class="chip chip-error" style="font-size:11px;">87% of JDs</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--zinc-50);border-radius:var(--radius-sm);">
+        <span style="font-size:13px;font-weight:500;color:var(--zinc-700);">Data Pipeline Analysis</span>
+        <span class="chip chip-error" style="font-size:11px;">72% of JDs</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--zinc-50);border-radius:var(--radius-sm);">
+        <span style="font-size:13px;font-weight:500;color:var(--zinc-700);">UPI Integration Case Study</span>
+        <span class="chip chip-amber" style="font-size:11px;">65% of JDs</span>
+      </div>
+    </div>
+
+    <!-- Progress by layer -->
+    <div class="h3" style="margin-bottom:12px;">Roadmap Progress</div>
+    <div style="margin-bottom:20px;">
+      <div class="progress-bar" style="height:8px;margin-bottom:4px;"><div class="progress-fill" style="width:28%;"></div></div>
+      <div style="display:flex;justify-content:space-between;">
+        <span class="caption">5 / 18 artefacts complete</span>
+        <span class="caption">L1: 2/5 | L2: 2/7 | L3: 1/6</span>
+      </div>
+    </div>
+
+    <!-- Next artefact -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="caption" style="text-transform:uppercase;letter-spacing:0.04em;font-weight:600;margin-bottom:6px;">Next up</div>
+      <div style="font-size:14px;font-weight:500;color:var(--zinc-700);margin-bottom:10px;">System Design Case Study</div>
+      <div class="caption" style="margin-bottom:10px;">Highest priority incomplete artefact</div>
+      <button class="btn btn-sm btn-primary" onclick="openEvidenceModal('System Design Case Study','System Design Case Study')">Mark complete</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+      <button class="btn btn-secondary" style="font-size:12px;padding:10px;" onclick="go('s-roadmap')">Roadmap</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:10px;" onclick="go('s-gap')">Gap Analysis</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:10px;" onclick="go('s-explorer')">Explorer</button>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- ========== SCREEN: ARCHETYPE EXPLORER ========== -->
+<div class="screen" id="s-explorer">
+  <nav class="nav">
+    <button class="nav-back" onclick="go('s-dashboard')">&#8592; Dashboard</button>
+    <div class="nav-logo">PM<span>Rocket</span></div>
+    <span></span>
+  </nav>
+  <div class="page-tight" style="overflow-y:auto;">
+    <h2 class="h2" style="margin-bottom:4px;">Explore Archetypes</h2>
+    <p class="small" style="margin-bottom:16px;color:var(--zinc-500);">Tap any archetype to switch. Your evidence is preserved.</p>
+
+    <div class="card" style="margin-bottom:10px;border:2px solid var(--primary);position:relative;">
+      <div style="position:absolute;top:8px;right:12px;font-size:9px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;">Current match</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:24px;">&#128295;</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--zinc-800);">Technical PM</div>
+          <div class="small" style="color:var(--primary);">87% match confidence</div>
+        </div>
+      </div>
+      <p class="small" style="color:var(--zinc-600);margin-bottom:8px;">Engineering backgrounds, API-first products, system design. Common in India at startups + enterprises.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:10px;cursor:pointer;" onclick="confirmSwitch('Growth PM')">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:24px;">&#128200;</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--zinc-800);">Growth PM</div>
+          <div class="small" style="color:var(--zinc-500);">54% match confidence</div>
+        </div>
+      </div>
+      <p class="small" style="color:var(--zinc-600);">Experimentation, funnel analysis, A/B testing. Common in India at startups + scale-ups.</p>
+      <button class="btn btn-sm btn-secondary" style="margin-top:10px;" onclick="event.stopPropagation();confirmSwitch('Growth PM')">Switch to this archetype</button>
+    </div>
+
+    <div class="card" style="margin-bottom:10px;cursor:pointer;" onclick="confirmSwitch('Enterprise PM')">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:24px;">&#127970;</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--zinc-800);">Enterprise PM</div>
+          <div class="small" style="color:var(--zinc-500);">48% match confidence</div>
+        </div>
+      </div>
+      <p class="small" style="color:var(--zinc-600);">Stakeholder management, enterprise deals, compliance. Common in India at enterprises + GCCs.</p>
+      <button class="btn btn-sm btn-secondary" style="margin-top:10px;" onclick="event.stopPropagation();confirmSwitch('Enterprise PM')">Switch to this archetype</button>
+    </div>
+
+    <div class="card" style="margin-bottom:10px;cursor:pointer;" onclick="confirmSwitch('AI PM')">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:24px;">&#129302;</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--zinc-800);">AI PM</div>
+          <div class="small" style="color:var(--zinc-500);">62% match confidence</div>
+        </div>
+      </div>
+      <p class="small" style="color:var(--zinc-600);">ML pipelines, data strategy, AI ethics. Common in India at scale-ups + big tech.</p>
+      <button class="btn btn-sm btn-secondary" style="margin-top:10px;" onclick="event.stopPropagation();confirmSwitch('AI PM')">Switch to this archetype</button>
+    </div>
+
+    <p class="small" style="text-align:center;color:var(--zinc-400);margin-top:12px;">Switching preserves all logged evidence. Your roadmap and gap analysis will recalibrate.</p>
+  </div>
+</div>
+
+<!-- ========== SCREEN: ADMIN ========== -->
+<div class="screen" id="s-admin">
+  <nav class="nav" style="background:#1E1B4B;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="nav-logo" style="color:white;">PM<span style="background:none;-webkit-text-fill-color:white;">Rocket</span></div>
+      <span style="background:rgba(255,255,255,0.15);color:white;font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;">ADMIN</span>
+    </div>
+    <button class="nav-back" style="color:rgba(255,255,255,0.7);font-size:13px;" onclick="go('s-dashboard')">Back to app</button>
+  </nav>
+  <div class="tab-bar">
+    <div class="tab-item active" id="admin-tab-decisions" onclick="adminTabSwitch('decisions')">Decisions</div>
+    <div class="tab-item" id="admin-tab-curriculum" onclick="adminTabSwitch('curriculum')">Curriculum</div>
+    <div class="tab-item" id="admin-tab-etl" onclick="adminTabSwitch('etl')">ETL Jobs</div>
+  </div>
+
+  <!-- Decisions panel -->
+  <div class="page-tight" id="admin-panel-decisions">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div class="h3">Intelligence Queue</div>
+      <div class="decisions-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        5 decisions
+      </div>
+    </div>
+
+    <!-- ETL run decision -->
+    <div class="decision-card" id="dc-etl">
+      <div class="decision-type type-etl">ETL RUN</div>
+      <div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin-bottom:6px;">Run ETL extraction on 12 new Fintech JDs</div>
+      <div class="small" style="margin-bottom:10px;color:var(--zinc-600);">12 JDs queued from India Fintech corpus. Estimated 40-60 skills to extract.</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-accept" onclick="document.getElementById('dc-etl').style.cssText='opacity:0.4;pointer-events:none';showToast('ETL pipeline started')">Accept</button>
+        <button class="btn-dismiss" onclick="document.getElementById('dc-etl').style.cssText='opacity:0.4;pointer-events:none';showToast('Dismissed')">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- New skill decision with impact preview + auto-chain -->
+    <div class="decision-card" id="dc-skill">
+      <div class="decision-type type-skill">NEW SKILL</div>
+      <div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin-bottom:6px;">Add "Prompt Engineering" to Technical PM curriculum</div>
+      <div class="small" style="margin-bottom:8px;color:var(--zinc-600);">Detected in 34% of recent Technical PM JDs. Not currently in curriculum. Trending upward.</div>
+      <div style="margin-bottom:10px;">
+        <svg class="sparkline" width="120" height="28" viewBox="0 0 120 28">
+          <polyline fill="none" stroke="var(--success)" stroke-width="2" points="0,24 15,22 30,20 45,18 60,14 75,10 90,7 105,5 120,3"/>
+          <polyline fill="none" stroke="var(--zinc-200)" stroke-width="1" stroke-dasharray="3,3" points="0,14 120,14"/>
+        </svg>
+        <span class="caption" style="margin-left:8px;">12-week trend</span>
+      </div>
+      <div style="background:var(--zinc-50);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--zinc-600);">
+        <div style="font-weight:600;color:var(--zinc-700);margin-bottom:4px;">Impact preview</div>
+        <div>Appears in: Technical PM (82%), AI PM (89%)</div>
+        <div style="margin-top:4px;">Affected users: 47 active users will see this artefact added</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-accept" onclick="document.getElementById('dc-skill').innerHTML=adminChainSkill();">Accept</button>
+        <button class="btn-dismiss" onclick="document.getElementById('dc-skill').style.cssText='opacity:0.4;pointer-events:none';showToast('Dismissed')">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- Weight adjust decision with impact preview -->
+    <div class="decision-card" id="dc-weight">
+      <div class="decision-type type-weight">WEIGHT ADJUST</div>
+      <div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin-bottom:6px;">Increase Q3 weight for AI PM: 4 &#8594; 6</div>
+      <div class="small" style="margin-bottom:8px;color:var(--zinc-600);">AI PM match distribution is skewed low. Q3 (technical depth) correlates with AI PM JD requirements.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span class="caption">Affected:</span>
+        <span class="chip" style="font-size:10px;">AI PM</span>
+        <span class="caption">Current: <strong>4</strong> &#8594; Recommended: <strong>6</strong></span>
+      </div>
+      <div style="background:var(--zinc-50);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--zinc-600);">
+        <div style="font-weight:600;color:var(--zinc-700);margin-bottom:4px;">Impact preview</div>
+        <div>If applied: 3 users shift Growth PM &#8594; AI PM</div>
+        <div style="margin-top:4px;">Distribution change: Technical 34% | Growth <span style="color:var(--error);">28&#8594;25%</span> | AI <span style="color:var(--success);">16&#8594;19%</span></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-accept" onclick="document.getElementById('dc-weight').style.cssText='opacity:0.4;pointer-events:none';showToast('Weight updated: 4 &rarr; 6 for AI PM')">Accept (4&#8594;6)</button>
+        <button class="btn-adjust" onclick="openWeightEditor('dc-weight',this.parentElement,6)">Adjust</button>
+        <button class="btn-dismiss" onclick="document.getElementById('dc-weight').style.cssText='opacity:0.4;pointer-events:none';showToast('Dismissed')">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- Retire decision with impact preview -->
+    <div class="decision-card" id="dc-retire">
+      <div class="decision-type type-retire">RETIRE</div>
+      <div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin-bottom:6px;">Retire "Waterfall Planning Doc" from Enterprise PM</div>
+      <div class="small" style="margin-bottom:8px;color:var(--zinc-600);">Frequency dropped from 45% to 8% over last 6 months. 3 users have evidence logged.</div>
+      <div style="margin-bottom:10px;">
+        <svg class="sparkline" width="120" height="28" viewBox="0 0 120 28">
+          <polyline fill="none" stroke="var(--error)" stroke-width="2" points="0,6 15,8 30,10 45,13 60,16 75,19 90,21 105,23 120,24"/>
+          <polyline fill="none" stroke="var(--zinc-200)" stroke-width="1" stroke-dasharray="3,3" points="0,14 120,14"/>
+        </svg>
+        <span class="caption" style="margin-left:8px;">12-week trend</span>
+      </div>
+      <div style="background:var(--zinc-50);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--zinc-600);">
+        <div style="font-weight:600;color:var(--zinc-700);margin-bottom:4px;">Impact preview</div>
+        <div>3 users have evidence logged (preserved &mdash; still counts)</div>
+        <div style="margin-top:4px;">Artefact removed from active roadmaps. No user data deleted.</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-retire" onclick="document.getElementById('dc-retire').innerHTML=adminChainRetire();">Retire</button>
+        <button class="btn-dismiss" onclick="document.getElementById('dc-retire').style.cssText='opacity:0.4;pointer-events:none';showToast('Kept in curriculum')">Keep</button>
+      </div>
+    </div>
+
+    <!-- New skill decision -->
+    <div class="decision-card" id="dc-skill2">
+      <div class="decision-type type-skill">NEW SKILL</div>
+      <div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin-bottom:6px;">Add "API-First Product Design" to Technical PM</div>
+      <div class="small" style="margin-bottom:10px;color:var(--zinc-600);">Detected in 28% of recent JDs. Related to existing "System Design" skill but distinct enough to warrant separate artefact.</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-accept" onclick="document.getElementById('dc-skill2').style.cssText='opacity:0.4;pointer-events:none';showToast('Skill added to Technical PM')">Accept</button>
+        <button class="btn-dismiss" onclick="document.getElementById('dc-skill2').style.cssText='opacity:0.4;pointer-events:none';showToast('Dismissed')">Dismiss</button>
+      </div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- Curriculum Browser panel -->
+  <div class="page-tight" id="admin-panel-curriculum" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <input type="text" placeholder="Search skills..." style="width:100%;padding:10px 14px;border:1px solid var(--zinc-200);border-radius:10px;font-size:13px;color:var(--zinc-800);outline:none;font-family:inherit;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--zinc-200)'">
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+      <button style="font-size:11px;padding:4px 10px;border-radius:100px;border:1px solid var(--primary);background:rgba(99,102,241,0.08);color:var(--primary);cursor:pointer;font-weight:600;">All domains</button>
+      <button style="font-size:11px;padding:4px 10px;border-radius:100px;border:1px solid var(--zinc-200);background:white;color:var(--zinc-600);cursor:pointer;">India</button>
+      <button style="font-size:11px;padding:4px 10px;border-radius:100px;border:1px solid var(--zinc-200);background:white;color:var(--zinc-600);cursor:pointer;">Technical PM</button>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <div style="flex:1;background:var(--zinc-50);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--zinc-800);">24</div>
+        <div style="font-size:10px;color:var(--zinc-500);">Active</div>
+      </div>
+      <div style="flex:1;background:var(--zinc-50);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--success);">3</div>
+        <div style="font-size:10px;color:var(--zinc-500);">Trending</div>
+      </div>
+      <div style="flex:1;background:var(--zinc-50);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--error);">2</div>
+        <div style="font-size:10px;color:var(--zinc-500);">Declining</div>
+      </div>
+    </div>
+    <div class="tab-bar" style="margin:-16px -20px 16px;">
+      <div class="tab-item active" id="cur-tab-trending" onclick="curTab('trending')">Trending</div>
+      <div class="tab-item" id="cur-tab-stable" onclick="curTab('stable')">Stable</div>
+      <div class="tab-item" id="cur-tab-declining" onclick="curTab('declining')">Declining</div>
+    </div>
+
+    <div id="cur-panel-trending">
+      <div class="curriculum-row" onclick="openSkillDetail('Prompt Engineering')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">Prompt Engineering</div>
+          <div class="caption">34% freq | Trending UP</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--success);">&#9650; +12</span>
+          <button onclick="event.stopPropagation();openSkillDetail('Prompt Engineering')" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--zinc-400);">&#8943;</button>
+        </div>
+      </div>
+      <div class="curriculum-row" onclick="openSkillDetail('API-First Design')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">API-First Design</div>
+          <div class="caption">28% freq | Trending UP</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--success);">&#9650; +8</span>
+          <button onclick="event.stopPropagation();openSkillDetail('API-First Design')" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--zinc-400);">&#8943;</button>
+        </div>
+      </div>
+      <div class="curriculum-row" onclick="openSkillDetail('GenAI Integration')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">GenAI Integration</div>
+          <div class="caption">22% freq | Trending UP</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--success);">&#9650; +6</span>
+          <button onclick="event.stopPropagation();openSkillDetail('GenAI Integration')" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--zinc-400);">&#8943;</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cur-panel-stable" style="display:none;">
+      <div class="curriculum-row" onclick="openSkillDetail('System Design')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">System Design</div>
+          <div class="caption">87% freq | Stable</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--zinc-400);">&mdash; 0</span>
+          <button onclick="event.stopPropagation();openSkillDetail('System Design')" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--zinc-400);">&#8943;</button>
+        </div>
+      </div>
+      <div class="curriculum-row" onclick="openSkillDetail('Metrics Framework')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">Metrics Framework</div>
+          <div class="caption">79% freq | Stable</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--zinc-400);">&mdash; 0</span>
+          <button onclick="event.stopPropagation();openSkillDetail('Metrics Framework')" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--zinc-400);">&#8943;</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cur-panel-declining" style="display:none;">
+      <div class="curriculum-row" onclick="openSkillDetail('Waterfall Planning')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">Waterfall Planning</div>
+          <div class="caption">8% freq | Declining</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--error);">&#9660; -14</span>
+          <span class="chip chip-error" style="font-size:10px;padding:3px 8px;">Review</span>
+        </div>
+      </div>
+      <div class="curriculum-row" onclick="openSkillDetail('Manual QA Processes')">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--zinc-800);">Manual QA Processes</div>
+          <div class="caption">12% freq | Declining</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--error);">&#9660; -10</span>
+          <span class="chip chip-error" style="font-size:10px;padding:3px 8px;">Review</span>
+        </div>
+      </div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- ETL Jobs panel -->
+  <div class="page-tight" id="admin-panel-etl" style="display:none;">
+    <div class="h3" style="margin-bottom:12px;">Latest ETL Run</div>
+    <div style="background:var(--zinc-50);border-radius:12px;padding:14px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:13px;font-weight:600;color:var(--zinc-800);">Run #47 &mdash; In Progress</span>
+        <span style="font-size:11px;font-weight:600;color:var(--warning);background:rgba(245,158,11,0.1);padding:2px 8px;border-radius:100px;">In Progress</span>
+      </div>
+      <div style="background:var(--zinc-200);border-radius:100px;height:8px;margin-bottom:8px;overflow:hidden;">
+        <div style="width:62%;height:100%;background:linear-gradient(to right,#6366f1,#8b5cf6);border-radius:100px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--zinc-500);margin-bottom:12px;">
+        <span>8 / 12 JDs processed</span>
+        <span>Started: 2026-03-26 10:32</span>
+      </div>
+      <div style="font-size:12px;color:var(--zinc-600);">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="color:var(--success);">&#10003;</span> <span>Step 1: Fetch JDs &mdash; 12/12 done</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="color:var(--warning);">&#9203;</span> <span>Step 2: Extract Skills (Claude) &mdash; 8/12 done</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="color:var(--zinc-300);">&#9675;</span> <span>Step 3: Embed JDs (OpenAI) &mdash; 0/12 pending</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--zinc-300);">&#9675;</span> <span>Step 4: Update Frequencies &mdash; pending</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:600;color:var(--zinc-700);margin-bottom:8px;">Failures (1)</div>
+    <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:10px 12px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:var(--zinc-800);">JD #1042 &mdash; Extraction Failed</div>
+          <div style="font-size:11px;color:var(--error);margin-top:2px;">Claude API timeout after 30s</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-left:8px;">
+          <button onclick="showToast('Retrying JD #1042...')" style="font-size:11px;font-weight:600;color:var(--primary);background:none;border:1px solid var(--primary);border-radius:6px;padding:4px 10px;cursor:pointer;">Retry</button>
+          <button onclick="showToast('Skipping JD #1042')" style="font-size:11px;font-weight:600;color:var(--zinc-500);background:none;border:1px solid var(--zinc-200);border-radius:6px;padding:4px 10px;cursor:pointer;">Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:600;color:var(--zinc-700);margin-bottom:8px;">Previous Runs</div>
+    <div style="background:var(--zinc-50);border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--zinc-700);">Run #46 &mdash; 25 Mar 2026</div>
+        <div style="font-size:11px;color:var(--zinc-500);">20 JDs | 58 skills extracted | 0 failures</div>
+      </div>
+      <span style="font-size:11px;font-weight:600;color:var(--success);background:rgba(34,197,94,0.1);padding:2px 8px;border-radius:100px;">Complete</span>
+    </div>
+    <div style="background:var(--zinc-50);border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--zinc-700);">Run #45 &mdash; 24 Mar 2026</div>
+        <div style="font-size:11px;color:var(--zinc-500);">15 JDs | 42 skills extracted | 1 failure (skipped)</div>
+      </div>
+      <span style="font-size:11px;font-weight:600;color:var(--success);background:rgba(34,197,94,0.1);padding:2px 8px;border-radius:100px;">Complete</span>
+    </div>
+    <div style="background:var(--zinc-50);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--zinc-700);">Run #44 &mdash; 23 Mar 2026</div>
+        <div style="font-size:11px;color:var(--zinc-500);">18 JDs | 51 skills extracted | 0 failures</div>
+      </div>
+      <span style="font-size:11px;font-weight:600;color:var(--success);background:rgba(34,197,94,0.1);padding:2px 8px;border-radius:100px;">Complete</span>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- Signal tab = Gap Analysis per decision log. No separate screen needed. -->
+
+<!-- ========== MODAL: EVIDENCE LOG ========== -->
+<div class="modal-backdrop" id="evidence-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="h3">Log Evidence</div>
+      <button class="modal-close" onclick="closeEvidenceModal()">&times;</button>
+    </div>
+    <div style="background:var(--zinc-50);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;">
+      <span style="font-size:14px;font-weight:600;color:var(--zinc-800);" id="modal-artefact-name">Artefact Name</span>
+    </div>
+    <div class="form-label" style="margin-bottom:4px;">Topics by level &mdash; cover topics to claim that level</div>
+    <div id="evidence-topics-by-level" style="margin-bottom:12px;">
+      <!-- populated by JS -->
+    </div>
+    <div id="evidence-computed-level" style="text-align:center;padding:10px;margin-bottom:12px;font-size:13px;font-weight:600;border:2px dashed var(--zinc-300);border-radius:var(--radius-sm);background:var(--zinc-50);color:var(--zinc-500);">
+      Check off topics above to determine your level
+    </div>
+    <!-- Previous activity timeline -->
+    <div id="evidence-timeline" style="margin-bottom:12px;">
+      <!-- populated by JS on open -->
+    </div>
+
+    <div id="evidence-note-toggle" style="margin-bottom:8px;">
+      <button onclick="var s=document.getElementById('evidence-note-section');s.style.display=s.style.display==='none'?'block':'none';this.textContent=s.style.display==='none'?'+ Add a note (optional)':'- Hide note'" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--primary);font-weight:600;padding:0;">+ Add a note (optional)</button>
+    </div>
+    <div id="evidence-note-section" style="display:none;">
+      <div class="form-group">
+        <textarea class="form-textarea" id="evidence-desc" placeholder="What did you do this session?" maxlength="200" style="height:48px;"></textarea>
+      </div>
+      <div class="form-group">
+        <input class="form-input" id="evidence-link" type="url" placeholder="Link (optional) https://..." />
+      </div>
+    </div>
+    <button class="btn btn-primary" id="evidence-log-btn" onclick="saveEvidence()">Save progress</button>
+    <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeEvidenceModal()">Close</button>
+  </div>
+</div>
+
+<!-- ========== MODAL: ARCHETYPE SWITCH CONFIRMATION ========== -->
+<div class="modal-backdrop" id="switch-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="h3">Switch Archetype</div>
+      <button class="modal-close" onclick="closeSwitchModal()">&times;</button>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:600;color:var(--zinc-800);margin-bottom:6px;" id="switch-target">Switch to &mdash;</div>
+      <p class="small" style="color:var(--zinc-600);">Your evidence is preserved. Your roadmap and gap analysis will recalibrate to the new archetype.</p>
+    </div>
+    <button class="btn btn-primary" onclick="closeSwitchModal();go('s-match');setTimeout(showMatchResult,100);showToast('Archetype switched — review your new match');">Confirm switch</button>
+    <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeSwitchModal()">Cancel</button>
+    <p class="caption" style="margin-top:12px;text-align:center;">You'll see your updated match result. Paid features require an active subscription.</p>
+  </div>
+</div>
+
+<!-- ========== MODAL: RETAKE ASSESSMENT CONFIRMATION ========== -->
+<div class="modal-backdrop" id="retake-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="h3">Retake Assessment</div>
+      <button class="modal-close" onclick="closeRetakeModal()">&times;</button>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <p class="small" style="color:var(--zinc-600);">This will reset your archetype match. Your logged evidence is preserved but your roadmap will change. Continue?</p>
+    </div>
+    <button class="btn btn-primary" onclick="closeRetakeModal();intakeStart();">Yes, retake</button>
+    <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeRetakeModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- ========== SKILL DETAIL BOTTOM SHEET ========== -->
+<div id="skill-detail-overlay" onclick="if(event.target===this)closeSkillDetail()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:150;justify-content:center;align-items:flex-end;">
+  <div style="width:390px;max-height:70vh;background:white;border-radius:16px 16px 0 0;padding:20px;overflow-y:auto;animation:slideUp 0.25s ease;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;color:var(--zinc-800);" id="skill-detail-name">Skill Name</div>
+      <button onclick="closeSkillDetail()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--zinc-400);">&#10005;</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div style="flex:1;background:var(--zinc-50);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--zinc-800);">34%</div>
+        <div style="font-size:10px;color:var(--zinc-500);">Frequency</div>
+      </div>
+      <div style="flex:1;background:var(--zinc-50);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--success);">UP</div>
+        <div style="font-size:10px;color:var(--zinc-500);">Trend +12%</div>
+      </div>
+      <div style="flex:1;background:var(--zinc-50);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--primary);">5</div>
+        <div style="font-size:10px;color:var(--zinc-500);">Weight</div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:600;color:var(--zinc-700);margin-bottom:8px;">Adjust weight</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <input type="range" min="0" max="10" value="5" style="flex:1;" oninput="this.nextElementSibling.textContent=this.value">
+        <span style="font-size:18px;font-weight:800;color:var(--primary);min-width:24px;text-align:center;">5</span>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:600;color:var(--zinc-700);margin-bottom:6px;">Archetype toggles</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <label style="font-size:12px;display:flex;align-items:center;gap:8px;color:var(--zinc-600);"><input type="checkbox" checked style="accent-color:var(--primary);"> Technical PM</label>
+        <label style="font-size:12px;display:flex;align-items:center;gap:8px;color:var(--zinc-600);"><input type="checkbox" style="accent-color:var(--primary);"> Growth PM</label>
+        <label style="font-size:12px;display:flex;align-items:center;gap:8px;color:var(--zinc-600);"><input type="checkbox" style="accent-color:var(--primary);"> Enterprise PM</label>
+        <label style="font-size:12px;display:flex;align-items:center;gap:8px;color:var(--zinc-600);"><input type="checkbox" checked style="accent-color:var(--primary);"> AI PM</label>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1;font-size:12px;padding:10px;" onclick="closeSkillDetail();showToast('Weight saved')">Save weight</button>
+      <button style="flex:1;font-size:12px;padding:10px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;color:var(--error);font-weight:600;cursor:pointer;font-family:inherit;" onclick="closeSkillDetail();showToast('Skill retired — evidence preserved')">Retire skill</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button style="flex:1;font-size:12px;padding:10px;background:var(--zinc-100);border:none;border-radius:8px;color:var(--zinc-700);font-weight:600;cursor:pointer;font-family:inherit;" onclick="closeSkillDetail();adminTabSwitch('decisions');showToast('Showing decisions for this skill')">View in decisions</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== BOTTOM NAV ========== -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="nav-tab active" id="bnav-home" onclick="navTo('s-dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </button>
+    <button class="nav-tab" id="bnav-roadmap" onclick="navTo('s-roadmap')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Roadmap
+    </button>
+    <button class="nav-tab" id="bnav-evidence" onclick="openEvidenceModal('Select from roadmap','')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      Evidence
+    </button>
+    <button class="nav-tab" id="bnav-signal" onclick="navTo('s-gap')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Signal
+    </button>
+    <button class="nav-tab" id="bnav-admin" onclick="navTo('s-admin')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Admin
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+</div><!-- /app -->
+
+<script>
+// ── Navigation ──
+var currentScreen = 's-landing';
+var navHistory = [];
+var bottomNavScreens = ['s-dashboard','s-roadmap','s-gap','s-explorer','s-admin'];
+
+function go(id, param) {
+  if (currentScreen === id) return;
+  navHistory.push(currentScreen);
+  showScreen(id, param);
+}
+
+function showScreen(id, param) {
+  var prev = document.querySelector('.screen.active');
+  var next = document.getElementById(id);
+  if (!next) return;
+
+  if (prev) {
+    prev.style.opacity = '0';
+    setTimeout(function() {
+      prev.classList.remove('active');
+      prev.style.opacity = '';
+      next.classList.add('active');
+      next.offsetHeight;
+      next.style.opacity = '1';
+      currentScreen = id;
+      updateBottomNav(id);
+      window.scrollTo(0, 0);
+      if (param) handleParam(id, param);
+      if (id === 's-dashboard') renderRadar('dashboard-radar');
+    }, 150);
+  } else {
+    next.classList.add('active');
+    next.style.opacity = '1';
+    currentScreen = id;
+    updateBottomNav(id);
+    if (param) handleParam(id, param);
+  }
+}
+
+function handleParam(id, param) {}
+
+function navTo(id) {
+  navHistory = [];
+  showScreen(id);
+  showBottomNav();
+}
+
+function showBottomNav() {
+  document.getElementById('bottom-nav').classList.add('visible');
+}
+
+function updateBottomNav(id) {
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  var map = { 's-dashboard': 'bnav-home', 's-roadmap': 'bnav-roadmap', 's-gap': 'bnav-signal', 's-admin': 'bnav-admin' };
+  if (map[id]) document.getElementById(map[id]).classList.add('active');
+  var showNav = bottomNavScreens.indexOf(id) !== -1;
+  document.getElementById('bottom-nav').style.display = showNav ? 'flex' : 'none';
+  if (showNav) document.getElementById('bottom-nav').classList.add('visible');
+}
+
+// ── Settings dropdown ──
+function toggleSettings() {
+  document.getElementById('settings-dropdown').classList.toggle('show');
+}
+function hideSettings() {
+  document.getElementById('settings-dropdown').classList.remove('show');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('[onclick*="toggleSettings"]') && !e.target.closest('.settings-dropdown')) {
+    hideSettings();
+  }
+});
+
+// ── Retake assessment ──
+function retakeAssessment() {
+  document.getElementById('retake-modal').classList.add('open');
+}
+function closeRetakeModal() {
+  document.getElementById('retake-modal').classList.remove('open');
+}
+
+// ── Archetype switch ── routes to match screen, not dashboard
+function confirmSwitch(name) {
+  document.getElementById('switch-target').textContent = 'Switch to ' + name;
+  document.getElementById('switch-modal').classList.add('open');
+}
+function closeSwitchModal() {
+  document.getElementById('switch-modal').classList.remove('open');
+}
+
+// ── Evidence modal with progressive topic tiers ──
+var artefactTopics = {
+  'AI Literacy Primer': {
+    learning: [
+      {group: 'Foundations', items: ['What are LLMs and how they work', 'Token limits and context windows']},
+      {group: 'Prompt Basics', items: ['Zero-shot vs few-shot prompting', 'Chain-of-thought technique']}
+    ],
+    practised: [
+      {group: 'PM Workflows', items: ['Using AI for research synthesis', 'AI-assisted PRD drafting', 'Competitive analysis with LLMs']},
+      {group: 'Evaluation', items: ['Spotting hallucinations', 'When to verify AI output']}
+    ],
+    mastered: [
+      {group: 'Product Sense', items: ['When AI is the right solution', 'AI failure modes in production']},
+      {group: 'Ethics', items: ['Bias and fairness', 'Privacy and explainability']}
+    ]
+  },
+  'Metrics Framework': {
+    learning: [
+      {group: 'Basics', items: ['What is a north star metric', 'Input vs output metrics', 'Leading vs lagging indicators']}
+    ],
+    practised: [
+      {group: 'Design', items: ['Dashboard design principles', 'Metric hierarchy for products']},
+      {group: 'Instrumentation', items: ['Event tracking plans', 'A/B test metric selection']}
+    ],
+    mastered: [
+      {group: 'Advanced', items: ['Metric manipulation risks', 'Counter-metrics and guardrails', 'Metric reviews with leadership']}
+    ]
+  },
+  'System Design Case Study': {
+    learning: [
+      {group: 'Basics', items: ['Client-server architecture', 'Database types (SQL vs NoSQL)', 'API basics (REST, GraphQL)']}
+    ],
+    practised: [
+      {group: 'Design Skills', items: ['Scalability patterns', 'Load balancing', 'Caching strategies']},
+      {group: 'Documentation', items: ['Sequence diagrams', 'Trade-off analysis']}
+    ],
+    mastered: [
+      {group: 'Advanced', items: ['Distributed systems trade-offs (CAP)', 'Data pipeline architecture', 'Failure mode analysis', 'Cost optimization']}
+    ]
+  },
+  'Technical Spec Document': {
+    learning: [
+      {group: 'Format', items: ['RFC structure and purpose', 'Problem statement writing', 'Scope vs non-goals']}
+    ],
+    practised: [
+      {group: 'Depth', items: ['Dependency mapping', 'Risk identification', 'Success metrics definition']}
+    ],
+    mastered: [
+      {group: 'Execution', items: ['Open questions resolution', 'Cross-team alignment', 'Post-ship review planning']}
+    ]
+  },
+  'Data Pipeline Analysis': {
+    learning: [
+      {group: 'Basics', items: ['ETL vs ELT concepts', 'Data quality dimensions', 'Schema basics']}
+    ],
+    practised: [
+      {group: 'Design', items: ['Monitoring and alerting', 'Schema evolution strategies']},
+      {group: 'Operations', items: ['Backfill strategy', 'Data freshness SLAs']}
+    ],
+    mastered: [
+      {group: 'Advanced', items: ['Data lineage tracking', 'Cost optimization', 'Real-time vs batch trade-offs']}
+    ]
+  },
+  'UPI Integration Case Study': {
+    learning: [
+      {group: 'Basics', items: ['UPI architecture overview', 'Payment flow mapping', 'NPCI guidelines basics']}
+    ],
+    practised: [
+      {group: 'Compliance', items: ['RBI compliance requirements', 'Error handling patterns']},
+      {group: 'Operations', items: ['Settlement reconciliation', 'Dispute resolution flows']}
+    ],
+    mastered: [
+      {group: 'Advanced', items: ['Cross-border payment implications', 'UPI 3.0 features', 'Fraud detection patterns']}
+    ]
+  },
+  'KYC Flow Redesign': {
+    learning: [
+      {group: 'Basics', items: ['eKYC vs physical KYC', 'Regulatory requirements overview', 'DPDP Act basics']}
+    ],
+    practised: [
+      {group: 'Design', items: ['Conversion funnel analysis', 'Drop-off reduction strategies']},
+      {group: 'Compliance', items: ['Document verification flows', 'Risk-based KYC tiers']}
+    ],
+    mastered: [
+      {group: 'Advanced', items: ['UX trade-offs in regulated flows', 'Biometric verification patterns', 'Cross-border KYC challenges']}
+    ]
+  }
+};
+
+function parseSimpleTopics(topicStr) {
+  if (!topicStr) return null;
+  var list = topicStr.split(',').map(function(t) { return t.trim(); }).filter(function(t) { return t && t !== '\u2014'; });
+  if (list.length === 0) return null;
+  var third = Math.max(Math.ceil(list.length / 3), 1);
+  return {
+    learning: [{group: 'Topics', items: list.slice(0, third)}],
+    practised: [{group: 'Topics', items: list.slice(third, third * 2)}],
+    mastered: [{group: 'Topics', items: list.slice(third * 2)}]
+  };
+}
+
+function openEvidenceModal(name, topicKey) {
+  document.getElementById('modal-artefact-name').textContent = name || 'Select an artefact';
+  var container = document.getElementById('evidence-topics-by-level');
+  var data = artefactTopics[topicKey || name];
+
+  if (!data) {
+    // Show artefact picker with recent activity
+    var allArtefacts = Object.keys(artefactTopics);
+    var labels = {in_progress: '📝 In Progress', learning: '🌱 Learning', practised: '⚡ Practised', mastered: '🏆 Mastered'};
+    var html = '';
+
+    // Recent activity section (if any evidence exists)
+    var hasActivity = false;
+    var recentHtml = '';
+    allArtefacts.forEach(function(a) {
+      var store = evidenceStore[a];
+      if (store && store.entries.length > 0) {
+        hasActivity = true;
+        var last = store.entries[store.entries.length - 1];
+        recentHtml += '<div style="padding:6px 8px;background:var(--zinc-50);border-radius:8px;margin-bottom:4px;font-size:11px;">';
+        recentHtml += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+        recentHtml += '<span style="font-weight:600;color:var(--zinc-700);">' + a + '</span>';
+        recentHtml += '<span style="font-weight:600;">' + (labels[last.level] || last.level) + '</span>';
+        recentHtml += '</div>';
+        recentHtml += '<div style="color:var(--zinc-500);margin-top:2px;">' + last.date + ' — ' + last.desc + '</div>';
+        if (last.link) {
+          recentHtml += '<div style="margin-top:2px;"><a href="' + last.link + '" target="_blank" style="color:#6366f1;font-size:10px;text-decoration:underline;">🔗 ' + last.link + '</a></div>';
+        }
+        recentHtml += '</div>';
+      }
+    });
+
+    if (hasActivity) {
+      html += '<div style="font-size:12px;font-weight:600;color:var(--zinc-700);margin-bottom:6px;">Recent Activity</div>';
+      html += recentHtml;
+      html += '<div style="height:1px;background:var(--zinc-200);margin:10px 0;"></div>';
+    }
+
+    // Artefact picker
+    html += '<div style="font-size:12px;font-weight:600;color:var(--zinc-700);margin-bottom:8px;">Pick an artefact:</div>';
+    allArtefacts.forEach(function(a) {
+      var store = evidenceStore[a];
+      var levelLabel = '';
+      if (store && store.entries.length > 0) {
+        var last = store.entries[store.entries.length - 1];
+        levelLabel = labels[last.level] || '';
+      }
+      html += '<button onclick="closeEvidenceModal();openEvidenceModal(\'' + a.replace(/'/g, "\\'") + '\',\'' + a.replace(/'/g, "\\'") + '\')" style="display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;padding:10px 12px;margin-bottom:4px;background:var(--zinc-50);border:1px solid var(--zinc-200);border-radius:8px;cursor:pointer;font-size:12px;color:var(--zinc-700);">';
+      html += '<span>' + a + '</span>';
+      html += '<span style="font-size:10px;">' + levelLabel + '</span>';
+      html += '</button>';
+    });
+    container.innerHTML = html;
+    document.getElementById('evidence-computed-level').innerHTML = 'Select an artefact above';
+    document.getElementById('evidence-computed-level').style.borderColor = 'var(--zinc-300)';
+    document.getElementById('evidence-computed-level').style.background = 'var(--zinc-50)';
+    document.getElementById('evidence-log-btn').disabled = true;
+    document.getElementById('evidence-timeline').innerHTML = '';
+    document.getElementById('evidence-modal').classList.add('open');
+    return;
+  }
+
+  var tierConfig = [
+    {key: 'learning', label: '&#127793; Learning', desc: 'understand the basics', color: '#059669', bg: '#D1FAE5'},
+    {key: 'practised', label: '&#9889; Practised', desc: 'applied in a real project', color: '#D97706', bg: '#FEF3C7'},
+    {key: 'mastered', label: '&#127942; Mastered', desc: 'portfolio-quality, could teach it', color: '#0D9488', bg: '#CCFBF1'}
+  ];
+
+  var html = '';
+  tierConfig.forEach(function(tier, idx) {
+    var groups = data[tier.key] || [];
+    var totalItems = 0;
+    groups.forEach(function(g) { totalItems += g.items.length; });
+    var locked = idx > 0;
+
+    html += '<div class="ev-tier" data-tier="' + idx + '" style="border-left:3px solid ' + tier.color + ';padding:10px 12px;margin-bottom:8px;background:' + (locked ? 'var(--zinc-50)' : tier.bg) + ';border-radius:0 8px 8px 0;' + (locked ? 'opacity:0.5;' : '') + '">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleEvTier(this.parentElement)">';
+    html += '<div style="font-size:13px;font-weight:600;">' + tier.label + ' <span style="font-weight:400;font-size:11px;color:var(--zinc-500);">&mdash; ' + tier.desc + '</span></div>';
+    html += '<span class="ev-tier-count" style="font-size:11px;font-weight:700;color:' + tier.color + ';">0/' + totalItems + '</span>';
+    html += '</div>';
+    html += '<div class="ev-tier-body" style="' + (locked ? 'display:none;' : '') + 'margin-top:8px;">';
+    groups.forEach(function(g) {
+      html += '<div style="margin-bottom:6px;">';
+      html += '<div style="font-size:10px;font-weight:600;color:var(--zinc-500);margin:4px 0 4px;text-transform:uppercase;letter-spacing:0.5px;">' + g.group + '</div>';
+      g.items.forEach(function(item) {
+        html += '<label style="display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;cursor:pointer;color:var(--zinc-700);">';
+        html += '<input type="checkbox" style="margin:0;accent-color:' + tier.color + ';" onchange="updateComputedLevel()" ' + (locked ? 'disabled' : '') + '> ' + item;
+        html += '</label>';
+      });
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+  // Clear description/link for new entry
+  var descEl = document.getElementById('evidence-desc');
+  var linkEl = document.getElementById('evidence-link');
+  if (descEl) descEl.value = '';
+  if (linkEl) linkEl.value = '';
+  // Restore previously checked topics
+  restoreCheckboxes(name);
+  // Render activity timeline
+  renderTimeline(name);
+  document.getElementById('evidence-modal').classList.add('open');
+  updateComputedLevel();
+}
+
+function toggleEvTier(tierEl) {
+  var body = tierEl.querySelector('.ev-tier-body');
+  if (tierEl.style.opacity === '0.5') return;
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
+}
+
+var currentEvidenceLevel = null;
+var evidenceStore = {}; // simulated persistence: {artefactName: {topics: {name: true}, entries: [{date, desc, level}]}}
+
+function renderTimeline(name) {
+  var el = document.getElementById('evidence-timeline');
+  var store = evidenceStore[name];
+  if (!store || store.entries.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+  var labels = {in_progress: '📝 In Progress', learning: '🌱 Learning', practised: '⚡ Practised', mastered: '🏆 Mastered'};
+  var html = '<div style="font-size:11px;font-weight:600;color:var(--zinc-600);margin-bottom:6px;">Activity Timeline</div>';
+  store.entries.forEach(function(e) {
+    html += '<div style="margin-bottom:6px;padding:6px 8px;background:var(--zinc-50);border-radius:8px;font-size:11px;">';
+    html += '<div style="display:flex;gap:8px;align-items:start;">';
+    html += '<div style="color:var(--zinc-400);white-space:nowrap;min-width:42px;">' + e.date + '</div>';
+    html += '<div style="flex:1;color:var(--zinc-600);">' + e.desc + '</div>';
+    html += '<div style="white-space:nowrap;font-weight:600;">' + (labels[e.level] || e.level) + '</div>';
+    html += '</div>';
+    if (e.link) {
+      html += '<div style="margin-top:3px;padding-left:50px;"><a href="' + e.link + '" target="_blank" style="color:#6366f1;font-size:10px;text-decoration:underline;word-break:break-all;">🔗 ' + e.link + '</a></div>';
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function restoreCheckboxes(name) {
+  var store = evidenceStore[name];
+  if (!store) return;
+  var checkboxes = document.querySelectorAll('#evidence-topics-by-level input[type="checkbox"]');
+  checkboxes.forEach(function(cb) {
+    var label = cb.parentElement.textContent.trim();
+    if (store.topics[label]) {
+      cb.checked = true;
+      // Also unlock tiers if needed
+      var tier = cb.closest('.ev-tier');
+      if (tier) {
+        tier.style.opacity = '1';
+        tier.querySelector('.ev-tier-body').style.display = 'block';
+        cb.disabled = false;
+      }
+    }
+  });
+}
+
+function updateComputedLevel() {
+  var tiers = document.querySelectorAll('.ev-tier');
+  var levelEl = document.getElementById('evidence-computed-level');
+  var logBtn = document.getElementById('evidence-log-btn');
+  var tierComplete = [];
+  var totalChecked = 0;
+  var totalBoxes = 0;
+
+  tiers.forEach(function(tier, idx) {
+    var boxes = tier.querySelectorAll('input[type="checkbox"]');
+    var checked = tier.querySelectorAll('input[type="checkbox"]:checked');
+    var count = tier.querySelector('.ev-tier-count');
+    if (count) count.textContent = checked.length + '/' + boxes.length;
+    tierComplete.push(boxes.length > 0 && checked.length === boxes.length);
+    totalChecked += checked.length;
+    totalBoxes += boxes.length;
+  });
+
+  // Progressive unlock with celebrations
+  tiers.forEach(function(tier, idx) {
+    if (idx === 0) return;
+    var allPrevDone = tierComplete.slice(0, idx).every(function(v) { return v; });
+    if (allPrevDone) {
+      tier.style.opacity = '1';
+      var bgs = ['#D1FAE5','#FEF3C7','#CCFBF1'];
+      tier.style.background = bgs[idx];
+      tier.querySelector('.ev-tier-body').style.display = 'block';
+      tier.querySelectorAll('input[type="checkbox"]').forEach(function(cb) { cb.disabled = false; });
+      if (tierComplete[idx - 1] && !tier.dataset.unlocked) {
+        tier.dataset.unlocked = 'true';
+        celebrateTierUnlock(idx);
+      }
+    }
+  });
+
+  // Determine level — save is ALWAYS enabled if any topic is checked
+  var prevLevel = currentEvidenceLevel;
+
+  if (tierComplete[0] && tierComplete[1] && tierComplete[2]) {
+    currentEvidenceLevel = 'mastered';
+    levelEl.innerHTML = '&#127942; <strong>Mastered</strong> &mdash; all tiers complete!';
+    levelEl.style.borderColor = '#0D9488'; levelEl.style.background = '#CCFBF1'; levelEl.style.color = '#0D9488';
+    if (!levelEl.dataset.celebrated) {
+      levelEl.dataset.celebrated = 'true';
+      celebrate();
+    }
+  } else if (tierComplete[0] && tierComplete[1]) {
+    currentEvidenceLevel = 'practised';
+    levelEl.innerHTML = '&#9889; <strong>Practised</strong> &mdash; two tiers complete';
+    levelEl.style.borderColor = '#D97706'; levelEl.style.background = '#FEF3C7'; levelEl.style.color = '#D97706';
+  } else if (tierComplete[0]) {
+    currentEvidenceLevel = 'learning';
+    levelEl.innerHTML = '&#127793; <strong>Learning</strong> &mdash; foundational tier complete';
+    levelEl.style.borderColor = '#059669'; levelEl.style.background = '#D1FAE5'; levelEl.style.color = '#059669';
+  } else if (totalChecked > 0) {
+    currentEvidenceLevel = 'in_progress';
+    levelEl.innerHTML = '&#128221; <strong>In Progress</strong> &mdash; ' + totalChecked + '/' + totalBoxes + ' topics covered';
+    levelEl.style.borderColor = '#6366f1'; levelEl.style.background = '#EEF2FF'; levelEl.style.color = '#6366f1';
+  } else {
+    currentEvidenceLevel = null;
+    levelEl.innerHTML = 'Check off topics as you cover them';
+    levelEl.style.borderColor = 'var(--zinc-300)'; levelEl.style.background = 'var(--zinc-50)'; levelEl.style.color = 'var(--zinc-500)';
+  }
+
+  // Save always enabled if at least 1 topic checked
+  if (logBtn) logBtn.disabled = totalChecked === 0;
+}
+
+function saveEvidence() {
+  var name = document.getElementById('modal-artefact-name').textContent;
+  var level = currentEvidenceLevel || 'in_progress';
+  var labels = {in_progress: 'In Progress', learning: 'Learning', practised: 'Practised', mastered: 'Mastered'};
+  var desc = document.getElementById('evidence-desc').value.trim() || 'Progress saved';
+  var rawLink = document.getElementById('evidence-link').value.trim();
+  var link = rawLink ? (rawLink.match(/^https?:\/\//) ? rawLink : 'https://' + rawLink) : '';
+
+  // Persist checkbox state
+  if (!evidenceStore[name]) evidenceStore[name] = {topics: {}, entries: []};
+  var checkboxes = document.querySelectorAll('#evidence-topics-by-level input[type="checkbox"]');
+  checkboxes.forEach(function(cb) {
+    if (cb.checked) {
+      evidenceStore[name].topics[cb.parentElement.textContent.trim()] = true;
+    }
+  });
+
+  // Add timeline entry
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+  evidenceStore[name].entries.push({date: dateStr, desc: desc, level: level, link: link});
+
+  closeEvidenceModal();
+  showToast('Progress saved — ' + name + ' at ' + (labels[level] || level));
+}
+
+function closeEvidenceModal() {
+  document.getElementById('evidence-modal').classList.remove('open');
+  var levelEl = document.getElementById('evidence-computed-level');
+  if (levelEl) levelEl.dataset.celebrated = '';
+}
+
+// ── Tier unlock celebrations ──
+function celebrateTierUnlock(tierIdx) {
+  var config = [
+    null,
+    { emojis: ['&#9889;','&#128161;','&#128200;','&#10024;'], title: 'Level Up!', subtitle: "You've earned Practised status", msg: "You're applying real skills now!", color: '#D97706', shadow: 'rgba(217,119,6,0.3)', count: 18 },
+    { emojis: ['&#127942;','&#128293;','&#128142;','&#11088;'], title: 'Almost There!', subtitle: 'Mastered tier is now open', msg: 'One more push and this skill is portfolio-ready', color: '#0D9488', shadow: 'rgba(13,148,136,0.3)', count: 22 }
+  ];
+  var c = config[tierIdx];
+  if (!c) return;
+
+  var burst = document.createElement('div');
+  burst.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:999;overflow:hidden;';
+  document.body.appendChild(burst);
+  var emojiArr = tierIdx === 2 ? ['&#127942;','&#128293;','&#128142;','&#11088;'] : ['&#9889;','&#128161;','&#128200;','&#10024;'];
+  for (var i = 0; i < c.count; i++) {
+    (function(idx) {
+      setTimeout(function() {
+        var p = document.createElement('div');
+        p.innerHTML = emojiArr[Math.floor(Math.random() * emojiArr.length)];
+        p.style.cssText = 'position:absolute;font-size:' + (16 + Math.random() * 16) + 'px;left:' + (10 + Math.random() * 80) + '%;top:-30px;animation:confettiFall ' + (1.2 + Math.random() * 1.5) + 's ease-out forwards;';
+        burst.appendChild(p);
+      }, idx * 70);
+    })(i);
+  }
+
+  var banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);width:280px;background:white;border:3px solid ' + c.color + ';border-radius:16px;padding:20px;z-index:1000;text-align:center;animation:popIn 0.3s ease-out;box-shadow:0 12px 40px ' + c.shadow + ';';
+  banner.innerHTML = '<div style="font-size:18px;font-weight:800;color:' + c.color + ';margin-bottom:4px;">' + c.title + '</div>' +
+    '<div style="font-size:13px;font-weight:600;color:var(--zinc-700);margin-bottom:6px;">' + c.subtitle + '</div>' +
+    '<div style="font-size:11px;color:var(--zinc-500);">' + c.msg + '</div>';
+  document.body.appendChild(banner);
+  setTimeout(function() { burst.remove(); banner.remove(); }, 3000);
+}
+
+// ── Mastery confetti ──
+function celebrate() {
+  var container = document.createElement('div');
+  container.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:999;overflow:hidden;';
+  document.body.appendChild(container);
+  var emojiArr = ['&#127942;','&#127881;','&#11088;','&#128640;','&#128170;','&#128293;'];
+  for (var i = 0; i < 30; i++) {
+    (function(idx) {
+      setTimeout(function() {
+        var p = document.createElement('div');
+        p.innerHTML = emojiArr[Math.floor(Math.random() * emojiArr.length)];
+        p.style.cssText = 'position:absolute;font-size:' + (16 + Math.random() * 20) + 'px;left:' + (Math.random() * 100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random() * 2) + 's ease-out forwards;';
+        container.appendChild(p);
+      }, idx * 80);
+    })(i);
+  }
+  var banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);background:#0D9488;color:white;padding:16px 32px;border-radius:16px;font-size:18px;font-weight:bold;z-index:1000;text-align:center;animation:popIn 0.3s ease-out;box-shadow:0 8px 30px rgba(13,148,136,0.4);';
+  banner.innerHTML = '&#127942; MASTERED!<br><span style="font-size:12px;font-weight:normal;opacity:0.9;">Portfolio-quality evidence logged</span>';
+  document.body.appendChild(banner);
+  setTimeout(function() { container.remove(); banner.remove(); }, 4000);
+}
+
+// ── Skill detail bottom sheet ──
+function openSkillDetail(name) {
+  document.getElementById('skill-detail-name').textContent = name;
+  document.getElementById('skill-detail-overlay').style.display = 'flex';
+}
+function closeSkillDetail() {
+  document.getElementById('skill-detail-overlay').style.display = 'none';
+}
+
+// ── Intake system (16 questions, single-select auto-advances at 400ms) ──
+var intakeQuestions = [
+  { id: 'Q1', text: 'What is your current background?', type: 'single', options: ['Software Engineer', 'MBA Student', 'Consultant', 'Business Analyst', 'Product Owner', 'Other'] },
+  { id: 'Q2', text: 'How many years of professional experience do you have?', type: 'single', options: ['0-1 years', '1-3 years', '3-5 years', '5-10 years', '10+ years'] },
+  { id: 'Q3', text: 'How would you rate your technical depth?', type: 'single', options: ['Non-technical', 'Technically literate', 'Can write code', 'Software engineer'] },
+  { id: 'Q4', text: 'What industry are you coming from?', type: 'single', options: ['Technology', 'Finance', 'Consulting', 'Healthcare', 'Education', 'Other'] },
+  { id: 'Q5', text: 'Where do you want to work as a PM? (Geography)', type: 'single', options: ['India', 'United States', 'Canada'] },
+  { id: 'Q6', text: 'What type of company are you targeting?', type: 'single', options: ['Startup', 'Scale-up', 'Enterprise', 'Big Tech / GCC'] },
+  { id: 'Q7', text: 'Which domain interests you most?', type: 'single', options: ['B2B SaaS', 'Consumer', 'Fintech', 'Healthcare', 'AI/ML'] },
+  { id: 'Q8', text: 'What is your target timeline to land a PM role?', type: 'single', options: ['0-3 months', '3-6 months', '6-12 months', '12+ months'] },
+  { id: 'Q9', text: 'Have you heard of PM archetypes before?', type: 'single', options: ['Yes, I know mine', 'Yes, but unsure which fits', 'No, this is new to me'] },
+  { id: 'Q10', text: 'Do you have any existing PM experience?', type: 'single', options: ['None', 'Side projects / personal', 'Internship', 'Full-time PM role'] },
+  { id: 'Q11', text: 'What stage of PM prep are you in?', type: 'single', options: ['Just starting', 'Learning basics', 'Building portfolio', 'Actively interviewing'] },
+  { id: 'Q12', text: 'Rate your Technical skills (min 3)', type: 'rating', skills: ['SQL', 'APIs', 'System Design', 'Data Analysis', 'Cloud/Infra', 'AI/ML Basics'] },
+  { id: 'Q13', text: 'Rate your Product skills (min 3)', type: 'rating', skills: ['User Research', 'Wireframing', 'PRD Writing', 'Prioritization', 'Metrics', 'A/B Testing'] },
+  { id: 'Q14', text: 'Rate your Business skills (min 3)', type: 'rating', skills: ['Market Analysis', 'Stakeholder Mgmt', 'Pricing', 'Go-to-Market', 'Financial Modeling', 'Competitive Intel'] },
+  { id: 'Q15', text: 'Which PM activities have you done?', type: 'checklist', activities: ['User interviews', 'Wrote a PRD', 'Ran a sprint', 'Defined metrics', 'Presented to stakeholders', 'Shipped a feature'] },
+  { id: 'Q16', text: 'Are you currently working as a PM?', type: 'single', options: ['Yes', 'No'], isNavigator: true }
+];
+
+var intakeStep = 0;
+
+function intakeStart() {
+  intakeStep = 0;
+  go('s-intake');
+  renderIntakeStep();
+}
+
+function renderIntakeStep() {
+  var q = intakeQuestions[intakeStep];
+  var total = intakeQuestions.length;
+  var pct = Math.round(((intakeStep + 1) / total) * 100);
+  document.getElementById('intake-progress').style.width = pct + '%';
+  document.getElementById('intake-counter').textContent = q.id + ' of ' + total;
+  document.getElementById('intake-back-btn').style.visibility = intakeStep === 0 ? 'hidden' : 'visible';
+
+  var body = document.getElementById('intake-body');
+  var nextBtn = document.getElementById('intake-next');
+  // Single-select: hide Next button, auto-advance at 400ms
+  nextBtn.style.display = q.type === 'single' ? 'none' : 'block';
+  nextBtn.disabled = true;
+
+  var html = '<h2 class="h2" style="margin-bottom:16px;">' + q.text + '</h2>';
+
+  if (q.type === 'single') {
+    html += '<div class="intake-grid">';
+    q.options.forEach(function(opt) {
+      html += '<button class="intake-option" onclick="selectSingleOption(this)"><div class="intake-check">&#10003;</div>' + opt + '</button>';
+    });
+    html += '</div>';
+    if (q.isNavigator) {
+      html += '<div style="margin-top:12px;padding:10px 14px;background:var(--zinc-50);border-radius:var(--radius-sm);border:1px solid var(--zinc-200);">';
+      html += '<div class="caption"><strong>V2a scope:</strong> If Yes, data is stored but Navigator questions Q17-Q19 are deferred. Coming soon — advanced Navigator path.</div>';
+      html += '</div>';
+    }
+  } else if (q.type === 'rating') {
+    html += '<div style="font-size:9px;color:var(--zinc-400);margin-bottom:8px;">N = None · L = Learning · P = Practised · S = Strong</div>';
+    q.skills.forEach(function(skill) {
+      html += '<div class="skill-row"><div class="skill-name">' + skill + '</div><div class="skill-levels">';
+      ['N','L','P','S'].forEach(function(l) {
+        html += '<button class="skill-btn" onclick="selectSkillGroup(this)">' + l + '</button>';
+      });
+      html += '</div></div>';
+    });
+    nextBtn.disabled = false;
+  } else if (q.type === 'checklist') {
+    html += '<div style="font-size:9px;color:var(--zinc-400);margin-bottom:8px;">N = Not done · O = Observed · C = Contributed · E = Owned E2E</div>';
+    q.activities.forEach(function(act) {
+      html += '<div class="skill-row"><div class="skill-name">' + act + '</div><div class="skill-levels">';
+      ['N','O','C','E'].forEach(function(l) {
+        html += '<button class="skill-btn" onclick="selectSkillGroup(this)">' + l + '</button>';
+      });
+      html += '</div></div>';
+    });
+    nextBtn.disabled = false;
+  }
+
+  body.innerHTML = html;
+}
+
+function selectSingleOption(el) {
+  el.parentElement.querySelectorAll('.intake-option').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  // Auto-advance after 400ms
+  setTimeout(intakeNext, 400);
+}
+
+function selectSkillRating(el) {
+  var row = el.closest('.skill-levels');
+  row.querySelectorAll('.skill-btn').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+}
+function selectSkillGroup(el) {
+  var row = el.parentElement;
+  row.querySelectorAll('.skill-btn').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+function intakeNext() {
+  if (intakeStep < intakeQuestions.length - 1) {
+    intakeStep++;
+    renderIntakeStep();
+    window.scrollTo(0, 0);
+  } else {
+    go('s-computing');
+  }
+}
+
+function intakeBack() {
+  if (intakeStep > 0) {
+    intakeStep--;
+    renderIntakeStep();
+    window.scrollTo(0, 0);
+  }
+}
+
+// ── Match result ──
+function showMatchResult() {
+  document.getElementById('match-loading').style.display = 'none';
+  document.getElementById('match-result').style.display = 'flex';
+}
+
+// ── Admin tabs ──
+function adminTabSwitch(tab) {
+  ['decisions', 'curriculum', 'etl'].forEach(function(t) {
+    document.getElementById('admin-tab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('admin-panel-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+function curTab(tab) {
+  ['trending', 'stable', 'declining'].forEach(function(t) {
+    document.getElementById('cur-tab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('cur-panel-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+// ── Pricing toggle ──
+function setPricing(plan) {
+  document.querySelectorAll('.pricing-toggle-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.target.classList.add('active');
+}
+
+// ── Admin decision chaining ──
+function adminChainSkill() {
+  showToast('Prompt Engineering added to Technical PM curriculum');
+  return '<div style="opacity:0.5;padding:12px;"><div class="decision-type type-skill">NEW SKILL</div><div style="font-size:13px;color:var(--zinc-500);margin-top:6px;">&#10003; Prompt Engineering added</div></div>' +
+    '<div style="border-top:1px solid var(--zinc-100);padding-top:12px;margin-top:8px;">' +
+    '<div style="font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">&#10229; Auto-chained follow-up</div>' +
+    '<div class="decision-type type-weight">WEIGHT ADJUSTMENT</div>' +
+    '<div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin:6px 0;">Adjust Q11 weight for AI PM?</div>' +
+    '<div class="small" style="margin-bottom:8px;color:var(--zinc-600);">Prompt Engineering is especially relevant for AI PM. Recommend increasing Q11 weight 3&#8594;5.</div>' +
+    '<div style="display:flex;gap:8px;">' +
+    '<button class="btn-accept" onclick="this.closest(\'.decision-card\').style.opacity=\'0.4\';showToast(\'Q11 weight for AI PM: 3 &rarr; 5\')">Accept (3&#8594;5)</button>' +
+    '<button class="btn-dismiss" onclick="this.closest(\'.decision-card\').style.opacity=\'0.4\';showToast(\'No weight change\')">Skip</button>' +
+    '</div></div>';
+}
+
+function adminChainRetire() {
+  showToast('Waterfall Planning Doc retired from active curriculum');
+  return '<div style="opacity:0.5;padding:12px;"><div class="decision-type type-retire">RETIRE</div><div style="font-size:13px;color:var(--zinc-500);margin-top:6px;">&#10003; Waterfall Planning Doc retired</div></div>' +
+    '<div style="border-top:1px solid var(--zinc-100);padding-top:12px;margin-top:8px;">' +
+    '<div style="font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">&#10229; Auto-chained follow-up</div>' +
+    '<div class="decision-type type-weight">WEIGHT ADJUSTMENT</div>' +
+    '<div style="font-size:14px;font-weight:600;color:var(--zinc-800);margin:6px 0;">Adjust Q4 (domain) weight for Enterprise PM?</div>' +
+    '<div class="small" style="margin-bottom:8px;color:var(--zinc-600);">Recommend reducing Q4 domain weight from 7&#8594;5 for Enterprise PM.</div>' +
+    '<div style="background:var(--zinc-50);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:var(--zinc-600);">' +
+    '<strong>Impact:</strong> 2 users would shift Enterprise PM &#8594; Technical PM</div>' +
+    '<div style="display:flex;gap:8px;">' +
+    '<button class="btn-accept" onclick="this.closest(\'.decision-card\').style.opacity=\'0.4\';showToast(\'Q4 weight for Enterprise PM: 7 &rarr; 5\')">Accept (7&#8594;5)</button>' +
+    '<button class="btn-dismiss" onclick="this.closest(\'.decision-card\').style.opacity=\'0.4\';showToast(\'No weight change\')">Skip</button>' +
+    '</div></div>';
+}
+
+function openWeightEditor(cardId, container, defaultVal) {
+  var html = '<div style="background:var(--zinc-50);border-radius:10px;padding:14px;margin-top:8px;">' +
+    '<div style="font-size:12px;font-weight:600;color:var(--zinc-700);margin-bottom:10px;">Manual Weight Editor</div>' +
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">' +
+    '<label style="font-size:12px;color:var(--zinc-600);white-space:nowrap;">Weight (0-10):</label>' +
+    '<input type="range" min="0" max="10" value="' + defaultVal + '" style="flex:1;" oninput="this.nextElementSibling.textContent=this.value">' +
+    '<span style="font-size:18px;font-weight:800;color:var(--primary);min-width:24px;text-align:center;">' + defaultVal + '</span>' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;">' +
+    '<button class="btn-accept" onclick="' + (cardId ? 'document.getElementById(\'' + cardId + '\').style.opacity=\'0.4\';' : 'this.closest(\'.decision-card\').style.opacity=\'0.4\';') + 'showToast(\'Weight applied\')">Apply</button>' +
+    '<button class="btn-dismiss" onclick="this.closest(\'.decision-card\').style.opacity=\'0.4\';showToast(\'Cancelled\')">Cancel</button>' +
+    '</div></div>';
+  container.innerHTML = html;
+}
+
+// ── Toast ──
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// ── Radar / Spider Chart (SVG) with padded viewBox ──
+function renderRadar(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var labels = ['Domain\nDepth', 'Portfolio\nEvidence', 'Technical\nFluency', 'Business\nImpact', 'Product\nSkills'];
+  var ideal =  [0.85, 0.90, 0.95, 0.80, 0.88];
+  var actual = [0.25, 0.35, 0.70, 0.20, 0.45];
+
+  var pad = 50;
+  var chartSize = 260;
+  var size = chartSize + pad * 2;
+  var cx = size / 2;
+  var cy = size / 2;
+  var maxR = 100;
+  var n = 5;
+  var angleStep = (2 * Math.PI) / n;
+  var startAngle = -Math.PI / 2;
+
+  function polarToCart(angle, r) {
+    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+  }
+
+  function makePolygon(values) {
+    return values.map(function(v, i) {
+      var p = polarToCart(startAngle + i * angleStep, v * maxR);
+      return p.x + ',' + p.y;
+    }).join(' ');
+  }
+
+  var svg = '<svg viewBox="0 0 ' + size + ' ' + size + '" xmlns="http://www.w3.org/2000/svg">';
+
+  // Grid rings
+  [0.25, 0.5, 0.75, 1.0].forEach(function(ring) {
+    var pts = [];
+    for (var i = 0; i < n; i++) {
+      var p = polarToCart(startAngle + i * angleStep, ring * maxR);
+      pts.push(p.x + ',' + p.y);
+    }
+    svg += '<polygon points="' + pts.join(' ') + '" fill="none" stroke="#E4E4E7" stroke-width="0.75"/>';
+  });
+
+  // Spokes
+  for (var i = 0; i < n; i++) {
+    var p = polarToCart(startAngle + i * angleStep, maxR);
+    svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p.x + '" y2="' + p.y + '" stroke="#E4E4E7" stroke-width="0.5"/>';
+  }
+
+  // Ideal polygon (dashed)
+  svg += '<polygon points="' + makePolygon(ideal) + '" fill="none" stroke="#A1A1AA" stroke-width="1.5" stroke-dasharray="4,3"/>';
+
+  // Actual polygon (filled)
+  svg += '<polygon points="' + makePolygon(actual) + '" fill="rgba(13,148,136,0.15)" stroke="#0D9488" stroke-width="2"/>';
+
+  // Data points
+  actual.forEach(function(v, i) {
+    var p = polarToCart(startAngle + i * angleStep, v * maxR);
+    svg += '<circle cx="' + p.x + '" cy="' + p.y + '" r="3.5" fill="#0D9488"/>';
+  });
+
+  // Labels (with padding so they don't clip)
+  labels.forEach(function(label, i) {
+    var p = polarToCart(startAngle + i * angleStep, maxR + 30);
+    var lines = label.split('\n');
+    var anchor = 'middle';
+    if (p.x < cx - 10) anchor = 'end';
+    else if (p.x > cx + 10) anchor = 'start';
+    svg += '<text x="' + p.x + '" y="' + (p.y - (lines.length - 1) * 7) + '" text-anchor="' + anchor + '" font-size="11" fill="#52525B" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">';
+    lines.forEach(function(line, li) {
+      svg += '<tspan x="' + p.x + '" dy="' + (li === 0 ? 0 : 13) + '">' + line + '</tspan>';
+    });
+    svg += '</text>';
+  });
+
+  svg += '</svg>';
+  container.innerHTML = svg;
+}
+</script>
+</body>
+</html>

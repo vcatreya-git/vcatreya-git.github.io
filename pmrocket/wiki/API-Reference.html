@@ -1,0 +1,326 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>API-Reference — PMRocket</title><style>
+:root { --teal:#0D9488; --teal-d:#0F766E; --navy:#0f172a; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc; }
+*{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;color:var(--slate-700);line-height:1.65}
+a{color:var(--teal-d)} nav{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{font-weight:800;color:var(--navy);text-decoration:none}.logo span{color:var(--teal-d)}
+.nav a{margin-left:12px;font-size:13px;font-weight:600;color:var(--slate-600);text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{color:var(--navy);line-height:1.25} h1{font-size:1.9rem} h2{font-size:1.25rem;margin-top:2rem;border-bottom:1px solid var(--slate-200);padding-bottom:6px}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px} th,td{border:1px solid var(--slate-200);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--slate-50)}
+code{background:var(--slate-100);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--navy);color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto} pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:3px solid var(--teal-d);margin:1rem 0;padding:8px 14px;background:#f0fdfa;color:var(--slate-600)}
+.footer{text-align:center;font-size:12px;color:var(--slate-500);padding:24px;border-top:1px solid var(--slate-200)}
+</style></head><body>
+<nav><a class="logo" href="../index.html">PM<span>Rocket</span></a>
+<div class="nav"><a href="../index.html">Home</a><a href="../wiki/Home.html">Wiki</a><a href="../prototype.html">Prototype</a>
+<a href="https://github.com/vcatreya-git/pmrocket">GitHub</a></div></nav>
+<main><h1>API Reference</h1>
+<p>All routes use standard Next.js App Router route handlers (<code>src/app/api/</code>). Every protected route calls <code>auth()</code> from <code>@clerk/nextjs/server</code>, checks <code>userId</code>, and includes <code>WHERE user_id = $userId</code> on all user-scoped database queries. No query can return another user's data, even with a valid session token.</p>
+<hr />
+<h2>Business Logic Routes</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>Auth</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/compute-match</code></td>
+<td>Clerk user</td>
+<td>Weighted scoring → archetype match result</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/gap-analysis</code></td>
+<td>Clerk user + ownership check</td>
+<td>RAG pipeline → gap_pct + LLM narrative</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/extract-skills</code></td>
+<td>Clerk admin</td>
+<td>ETL: LLM skill extraction from JD text</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/confirm-extraction</code></td>
+<td>Clerk admin</td>
+<td>ETL: approve skills → embed JD → update curriculum</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/aggregate-skill-frequency</code></td>
+<td>Clerk admin</td>
+<td>Recalculate <code>skill_frequency</code> for a domain × geography slice</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/dashboard</code></td>
+<td>Clerk user</td>
+<td>Dashboard summary (profile + match + roadmap + latest gap)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/evidence-log</code></td>
+<td>Clerk user</td>
+<td>Log an evidence artefact with topic_progress</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/evidence-log</code></td>
+<td>Clerk user</td>
+<td>Fetch all evidence log entries for the authenticated user</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/artefacts</code></td>
+<td>Clerk user</td>
+<td>Get 3-layer curriculum for an archetype match</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/gap-analyses</code></td>
+<td>Clerk user</td>
+<td>Fetch gap analysis history for the authenticated user</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/intake-questions</code></td>
+<td>Clerk user</td>
+<td>Fetch question bank</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/intake-responses</code></td>
+<td>Clerk user</td>
+<td>Persist intake answers</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/user-profiles</code></td>
+<td>Clerk user</td>
+<td>Update profile state (onboarding_shown, intake_progress, geography)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/company-type-taxonomy</code></td>
+<td>Clerk user</td>
+<td>Fetch company types filtered by <code>?geography=</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Admin Routes</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>Auth</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code>, <code>POST</code></td>
+<td><code>/api/admin/jd-ingestion-queue</code></td>
+<td>Clerk admin</td>
+<td>Manage JD queue entries</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/extracted-skills</code></td>
+<td>Clerk admin</td>
+<td>View extracted skills preview</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>PATCH</code></td>
+<td><code>/api/admin/question-weights</code></td>
+<td>Clerk admin</td>
+<td>Tune archetype × question weights</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>POST</code>, <code>PATCH</code></td>
+<td><code>/api/admin/artefacts</code></td>
+<td>Clerk admin</td>
+<td>Curriculum CRUD</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>PATCH</code></td>
+<td><code>/api/admin/intake-questions</code></td>
+<td>Clerk admin</td>
+<td>Question bank management</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>PATCH</code></td>
+<td><code>/api/admin/gap-threshold</code></td>
+<td>Clerk admin</td>
+<td>Configure ready-to-apply threshold</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/skill-frequency</code></td>
+<td>Clerk admin</td>
+<td>View skill frequency trends</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Infrastructure Routes</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>Auth</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/webhooks/clerk</code></td>
+<td>Clerk signature (svix)</td>
+<td>Provision <code>users</code> + <code>user_profiles</code> + <code>subscriptions</code> rows on signup</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/stripe/create-checkout</code></td>
+<td>Clerk user</td>
+<td>Create Stripe Checkout session</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/stripe/webhook</code></td>
+<td>Stripe signature</td>
+<td>Handle subscription state changes</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/stripe/create-portal</code></td>
+<td>Clerk user</td>
+<td>Create Stripe Customer Portal session</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/send-email</code></td>
+<td>Internal only</td>
+<td>Transactional email via Resend — not exposed to client</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Full Contract: POST /api/gap-analysis</h2>
+<p><strong>Auth:</strong> Clerk session required. <code>userId</code> from the session must match <code>user_id</code> in the request body.</p>
+<p><strong>Request body:</strong></p>
+<pre><code class="language-json">{
+  &quot;user_id&quot;: &quot;user_2abc...&quot;
+}
+</code></pre>
+<p><strong>Processing:</strong></p>
+<ol>
+<li>Verify <code>auth().userId === user_id</code> (ownership check)</li>
+<li>Fetch active <code>archetype_match</code> for the user</li>
+<li>Check corpus minimum — requires ≥ 15 JDs for the user's archetype × domain × geography slice; returns <code>422 THIN_CORPUS</code> if not met</li>
+<li>Build profile text from <code>intake_responses</code> + <code>evidence_log</code></li>
+<li>Embed profile via Vercel AI SDK <code>embed()</code> using <code>getEmbedModel()</code></li>
+<li>pgvector cosine similarity search, K=25, pre-filtered by domain / geography / archetype</li>
+<li>Compute <code>gap_pct</code> (deterministic, application-side):</li>
+</ol>
+<p><code>gap_pct = (1 − artefacts_with_evidence / total_roadmap_artefacts) × 100</code></p>
+<ol>
+<li>Call <code>getLLMModel()</code> via <code>generateText()</code> — qualitative top gaps and recommendations</li>
+<li>Write result to <code>gap_analyses</code> table</li>
+</ol>
+<p><strong>Rate limit:</strong> 3 requests per 24 hours per user.</p>
+<p><strong>Response (200):</strong></p>
+<pre><code class="language-json">{
+  &quot;gap_analysis&quot;: {
+    &quot;id&quot;: &quot;uuid&quot;,
+    &quot;gap_pct&quot;: 42.5,
+    &quot;jds_used&quot;: 23,
+    &quot;top_gaps&quot;: [
+      {
+        &quot;skill&quot;: &quot;System design&quot;,
+        &quot;gap_reason&quot;: &quot;Required in 18/23 JDs; no evidence logged&quot;,
+        &quot;recommended_artefact&quot;: &quot;System design case study&quot;
+      }
+    ],
+    &quot;summary&quot;: &quot;Your profile is strong in product sense but lacks technical depth...&quot;,
+    &quot;ready_to_apply&quot;: false
+  }
+}
+</code></pre>
+<p><strong>Error codes:</strong> <code>401 UNAUTHORIZED</code> · <code>403 FORBIDDEN</code> · <code>422 NO_MATCH</code> · <code>422 THIN_CORPUS</code> · <code>422 NO_SUBSCRIPTION</code> · <code>429 RATE_LIMIT_EXCEEDED</code> · <code>502 LLM_ERROR</code> · <code>500 INTERNAL_ERROR</code></p>
+<hr />
+<h2>Full Contract: POST /api/extract-skills</h2>
+<p><strong>Auth:</strong> Clerk session required. <code>publicMetadata.role</code> must be <code>"admin"</code>.</p>
+<p><strong>Request body:</strong></p>
+<pre><code class="language-json">{
+  &quot;jd_queue_id&quot;: &quot;uuid&quot;,
+  &quot;jd_text&quot;: &quot;We are looking for a Technical PM with...&quot;,
+  &quot;archetype_id&quot;: &quot;uuid&quot;,
+  &quot;domain&quot;: &quot;b2b_saas&quot;,
+  &quot;geography&quot;: &quot;north_america&quot;
+}
+</code></pre>
+<p><strong>Processing:</strong></p>
+<ol>
+<li>Verify admin role from Clerk <code>publicMetadata</code></li>
+<li>Fetch <code>jd_ingestion_queue</code> row; status must be <code>pending</code></li>
+<li>Set status = <code>processing</code></li>
+<li>Call <code>getLLMModel()</code> via <code>generateObject()</code> with structured skill extraction schema. Prompt includes the existing <code>skill_frequency.skill_name</code> vocabulary list to constrain output to known taxonomy terms</li>
+<li>Return extracted skills preview — nothing written to the curriculum yet</li>
+<li>On error: set status = <code>failed</code>, write <code>error_message</code></li>
+</ol>
+<p><strong>Response (200):</strong></p>
+<pre><code class="language-json">{
+  &quot;jd_id&quot;: &quot;uuid&quot;,
+  &quot;extracted&quot;: [
+    { &quot;skill_name&quot;: &quot;System design&quot;, &quot;skill_category&quot;: &quot;Technical&quot;, &quot;confidence&quot;: 0.92 },
+    { &quot;skill_name&quot;: &quot;Stakeholder management&quot;, &quot;skill_category&quot;: &quot;Business&quot;, &quot;confidence&quot;: 0.85 }
+  ]
+}
+</code></pre>
+<p><strong>Error codes:</strong> <code>403 FORBIDDEN</code> · <code>404 NOT_FOUND</code> · <code>422 ALREADY_PROCESSED</code> · <code>502 LLM_ERROR</code> · <code>500 INTERNAL_ERROR</code></p>
+<hr />
+<h2>Auth Pattern</h2>
+<p>Every protected route follows this pattern. The ownership check (<code>userId !== user_id</code>) ensures users can only access their own data, even with a valid session token.</p>
+<pre><code class="language-typescript">import { auth } from '@clerk/nextjs/server'
+
+export async function POST(request: Request) {
+  const { userId } = await auth()
+  if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { user_id } = await request.json()
+  if (userId !== user_id) {
+    return Response.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  // business logic ...
+}
+</code></pre>
+<p>Admin routes additionally check <code>publicMetadata.role</code>:</p>
+<pre><code class="language-typescript">import { auth, currentUser } from '@clerk/nextjs/server'
+
+export async function POST(request: Request) {
+  const { userId } = await auth()
+  if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const user = await currentUser()
+  if (user?.publicMetadata?.role !== 'admin') {
+    return Response.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  // admin logic ...
+}
+</code></pre>
+<p>Admin routes return <code>403</code> (not <code>404</code>) to authenticated non-admin users. The <code>404</code> approach is used only at the routing layer for unauthenticated access, where revealing the existence of an admin route is an unnecessary information leak.</p></main>
+<div class="footer">PMRocket · portfolio docs</div></body></html>
