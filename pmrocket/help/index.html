@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to use PMRocket</title>
+<style>
+  :root {
+    --teal: #0D9488;
+    --teal-dark: #0F766E;
+    --teal-soft: #f0fdfa;
+    --bg: #fafaf9;
+    --card: #fff;
+    --text: #18181b;
+    --muted: #71717a;
+    --border: #e4e4e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 16px;
+  }
+  header {
+    background: linear-gradient(160deg, #f0fdfa 0%, #fff 70%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 20px 24px;
+  }
+  header .brand { font-size: 13px; font-weight: 700; color: var(--teal-dark); margin-bottom: 8px; }
+  header h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 6px; }
+  header p { font-size: 14px; color: var(--muted); max-width: 36rem; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 64px; }
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  nav.toc p { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
+  nav.toc a { display: block; font-size: 14px; font-weight: 600; color: var(--teal-dark); padding: 6px 0; text-decoration: none; }
+  section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 16px;
+    margin-bottom: 14px;
+  }
+  h2 { font-size: 1.05rem; font-weight: 800; margin-bottom: 10px; }
+  h3 { font-size: 0.92rem; font-weight: 700; margin: 14px 0 6px; }
+  p, li { font-size: 14px; color: #3f3f46; }
+  ul, ol { padding-left: 1.2rem; margin: 6px 0; }
+  li { margin-bottom: 5px; }
+  .step {
+    display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;
+  }
+  .step .n {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--teal); color: #fff; font-size: 13px; font-weight: 800;
+    display: grid; place-items: center;
+  }
+  .step strong { display: block; margin-bottom: 2px; color: var(--text); }
+  .callout {
+    margin-top: 10px; padding: 10px 12px; border-radius: 8px;
+    background: var(--teal-soft); border-left: 3px solid var(--teal);
+    font-size: 13px; color: var(--teal-dark);
+  }
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding: 8px; }
+  footer a { color: var(--teal-dark); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">PMROCKET · HELP</div>
+  <h1>How to use PMRocket</h1>
+  <p>A short guide to navigate your PM prep: match, roadmap, evidence, and readiness. Written for you as a user — not as a developer.</p>
+</header>
+
+<main>
+  <nav class="toc" aria-label="Contents">
+    <p>Jump to</p>
+    <a href="#what">What this app is</a>
+    <a href="#path">Your path through the app</a>
+    <a href="#roadmap">Roadmap &amp; evidence</a>
+    <a href="#readiness">Readiness &amp; scores</a>
+    <a href="#tips">Tips &amp; FAQ</a>
+  </nav>
+
+  <section id="what">
+    <h2>What this app is</h2>
+    <p>PMRocket helps aspiring PMs stop guessing. It answers three questions:</p>
+    <ul>
+      <li><strong>Which PM path fits me?</strong> (archetype match)</li>
+      <li><strong>What should I build as proof?</strong> (personalised roadmap)</li>
+      <li><strong>How ready am I?</strong> (evidence + readiness signal)</li>
+    </ul>
+    <p class="callout">It is a <strong>navigation</strong> tool — not another pile of random courses. Progress only counts when you log real evidence.</p>
+  </section>
+
+  <section id="path">
+    <h2>Your path through the app</h2>
+    <div class="step">
+      <div class="n">1</div>
+      <div>
+        <strong>Onboarding</strong>
+        Short intro to how PMRocket works. You can skip if you’re ready.
+      </div>
+    </div>
+    <div class="step">
+      <div class="n">2</div>
+      <div>
+        <strong>Intake (about 5–7 minutes)</strong>
+        Answer questions on background, goals, skills, and experience. Answers save as you go — you can leave and resume.
+      </div>
+    </div>
+    <div class="step">
+      <div class="n">3</div>
+      <div>
+        <strong>Match</strong>
+        See your primary PM archetype (e.g. Technical PM), match confidence, and domain focus. You can explore other archetypes later from the menu.
+      </div>
+    </div>
+    <div class="step">
+      <div class="n">4</div>
+      <div>
+        <strong>Dashboard (Home)</strong>
+        Your home base: progress, next recommended artefact, and shortcuts into the roadmap.
+      </div>
+    </div>
+    <div class="step">
+      <div class="n">5</div>
+      <div>
+        <strong>Roadmap → log evidence → Readiness</strong>
+        Work artefacts layer by layer, log what you completed, watch readiness update.
+      </div>
+    </div>
+  </section>
+
+  <section id="roadmap">
+    <h2>Roadmap &amp; evidence</h2>
+    <h3>Three layers</h3>
+    <ul>
+      <li><strong>Universal</strong> — skills every modern PM needs (including AI literacy)</li>
+      <li><strong>Archetype</strong> — craft for your path (e.g. Technical PM)</li>
+      <li><strong>Domain × market</strong> — e.g. fintech in North America</li>
+    </ul>
+    <h3>Logging evidence</h3>
+    <ul>
+      <li>Open an artefact → mark topics / completion level → save.</li>
+      <li>Link a portfolio piece or notes when you have them.</li>
+      <li>Deeper completion (e.g. Practised / Mastered) strengthens your readiness more than a light pass.</li>
+    </ul>
+    <p class="callout">If you’re unsure what to do next: open <strong>Home</strong> and follow the “next step” artefact, or filter the roadmap by your weakest skill track.</p>
+  </section>
+
+  <section id="readiness">
+    <h2>Readiness &amp; scores</h2>
+    <ul>
+      <li><strong>Readiness</strong> reflects how much of your roadmap you’ve evidenced — not a judgment of your worth as a PM.</li>
+      <li><strong>Match %</strong> is how well your intake answers fit an archetype under our scoring model — not a hiring guarantee.</li>
+      <li><strong>Gap analysis</strong> (when available) explains gaps using market-style signals and points you back to artefacts.</li>
+    </ul>
+    <p style="margin-top:10px">Later features (apply pack, interview practice, coach) will build on the same evidence you’ve already logged.</p>
+  </section>
+
+  <section id="tips">
+    <h2>Tips &amp; FAQ</h2>
+    <h3>Can I retake the assessment?</h3>
+    <p>Yes — menu → <strong>Retake assessment</strong>. Your logged evidence is kept, but your match and roadmap may change.</p>
+    <h3>Why does the roadmap look empty?</h3>
+    <p>Finish intake and match first. Content is seeded for supported archetype × domain slices; unseeded combos may show less.</p>
+    <h3>How often should I log evidence?</h3>
+    <p>Small, regular logs beat rare marathons. Aim for a weekly rhythm if you’re actively prepping.</p>
+    <h3>Need this page again?</h3>
+    <p>Open <strong>menu (···) → How to use PMRocket</strong> anytime from the app.</p>
+  </section>
+
+  <footer>
+    <a href="../">← Back to app</a>
+    · <a href="../">Home</a>
+  </footer>
+</main>
+</body>
+</html>
