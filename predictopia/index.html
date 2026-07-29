@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictopia — Sports Prediction Leagues That Run Themselves</title>
+<style>
+  :root {
+    --navy: #0B1D36;
+    --navy-mid: #122849;
+    --teal: #14B8A6;
+    --teal-dark: #0D9488;
+    --teal-light: #CCFBF1;
+    --teal-xlight: #F0FDFA;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+    --white: #ffffff;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow: 0 4px 16px rgba(0,0,0,0.07);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--white);
+    color: var(--slate-800);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  a { color: var(--teal-dark); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { font-size: 18px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; text-decoration: none; }
+  .nav-logo span { color: var(--teal-dark); }
+  .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500; color: var(--slate-600);
+    padding: 6px 11px; border-radius: var(--radius-sm);
+  }
+  .nav-links a:hover { background: var(--slate-100); color: var(--slate-900); text-decoration: none; }
+  .nav-links a.primary { background: var(--navy); color: white; }
+  .nav-links a.primary:hover { background: var(--navy-mid); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 12px 22px; border-radius: var(--radius);
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    text-decoration: none; font-family: inherit; border: none;
+  }
+  .btn-primary { background: var(--navy); color: white; box-shadow: 0 2px 12px rgba(11,29,54,0.25); }
+  .btn-primary:hover { background: var(--navy-mid); text-decoration: none; transform: translateY(-1px); }
+  .btn-secondary { background: white; color: var(--slate-800); border: 1.5px solid var(--slate-200); }
+  .btn-secondary:hover { border-color: var(--teal-dark); color: var(--teal-dark); text-decoration: none; }
+
+  .hero {
+    background: linear-gradient(155deg, #0B1D36 0%, #122849 45%, #0f3d4a 100%);
+    color: white; padding: 72px 24px 64px; text-align: center;
+  }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(20,184,166,0.18); color: #5eead4;
+    font-size: 12px; font-weight: 600; padding: 4px 14px;
+    border-radius: 100px; margin-bottom: 20px;
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #2dd4bf;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 48px); font-weight: 800;
+    letter-spacing: -1.2px; line-height: 1.12; max-width: 720px;
+    margin: 0 auto 16px;
+  }
+  .hero h1 span { color: #5eead4; }
+  .hero p {
+    font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,0.72);
+    max-width: 580px; margin: 0 auto 28px; line-height: 1.7;
+  }
+  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero .btn-primary { background: #14B8A6; color: #042f2e; }
+  .hero .btn-primary:hover { background: #2dd4bf; }
+  .hero .btn-secondary { background: transparent; color: white; border-color: rgba(255,255,255,0.25); }
+  .hero .btn-secondary:hover { border-color: #5eead4; color: #5eead4; background: rgba(20,184,166,0.1); }
+
+  .stats-bar { background: var(--navy); padding: 36px 24px; }
+  .stats-grid {
+    max-width: 960px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+  .stat-item { background: var(--navy); padding: 22px 16px; text-align: center; }
+  .stat-number { font-size: 28px; font-weight: 800; color: #5eead4; display: block; margin-bottom: 4px; }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+  .section { padding: 64px 24px; }
+  .section-alt { background: var(--slate-50); }
+  .container { max-width: 960px; margin: 0 auto; }
+  .section-label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.4px; color: var(--teal-dark); margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: clamp(22px, 3vw, 32px); font-weight: 800;
+    color: var(--slate-900); letter-spacing: -0.6px; margin-bottom: 10px;
+  }
+  .section-sub { font-size: 15px; color: var(--slate-600); max-width: 560px; margin-bottom: 36px; }
+
+  .pipeline { display: flex; flex-wrap: wrap; gap: 12px; }
+  .pipeline-step {
+    flex: 1; min-width: 140px; background: white;
+    border: 1.5px solid var(--slate-200); border-radius: var(--radius);
+    padding: 20px 16px; text-align: center;
+  }
+  .step-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; background: var(--navy); color: white;
+    border-radius: 50%; font-size: 13px; font-weight: 700; margin-bottom: 10px;
+  }
+  .pipeline-step h3 { font-size: 14px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px; }
+  .pipeline-step p { font-size: 12px; color: var(--slate-600); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card {
+    background: white; border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-sm);
+  }
+  .card h3 { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
+  .card p { font-size: 13px; color: var(--slate-600); line-height: 1.55; }
+
+  .wiki-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .wiki-card {
+    display: block; padding: 18px; border-radius: var(--radius);
+    border: 1.5px solid var(--slate-200); background: white;
+    text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s;
+  }
+  .wiki-card:hover { border-color: var(--teal-dark); box-shadow: var(--shadow); text-decoration: none; }
+  .wiki-card strong { display: block; font-size: 14px; color: var(--slate-900); margin-bottom: 4px; }
+  .wiki-card span { font-size: 12px; color: var(--slate-500); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--slate-200); }
+  th { color: var(--slate-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  footer {
+    border-top: 1px solid var(--slate-200); padding: 28px 24px; text-align: center;
+    font-size: 13px; color: var(--slate-500);
+  }
+
+  @media (max-width: 700px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .pipeline-step { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Predict<span>opia</span></a>
+  <div class="nav-links">
+    <a href="wiki/Home.html">Wiki</a>
+    <a href="wiki/Architecture.html">Architecture</a>
+    <a href="wiki/Feature-Map.html">Features</a>
+    <a href="prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia" class="primary">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="status-badge"><span class="status-dot"></span> Build complete · docs revived 2026-07-28</div>
+  <h1>Sports prediction leagues that <span>run themselves</span></h1>
+  <p>
+    Create a pool, share one permanent link, and stop babysitting Google Sheets.
+    One-tap picks, auto lock before toss, scoring, leaderboards, and prize tracking —
+    built for IPL family leagues, ready for any sport.
+  </p>
+  <div class="hero-ctas">
+    <a class="btn btn-primary" href="wiki/Home.html">Read the wiki</a>
+    <a class="btn btn-secondary" href="prototype.html">Open prototype</a>
+    <a class="btn btn-secondary" href="wiki/Live-Status.html">Live status</a>
+  </div>
+</header>
+
+<section class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Build phases shipped</span></div>
+    <div class="stat-item"><span class="stat-number">15</span><span class="stat-label">Tables · RLS hardened</span></div>
+    <div class="stat-item"><span class="stat-number">84</span><span class="stat-label">IPL matches seeded</span></div>
+    <div class="stat-item"><span class="stat-number">~$0</span><span class="stat-label">/mo at family scale</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Product loop</div>
+    <h2 class="section-title">From WhatsApp chaos to one pinned link</h2>
+    <p class="section-sub">Admin sets up once. Members predict. The app scores and ranks.</p>
+    <div class="pipeline">
+      <div class="pipeline-step"><div class="step-number">1</div><h3>Create pool</h3><p>Buy-in, commission, prize tiers</p></div>
+      <div class="pipeline-step"><div class="step-number">2</div><h3>Share link</h3><p>One permanent join URL</p></div>
+      <div class="pipeline-step"><div class="step-number">3</div><h3>One-tap pick</h3><p>Team A / B before cutoff</p></div>
+      <div class="pipeline-step"><div class="step-number">4</div><h3>Lock &amp; reveal</h3><p>Picks visible after deadline</p></div>
+      <div class="pipeline-step"><div class="step-number">5</div><h3>Score &amp; pay</h3><p>Leaderboards + offline UPI track</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">Technical highlights</div>
+    <h2 class="section-title">Built like a real product, sized for family</h2>
+    <p class="section-sub">Interesting engineering without enterprise bloat.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>RLS nuclear fix (007)</h3>
+        <p>Recursive pool_members policies rewritten so no policy queries its own table. Hybrid RLS + API for time-dependent rules.</p>
+      </div>
+      <div class="card">
+        <h3>Cutoff-enforced predictions</h3>
+        <p>Lock at query time via cutoff_at — no toss-detection cron. Change until deadline; last pick wins.</p>
+      </div>
+      <div class="card">
+        <h3>Commission prize engine</h3>
+        <p>Nx distribution, live preview, tie split with rank-inversion guard. Money stays offline.</p>
+      </div>
+      <div class="card">
+        <h3>API-thrifty cricket data</h3>
+        <p>Daily schedule cron; results fetched once on first open and cached forever.</p>
+      </div>
+      <div class="card">
+        <h3>Multi-pool strategies</h3>
+        <p>Predictions scoped per pool — different family groups, different bragging rights.</p>
+      </div>
+      <div class="card">
+        <h3>Share-native cards</h3>
+        <p>Device share sheet + QR join codes so every screenshot is an invite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Stack</div>
+    <h2 class="section-title">Free-tier friendly</h2>
+    <table>
+      <thead><tr><th>Layer</th><th>Tool</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>App</td><td>Next.js 14 on Vercel</td><td>App Router + cron</td></tr>
+        <tr><td>DB / Auth</td><td>Supabase</td><td>Postgres, Google OAuth, Realtime</td></tr>
+        <tr><td>Sports API</td><td>CricketData.org</td><td>Schedule + on-demand results</td></tr>
+        <tr><td>Share</td><td>navigator.share</td><td>No WhatsApp Business API in V1</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">Wiki</div>
+    <h2 class="section-title">Documentation (PMRocket-style)</h2>
+    <p class="section-sub">Full technical and product wiki — same portfolio standard as PMRocket.</p>
+    <div class="wiki-grid">
+      <a class="wiki-card" href="wiki/Home.html"><strong>Home</strong><span>Overview + technical narrative</span></a>
+      <a class="wiki-card" href="wiki/Live-Status.html"><strong>Live Status</strong><span>Revive report · how to run</span></a>
+      <a class="wiki-card" href="wiki/Product-Overview.html"><strong>Product Overview</strong><span>Personas, pools, scoring</span></a>
+      <a class="wiki-card" href="wiki/Feature-Map.html"><strong>Feature Map</strong><span>V1 / V1.1 / V2</span></a>
+      <a class="wiki-card" href="wiki/Architecture.html"><strong>Architecture</strong><span>Tables, RLS, routes</span></a>
+      <a class="wiki-card" href="wiki/API-Reference.html"><strong>API Reference</strong><span>Endpoint contracts</span></a>
+      <a class="wiki-card" href="wiki/Decision-Log.html"><strong>Decision Log</strong><span>Key product decisions</span></a>
+      <a class="wiki-card" href="wiki/Contributing.html"><strong>Contributing</strong><span>Local setup</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Predictopia · family prediction leagues · portfolio docs refreshed 2026-07-28<br/>
+  <a href="https://vcatreya-git.github.io/">Profile</a> ·
+  <a href="https://github.com/vcatreya-git/predictopia">GitHub</a> ·
+  <a href="https://vcatreya-git.github.io/pmrocket/docs/">PMRocket docs</a>
+</footer>
+
+</body>
+</html>

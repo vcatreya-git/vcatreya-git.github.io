@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Feature Map — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>Feature Map</h1>
+<p>Feature phasing across V1 (family MVP), V1.1 (fast follow), and V2 (post-season growth). Every feature listed here was explicitly discussed and approved in the <a href="Decision-Log.html">Decision Log</a>.</p>
+<p><strong>Build status (2026-07-28):</strong> V1 feature set is <strong>implemented</strong> in code (phases 1–5). Supabase + schedule seed done. Production re-deploy and family E2E are the remaining ship steps. See <a href="Live-Status.html">Live Status</a>.</p>
+<hr />
+<h2>V1 — Family MVP</h2>
+<p>The minimum product that lets a family run IPL predictions with zero manual work after pool setup.</p>
+<h3>Authentication and Identity</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google-only auth</td>
+<td>V1</td>
+<td>Phone OTP deferred (may need paid Twilio). Google covers all family members.</td>
+</tr>
+<tr>
+<td>Auto-populate display name + avatar</td>
+<td>V1</td>
+<td>Pulled from Google OAuth profile. Editable later.</td>
+</tr>
+<tr>
+<td>Pick favourite IPL team (onboarding)</td>
+<td>V1</td>
+<td>Tints nav bar + accent colour.</td>
+</tr>
+</tbody>
+</table>
+<h3>Pools</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pool creation + permanent join link</td>
+<td>V1</td>
+<td>One link, admin shares once, members pin it.</td>
+</tr>
+<tr>
+<td>Private pools only (invite-link)</td>
+<td>V1</td>
+<td><code>is_public</code> boolean in schema from day one; discovery is V2.</td>
+</tr>
+<tr>
+<td>Max pool size: 100 members</td>
+<td>V1</td>
+<td>Join requests auto-rejected when full.</td>
+</tr>
+<tr>
+<td>Multi-admin (WhatsApp model)</td>
+<td>V1</td>
+<td>Creator / Admin / Member roles. Creator can't be removed.</td>
+</tr>
+<tr>
+<td>Creator vs Admin permission split</td>
+<td>V1</td>
+<td>Creator controls money + pool existence. Admins help with daily ops.</td>
+</tr>
+<tr>
+<td>Admin screen (2 tabs)</td>
+<td>V1</td>
+<td>Gear icon → 2 tabs: (1) Settings + Competitions, (2) Requests + Budget. No Cards tab — share buttons on Pool Home. Commission/buy-in/league style locked after first match.</td>
+</tr>
+<tr>
+<td>Join request flow</td>
+<td>V1</td>
+<td>Paid: request + approval. Free: auto-join. Approve != Paid.</td>
+</tr>
+<tr>
+<td>Mid-season exit: buy-in stays</td>
+<td>V1</td>
+<td>No refund. Points frozen. Predictions preserved for history.</td>
+</tr>
+<tr>
+<td>Pool cards: pin/favourite, winnings</td>
+<td>V1</td>
+<td>Pinned sort to top. Show Won only (never net loss).</td>
+</tr>
+</tbody>
+</table>
+<h3>Predictions</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One-tap prediction (Team A or B)</td>
+<td>V1</td>
+<td>No tie option. Duolingo-style predict/done UX.</td>
+</tr>
+<tr>
+<td>Advance predictions (next 5 matches)</td>
+<td>V1</td>
+<td>Changeable until cutoff. Engagement on no-match days.</td>
+</tr>
+<tr>
+<td>Auto-lock before toss</td>
+<td>V1</td>
+<td>Fixed ~30 min before scheduled start.</td>
+</tr>
+<tr>
+<td>Predictions visible after cutoff only</td>
+<td>V1</td>
+<td>Independent thinking before, banter after.</td>
+</tr>
+<tr>
+<td>Predictions are per-pool</td>
+<td>V1</td>
+<td>Different pools, different strategies.</td>
+</tr>
+<tr>
+<td>Prediction share card</td>
+<td>V1</td>
+<td>All members' picks grouped by team after cutoff.</td>
+</tr>
+</tbody>
+</table>
+<h3>Match Data and Results</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPL schedule preloaded</td>
+<td>V1</td>
+<td>CricketData.org. Daily cron at 00:30 IST.</td>
+</tr>
+<tr>
+<td>On-demand result fetch (cached)</td>
+<td>V1</td>
+<td>First tap triggers API. One write per match via upsert.</td>
+</tr>
+<tr>
+<td>Admin result override</td>
+<td>V1</td>
+<td>For disputes only. Source marked as <code>admin_override</code>.</td>
+</tr>
+<tr>
+<td>Times in member's local timezone</td>
+<td>V1</td>
+<td>Stored UTC, displayed in browser locale.</td>
+</tr>
+</tbody>
+</table>
+<h3>Scoring and Leaderboards</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scoring: 2/0/1 (abandoned)</td>
+<td>V1</td>
+<td>All matches worth 2 pts. No ties in IPL.</td>
+</tr>
+<tr>
+<td>Synchronous score calculation</td>
+<td>V1</td>
+<td>No background jobs at family scale.</td>
+</tr>
+<tr>
+<td>Weekly/monthly/season leaderboards</td>
+<td>V1</td>
+<td>Tab inside Pool Home, not standalone.</td>
+</tr>
+<tr>
+<td>Streaks per-pool</td>
+<td>V1</td>
+<td>Independent per pool. Profile shows best active streak across pools.</td>
+</tr>
+<tr>
+<td>Visual streaks + achievements</td>
+<td>V1</td>
+<td>Hot Streak, Perfect Week, Team Loyalist.</td>
+</tr>
+</tbody>
+</table>
+<h3>Prizes and Money</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commission slider (0-50%)</td>
+<td>V1</td>
+<td>Admin sets, system computes prize pool.</td>
+</tr>
+<tr>
+<td>Nx distribution formula</td>
+<td>V1</td>
+<td>Position N from bottom = Nx share.</td>
+</tr>
+<tr>
+<td>Distribution tiers</td>
+<td>V1</td>
+<td>7 tiers from Winner Takes All to Top 50.</td>
+</tr>
+<tr>
+<td>Live prize preview</td>
+<td>V1</td>
+<td>Admin enters expected size, preview updates live.</td>
+</tr>
+<tr>
+<td>Prize periods: configurable (chunks/weekly/monthly/season)</td>
+<td>V1</td>
+<td>Admin picks league style; competitions auto-generated. Per-chunk pot set once, applied uniformly.</td>
+</tr>
+<tr>
+<td>Competition model</td>
+<td>V1</td>
+<td>Auto-generated from league style. One-offs: Top 4, Season Winner (default on, bragging only). No CompetitionBuilder UI — all auto-generated.</td>
+</tr>
+<tr>
+<td>Tie-breaking with rank inversion guard</td>
+<td>V1</td>
+<td>Split equally, guard prevents inversion.</td>
+</tr>
+<tr>
+<td>Pool budget tracker (admin-only)</td>
+<td>V1</td>
+<td>Total, allocated, paid, remaining, surplus.</td>
+</tr>
+<tr>
+<td>Never show losses to members</td>
+<td>V1</td>
+<td>"Won X so far" only. Buy-in is sunk.</td>
+</tr>
+<tr>
+<td>Commission % is admin-only</td>
+<td>V1</td>
+<td>Members see amounts, never the percentage.</td>
+</tr>
+<tr>
+<td>Money stays offline</td>
+<td>V1</td>
+<td>App tracks, doesn't process payments.</td>
+</tr>
+</tbody>
+</table>
+<h3>Navigation and UX</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3-tab bottom nav</td>
+<td>V1</td>
+<td>My Pools / Predict / Profile.</td>
+</tr>
+<tr>
+<td>Max depth 2 from any tab</td>
+<td>V1</td>
+<td>Bottom nav always visible.</td>
+</tr>
+<tr>
+<td>Predict tab: all pools unified</td>
+<td>V1</td>
+<td>Grouped by pool, soonest cutoff first.</td>
+</tr>
+<tr>
+<td>Members view: one screen, role-aware</td>
+<td>V1</td>
+<td>Admins see paid/unpaid toggle, make admin, remove.</td>
+</tr>
+</tbody>
+</table>
+<h3>Sharing and Growth</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Screenshot cards with QR/link</td>
+<td>V1</td>
+<td>Shareable by ALL members.</td>
+</tr>
+<tr>
+<td>Native share sheet</td>
+<td>V1</td>
+<td><code>navigator.share</code> on mobile. Copy + download on desktop.</td>
+</tr>
+<tr>
+<td>Feature board (submit + upvote)</td>
+<td>V1</td>
+<td>Profile &gt; Feature Board. Simple list.</td>
+</tr>
+</tbody>
+</table>
+<h3>Design and Theming</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Light, bright, energetic theme</td>
+<td>V1</td>
+<td>White backgrounds, vibrant team colours. bet365 + Daily Faceoff energy.</td>
+</tr>
+<tr>
+<td>No copyrighted images</td>
+<td>V1</td>
+<td>Team abbreviations in team colours.</td>
+</tr>
+<tr>
+<td>Accessibility for seniors</td>
+<td>V1</td>
+<td>48px min tap targets, high contrast, clear labels.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>V1.1 — Fast Follow (April 5-18)</h2>
+<p>Features explicitly deferred from V1 during brainstorming.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phone OTP auth</td>
+<td>For family members without Google accounts. May need Twilio.</td>
+</tr>
+<tr>
+<td>Configurable match point values</td>
+<td>Default 2 for league. Admin sets higher for knockouts (Eliminator 3, Qualifier 4, Final 5).</td>
+</tr>
+<tr>
+<td>Top 2/3/5 prize splits with custom %</td>
+<td>Full prize configuration UI beyond winner-takes-all per tier.</td>
+</tr>
+<tr>
+<td>Full team palette theming</td>
+<td>V1 stores selection, applies nav + accent. V1.1: full 10-palette override.</td>
+</tr>
+<tr>
+<td>"My Money" cross-pool view</td>
+<td>Total invested, total won, net, pending payouts, per-pool breakdown.</td>
+</tr>
+<tr>
+<td>Illustrated/caricature player cards</td>
+<td>Visual upgrade from abbreviations. Avoids likeness rights.</td>
+</tr>
+<tr>
+<td>Public pools + search/browse</td>
+<td><code>is_public</code> already in schema. Discovery when enough pools exist.</td>
+</tr>
+<tr>
+<td>Prorated points for mid-season joiners</td>
+<td>Admin toggle. Average of all members' scores per missed match.</td>
+</tr>
+<tr>
+<td>Automated WhatsApp/Telegram notifications</td>
+<td>V1 admin shares links manually. V1.1 adds automated reminders.</td>
+</tr>
+<tr>
+<td>Knockout-specific prize pots</td>
+<td>Qualifier, Eliminator, Final each get own pot and tier.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>V2 — Growth (Post-IPL 2026)</h2>
+<p>Larger features requiring architecture changes or meaningful user base.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multi-league support</td>
+<td>EPL, NBA, F1, MotoGP. Schema supports any sport from day one.</td>
+</tr>
+<tr>
+<td>Automated notification channels</td>
+<td>Email, SMS, WhatsApp Business API, Telegram bots.</td>
+</tr>
+<tr>
+<td>Ads integration</td>
+<td>Primary monetisation. Ad-supported, never charge users.</td>
+</tr>
+<tr>
+<td>Configurable bonus points</td>
+<td>Data tracked from V1, scoring toggles exposed in V2.</td>
+</tr>
+<tr>
+<td>Custom scoring rules per group</td>
+<td>Beyond 2/1/0 default. Admin-defined schemes.</td>
+</tr>
+<tr>
+<td>White-label for brands</td>
+<td>Predictopia as a platform other brands can skin.</td>
+</tr>
+<tr>
+<td>Cross-pool aggregate stats</td>
+<td>Profile-level stats across all pools.</td>
+</tr>
+<tr>
+<td>Public pool discovery</td>
+<td>Search/browse public pools.</td>
+</tr>
+<tr>
+<td>Advanced analytics</td>
+<td>Prediction accuracy trends, team bias analysis, head-to-head records.</td>
+</tr>
+</tbody>
+</table>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>

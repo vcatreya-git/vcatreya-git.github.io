@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Architecture — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>Architecture</h1>
+<h2>System Diagram</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Vercel
+        FE[Next.js Frontend -- App Router]
+        API[Next.js API Routes]
+        CRON[Vercel Cron -- Daily Schedule Refresh]
+        OG[@vercel/og -- Screenshot Cards]
+    end
+
+    subgraph Supabase
+        DB[(PostgreSQL + RLS)]
+        AUTH[Supabase Auth -- Google OAuth]
+        RT[Supabase Realtime]
+    end
+
+    EXT[CricketData.org API]
+    WA[WhatsApp -- Link Sharing]
+    USER[User Browser -- Mobile-First]
+
+    USER --&gt;|HTTPS| FE
+    FE --&gt;|Server Components + Client| API
+    API --&gt;|SQL via Supabase Client| DB
+    API --&gt;|JWT Verification| AUTH
+    API --&gt;|On-demand Result Fetch| EXT
+    CRON --&gt;|Daily| API
+    API --&gt;|Schedule Upsert| DB
+    FE --&gt;|Subscription| RT
+    RT --&gt;|Live Updates| DB
+    API --&gt;|Generate| OG
+    USER --&gt;|Share Screenshots| WA
+    WA --&gt;|Pool Join Link| FE
+</code></pre>
+<hr />
+<h2>Stack Decision</h2>
+<p>Reuses the proven Supabase + Next.js pattern from <a href="https://github.com/vcatreya-git/pmrocket">PMRocket</a>. Zero monthly cost at family scale. 9-day deadline means zero room for stack exploration.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tool</th>
+<th>Free Tier Limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend + API</td>
+<td>Next.js on Vercel</td>
+<td>100 GB bandwidth/month, serverless functions, cron</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Supabase PostgreSQL</td>
+<td>500 MB storage, 50K auth users, 2 projects</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Supabase Auth (Google OAuth)</td>
+<td>Included in free tier</td>
+</tr>
+<tr>
+<td>Realtime</td>
+<td>Supabase Realtime</td>
+<td>200 concurrent connections</td>
+</tr>
+<tr>
+<td>File storage</td>
+<td>Supabase Storage</td>
+<td>1 GB free</td>
+</tr>
+<tr>
+<td>Cron</td>
+<td>Vercel Cron</td>
+<td>1 cron job (hobby tier)</td>
+</tr>
+<tr>
+<td>Screenshot cards</td>
+<td>@vercel/og (satori)</td>
+<td>Serverless function (included)</td>
+</tr>
+<tr>
+<td>Sports API</td>
+<td>CricketData.org</td>
+<td>100 calls/day free</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Database Schema — 10 Tables</h2>
+<h3>Entity-Relationship Diagram</h3>
+<pre><code class="language-mermaid">erDiagram
+    USERS ||--o{ POOL_MEMBERS : &quot;joins&quot;
+    USERS ||--o{ PREDICTIONS : &quot;makes&quot;
+    USERS ||--o{ ACHIEVEMENTS : &quot;earns&quot;
+    POOLS ||--o{ POOL_MEMBERS : &quot;has&quot;
+    POOLS ||--o{ PREDICTIONS : &quot;scoped to&quot;
+    POOLS ||--o{ PRIZES : &quot;awards&quot;
+    POOLS ||--|| POOL_BUDGET : &quot;has&quot;
+    POOLS ||--o{ LEADERBOARD_CACHE : &quot;ranked in&quot;
+    POOLS ||--o{ ACHIEVEMENTS : &quot;scoped to&quot;
+    MATCHES ||--o{ PREDICTIONS : &quot;predicted on&quot;
+    MATCHES ||--o| MATCH_RESULTS : &quot;has result&quot;
+    USERS ||--o{ LEADERBOARD_CACHE : &quot;ranked&quot;
+    USERS ||--o{ PRIZES : &quot;wins&quot;
+</code></pre>
+<h3>Table Summary</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Table</th>
+<th>Purpose</th>
+<th>Key constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>users</code></td>
+<td>Profiles linked to <code>auth.users</code></td>
+<td>PK = <code>auth.users.id</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>pools</code></td>
+<td>Prediction groups with prize config</td>
+<td><code>join_code</code> UNIQUE, <code>commission_pct</code> 0--50</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>pool_members</code></td>
+<td>Junction: user + pool + role + payment</td>
+<td>UNIQUE(pool_id, user_id)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>matches</code></td>
+<td>IPL schedule from CricketData.org</td>
+<td><code>external_id</code> UNIQUE</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>match_results</code></td>
+<td>One outcome per match, written once</td>
+<td><code>match_id</code> UNIQUE, ON CONFLICT DO NOTHING</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>predictions</code></td>
+<td>One pick per user per match per pool</td>
+<td>UNIQUE(pool_id, user_id, match_id)</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>leaderboard_cache</code></td>
+<td>Pre-computed rankings per timeframe</td>
+<td>UNIQUE(pool_id, user_id, timeframe, period_key)</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>prizes</code></td>
+<td>Prize config + payout tracking per period</td>
+<td>Per pool per timeframe</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>pool_budget</code></td>
+<td>Admin-only pool financials</td>
+<td><code>pool_id</code> UNIQUE, one row per pool</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>achievements</code></td>
+<td>Earned badges (append-only)</td>
+<td>UNIQUE(pool_id, user_id, type, earned_at)</td>
+</tr>
+</tbody>
+</table>
+<h3>Key fields per table</h3>
+<p><strong>users</strong> — <code>id</code> (uuid, PK, refs auth.users), <code>display_name</code>, <code>avatar_url</code>, <code>google_avatar_url</code>, <code>favourite_team</code> (CHECK: 10 IPL teams)</p>
+<p><strong>pools</strong> — <code>id</code>, <code>name</code>, <code>join_code</code> (unique), <code>created_by</code> (FK users), <code>buy_in_amount</code> (default 0), <code>max_members</code> (default 100), <code>is_public</code> (default false), <code>commission_pct</code> (0--50), <code>distribution_tier</code> (winner/top3/top5/top10/top20/top25/top50), <code>late_join_policy</code> (zero/prorated), <code>status</code> (active/archived)</p>
+<p><strong>pool_members</strong> — <code>pool_id</code>, <code>user_id</code>, <code>role</code> (creator/admin/member), <code>status</code> (pending/approved/active/removed/blocked), <code>payment_status</code> (unpaid/paid), <code>is_pinned</code></p>
+<p><strong>matches</strong> — <code>external_id</code>, <code>league</code>, <code>team_a</code>, <code>team_b</code>, <code>team_a_name</code>, <code>team_b_name</code>, <code>match_number</code>, <code>match_type</code> (league/eliminator/qualifier/final), <code>venue</code>, <code>scheduled_at</code>, <code>cutoff_at</code> (scheduled_at - 30 min), <code>status</code> (upcoming/live/completed/abandoned/no_result)</p>
+<p><strong>match_results</strong> — <code>match_id</code> (unique FK), <code>winner</code>, <code>result_type</code> (normal/super_over/no_result/abandoned), <code>result_summary</code>, <code>source</code> (api/admin_override), <code>fetched_at</code></p>
+<p><strong>predictions</strong> — <code>pool_id</code>, <code>user_id</code>, <code>match_id</code>, <code>predicted_team</code>, <code>points_awarded</code> (null until scored; 0/1/2)</p>
+<p><strong>leaderboard_cache</strong> — <code>pool_id</code>, <code>user_id</code>, <code>timeframe</code> (weekly/monthly/overall), <code>period_key</code>, <code>total_points</code>, <code>matches_predicted</code>, <code>correct_predictions</code>, <code>current_streak</code>, <code>best_streak</code>, <code>rank</code></p>
+<p><strong>prizes</strong> — <code>pool_id</code>, <code>timeframe</code> (weekly/monthly/season), <code>period_key</code>, <code>amount</code>, <code>winner_user_id</code>, <code>paid</code>, <code>paid_at</code></p>
+<p><strong>pool_budget</strong> — <code>pool_id</code> (unique), <code>total_collected</code>, <code>total_allocated</code>, <code>total_paid</code></p>
+<p><strong>achievements</strong> — <code>pool_id</code>, <code>user_id</code>, <code>type</code> (hot_streak/perfect_week/upset_caller/team_loyalist), <code>metadata</code> (jsonb), <code>earned_at</code></p>
+<hr />
+<h2>RLS Strategy</h2>
+<p>RLS is enabled on all 15 tables (10 core + feature_requests, feature_votes, top4_predictions, competitions, season_winner_predictions). The design uses a hybrid approach:</p>
+<ul>
+<li><strong>RLS provides a broad security floor</strong> — most tables allow authenticated read access. RLS prevents unauthenticated access and enforces write restrictions.</li>
+<li><strong>API routes enforce business rules</strong> — prediction visibility before/after cutoff, pool membership checks for data filtering, result fetch triggers, scoring cascades. These are complex to express in RLS and easier to debug in application code.</li>
+</ul>
+<h3>Migration 007 — RLS Nuclear Fix</h3>
+<p>The original RLS policies caused <strong>infinite recursion</strong> on <code>pool_members</code>: a SELECT policy queried <code>pool_members</code> itself to verify membership. Migration 007 drops ALL policies on ALL 15 tables and recreates them with zero recursion.</p>
+<p>Three core principles:<br />
+1. <strong>No table's policy ever queries the same table</strong> — eliminates recursion by design.<br />
+2. <strong><code>pool_members</code> policies never query <code>pool_members</code></strong> — use <code>auth.uid() = user_id</code> for self-access, <code>pools.created_by</code> for creator access.<br />
+3. <strong><code>pools</code> policies never query <code>pool_members</code></strong> — any authenticated user can read pools (needed for join flow preview).</p>
+<p>Key RLS policies (post-007):</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Policy</th>
+<th>Logic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>users</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>pools</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code> (join preview needs this)</td>
+</tr>
+<tr>
+<td><code>pool_members</code></td>
+<td>Read own + creator sees all</td>
+<td><code>auth.uid() = user_id</code> OR <code>pool_id IN (SELECT id FROM pools WHERE created_by = auth.uid())</code></td>
+</tr>
+<tr>
+<td><code>matches</code></td>
+<td>Read all</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>match_results</code></td>
+<td>Read all</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>predictions</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code> (cutoff visibility in API)</td>
+</tr>
+<tr>
+<td><code>leaderboard_cache</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>prizes</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>pool_budget</code></td>
+<td>Read: creator only</td>
+<td><code>pool_id IN (SELECT id FROM pools WHERE created_by = auth.uid())</code></td>
+</tr>
+<tr>
+<td><code>achievements</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>competitions</code></td>
+<td>Read: any authenticated</td>
+<td><code>auth.uid() IS NOT NULL</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Backend Modules</h2>
+<pre><code class="language-mermaid">graph LR
+    API[API Routes] --&gt; AuthModule
+    API --&gt; PoolModule
+    API --&gt; MatchModule
+    API --&gt; PredictionModule
+    API --&gt; ScoringModule
+    API --&gt; PrizeModule
+    API --&gt; CardModule
+
+    PoolModule --&gt; AuthModule
+    PredictionModule --&gt; AuthModule
+    PredictionModule --&gt; PoolModule
+    MatchModule --&gt; ScoringModule
+    ScoringModule --&gt; PredictionModule
+    PrizeModule --&gt; PoolModule
+    PrizeModule --&gt; ScoringModule
+    CardModule --&gt; ScoringModule
+
+    MatchModule --&gt; EXT[CricketData.org]
+    AuthModule --&gt; SUPA[Supabase Auth]
+    PoolModule --&gt; DB[(PostgreSQL)]
+    PredictionModule --&gt; DB
+    ScoringModule --&gt; DB
+    MatchModule --&gt; DB
+    PrizeModule --&gt; DB
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+<th>Key routes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AuthModule</td>
+<td>Google OAuth, profile CRUD</td>
+<td><code>POST /api/users/profile</code>, <code>GET /api/users/me</code></td>
+</tr>
+<tr>
+<td>PoolModule</td>
+<td>Pool CRUD, join flow, members</td>
+<td><code>POST /api/pools</code>, <code>GET /api/pools</code>, join/role/block endpoints</td>
+</tr>
+<tr>
+<td>MatchModule</td>
+<td>Schedule import, result fetch</td>
+<td><code>GET /api/matches</code>, <code>GET /api/matches/{id}/result</code>, cron</td>
+</tr>
+<tr>
+<td>PredictionModule</td>
+<td>Submit + reveal with cutoff</td>
+<td><code>POST /api/predictions</code>, <code>GET /api/predictions/{pool}/{match}</code></td>
+</tr>
+<tr>
+<td>ScoringModule</td>
+<td>2/1/0 scoring, leaderboard, achievements</td>
+<td><code>GET /api/leaderboard/{pool}</code></td>
+</tr>
+<tr>
+<td>PrizeModule</td>
+<td>Prize config, payout tracking, budget</td>
+<td><code>GET /api/prizes/{pool}</code>, admin budget endpoints</td>
+</tr>
+<tr>
+<td>CardModule</td>
+<td>Screenshot card generation with QR</td>
+<td><code>GET /api/cards/leaderboard/{pool}</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Auth Flow</h2>
+<ol>
+<li>User taps "Sign in with Google" on the auth screen</li>
+<li>Supabase Auth handles OAuth redirect and JWT issuance</li>
+<li>If new user: frontend routes to onboarding (display name auto-populated from Google profile, avatar auto-populated, pick favourite IPL team)</li>
+<li>Profile row created in <code>users</code> table linked to <code>auth.users.id</code></li>
+<li>If user arrived via a join link: redirect intent preserved through auth flow, resolved after profile creation</li>
+<li>Phone OTP deferred to V1.1 (may require paid Twilio)</li>
+</ol>
+<hr />
+<h2>Cron Jobs</h2>
+<h3>Daily Schedule Refresh</h3>
+<ul>
+<li><strong>When:</strong> 00:30 IST (19:00 UTC previous day)</li>
+<li><strong>What:</strong> Calls CricketData.org <code>v1/series_info</code> for IPL 2026. Upserts into <code>matches</code> table.</li>
+<li><strong>Implementation:</strong> Vercel Cron calling <code>GET /api/cron/refresh-schedule</code></li>
+<li><strong>Failure:</strong> Non-critical. Schedule is pre-seeded. Cron catches new matches and time changes.</li>
+</ul>
+<h3>Cutoff Enforcement</h3>
+<p>Not a cron job. Enforced at query time: <code>now() &gt;= match.cutoff_at</code>. No background process needed.</p>
+<h3>Leaderboard Refresh</h3>
+<p>Not a cron job in V1. Updated synchronously when a match result is scored. At family scale (15 users, 1 pool), scoring takes milliseconds. Revisit at 100+ pools.</p>
+<hr />
+<h2>Key Architectural Flows</h2>
+<h3>Result Fetch + Score Cascade</h3>
+<ol>
+<li>User opens a completed match card (or taps refresh)</li>
+<li>API checks <code>match_results</code> for cached result</li>
+<li>If no cache: calls CricketData.org, parses winner</li>
+<li><code>INSERT INTO match_results ... ON CONFLICT (match_id) DO NOTHING</code> — first write wins</li>
+<li>Score all predictions for this match across all pools: 2 (correct), 0 (wrong), 1 (abandoned)</li>
+<li>Recompute <code>leaderboard_cache</code> for affected pools (weekly, monthly, overall)</li>
+<li>Check achievement criteria (streak, perfect week, team loyalist)</li>
+<li>Two simultaneous users: upsert race handled by DB constraint. Second write is a no-op.</li>
+</ol>
+<h3>Team Colour Theming (V1)</h3>
+<p>User selects favourite team at onboarding. A static JSON map provides <code>{ primary, secondary, text }</code> per team. V1 applies <code>primary</code> as <code>--team-color</code> CSS variable to root layout — used for nav bar background, button accents, active tab indicator. Full 10-palette override across all components is V1.1.</p>
+<hr />
+<h2>Build Order — 9-Day Sprint</h2>
+<pre><code>Phase 1 (Day 1-2) — Foundation
+  Schema (10 tables + RLS), Supabase setup, Next.js scaffold, Google OAuth, team theming CSS vars
+
+Phase 2 (Day 3-4) — Core Prediction Loop
+  Match seeding, Vercel Cron, pool CRUD, join flow, prediction submission + cutoff + reveal
+
+Phase 3 (Day 5-6) — Scoring + Leaderboards
+  On-demand result fetch, 2/1/0 scoring, leaderboard computation, leaderboard UI
+
+Phase 4 (Day 7) — Admin + Prizes
+  Budget tracker, member management, result override, prize config, payout tracking
+
+Phase 5 (Day 8-9) — Polish + Ship
+  Advance predictions, screenshot cards, achievements, landing page, join flow, deploy
+
+Phase 5.1 — Supabase Setup
+  Project created, all 7 migrations run (including 007 RLS nuclear fix), Google OAuth configured
+
+Phase 5.2 — Data Seeding
+  IPL 2026 schedule seeded (84 matches via CricketData.org API)
+</code></pre>
+<h3>Migrations</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>001</td>
+<td><code>001_tables.sql</code></td>
+<td>10 core tables (users, pools, pool_members, matches, match_results, predictions, leaderboard_cache, prizes, pool_budget, achievements)</td>
+</tr>
+<tr>
+<td>002</td>
+<td><code>002_rls.sql</code></td>
+<td>Original RLS policies (superseded by 007)</td>
+</tr>
+<tr>
+<td>003</td>
+<td><code>003_triggers.sql</code></td>
+<td><code>updated_at</code> triggers</td>
+</tr>
+<tr>
+<td>004</td>
+<td><code>004_feature_board.sql</code></td>
+<td><code>feature_requests</code> + <code>feature_votes</code> tables</td>
+</tr>
+<tr>
+<td>005</td>
+<td><code>005_top4_and_periods.sql</code></td>
+<td><code>top4_predictions</code> + <code>season_winner_predictions</code> tables</td>
+</tr>
+<tr>
+<td>006</td>
+<td><code>006_competitions.sql</code></td>
+<td><code>competitions</code> table</td>
+</tr>
+<tr>
+<td>007</td>
+<td><code>007_fix_rls.sql</code></td>
+<td>Nuclear RLS fix — drops all policies on 15 tables, recreates with zero recursion</td>
+</tr>
+</tbody>
+</table>
+<h3>DBA Agent</h3>
+<p>All migrations were authored using a reusable DBA agent. The agent handles SQL generation, migration file creation, Supabase CLI execution, and RLS debugging. Available at <code>~/.claude/agents/dba-agent.md</code> for future projects.</p>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>

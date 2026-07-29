@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Home — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>Predictopia</h1>
+<blockquote>
+<p>Multi-group sports prediction leagues that run themselves — schedule, picks, scoring, leaderboards, and prizes. Built for IPL 2026 family use; architected for any sport or league.</p>
+</blockquote>
+<h2>What is Predictopia?</h2>
+<p>Running a prediction league by hand is a seasonal tax: Google Sheets, coloured cells, WhatsApp chaos, and manual score tallying across 70+ matches. Predictopia removes that work after pool setup.</p>
+<ol>
+<li><strong>Create a pool</strong> — name, buy-in (or free), commission, prize tiers  </li>
+<li><strong>Share one permanent join link</strong> — pin it in WhatsApp once  </li>
+<li><strong>One-tap predictions</strong> — Team A or Team B before cutoff  </li>
+<li><strong>Auto lock &amp; reveal</strong> — after cutoff, everyone’s picks are visible  </li>
+<li><strong>Scoring &amp; leaderboards</strong> — weekly / monthly / season  </li>
+<li><strong>Prize tracking</strong> — money stays offline (UPI/cash); app tracks who paid and who won  </li>
+</ol>
+<p>As a portfolio project, Predictopia demonstrates:</p>
+<p><strong>Lived-problem product craft</strong> — designed from real family league ops, not abstract market research.</p>
+<p><strong>Access control under pressure</strong> — hybrid RLS + API enforcement after a recursive RLS failure and nuclear rewrite (migration 007).</p>
+<p><strong>Event-driven prediction rules</strong> — cutoff enforced at query time; no toss-detection cron for locks.</p>
+<p><strong>Commission-based prize engine</strong> — Nx distribution, live preview, rank-inversion guard for ties.</p>
+<p><strong>API thrift</strong> — CricketData schedule via daily cron; results on-demand with first-write-wins cache.</p>
+<hr />
+<h2>What makes it technically interesting</h2>
+<h3>RLS nuclear fix (migration 007)</h3>
+<p>Early <code>pool_members</code> policies queried <code>pool_members</code> to prove membership → infinite recursion. Migration 007 drops all policies on 15 tables and rebuilds with: never self-query the same table in a policy; membership uses <code>auth.uid() = user_id</code> or <code>pools.created_by</code>; fine-grained rules live in API routes where time and role logic are clearer.</p>
+<h3>Cutoff-enforced prediction engine</h3>
+<p>Cutoff is ~30 minutes before scheduled start (stored as <code>cutoff_at</code>). Enforcement is <code>now() &lt; cutoff_at</code> in API routes — no background job. Before cutoff: only own pick visible. After: pool-wide reveal (Realtime-friendly). Upserts allow change-until-lock; last pick wins.</p>
+<h3>Commission prize engine</h3>
+<p>Admin sets buy-in and commission 0–50%. Prize pool = total buy-ins − commission. Distribution tiers (Winner Takes All → Top 50) use Nx shares from the bottom of the paid rank. Ties split pot shares with a guard so rank inversion cannot pay 2nd more than tied 1st.</p>
+<h3>CricketData.org integration</h3>
+<ul>
+<li><strong>Schedule:</strong> Vercel Cron daily → <code>/api/cron/refresh-schedule</code> upsert  </li>
+<li><strong>Results:</strong> first user to open a completed match triggers fetch; <code>ON CONFLICT DO NOTHING</code> → one API call per match  </li>
+</ul>
+<h3>Multi-pool predictions</h3>
+<p>Predictions are scoped <code>(pool_id, user_id, match_id)</code>. One person can run different strategies in different family groups.</p>
+<h3>Join request + paid states</h3>
+<p>Paid pools: request → admin approve → admin marks <strong>Paid</strong> separately (async UPI/cash). Free pools: auto-join.</p>
+<h3>Screenshot-native sharing</h3>
+<p><code>navigator.share</code> on mobile; clipboard + image fallback on desktop. Cards for leaderboard / picks / unpaid nudges include join QR for viral distribution.</p>
+<hr />
+<h2>Current status</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product type</td>
+<td>Original idea · family side project</td>
+</tr>
+<tr>
+<td>Build phases 1–5</td>
+<td>Complete (schema → polish)</td>
+</tr>
+<tr>
+<td>Supabase</td>
+<td>Project live · migrations 001–007 applied</td>
+</tr>
+<tr>
+<td>IPL 2026 schedule</td>
+<td>Seeded (84 matches)</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Google OAuth via Supabase</td>
+</tr>
+<tr>
+<td>Local build</td>
+<td><code>npm run build</code> green (2026-07-28)</td>
+</tr>
+<tr>
+<td>Production deploy</td>
+<td><strong>Reviving</strong> — re-deploy to Vercel</td>
+</tr>
+<tr>
+<td>Public portfolio wiki</td>
+<td><strong>This docs site</strong> (GitHub + Pages)</td>
+</tr>
+<tr>
+<td>Next</td>
+<td>E2E family test · Vercel live · share join link</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="Live-Status.html">Live Status</a> for the revive report.</p>
+<hr />
+<h2>Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tool</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend + API</td>
+<td>Next.js 14 App Router on Vercel</td>
+<td>Serverless routes + cron</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Supabase PostgreSQL</td>
+<td>15 tables · RLS + API hybrid</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Supabase Auth · Google OAuth</td>
+<td>Phone OTP deferred</td>
+</tr>
+<tr>
+<td>Realtime</td>
+<td>Supabase Realtime</td>
+<td>Prediction reveal</td>
+</tr>
+<tr>
+<td>Sports data</td>
+<td>CricketData.org</td>
+<td>Schedule cron · on-demand results</td>
+</tr>
+<tr>
+<td>Sharing</td>
+<td>navigator.share + QR cards</td>
+<td>No WhatsApp Business API in V1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Target cost at family scale: ~$0/mo</strong></p>
+<hr />
+<h2>Wiki map</h2>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="Home.html">Home</a></td>
+<td>This page</td>
+</tr>
+<tr>
+<td><a href="Product-Overview.html">Product Overview</a></td>
+<td>Personas, pool model, scoring, prizes</td>
+</tr>
+<tr>
+<td><a href="Feature-Map.html">Feature Map</a></td>
+<td>V1 / V1.1 / V2 + build status</td>
+</tr>
+<tr>
+<td><a href="Architecture.html">Architecture</a></td>
+<td>System design, tables, RLS, routes</td>
+</tr>
+<tr>
+<td><a href="API-Reference.html">API Reference</a></td>
+<td>Endpoint contracts</td>
+</tr>
+<tr>
+<td><a href="Decision-Log.html">Decision Log</a></td>
+<td>Key product &amp; tech decisions</td>
+</tr>
+<tr>
+<td><a href="Live-Status.html">Live Status</a></td>
+<td>Revive / deploy status (2026-07-28)</td>
+</tr>
+<tr>
+<td><a href="Contributing.html">Contributing</a></td>
+<td>Local setup &amp; standards</td>
+</tr>
+<tr>
+<td><a href="../prototype.html">Prototype</a></td>
+<td>Clickable UI prototype</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Links</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GitHub</strong></td>
+<td>https://github.com/vcatreya-git/predictopia <em>(private repo)</em></td>
+</tr>
+<tr>
+<td><strong>Public docs</strong></td>
+<td>https://vcatreya-git.github.io/predictopia/</td>
+</tr>
+<tr>
+<td><strong>Local</strong></td>
+<td><code>~/projects/predictopia</code></td>
+</tr>
+<tr>
+<td><strong>Obsidian</strong></td>
+<td><code>Thoughts/Projects/projectPredictopia/</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Wiki refreshed 2026-07-28 to match PMRocket-style portfolio documentation.</em></p>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>

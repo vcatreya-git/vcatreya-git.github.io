@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Live Status — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>Live Status — Predictopia Revive</h1>
+<p><strong>Status date:</strong> 2026-07-28<br />
+<strong>Phase:</strong> Post-build revive · portfolio docs refresh<br />
+<strong>App:</strong> Built and verified locally · production re-deploy in progress  </p>
+<hr />
+<h2>What was true at last full ship (2026-03-27)</h2>
+<ul>
+<li>All five feature build phases complete  </li>
+<li>Supabase project <code>hhlymcuwdhtyfhyqkbwv</code> with migrations 001–007  </li>
+<li>IPL 2026 schedule seeded (84 matches)  </li>
+<li>Google OAuth configured  </li>
+<li>Docs v1.6 + wiki published in-repo  </li>
+<li>Next actions then: E2E test, Vercel deploy, family share  </li>
+</ul>
+<hr />
+<h2>Revive work (2026-07-28)</h2>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm run build</code></td>
+<td>✓ Passes (Next.js 14.2.20)</td>
+</tr>
+<tr>
+<td>Uncommitted WIP</td>
+<td>Stashed/restored on predict + matches/today routes</td>
+</tr>
+<tr>
+<td>Env keys present</td>
+<td>Supabase URL/anon/service + Cricket API in <code>.env.local</code></td>
+</tr>
+<tr>
+<td>Wiki</td>
+<td>Rewritten Home + Live Status (PMRocket-style)</td>
+</tr>
+<tr>
+<td>Portfolio landing</td>
+<td><code>docs/index.html</code></td>
+</tr>
+<tr>
+<td>Public mirror</td>
+<td>Published under profile Pages: <code>/predictopia/</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>How to run locally</h2>
+<pre><code class="language-bash">cd ~/projects/predictopia
+npm install
+# ensure .env.local has Supabase + CricketData keys
+npm run dev
+# → http://localhost:3000
+</code></pre>
+<h3>Deploy (Vercel)</h3>
+<pre><code class="language-bash">cd ~/projects/predictopia
+npx vercel --prod
+# set env vars in Vercel dashboard to match .env.local
+# add Google OAuth redirect: https://&lt;deployment&gt;/auth/callback
+</code></pre>
+<hr />
+<h2>Known follow-ups</h2>
+<ol>
+<li>Confirm Supabase project still active (no pause / key rotation)  </li>
+<li>Re-run schedule cron or seed if match data is stale for current IPL window  </li>
+<li>Production E2E: create pool → join → predict → leaderboard  </li>
+<li>Prorated points rounding (open product question)  </li>
+<li>Upset Caller achievement deferred (no underdog data in V1)  </li>
+</ol>
+<hr />
+<h2>Related wiki</h2>
+<ul>
+<li><a href="Home.html">Home</a>  </li>
+<li><a href="Feature-Map.html">Feature Map</a>  </li>
+<li><a href="Architecture.html">Architecture</a>  </li>
+<li><a href="Decision-Log.html">Decision Log</a>  </li>
+</ul>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>

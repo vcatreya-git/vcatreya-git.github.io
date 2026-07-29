@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>API Reference — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>API Reference</h1>
+<p>All endpoints are Next.js API Routes (<code>/api/*</code>). Auth is handled via Supabase Auth JWTs passed as Bearer tokens. Unless marked "optional", all endpoints require authentication.</p>
+<hr />
+<h2>Authentication</h2>
+<p>Auth is handled entirely by Supabase Auth. No custom auth endpoints. The frontend uses <code>@supabase/auth-helpers-nextjs</code>.</p>
+<ul>
+<li><strong>Provider:</strong> Google OAuth (V1). Phone OTP deferred to V1.1.</li>
+<li><strong>Session:</strong> JWT issued by Supabase, verified server-side via <code>supabase.auth.getUser()</code>.</li>
+</ul>
+<hr />
+<h2>User Profile</h2>
+<h3>Create or update profile</h3>
+<pre><code>POST /api/users/profile
+Auth: required
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;display_name&quot;: &quot;Venkat&quot;,
+  &quot;avatar_url&quot;: &quot;https://...&quot;,
+  &quot;favourite_team&quot;: &quot;CSK&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;uuid&quot;,
+  &quot;display_name&quot;: &quot;Venkat&quot;,
+  &quot;avatar_url&quot;: &quot;https://...&quot;,
+  &quot;google_avatar_url&quot;: &quot;https://lh3.googleusercontent.com/...&quot;,
+  &quot;favourite_team&quot;: &quot;CSK&quot;
+}
+</code></pre>
+<p>On first creation, <code>display_name</code> and <code>google_avatar_url</code> are auto-populated from the Google OAuth profile.</p>
+<h3>Get current user</h3>
+<pre><code>GET /api/users/me
+Auth: required
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;uuid&quot;,
+  &quot;display_name&quot;: &quot;Venkat&quot;,
+  &quot;avatar_url&quot;: &quot;https://...&quot;,
+  &quot;favourite_team&quot;: &quot;CSK&quot;,
+  &quot;created_at&quot;: &quot;2026-03-28T00:00:00Z&quot;
+}
+</code></pre>
+<hr />
+<h2>Pools</h2>
+<h3>Create pool</h3>
+<pre><code>POST /api/pools
+Auth: required
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Family IPL 2026&quot;,
+  &quot;icon_url&quot;: &quot;https://...&quot;,
+  &quot;buy_in_amount&quot;: 500,
+  &quot;max_members&quot;: 100,
+  &quot;commission_pct&quot;: 20,
+  &quot;distribution_tier&quot;: &quot;top3&quot;,
+  &quot;late_join_policy&quot;: &quot;zero&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;uuid&quot;,
+  &quot;name&quot;: &quot;Family IPL 2026&quot;,
+  &quot;join_code&quot;: &quot;abc123&quot;,
+  &quot;join_url&quot;: &quot;/join/abc123&quot;,
+  &quot;created_by&quot;: &quot;uuid&quot;,
+  &quot;buy_in_amount&quot;: 500,
+  &quot;max_members&quot;: 100,
+  &quot;commission_pct&quot;: 20,
+  &quot;distribution_tier&quot;: &quot;top3&quot;,
+  &quot;late_join_policy&quot;: &quot;zero&quot;
+}
+</code></pre>
+<p><strong>Side effects:</strong> Creates <code>pool_members</code> row (role: creator, status: active) and <code>pool_budget</code> row.</p>
+<h3>List user's pools</h3>
+<pre><code>GET /api/pools
+Auth: required
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;pools&quot;: [
+    {
+      &quot;id&quot;: &quot;uuid&quot;,
+      &quot;name&quot;: &quot;Family IPL 2026&quot;,
+      &quot;icon_url&quot;: &quot;https://...&quot;,
+      &quot;join_code&quot;: &quot;abc123&quot;,
+      &quot;role&quot;: &quot;creator&quot;,
+      &quot;member_count&quot;: 15,
+      &quot;today_match_status&quot;: &quot;CSK vs MI -- Predict now!&quot;
+    }
+  ]
+}
+</code></pre>
+<p>Returns only pools where the user is an active member.</p>
+<h3>Get pool detail</h3>
+<pre><code>GET /api/pools/{pool_id}
+Auth: required (must be active member)
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;uuid&quot;,
+  &quot;name&quot;: &quot;Family IPL 2026&quot;,
+  &quot;icon_url&quot;: &quot;https://...&quot;,
+  &quot;join_code&quot;: &quot;abc123&quot;,
+  &quot;join_url&quot;: &quot;/join/abc123&quot;,
+  &quot;buy_in_amount&quot;: 500,
+  &quot;late_join_policy&quot;: &quot;zero&quot;,
+  &quot;member_count&quot;: 15,
+  &quot;my_role&quot;: &quot;creator&quot;
+}
+</code></pre>
+<h3>Resolve join link (preview)</h3>
+<pre><code>GET /api/pools/join/{join_code}
+Auth: optional
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;pool_id&quot;: &quot;uuid&quot;,
+  &quot;name&quot;: &quot;Family IPL 2026&quot;,
+  &quot;icon_url&quot;: &quot;https://...&quot;,
+  &quot;member_count&quot;: 15,
+  &quot;is_member&quot;: false
+}
+</code></pre>
+<p>Public endpoint. Shows pool preview without revealing internals.</p>
+<h3>Join pool</h3>
+<pre><code>POST /api/pools/{pool_id}/join
+Auth: required
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;pool_member&quot;: {
+    &quot;id&quot;: &quot;uuid&quot;,
+    &quot;pool_id&quot;: &quot;uuid&quot;,
+    &quot;user_id&quot;: &quot;uuid&quot;,
+    &quot;role&quot;: &quot;member&quot;,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;payment_status&quot;: &quot;unpaid&quot;,
+    &quot;joined_at&quot;: &quot;2026-03-29T10:00:00Z&quot;
+  }
+}
+</code></pre>
+<ul>
+<li>Free pools (<code>buy_in = 0</code>): status set to <code>active</code> (auto-join).</li>
+<li>Paid pools (<code>buy_in &gt; 0</code>): status set to <code>pending</code> (requires admin approval).</li>
+<li><strong>Errors:</strong> <code>403</code> if blocked, <code>409</code> if already member, <code>422</code> if pool full (max_members reached).</li>
+</ul>
+<hr />
+<h2>Pool Admin</h2>
+<h3>Update member role</h3>
+<pre><code>PUT /api/pools/{pool_id}/members/{user_id}/role
+Auth: required (creator or admin)
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{ &quot;role&quot;: &quot;admin&quot; }
+</code></pre>
+<p><strong>Error:</strong> <code>403</code> if targeting the creator.</p>
+<h3>Remove member</h3>
+<pre><code>DELETE /api/pools/{pool_id}/members/{user_id}
+Auth: required (creator or admin)
+</code></pre>
+<p>Sets <code>pool_members.status = 'removed'</code> and <code>removed_at = now()</code>. Historical predictions preserved for leaderboard integrity.</p>
+<p><strong>Error:</strong> <code>403</code> if targeting creator, or if a non-admin calls it.</p>
+<h3>Block member</h3>
+<pre><code>PUT /api/pools/{pool_id}/members/{user_id}/block
+Auth: required (creator or admin)
+</code></pre>
+<p>Sets <code>status = 'blocked'</code>. Blocked members cannot rejoin via the same link.</p>
+<h3>Update payment status</h3>
+<pre><code>PUT /api/pools/{pool_id}/members/{user_id}/payment-status
+Auth: required (creator or admin)
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{ &quot;payment_status&quot;: &quot;paid&quot; }
+</code></pre>
+<p>Separate from approval. Approve = "you're in." Paid = "I got your money."</p>
+<hr />
+<h2>Matches</h2>
+<h3>List matches</h3>
+<pre><code>GET /api/matches?status=upcoming&amp;limit=10
+Auth: required
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;matches&quot;: [
+    {
+      &quot;id&quot;: &quot;uuid&quot;,
+      &quot;team_a&quot;: &quot;CSK&quot;,
+      &quot;team_b&quot;: &quot;MI&quot;,
+      &quot;team_a_name&quot;: &quot;Chennai Super Kings&quot;,
+      &quot;team_b_name&quot;: &quot;Mumbai Indians&quot;,
+      &quot;match_number&quot;: 1,
+      &quot;match_type&quot;: &quot;league&quot;,
+      &quot;venue&quot;: &quot;M.A. Chidambaram Stadium&quot;,
+      &quot;scheduled_at&quot;: &quot;2026-03-28T14:00:00Z&quot;,
+      &quot;cutoff_at&quot;: &quot;2026-03-28T13:30:00Z&quot;,
+      &quot;status&quot;: &quot;upcoming&quot;
+    }
+  ]
+}
+</code></pre>
+<h3>Get match result (on-demand fetch)</h3>
+<pre><code>GET /api/matches/{match_id}/result
+Auth: required
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;result&quot;: {
+    &quot;winner&quot;: &quot;CSK&quot;,
+    &quot;result_type&quot;: &quot;normal&quot;,
+    &quot;result_summary&quot;: &quot;CSK won by 6 wickets&quot;,
+    &quot;source&quot;: &quot;api&quot;
+  },
+  &quot;match_status&quot;: &quot;completed&quot;
+}
+</code></pre>
+<p><strong>Side effects:</strong> If no cached result and the match appears completed, triggers an external API call to CricketData.org, caches the result via upsert, and cascades score calculation for all pools.</p>
+<h3>Admin result override</h3>
+<pre><code>POST /api/admin/matches/{match_id}/result
+Auth: required (must be admin/creator of at least one pool)
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;winner&quot;: &quot;CSK&quot;,
+  &quot;result_type&quot;: &quot;normal&quot;,
+  &quot;result_summary&quot;: &quot;CSK won by 6 wickets&quot;
+}
+</code></pre>
+<p>Writes/overwrites <code>match_results</code> with <code>source = 'admin_override'</code>. Re-triggers scoring for all pools.</p>
+<hr />
+<h2>Predictions</h2>
+<h3>Submit prediction</h3>
+<pre><code>POST /api/predictions
+Auth: required
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;pool_id&quot;: &quot;uuid&quot;,
+  &quot;match_id&quot;: &quot;uuid&quot;,
+  &quot;predicted_team&quot;: &quot;CSK&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;prediction&quot;: {
+    &quot;id&quot;: &quot;uuid&quot;,
+    &quot;pool_id&quot;: &quot;uuid&quot;,
+    &quot;match_id&quot;: &quot;uuid&quot;,
+    &quot;predicted_team&quot;: &quot;CSK&quot;,
+    &quot;created_at&quot;: &quot;2026-03-28T12:00:00Z&quot;
+  }
+}
+</code></pre>
+<p>Uses <code>INSERT ... ON CONFLICT (pool_id, user_id, match_id) DO UPDATE SET predicted_team, updated_at</code>.</p>
+<p><strong>Errors:</strong> <code>403</code> if after cutoff, <code>403</code> if not a pool member, <code>404</code> if match not found.</p>
+<h3>Get predictions for a match</h3>
+<pre><code>GET /api/predictions/{pool_id}/{match_id}
+Auth: required (must be pool member)
+</code></pre>
+<p><strong>Before cutoff:</strong></p>
+<pre><code class="language-json">{
+  &quot;my_prediction&quot;: { &quot;predicted_team&quot;: &quot;CSK&quot; },
+  &quot;total_predicted&quot;: 8,
+  &quot;total_members&quot;: 15
+}
+</code></pre>
+<p><strong>After cutoff:</strong></p>
+<pre><code class="language-json">{
+  &quot;predictions&quot;: [
+    {
+      &quot;user_id&quot;: &quot;uuid&quot;,
+      &quot;display_name&quot;: &quot;Venkat&quot;,
+      &quot;avatar_url&quot;: &quot;https://...&quot;,
+      &quot;predicted_team&quot;: &quot;CSK&quot;,
+      &quot;points_awarded&quot;: 2
+    }
+  ],
+  &quot;my_prediction&quot;: { &quot;predicted_team&quot;: &quot;CSK&quot; }
+}
+</code></pre>
+<p>Before cutoff, only returns own prediction + aggregate count. After cutoff, returns all members' predictions.</p>
+<h3>Get upcoming predictions</h3>
+<pre><code>GET /api/predictions/{pool_id}/upcoming
+Auth: required (must be pool member)
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;matches&quot;: [
+    {
+      &quot;match_id&quot;: &quot;uuid&quot;,
+      &quot;team_a&quot;: &quot;CSK&quot;,
+      &quot;team_b&quot;: &quot;MI&quot;,
+      &quot;scheduled_at&quot;: &quot;2026-03-29T14:00:00Z&quot;,
+      &quot;cutoff_at&quot;: &quot;2026-03-29T13:30:00Z&quot;,
+      &quot;my_prediction&quot;: &quot;CSK&quot;
+    }
+  ]
+}
+</code></pre>
+<p>Returns next 5 upcoming matches with the user's prediction status.</p>
+<hr />
+<h2>Leaderboard</h2>
+<h3>Get pool leaderboard</h3>
+<pre><code>GET /api/leaderboard/{pool_id}?timeframe=overall&amp;period_key=overall
+Auth: required (must be pool member)
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;leaderboard&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;user_id&quot;: &quot;uuid&quot;,
+      &quot;display_name&quot;: &quot;Venkat&quot;,
+      &quot;avatar_url&quot;: &quot;https://...&quot;,
+      &quot;total_points&quot;: 42,
+      &quot;correct_predictions&quot;: 21,
+      &quot;matches_predicted&quot;: 25,
+      &quot;current_streak&quot;: 5,
+      &quot;best_streak&quot;: 8
+    }
+  ],
+  &quot;my_rank&quot;: 1
+}
+</code></pre>
+<p>Timeframe options: <code>weekly</code>, <code>monthly</code>, <code>overall</code>. Period key examples: <code>2026-W14</code>, <code>2026-04</code>, <code>overall</code>.</p>
+<hr />
+<h2>Prizes</h2>
+<h3>Get pool prizes (member view)</h3>
+<pre><code>GET /api/prizes/{pool_id}
+Auth: required (must be pool member)
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;prizes&quot;: [
+    {
+      &quot;timeframe&quot;: &quot;weekly&quot;,
+      &quot;period_key&quot;: &quot;2026-W14&quot;,
+      &quot;amount&quot;: 200,
+      &quot;winner_display_name&quot;: &quot;Venkat&quot;,
+      &quot;paid&quot;: true
+    }
+  ]
+}
+</code></pre>
+<p>Members see winner + amount + paid status only. No pool economics.</p>
+<h3>Configure prize (admin)</h3>
+<pre><code>POST /api/admin/prizes/{pool_id}
+Auth: required (creator or admin)
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;timeframe&quot;: &quot;weekly&quot;,
+  &quot;period_key&quot;: &quot;2026-W14&quot;,
+  &quot;amount&quot;: 200
+}
+</code></pre>
+<h3>Mark prize paid (admin)</h3>
+<pre><code>PUT /api/admin/prizes/{prize_id}/paid
+Auth: required (creator or admin)
+</code></pre>
+<p><strong>Side effects:</strong> Updates <code>pool_budget.total_paid</code>.</p>
+<h3>Get budget (admin only)</h3>
+<pre><code>GET /api/admin/budget/{pool_id}
+Auth: required (creator or admin)
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;total_collected&quot;: 7500,
+  &quot;total_allocated&quot;: 6000,
+  &quot;total_paid&quot;: 2400,
+  &quot;remaining&quot;: 3600,
+  &quot;surplus&quot;: 1500
+}
+</code></pre>
+<p>Never exposed to members.</p>
+<hr />
+<h2>Screenshot Cards</h2>
+<h3>Generate leaderboard card</h3>
+<pre><code>GET /api/cards/leaderboard/{pool_id}?timeframe=overall
+Auth: required (pool member)
+</code></pre>
+<p><strong>Response:</strong> PNG image (server-rendered via @vercel/og / satori).</p>
+<p>Includes pool name, top 5 rankings, QR code with join link. Optimized for WhatsApp image sharing.</p>
+<hr />
+<h2>Feature Board</h2>
+<h3>List features</h3>
+<pre><code>GET /api/features
+Auth: required
+</code></pre>
+<h3>Submit feature request</h3>
+<pre><code>POST /api/features
+Auth: required
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;Dark mode&quot;,
+  &quot;description&quot;: &quot;Add a dark theme option&quot;
+}
+</code></pre>
+<h3>Upvote feature</h3>
+<pre><code>PUT /api/features/{id}/upvote
+Auth: required
+</code></pre>
+<p>One tap to upvote. No comments, no threading.</p>
+<hr />
+<h2>Cron</h2>
+<h3>Refresh schedule</h3>
+<pre><code>GET /api/cron/refresh-schedule
+Auth: Vercel Cron (verified via CRON_SECRET header)
+</code></pre>
+<p>Called daily at 00:30 IST. Fetches IPL 2026 schedule from CricketData.org and upserts into <code>matches</code> table.</p>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>

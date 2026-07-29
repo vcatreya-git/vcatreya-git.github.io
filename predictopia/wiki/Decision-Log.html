@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Decision Log — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>Decision Log</h1>
+<p>Curated key decisions from the Predictopia brainstorming and design phases (March 2026). Grouped by category, with reasoning preserved.</p>
+<hr />
+<h2>Product Strategy</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product name: Predictopia</td>
+<td>Prediction + utopia. Memorable, works for any sport, doesn't sound like betting.</td>
+</tr>
+<tr>
+<td>Ad-supported, never charge users</td>
+<td>Friends pooling money + no house edge = not betting. Ads are cleanest monetisation.</td>
+</tr>
+<tr>
+<td>Multi-group platform (anyone can create)</td>
+<td>Every group admin is a distribution channel. Organic growth without acquisition spend.</td>
+</tr>
+<tr>
+<td>Multi-league architecture, IPL only at launch</td>
+<td>Schema supports any sport/league from day one. Content and API integration for IPL only in MVP.</td>
+</tr>
+<tr>
+<td>Hard deadline: April 4, 2026</td>
+<td>IPL started March 28. Ship MVP before too many matches pass.</td>
+</tr>
+<tr>
+<td>Skip hypothesis and discovery phases</td>
+<td>Problem validated through 3 seasons of manual Google Sheets leagues. No market research needed for a family side project.</td>
+</tr>
+<tr>
+<td>Primary persona: Pool Admin</td>
+<td>If admin pain is eliminated, pool survives. Admin is also the distribution channel.</td>
+</tr>
+<tr>
+<td>North Star Metric: Prediction rate &gt; 70%</td>
+<td>% of eligible predictions made per match. If members predict, the product works.</td>
+</tr>
+<tr>
+<td>Alpha = family group directly</td>
+<td>No separate alpha environment. Ship to family WhatsApp group by April 4.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Authentication</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google-only auth for V1</td>
+<td>Family all have Google accounts. Phone OTP may require paid Twilio -- deferred to V1.1.</td>
+</tr>
+<tr>
+<td>Google display name + avatar auto-populated</td>
+<td>Reduces onboarding friction. One less thing to type.</td>
+</tr>
+<tr>
+<td>Pick favourite IPL team at onboarding</td>
+<td>Tints app UI, feeds Team Loyalist streak. One extra signup question.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Pools and Membership</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One permanent pool link (not per-match)</td>
+<td>Admin shares once, members pin it. No daily link generation.</td>
+</tr>
+<tr>
+<td>Private pools only in V1</td>
+<td>Family use case = closed groups. <code>is_public</code> boolean in schema for V2.</td>
+</tr>
+<tr>
+<td>Max pool size: 100 members</td>
+<td>Prevents abuse, keeps leaderboards manageable.</td>
+</tr>
+<tr>
+<td>Multi-admin (WhatsApp model)</td>
+<td>Familiar permissions, no learning curve. Creator can't be removed.</td>
+</tr>
+<tr>
+<td>Creator vs Admin permission split</td>
+<td>Creator controls money + pool existence. Admins help with daily ops.</td>
+</tr>
+<tr>
+<td>Admin removal: only Creator can</td>
+<td>Keeps power hierarchy clear. Admin steps down by leaving and rejoining.</td>
+</tr>
+<tr>
+<td>Approve != Paid (two separate states)</td>
+<td>UPI/cash payment is async. Approve = "you're in." Paid = "I got your money."</td>
+</tr>
+<tr>
+<td>Join flow: request + approval (paid), auto-join (free)</td>
+<td>Prevents strangers via leaked links, makes buy-in transparent.</td>
+</tr>
+<tr>
+<td>Mid-season exit: buy-in stays in pool</td>
+<td>No refund. Predictions preserved. The buy-in is the entry fee.</td>
+</tr>
+<tr>
+<td>Merged Admin/Settings screen</td>
+<td>One gear icon, one screen with sub-tabs. Reduces nav confusion.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Predictions and Scoring</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One-tap prediction (Team A or B, no tie)</td>
+<td>IPL has super overs -- always a winner. Simplest possible UX.</td>
+</tr>
+<tr>
+<td>Advance predictions for next 5 matches</td>
+<td>Keeps engagement on no-match days. Changeable until cutoff.</td>
+</tr>
+<tr>
+<td>Cutoff = fixed time before scheduled start</td>
+<td>~30 min before. Not tied to actual toss detection. Simpler, no live toss API dependency.</td>
+</tr>
+<tr>
+<td>Predictions visible after cutoff only</td>
+<td>Independent thinking before, banter after.</td>
+</tr>
+<tr>
+<td>Predictions are per-pool</td>
+<td>Different pools, different strategies, different bragging rights.</td>
+</tr>
+<tr>
+<td>Scoring: 2/0/1 (abandoned). All matches 2 pts in V1</td>
+<td>Clean, simple. Configurable match point values deferred to V1.1.</td>
+</tr>
+<tr>
+<td>Synchronous score calculation</td>
+<td>At family scale (15 users, 1 pool), milliseconds. Background jobs add complexity with zero benefit.</td>
+</tr>
+<tr>
+<td>Streaks are per-pool in V1</td>
+<td>Profile shows best active streak across pools. Cross-pool aggregate is V2.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Match Data</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CricketData.org as sports API</td>
+<td>Free tier: 100 calls/day. Fallback: Roanuz. No SportRadar needed.</td>
+</tr>
+<tr>
+<td>Schedule: daily cron at 00:30 IST</td>
+<td>One API call/day. Catches time changes and new matches.</td>
+</tr>
+<tr>
+<td>Results: on-demand fetch, not polled</td>
+<td>First user tap triggers API + cache. One write per match. Near-zero API usage.</td>
+</tr>
+<tr>
+<td>On-demand fetch uses DB upsert (ON CONFLICT DO NOTHING)</td>
+<td>Handles race when two users tap simultaneously. First write wins, second is a no-op.</td>
+</tr>
+<tr>
+<td>Admin result override for disputes</td>
+<td>Source marked as <code>admin_override</code>. Rare edge case only.</td>
+</tr>
+<tr>
+<td>Match times in member's local timezone</td>
+<td>Stored UTC, displayed in browser locale. Countdown is timezone-agnostic.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Prizes and Money</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commission slider (0-50%)</td>
+<td>Admin sets commission, system computes prize pool. No manual math.</td>
+</tr>
+<tr>
+<td>Nx distribution formula</td>
+<td>Position N from bottom = Nx share. Intuitive, automatic.</td>
+</tr>
+<tr>
+<td>Tie-breaking: split equally + rank inversion guard</td>
+<td>Prevents "2nd place earns more than tied-1st" scenarios.</td>
+</tr>
+<tr>
+<td>Prize periods: weekly + monthly + season (V1)</td>
+<td>Knockout-specific pots are V1.1. Keeps V1 config simple.</td>
+</tr>
+<tr>
+<td>Prize preview with expected member count</td>
+<td>Admin enters expected size, preview shows exact amounts. Updates live.</td>
+</tr>
+<tr>
+<td>Commission % is admin-only</td>
+<td>Members see prize amounts, never the admin's cut.</td>
+</tr>
+<tr>
+<td>Never show losses to members</td>
+<td>"Won X so far" only. Showing losses discourages participation.</td>
+</tr>
+<tr>
+<td>Money stays offline</td>
+<td>MVP complexity reduction. App tracks, doesn't process payments.</td>
+</tr>
+<tr>
+<td>Pool budget tracker (admin-only)</td>
+<td>Total collected, allocated, paid, remaining, surplus. Members never see pool economics.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Design and UX</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Light, bright, energetic -- NOT dark theme</td>
+<td>White backgrounds, vibrant team colours. Dark theme killed the IPL broadcast energy.</td>
+</tr>
+<tr>
+<td>IPL broadcast + bet365 energy</td>
+<td>Professional, data-rich, scannable. Dark nav + white content.</td>
+</tr>
+<tr>
+<td>No copyrighted images</td>
+<td>Team abbreviations in team colours. No logos, no player photos.</td>
+</tr>
+<tr>
+<td>Accessibility for seniors</td>
+<td>48px min tap targets, high contrast, clear labels.</td>
+</tr>
+<tr>
+<td>3-tab bottom nav (My Pools / Predict / Profile)</td>
+<td>Leaderboard inside Pool Home, not standalone. Max depth 2.</td>
+</tr>
+<tr>
+<td>Predict tab = today's to-do across all pools</td>
+<td>Grouped by pool, soonest cutoff first.</td>
+</tr>
+<tr>
+<td>"Who hasn't predicted" visible to ALL members</td>
+<td>Social nudge. Members can tag stragglers in WhatsApp.</td>
+</tr>
+<tr>
+<td>Share = text + link via navigator.share() in V1</td>
+<td>Visual card (PNG) share is V1.1. Text shares are faster.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Infrastructure</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supabase + Next.js + Vercel (all free tiers)</td>
+<td>Reuses PMRocket stack. $0/month at alpha. Zero new learning curve.</td>
+</tr>
+<tr>
+<td>Hybrid RLS + API route access control</td>
+<td>RLS for pool isolation (static). API routes for time-dependent logic (cutoff).</td>
+</tr>
+<tr>
+<td>Next.js API Routes (not Edge Functions)</td>
+<td>Local-dev compatible via <code>next dev</code>. Simpler debugging.</td>
+</tr>
+<tr>
+<td>Notification channel as config</td>
+<td>Architecture supports WhatsApp/email/Telegram/SMS. V1: admin shares manually.</td>
+</tr>
+<tr>
+<td>$0/month cost target at alpha</td>
+<td>All free tiers. No paid services until 1,000+ users.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Review Outcomes</h2>
+<table>
+<thead>
+<tr>
+<th>Review</th>
+<th>Result</th>
+<th>Key changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PRD v1.0 (prd-reviewer)</td>
+<td>Approved with changes</td>
+<td>(1) Annotate superseded decision log entries. (2) Resolve sports API choice.</td>
+</tr>
+<tr>
+<td>Design Phase 7a (design-reviewer)</td>
+<td>Approved with changes</td>
+<td>(1) Add Prizes + Members tab definitions. (2) Clarify team selector navigation. (3) Align to Google-only auth. (4) Correct API rate limit.</td>
+</tr>
+<tr>
+<td>Architecture (architecture-reviewer)</td>
+<td>Approved with changes</td>
+<td>(1) Remove resolved open questions. (2) Align phone OTP references to Google-only.</td>
+</tr>
+</tbody>
+</table>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>

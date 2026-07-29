@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Product Overview — Predictopia</title>
+<style>
+:root {
+  --navy: #0B1D36; --navy-2: #122849; --teal: #14B8A6; --teal-d: #0D9488;
+  --slate-900: #0f172a; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9; --slate-50: #f8fafc; --white: #fff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: var(--slate-700); line-height: 1.65; background: var(--white); }
+a { color: var(--teal-d); }
+nav { position: sticky; top: 0; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+.logo { font-weight: 800; color: var(--navy); text-decoration: none; }
+.logo span { color: var(--teal-d); }
+.nav a { margin-left: 12px; font-size: 13px; font-weight: 600; color: var(--slate-600); text-decoration: none; }
+.nav a:hover { color: var(--navy); }
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+h1,h2,h3 { color: var(--slate-900); line-height: 1.25; }
+h1 { font-size: 1.9rem; letter-spacing: -0.5px; }
+h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 6px; }
+h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 14px; }
+th, td { border: 1px solid var(--slate-200); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--slate-50); }
+code { background: var(--slate-100); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--navy); color: #e2e8f0; padding: 14px; border-radius: 10px; overflow-x: auto; }
+pre code { background: none; color: inherit; padding: 0; }
+blockquote { border-left: 3px solid var(--teal-d); margin: 1rem 0; padding: 8px 14px; background: #f0fdfa; color: var(--slate-600); }
+hr { border: none; border-top: 1px solid var(--slate-200); margin: 2rem 0; }
+.footer { text-align: center; font-size: 12px; color: var(--slate-500); padding: 24px; border-top: 1px solid var(--slate-200); }
+</style>
+</head><body>
+<nav>
+  <a class="logo" href="../index.html">Predict<span>opia</span></a>
+  <div class="nav">
+    <a href="../index.html">Home</a>
+    <a href="../wiki/Home.html">Wiki</a>
+    <a href="../prototype.html">Prototype</a>
+    <a href="https://github.com/vcatreya-git/predictopia">GitHub</a>
+  </div>
+</nav>
+<main>
+<h1>Product Overview</h1>
+<h2>What Predictopia does</h2>
+<p>Predictopia is a mobile-first web app where anyone creates a prediction pool, shares a single permanent link, and the app runs the entire league automatically. No daily Google Sheets, no WhatsApp message chaos, no manual score tallying. The admin's job after initial setup: nothing.</p>
+<p>The app handles schedule imports from CricketData.org, prediction collection with auto-lock before toss, result fetching, scoring, leaderboards, and prize tracking. Members make one-tap predictions (Team A or Team B) and see everyone's picks revealed after cutoff. Leaderboards, streaks, and achievement badges keep the competitive energy alive across a 70+ match IPL season.</p>
+<hr />
+<h2>Who it's for</h2>
+<h3>Primary persona: Pool Admin</h3>
+<p>The person who voluntarily takes on the work of running a prediction league. They spend 15-30 minutes per match day on admin tasks using Google Sheets. Over 70+ IPL matches, that's 17-35 hours of unpaid work per season. Predictopia reduces this to zero after initial pool setup. If the admin's pain is eliminated, the pool survives the full season. The admin is also the distribution channel -- they create pools and invite members.</p>
+<h3>Secondary personas</h3>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Description</th>
+<th>Motivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active Predictor</td>
+<td>Checks every match day, 18-55 years old</td>
+<td>Competition, bragging rights, prizes</td>
+</tr>
+<tr>
+<td>Casual Predictor</td>
+<td>Predicts when reminded, 40-65 years old</td>
+<td>Social belonging, doesn't want to miss out</td>
+</tr>
+</tbody>
+</table>
+<h3>Design for the family</h3>
+<p>Accessibility matters: large tap targets (48px minimum), big readable text, high contrast, one primary action per screen, clear labels ("Pick your winner" not "Submit prediction"). Simple enough for non-tech-savvy seniors.</p>
+<hr />
+<h2>The pool model</h2>
+<h3>Pool creation</h3>
+<p>Any authenticated user can create a pool. They set a name, icon, buy-in amount (or free at INR 0), commission percentage, and prize distribution tier. The system generates a permanent join link -- one link, shared once, pinnable in WhatsApp.</p>
+<h3>Joining a pool</h3>
+<ul>
+<li><strong>Free pools (INR 0 buy-in):</strong> Tap the link, auto-join instantly.</li>
+<li><strong>Paid pools:</strong> Tap the link, see buy-in amount upfront, request to join. Admin approves the request. Admin separately marks "Paid" when money arrives offline. Approve and Paid are two separate states because UPI and cash payments are asynchronous.</li>
+</ul>
+<h3>Roles (WhatsApp model)</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Can do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Creator</strong></td>
+<td>Everything. Change buy-in/commission/prizes, delete pool, remove admins. Cannot be removed.</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Approve joins, mark paid, screenshot cards, override results, remove members.</td>
+</tr>
+<tr>
+<td><strong>Member</strong></td>
+<td>Predict, view leaderboard, view prizes, share cards.</td>
+</tr>
+</tbody>
+</table>
+<h3>Pool limits</h3>
+<p>Max 100 members per pool. Predictions are per-pool -- a member in three pools can predict differently in each. Mid-season exit: buy-in stays in the pool (no refund), predictions preserved, points frozen.</p>
+<hr />
+<h2>Scoring</h2>
+<h3>Base scoring</h3>
+<table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Correct prediction</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Wrong prediction</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Match abandoned / no result (rain)</td>
+<td>1 (everyone)</td>
+</tr>
+</tbody>
+</table>
+<p>In V1, all matches are worth 2 points. Admin-configurable point values for knockouts (Eliminator 3, Qualifier 4, Final 5) are V1.1.</p>
+<h3>Leaderboards</h3>
+<p>Three timeframes: weekly (Mon-Sun), monthly (calendar month), and season overall. Leaderboards live inside Pool Home as a tab, not as standalone navigation. Updated synchronously after each match result -- no background jobs needed at family scale.</p>
+<h3>Streaks and achievements</h3>
+<p>Streaks are tracked per-pool. A streak in Pool A and Pool B are independent. Profile shows best active streak across pools.</p>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hot Streak</td>
+<td>N consecutive correct predictions</td>
+</tr>
+<tr>
+<td>Perfect Week</td>
+<td>100% accuracy for a Mon-Sun week</td>
+</tr>
+<tr>
+<td>Team Loyalist</td>
+<td>Always predicts the same team</td>
+</tr>
+<tr>
+<td>Upset Caller</td>
+<td>Correctly predicted an upset (V1.1 -- no underdog data source in V1)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Prizes</h2>
+<h3>How prize calculation works</h3>
+<ol>
+<li><strong>Admin sets commission</strong> (0-50% slider). Commission is admin-only -- members never see the percentage.</li>
+<li><strong>System computes prize pool</strong> = total buy-ins x (1 - commission / 100).</li>
+<li><strong>Admin picks distribution tier:</strong> Winner Takes All, Top 3, Top 5, Top 10, Top 20, Top 25, or Top 50.</li>
+<li><strong>Nx multiplier formula:</strong> Position N from bottom gets Nx share. For Top 3: 3x + 2x + 1x = 6 total parts.</li>
+<li><strong>Live preview</strong> shows exact amounts per rank. Admin enters expected pool size during creation; preview updates as members actually join and pay.</li>
+</ol>
+<h3>Tie-breaking</h3>
+<p>If N people tie at rank R, they split the sum of prizes for ranks R through R+N-1, divided equally. A rank inversion guard ensures tied people always get at least as much as the rank directly below them.</p>
+<h3>Prize periods</h3>
+<p>V1 supports three periods: weekly (12 weeks in league stage), monthly (3 months), and season overall. Admin sets pot size and tier for each. Knockout-specific prize pots (qualifier, eliminator, final) are V1.1.</p>
+<h3>What members see vs what admins see</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Members</th>
+<th>Admins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prize amounts</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Who won</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Paid / unpaid</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Commission %</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Pool balance</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Allocated budget</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Admin surplus</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Net loss</td>
+<td>No</td>
+<td>Yes (budget tracker)</td>
+</tr>
+</tbody>
+</table>
+<p>Members see "Won INR 100 so far" -- never "Net -INR 400." Buy-in is treated as a sunk entry fee, not an investment. Showing losses discourages participation.</p>
+<h3>Money stays offline</h3>
+<p>The app tracks prizes but does not process payments. Payouts are marked in-app by the admin when money is transferred via UPI, cash, or other offline means.</p>
+<hr />
+<h2>Match data pipeline</h2>
+<h3>Schedule</h3>
+<p>IPL 2026 schedule is preloaded from CricketData.org. A daily Vercel Cron at 00:30 IST refreshes the schedule to catch time changes or newly announced matches. One API call per day.</p>
+<h3>Results</h3>
+<p>Results are not polled. The first user who opens a completed match card triggers an on-demand API call to CricketData.org. The result is cached via database upsert (<code>ON CONFLICT DO NOTHING</code> -- first write wins). Subsequent users read from cache. Total API usage: approximately 1 call per match across the entire user base.</p>
+<h3>Cutoff</h3>
+<p>Predictions lock at a fixed time ~30 minutes before scheduled match start. Not tied to actual toss detection. Server time is authoritative -- frontend shows a countdown, but enforcement is server-side.</p>
+<hr />
+<h2>Sharing</h2>
+<h3>What can be shared</h3>
+<ul>
+<li><strong>All members:</strong> Leaderboard position, their predictions, achievements, match results</li>
+<li><strong>Admins additionally:</strong> Payout cards, "who hasn't predicted" nudge cards, budget summary</li>
+</ul>
+<h3>How sharing works</h3>
+<p>Mobile: one tap triggers <code>navigator.share()</code> for the native device share sheet (WhatsApp, Telegram, etc.) with pre-filled text + pool link. Desktop: copy link + download as image.</p>
+<p>Every screenshot card embeds a QR code and pool join link. Every share is organic marketing -- the card is the invite.</p>
+<hr />
+<h2>Cost</h2>
+<table>
+<thead>
+<tr>
+<th>Scale</th>
+<th>Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 users (family)</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>100 users</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>1,000 users</td>
+<td>~$25 (Supabase Pro)</td>
+</tr>
+<tr>
+<td>5,000 users</td>
+<td>~$50-75</td>
+</tr>
+</tbody>
+</table>
+<p>All free tiers: Supabase, Vercel, CricketData.org. No paid services until 1,000+ users.</p>
+</main>
+<div class="footer">Predictopia · portfolio docs · refreshed 2026-07-28</div>
+</body></html>
