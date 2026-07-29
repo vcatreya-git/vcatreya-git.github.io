@@ -260,6 +260,8 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 ### Current — Enterprise Notification Platform
 - Enterprise leadership initiated a strategic consolidation to eliminate fragmented multi-vendor notification delivery across bank clients; owned product definition and roadmap from that directive.
 - Defined multi-tenant platform: **single outbound API** (SMS, email, push) — priority routing, failover, idempotency, full audit trail. Roadmap evolves toward event-driven architecture receiving upstream events → bespoke end-customer notifications on preferred delivery channels, with consent, preferences, and upstream channel branding on the platform side of the contract.
+- Platform built on AWS serverless stack (Lambda, SQS, EventBridge, DynamoDB).
+- Ran architecture review meetings as PO — identified when progress had stalled, reset the agenda, and provided structured feedback on HLD and LLD documents to unblock design decisions.
 - Owned phased execution so early integrators stay stable as capabilities grow.
 
 ### Team leadership at FIS
