@@ -262,6 +262,13 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 - Defined multi-tenant platform: **single outbound API** (SMS, email, push) — priority routing, failover, idempotency, full audit trail. Roadmap evolves toward event-driven architecture receiving upstream events → bespoke end-customer notifications on preferred delivery channels, with consent, preferences, and upstream channel branding on the platform side of the contract.
 - Owned phased execution so early integrators stay stable as capabilities grow.
 
+### Team leadership at FIS
+- SAFe Agile team structure: 5 developers + 2 QAs + 1 TL + 1 shared RTE + PO per team.
+- Regularly brought in to stand up NEW teams — not just maintain existing ones. Sets project context, defines delivery outcomes, establishes timelines, shapes delivery culture, and manages team morale from day one.
+- Managed more than one such team concurrently during peak periods.
+- Day-to-day: assesses individual developer capability and assigns work by skill and complexity in partnership with the TL.
+- Acting people manager during leadership transition (covered for departing manager until replacement found; TPM role subsequently eliminated in restructure).
+
 ### Skills demonstrated at FIS
 - API/platform product ownership (channel-agnostic design, contracts, CodeConnect publishing)
 - API modernisation; RTP/FedNow; wires; money movement
