@@ -56,7 +56,7 @@ Cross-checked this dump against prior profile materials. **Mostly accepted as us
 |---|------|------|
 | 1 | TCS start | Dump says role **May 2010 – Mar 2013** and also **joined March 2010** (training). Master uses **May 2010 – Mar 2013** for employment; note Mar 2010 join/training. |
 | 2 | “Spring Boot” at TCS (2010) | Spring Boot released **2014**. Likely **Spring Framework** / enterprise Java stack. Do **not** claim Spring Boot on 2010 work unless user confirms later Spring use. Tag as **Java/JEE, MVC, Spring (era-appropriate)**. |
-| 3 | Deposit workflow acronym | Earlier materials said **CAT**; this dump says **CAD** (Change Account Titling). **Use CAD** as primary; CAT may have been a mislabel. |
+| 3 | Deposit workflow acronym | Earlier materials said **CAT**; dump said **CAD**. User confirmed 2026-07-29: **CAT is correct** — Change Account Titling. Update all references from CAD → CAT. |
 | 4 | FAB naming | Dump uses FADB / First Abu Dhabi Bank — **FAB / First Abu Dhabi Bank**. |
 | 5 | RTP “~$1.3–1.4M value” | User-stated commercial scale — use only if comfortable; label as approximate programme value if used on resume. |
 | 6 | Concurrent Edgeverve clients | Bancolombia / BRAC / QNB overlap is normal for consulting — keep all. |
@@ -71,7 +71,7 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 **Signature outcomes**
 - **IBS Fintech Innovation Award 2019** — Best Payments System Implementation (QNB Enterprise Payments Hub; multi-country; **~60% STP** via intelligent intermediary routing / Bankers Almanac)
 - Turned around troubled implementations (QNB payments hub; FIS wires; IBS UI/UX modernisation)
-- **Western Alliance Bank**, **MidFirst Bank**, **Westmoreland** (BaaS) among FIS API clients
+- **Western Alliance Bank**, **MidFirst Bank** among FIS API clients *(Westmoreland name unverified — do not use publicly)*
 - **Open Access Connect** — FDX-aligned data sharing, consent management dashboard, fintech consumers
 - **Standard Chartered** — multi-market core interfaces (40+ markets EBBS era) and later origination pre-processor in payments modernisation (40+ markets SCPAY)
 - **Current:** multi-tenant **Enterprise Notification Platform** — single outbound API (SMS/email/push)
@@ -227,8 +227,8 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 
 ### Wires API modernisation (D1B / BPS Wires)
 - Took over **troubled Wires** initiative; led from scratch through UAT and production.
-- Clients: **Western Alliance Bank** (inaugural BPS digital banking APIs), **MidFirst Bank** (short-track mortgage processing platform for brokers/bankers), **Westmoreland Bank** (BaaS wrapper — customers onboard to their platform then FIS for wire initiation), others.
-- Features: inquiries, updates, legacy base access; integrations with payment systems (**OPAY**, **Fiserv/Dovetail**) via **IBM MQ**.
+- Clients: **Western Alliance Bank** (inaugural BPS digital banking APIs), **MidFirst Bank** (short-track mortgage processing platform for brokers/bankers), others. *(Note: "Westmoreland Bank" name unverified — user could not confirm 2026-07-29; removed from public materials. Do not use until confirmed.)*
+- Features: inquiries, updates, legacy base access; integrations with payment systems (**OPF**, **Fiserv/Dovetail**) via **IBM MQ**.
 
 ### Banking Platform Services (BPS) evolution
 - D1B APIs rebuilt as channel-agnostic **Banking Platform Services** (retail + corporate).
@@ -236,7 +236,7 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 
 ### IBS UI/UX modernisation — Deposit Origination & SRM
 - Stabilized troubled project.
-- Owned **Deposit Origination** (hardcoded + dynamic/authored pages) and **Change Account Titling (CAD)** workflows.
+- Owned **Deposit Origination** (hardcoded + dynamic/authored pages) and **Change Account Titling (CAT)** workflows.
 - Workflows: progress tracking, validations, document uploads, **e-signature (DocuSign)**, document/form generation, card generation integrations.
 - Two main workflows: direct bank vs traditional.
 - Authored pages: complex, dynamic, rule-based, highly customizable per bank.
@@ -258,9 +258,9 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 - Handed over to dedicated Product Manager for build phase.
 
 ### Current — Enterprise Notification Platform
-- Identified fragmented multi-vendor notification delivery as integration pain for bank clients.
-- Defined multi-tenant platform: **single outbound API** (SMS, email, push) — priority routing, failover, idempotency, full audit trail.
-- Owned product definition, roadmap (foundation → intelligence → event-driven → voice), phased execution so early integrators stay stable.
+- Enterprise leadership initiated a strategic consolidation to eliminate fragmented multi-vendor notification delivery across bank clients; owned product definition and roadmap from that directive.
+- Defined multi-tenant platform: **single outbound API** (SMS, email, push) — priority routing, failover, idempotency, full audit trail. Roadmap evolves toward event-driven architecture receiving upstream events → bespoke end-customer notifications on preferred delivery channels, with consent, preferences, and upstream channel branding on the platform side of the contract.
+- Owned phased execution so early integrators stay stable as capabilities grow.
 
 ### Skills demonstrated at FIS
 - API/platform product ownership (channel-agnostic design, contracts, CodeConnect publishing)
@@ -303,7 +303,7 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 - Multi-tenant platforms (notifications, data outreach)  
 - API publishing (CodeConnect); marketplace ideation (Business Hub)  
 - Fintech/vendor onboarding (Yodlee, MX, Finicity, etc.)  
-- BaaS wrapper patterns (e.g. Westmoreland)  
+- BaaS wrapper patterns (wire initiation, platform onboarding)  
 
 ### Technical & development
 - Java/JEE 5, MVC, rule engines; Spring ecosystem (era-appropriate)  
@@ -329,7 +329,7 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 - BA team leadership; mentoring; stepped-up ownership  
 
 ### Platforms & products (worked with)
-Finacle Core / Enterprise Payments Hub · FIS BPS / Digital One · IBS / HZN · CodeConnect · OPAY · Fiserv/Dovetail · Fundtech/eWires (earlier wires modernisation) · Euronet · Bankers Almanac · S2B · TLM (reconciliation context) · RLS · CCMS · Capgemini Clearing Connect / Payment Reference Architecture patterns · DocuSign · NGINX Gen Authentication (consent path)
+Finacle Core / Enterprise Payments Hub · FIS BPS / Digital One · IBS / HZN · CodeConnect · OPF · Fiserv/Dovetail · Fundtech/eWires (earlier wires modernisation) · Euronet · Bankers Almanac · S2B · TLM (reconciliation context) · RLS · CCMS · Capgemini Clearing Connect / Payment Reference Architecture patterns · DocuSign · NGINX Gen Authentication (consent path)
 
 ### Certifications & education
 - CSM® · SAFe® POPM · SAFe® Agilist (SA) · ISO 20022 Masterclass  
