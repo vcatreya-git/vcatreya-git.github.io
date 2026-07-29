@@ -71,7 +71,7 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 **Signature outcomes**
 - **IBS Fintech Innovation Award 2019** — Best Payments System Implementation (QNB Enterprise Payments Hub; multi-country; **~60% STP** via intelligent intermediary routing / Bankers Almanac)
 - Turned around troubled implementations (QNB payments hub; FIS wires; IBS UI/UX modernisation)
-- **Western Alliance Bank**, **MidFirst Bank** among FIS API clients *(Westmoreland name unverified — do not use publicly)*
+- **Western Alliance Bank**, **MidFirst Bank** among FIS API clients
 - **Open Access Connect** — FDX-aligned data sharing, consent management dashboard, fintech consumers
 - **Standard Chartered** — multi-market core interfaces (40+ markets EBBS era) and later origination pre-processor in payments modernisation (40+ markets SCPAY)
 - **Current:** multi-tenant **Enterprise Notification Platform** — single outbound API (SMS/email/push)
@@ -227,7 +227,7 @@ Agile Product Owner / TPM with **15+ years** owning enterprise banking platforms
 
 ### Wires API modernisation (D1B / BPS Wires)
 - Took over **troubled Wires** initiative; led from scratch through UAT and production.
-- Clients: **Western Alliance Bank** (inaugural BPS digital banking APIs), **MidFirst Bank** (short-track mortgage processing platform for brokers/bankers), others. *(Note: "Westmoreland Bank" name unverified — user could not confirm 2026-07-29; removed from public materials. Do not use until confirmed.)*
+- Clients: **Western Alliance Bank** (inaugural BPS digital banking APIs; also BaaS wrapper — wire initiation), **MidFirst Bank** (short-track mortgage processing platform for brokers/bankers), others. *(Note: "Westmoreland Bank" was a misremembering — confirmed 2026-07-29 the correct name is Western Alliance Bank.)*
 - Features: inquiries, updates, legacy base access; integrations with payment systems (**OPF**, **Fiserv/Dovetail**) via **IBM MQ**.
 
 ### Banking Platform Services (BPS) evolution
