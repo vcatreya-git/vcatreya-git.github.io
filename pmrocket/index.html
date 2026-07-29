@@ -5,423 +5,344 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PMRocket — Career Navigation for Aspiring PMs</title>
 <style>
-  :root {
-    --teal: #0D9488;
-    --teal-dark: #0F766E;
-    --teal-light: #CCFBF1;
-    --teal-xlight: #F0FDFA;
-    --slate-900: #0f172a;
-    --slate-800: #1e293b;
-    --slate-700: #334155;
-    --slate-600: #475569;
-    --slate-500: #64748b;
-    --slate-400: #94a3b8;
-    --slate-200: #e2e8f0;
-    --slate-100: #f1f5f9;
-    --slate-50: #f8fafc;
-    --white: #ffffff;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
-    --shadow-lg: 0 20px 48px rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.05);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    background: var(--white);
-    color: var(--slate-800);
-    line-height: 1.6;
-    font-size: 16px;
-  }
-  a { color: var(--teal); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+:root {
+  --teal: #0D9488;
+  --teal-dark: #0F766E;
+  --teal-light: #CCFBF1;
+  --teal-xlight: #F0FDFA;
+  --purple: #7C3AED;
+  --purple-light: #EDE9FE;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --white: #ffffff;
+  --sidebar-w: 224px;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--white);color:var(--slate-800);line-height:1.6;font-size:15px;padding-left:var(--sidebar-w)}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:12px;background:var(--slate-100);padding:1px 5px;border-radius:3px;color:var(--teal-dark)}
 
-  /* NAV */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--slate-200);
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-  }
-  .nav-logo { font-size: 18px; font-weight: 700; color: var(--slate-900); letter-spacing: -0.3px; }
-  .nav-logo span { color: var(--teal); }
-  .nav-links { display: flex; gap: 8px; align-items: center; }
-  .nav-links a {
-    font-size: 14px; font-weight: 500; color: var(--slate-600);
-    padding: 6px 12px; border-radius: var(--radius-sm);
-    transition: background 0.15s, color 0.15s;
-  }
-  .nav-links a:hover { background: var(--slate-100); color: var(--slate-900); text-decoration: none; }
-  .nav-links a.primary { background: var(--teal); color: white; }
-  .nav-links a.primary:hover { background: var(--teal-dark); }
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--slate-200);z-index:200;display:flex;flex-direction:column;overflow-y:auto}
+.sb-logo{padding:16px 14px 12px;border-bottom:1px solid var(--slate-200);flex-shrink:0}
+.sb-logo .wordmark{font-size:16px;font-weight:800;color:var(--slate-900);letter-spacing:-0.3px}
+.sb-logo .wordmark span{color:var(--teal)}
+.sb-status{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;font-weight:600;color:var(--teal-dark);background:var(--teal-light);padding:2px 8px;border-radius:100px}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sb-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate-400);padding:12px 14px 3px}
+.sb-nav{padding:4px 6px;flex:1}
+.sb-nav a{display:flex;align-items:center;gap:7px;padding:6px 8px;font-size:12.5px;font-weight:500;color:var(--slate-500);border-radius:var(--radius-sm);text-decoration:none;transition:all .12s;margin-bottom:1px;line-height:1.3}
+.sb-nav a .ico{font-size:13px;flex-shrink:0}
+.sb-nav a:hover{background:var(--slate-100);color:var(--slate-800)}
+.sb-nav a.active{background:var(--teal-xlight);color:var(--teal-dark);font-weight:600}
+.sb-ctas{padding:10px;border-top:1px solid var(--slate-200);flex-shrink:0}
+.sb-ctas a{display:block;text-align:center;padding:7px;font-size:12.5px;font-weight:600;border-radius:var(--radius-sm);text-decoration:none;margin-bottom:5px;transition:all .12s}
+.sb-btn-primary{background:var(--teal);color:white}
+.sb-btn-primary:hover{background:var(--teal-dark);text-decoration:none}
+.sb-btn-ghost{color:var(--slate-600);border:1px solid var(--slate-200)}
+.sb-btn-ghost:hover{background:var(--slate-100);color:var(--slate-800);text-decoration:none}
 
-  /* HERO */
-  .hero {
-    background: linear-gradient(160deg, var(--teal-xlight) 0%, var(--white) 55%);
-    padding: 88px 24px 80px;
-    text-align: center;
-  }
-  .status-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--teal-light); color: var(--teal-dark);
-    font-size: 12px; font-weight: 600; padding: 4px 14px;
-    border-radius: 100px; margin-bottom: 24px; letter-spacing: 0.2px;
-  }
-  .status-dot {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-  .hero h1 {
-    font-size: clamp(30px, 4.5vw, 50px);
-    font-weight: 800; color: var(--slate-900); letter-spacing: -1.5px;
-    line-height: 1.1; max-width: 720px; margin: 0 auto 20px;
-  }
-  .hero h1 span { color: var(--teal); }
-  .hero p {
-    font-size: clamp(15px, 2vw, 18px); color: var(--slate-600);
-    max-width: 640px; margin: 0 auto 36px; line-height: 1.7;
-  }
-  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 12px 24px; border-radius: var(--radius);
-    font-size: 15px; font-weight: 600; cursor: pointer;
-    transition: all 0.15s; text-decoration: none;
-  }
-  .btn-primary { background: var(--teal); color: white; box-shadow: 0 2px 12px rgba(13,148,136,0.3); }
-  .btn-primary:hover { background: var(--teal-dark); box-shadow: 0 4px 20px rgba(13,148,136,0.4); transform: translateY(-1px); text-decoration: none; }
-  .btn-secondary { background: white; color: var(--slate-800); border: 1.5px solid var(--slate-200); }
-  .btn-secondary:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-xlight); text-decoration: none; }
-  .btn-ghost { background: transparent; color: var(--slate-600); border: 1.5px solid var(--slate-200); }
-  .btn-ghost:hover { background: var(--slate-100); color: var(--slate-800); text-decoration: none; }
+/* ── MOBILE HEADER ── */
+.mobile-header{display:none;position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);padding:0 16px;height:52px;align-items:center;justify-content:space-between}
+.mob-logo{font-size:15px;font-weight:800;color:var(--slate-900)}
+.mob-logo span{color:var(--teal)}
+.mob-cta{background:var(--teal);color:white;padding:6px 13px;border-radius:var(--radius-sm);font-size:12px;font-weight:600}
 
-  /* SECTION WRAPPER */
-  .section { padding: 80px 24px; }
-  .section-alt { background: var(--slate-50); }
-  .section-dark { background: var(--slate-900); }
-  .container { max-width: 1060px; margin: 0 auto; }
-  .section-label {
-    font-size: 12px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1.5px; color: var(--teal); margin-bottom: 10px;
-  }
-  .section-label-light { color: rgba(13,148,136,0.9); }
-  .section-title {
-    font-size: clamp(24px, 3vw, 36px); font-weight: 800;
-    color: var(--slate-900); letter-spacing: -0.8px; margin-bottom: 12px;
-  }
-  .section-title-light { color: white; }
-  .section-sub {
-    font-size: 16px; color: var(--slate-600);
-    max-width: 580px; margin-bottom: 52px; line-height: 1.6;
-  }
-  .section-sub-light { color: rgba(255,255,255,0.55); }
+/* ── LAYOUT ── */
+.section{padding:72px 40px}
+.section-alt{background:var(--slate-50)}
+.section-dark{background:var(--slate-900)}
+.container{max-width:1020px;margin:0 auto}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:6px}
+.section-title{font-size:clamp(20px,2.5vw,30px);font-weight:800;color:var(--slate-900);letter-spacing:-.6px;margin-bottom:8px;line-height:1.2}
+.section-sub{font-size:14px;color:var(--slate-500);max-width:580px;margin-bottom:40px;line-height:1.65}
+.section-sub-wide{max-width:760px}
 
-  /* STATS BAR */
-  .stats-bar { background: var(--slate-900); padding: 44px 24px; }
-  .stats-grid {
-    max-width: 1060px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: rgba(255,255,255,0.08);
-  }
-  .stat-item { background: var(--slate-900); padding: 28px 32px; text-align: center; }
-  .stat-number {
-    font-size: clamp(28px, 4vw, 42px); font-weight: 800; color: var(--teal);
-    letter-spacing: -1px; display: block; margin-bottom: 6px;
-  }
-  .stat-label { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+/* ── HERO ── */
+#overview{background:linear-gradient(155deg,var(--teal-xlight) 0%,var(--white) 55%);padding:80px 40px 72px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:var(--teal-light);color:var(--teal-dark);font-size:11px;font-weight:600;padding:4px 13px;border-radius:100px;margin-bottom:20px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+#overview h1{font-size:clamp(26px,3.8vw,44px);font-weight:800;color:var(--slate-900);letter-spacing:-1.5px;line-height:1.1;max-width:660px;margin:0 auto 16px}
+#overview h1 span{color:var(--teal)}
+#overview .hero-sub{font-size:clamp(13px,1.6vw,16px);color:var(--slate-600);max-width:600px;margin:0 auto 28px;line-height:1.7}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:600;transition:all .15s;text-decoration:none}
+.btn-primary{background:var(--teal);color:white;box-shadow:0 2px 10px rgba(13,148,136,.25)}
+.btn-primary:hover{background:var(--teal-dark);transform:translateY(-1px);text-decoration:none}
+.btn-secondary{background:white;color:var(--slate-800);border:1.5px solid var(--slate-200)}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-xlight);text-decoration:none}
 
-  /* PROBLEM CARDS */
-  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-  .problem-card {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm);
-  }
-  .problem-icon {
-    width: 40px; height: 40px; background: var(--teal-xlight);
-    border-radius: var(--radius-sm); display: flex; align-items: center;
-    justify-content: center; margin-bottom: 16px; font-size: 18px;
-  }
-  .problem-card h3 { font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
-  .problem-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+/* ── STATS ── */
+#stats{background:var(--slate-900);padding:40px}
+.stats-grid{max-width:1020px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.08)}
+.stat-item{background:var(--slate-900);padding:26px 28px;text-align:center}
+.stat-number{font-size:clamp(24px,3.2vw,38px);font-weight:800;color:var(--teal);letter-spacing:-1px;display:block;margin-bottom:5px}
+.stat-label{font-size:12px;color:rgba(255,255,255,.45);line-height:1.5}
 
-  /* PIPELINE - 7 STAGE */
-  .pipeline-7 { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
-  .pipeline-step {
-    flex: 1; min-width: 130px;
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); padding: 20px 16px;
-    position: relative; text-align: center;
-    box-shadow: var(--shadow-sm);
-  }
-  .pipeline-step.live { border-color: var(--teal); }
-  .pipeline-step.planned {
-    border-style: dashed; border-color: var(--slate-300);
-    background: var(--slate-50);
-  }
-  .pipeline-step:not(:last-child)::after {
-    content: '→';
-    position: absolute; right: -14px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--teal); font-size: 18px; font-weight: 700; z-index: 1;
-  }
-  .pipeline-step.planned:not(:last-child)::after { color: var(--slate-400); }
-  .step-number {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 26px; height: 26px; background: var(--teal); color: white;
-    border-radius: 50%; font-size: 12px; font-weight: 700; margin-bottom: 10px;
-  }
-  .pipeline-step.planned .step-number { background: var(--slate-400); }
-  .step-badge {
-    display: inline-block; font-size: 9px; font-weight: 700;
-    letter-spacing: 0.8px; text-transform: uppercase;
-    padding: 2px 7px; border-radius: 100px; margin-bottom: 8px;
-  }
-  .badge-live { background: var(--teal-light); color: var(--teal-dark); }
-  .badge-planned { background: var(--slate-200); color: var(--slate-600); }
-  .pipeline-step h3 { font-size: 13px; font-weight: 700; color: var(--slate-900); margin-bottom: 5px; }
-  .pipeline-step.planned h3 { color: var(--slate-600); }
-  .pipeline-step p { font-size: 11px; color: var(--slate-500); line-height: 1.5; }
+/* ── PROBLEM ── */
+.problem-intro{font-size:14px;color:var(--slate-700);line-height:1.7;max-width:760px;margin-bottom:32px;padding:16px 20px;background:white;border-radius:var(--radius);border-left:4px solid var(--teal);box-shadow:var(--shadow-sm)}
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.problem-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.problem-icon{width:36px;height:36px;background:var(--teal-xlight);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:16px}
+.problem-card h3{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:6px}
+.problem-card p{font-size:13px;color:var(--slate-600);line-height:1.65}
 
-  /* DIAGRAM EMBED */
-  .diagram-embed {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); padding: 24px;
-    box-shadow: var(--shadow-sm); margin-bottom: 12px; overflow: hidden;
-  }
-  .diagram-embed img { width: 100%; height: auto; display: block; }
-  .diagram-embed-label {
-    font-size: 12px; color: var(--slate-400); text-align: right; margin-top: 8px;
-  }
-  .diagram-embed-label a { color: var(--teal); font-size: 12px; }
+/* ── PIPELINE ── */
+.pipeline-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:36px}
+.p-step{flex:1;min-width:118px;background:white;border:1.5px solid var(--teal);border-radius:var(--radius);padding:16px 12px;position:relative;text-align:center;box-shadow:var(--shadow-sm)}
+.p-step.planned{border-style:dashed;border-color:var(--slate-300);background:var(--slate-50)}
+.p-step:not(:last-child)::after{content:'→';position:absolute;right:-11px;top:50%;transform:translateY(-50%);color:var(--teal);font-size:14px;font-weight:700;z-index:1}
+.p-step.planned:not(:last-child)::after{color:var(--slate-400)}
+.p-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--teal);color:white;border-radius:50%;font-size:10px;font-weight:700;margin-bottom:6px}
+.p-step.planned .p-step-num{background:var(--slate-400)}
+.p-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 6px;border-radius:100px;margin-bottom:6px}
+.badge-live{background:var(--teal-light);color:var(--teal-dark)}
+.badge-planned{background:var(--slate-200);color:var(--slate-600)}
+.p-step h3{font-size:11px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.p-step.planned h3{color:var(--slate-500)}
+.p-step p{font-size:10px;color:var(--slate-500);line-height:1.5}
 
-  /* JOURNEY MOMENTS */
-  .journey-moments {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 16px; margin-top: 40px;
-  }
-  .moment-card {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); padding: 24px;
-    box-shadow: var(--shadow-sm);
-    border-left: 4px solid var(--teal);
-  }
-  .moment-stage {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
-  }
-  .moment-card h3 { font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
-  .moment-card p { font-size: 13px; color: var(--slate-600); line-height: 1.6; }
-  .moment-quote {
-    margin-top: 10px; padding: 10px 14px;
-    background: var(--teal-xlight); border-radius: var(--radius-sm);
-    font-size: 13px; font-style: italic; color: var(--teal-dark);
-  }
+/* ── DIAGRAM EMBED ── */
+.diagram-embed{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:8px}
+.diagram-embed img{width:100%;height:auto;display:block}
+.diagram-caption{font-size:10px;color:var(--slate-400);text-align:right;margin-top:6px}
+.diagram-caption a{color:var(--teal);font-size:10px}
 
-  /* TECH CARDS */
-  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-  .tech-card { background: var(--slate-900); border-radius: var(--radius); padding: 28px; }
-  .tech-card-label {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1.5px; color: var(--teal); margin-bottom: 10px;
-  }
-  .tech-card h3 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 12px; }
-  .tech-code {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    border-left: 3px solid var(--teal); border-radius: var(--radius-sm);
-    padding: 12px 14px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 12px; color: var(--teal-light); margin-bottom: 14px;
-    white-space: pre; line-height: 1.6; overflow-x: auto;
-  }
-  .tech-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
-  .tech-card code { color: #5eead4; font-family: monospace; }
+/* ── CAPABILITIES ── */
+.cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.cap-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm)}
+.cap-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--teal);color:white;border-radius:50%;font-size:10px;font-weight:700;margin-bottom:8px}
+.cap-card h3{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:5px}
+.cap-card .cap-status{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:6px;display:block}
+.cap-card .cap-status.live-tag{color:var(--teal-dark)}
+.cap-card p{font-size:12px;color:var(--slate-600);line-height:1.6}
 
-  /* ROADMAP NOW / NEXT / LATER */
-  .roadmap-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-  }
-  .roadmap-col {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-  .roadmap-col-header {
-    padding: 16px 20px; font-size: 13px; font-weight: 700;
-    letter-spacing: 0.3px; color: white;
-  }
-  .roadmap-col-header.now { background: var(--teal); }
-  .roadmap-col-header.next { background: #7C3AED; }
-  .roadmap-col-header.later { background: var(--slate-700); }
-  .roadmap-col-header .phase-label {
-    font-size: 10px; font-weight: 600; opacity: 0.75;
-    text-transform: uppercase; letter-spacing: 1px; display: block;
-    margin-bottom: 2px;
-  }
-  .roadmap-items { padding: 16px; }
-  .roadmap-item {
-    padding: 12px 14px; margin-bottom: 8px;
-    background: var(--slate-50); border-radius: var(--radius-sm);
-    border: 1px solid var(--slate-100);
-  }
-  .roadmap-item:last-child { margin-bottom: 0; }
-  .roadmap-item h4 { font-size: 13px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; }
-  .roadmap-item p { font-size: 12px; color: var(--slate-500); line-height: 1.5; }
-  .roadmap-item .benefit {
-    display: inline-block; margin-top: 6px;
-    font-size: 11px; font-weight: 600; color: var(--teal);
-    background: var(--teal-xlight); padding: 2px 8px;
-    border-radius: 100px;
-  }
+/* ── JOURNEYS ── */
+.journey-cards{display:flex;flex-direction:column;gap:20px;margin-top:32px}
+.journey-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.journey-card h3{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:4px}
+.journey-card .j-meta{font-size:11px;color:var(--slate-400);margin-bottom:14px;font-style:italic}
+.journey-card p{font-size:13px;color:var(--slate-600);line-height:1.7;margin-bottom:8px}
+.journey-card p:last-child{margin-bottom:0}
+.j-intake{background:var(--slate-50);border-radius:var(--radius-sm);padding:12px 14px;margin:10px 0;font-size:12px;color:var(--slate-700);line-height:1.8}
+.j-intake strong{color:var(--slate-900)}
+.j-result{background:var(--teal-xlight);border-radius:var(--radius-sm);padding:12px 14px;margin:10px 0;font-size:13px;color:var(--teal-dark);font-weight:600}
+.j-gap-list{margin:10px 0;padding-left:0;list-style:none}
+.j-gap-list li{font-size:13px;color:var(--slate-600);padding:6px 10px;margin-bottom:4px;background:var(--slate-50);border-radius:var(--radius-sm);border-left:3px solid var(--teal)}
+.j-gate{background:var(--teal);color:white;border-radius:var(--radius-sm);padding:12px 16px;margin:12px 0;font-size:13px;font-weight:600;text-align:center}
 
-  /* STACK */
-  .stack-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
-  .stack-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; background: white;
-    border: 1.5px solid var(--slate-200); border-radius: 100px;
-    font-size: 13px; font-weight: 600; color: var(--slate-700);
-    box-shadow: var(--shadow-sm);
-  }
-  .stack-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
-  .stack-note {
-    font-size: 13px; color: var(--slate-500); margin-top: 16px;
-    padding: 12px 16px; background: var(--slate-100);
-    border-radius: var(--radius-sm); border-left: 3px solid var(--teal);
-  }
+/* ── FLOWS ── */
+.flow-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:40px}
+.flow-step{display:grid;grid-template-columns:32px 1fr 1fr 1fr;gap:12px;align-items:start;background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.flow-step-num{display:flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--teal);color:white;border-radius:50%;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px}
+.flow-step-num.loop-step{background:var(--slate-500)}
+.flow-col h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:4px}
+.flow-col p{font-size:12px;color:var(--slate-700);line-height:1.55}
+.flow-col code{font-size:11px}
+.timing-steps{display:flex;flex-direction:column;gap:6px}
+.timing-step{display:flex;gap:12px;align-items:baseline;padding:8px 14px;background:white;border:1px solid var(--slate-200);border-radius:var(--radius-sm)}
+.timing-t{font-size:11px;font-weight:700;color:var(--teal);width:44px;flex-shrink:0}
+.timing-step p{font-size:12px;color:var(--slate-700);line-height:1.5}
 
-  /* PERSONAS */
-  .persona-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-  .persona-card {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm);
-  }
-  .persona-tag {
-    display: inline-block; font-size: 10px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1px;
-    padding: 3px 10px; border-radius: 100px; margin-bottom: 14px;
-  }
-  .persona-tag.primary { background: var(--teal-light); color: var(--teal-dark); }
-  .persona-tag.secondary { background: var(--slate-200); color: var(--slate-600); }
-  .persona-card h3 { font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px; }
-  .persona-card .persona-desc { font-size: 13px; color: var(--slate-500); margin-bottom: 12px; font-style: italic; }
-  .persona-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+/* ── PERSONAS ── */
+.persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.persona-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.persona-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:100px;margin-bottom:10px}
+.persona-tag.primary{background:var(--teal-light);color:var(--teal-dark)}
+.persona-tag.secondary{background:var(--slate-200);color:var(--slate-600)}
+.persona-card h3{font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.persona-desc{font-size:12px;color:var(--slate-400);font-style:italic;margin-bottom:10px}
+.persona-card p{font-size:13px;color:var(--slate-600);line-height:1.65}
 
-  /* DIAGRAMS GALLERY */
-  .diagrams-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-  }
-  .diagram-item {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); overflow: hidden;
-    box-shadow: var(--shadow-sm); transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .diagram-item:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-  .diagram-item a { display: block; text-decoration: none; }
-  .diagram-img-wrap {
-    background: var(--slate-50); padding: 16px;
-    display: flex; align-items: center; justify-content: center;
-    min-height: 160px; overflow: hidden;
-  }
-  .diagram-img-wrap img { max-width: 100%; max-height: 180px; object-fit: contain; }
-  .diagram-caption {
-    padding: 10px 14px; font-size: 12px; font-weight: 600;
-    color: var(--slate-700); border-top: 1px solid var(--slate-200);
-    background: white;
-  }
-  .diagram-caption span { font-weight: 400; color: var(--slate-400); margin-left: 4px; font-size: 11px; }
-  .diagram-item.featured { grid-column: span 2; }
-  .diagram-item.featured .diagram-img-wrap { min-height: 220px; }
-  .diagram-item.featured .diagram-img-wrap img { max-height: 260px; }
+/* ── TECHNICAL ── */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.tech-card{background:var(--slate-900);border-radius:var(--radius);padding:22px}
+.tech-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:7px}
+.tech-card h3{font-size:14px;font-weight:700;color:white;margin-bottom:10px}
+.tech-code{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--teal);border-radius:var(--radius-sm);padding:10px 12px;font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--teal-light);margin-bottom:12px;white-space:pre;line-height:1.6;overflow-x:auto}
+.tech-card p{font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.65}
+.tech-card code{background:rgba(255,255,255,.1);color:#5eead4;padding:1px 5px;border-radius:3px}
 
-  /* WIKI DOCS */
-  .wiki-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;
-  }
-  .wiki-card {
-    background: white; border: 1.5px solid var(--slate-200);
-    border-radius: var(--radius); padding: 22px 20px;
-    box-shadow: var(--shadow-sm); transition: all 0.15s;
-    text-decoration: none; color: inherit; display: block;
-  }
-  .wiki-card:hover { border-color: var(--teal); box-shadow: var(--shadow); transform: translateY(-2px); text-decoration: none; }
-  .wiki-icon { font-size: 22px; margin-bottom: 10px; display: block; }
-  .wiki-card h3 { font-size: 14px; font-weight: 700; color: var(--slate-900); margin-bottom: 5px; }
-  .wiki-card p { font-size: 12px; color: var(--slate-500); line-height: 1.5; }
-  .wiki-card .wiki-arrow { display: inline-block; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--teal); }
+/* ── ROADMAP ── */
+.roadmap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.roadmap-col{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.roadmap-header{padding:12px 16px;font-size:13px;font-weight:700;color:white}
+.roadmap-header.now{background:var(--teal)}
+.roadmap-header.next{background:var(--purple)}
+.roadmap-header.later{background:var(--slate-700)}
+.roadmap-header .phase-sub{font-size:9px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:1px}
+.roadmap-body{padding:12px}
+.roadmap-item{padding:9px 11px;margin-bottom:6px;background:var(--slate-50);border-radius:var(--radius-sm);border:1px solid var(--slate-100)}
+.roadmap-item:last-child{margin-bottom:0}
+.roadmap-item h4{font-size:11.5px;font-weight:700;color:var(--slate-900);margin-bottom:2px}
+.roadmap-item p{font-size:11px;color:var(--slate-500);line-height:1.5}
+.roadmap-benefit{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:600;color:var(--teal);background:var(--teal-xlight);padding:2px 7px;border-radius:100px}
+.roadmap-seq{margin-top:28px;padding:16px 20px;background:var(--slate-900);border-radius:var(--radius);color:rgba(255,255,255,.7);font-size:13px;line-height:1.7}
+.roadmap-seq strong{color:var(--teal)}
 
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--slate-200); margin: 0 24px; }
+/* ── FEATURE MAP ── */
+.phase-cards{display:flex;flex-direction:column;gap:16px}
+.phase-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.phase-card-header{padding:12px 18px;font-size:13px;font-weight:700;color:white;display:flex;align-items:center;gap:8px}
+.phase-card-header.live{background:var(--teal)}
+.phase-card-header.v2a{background:var(--purple)}
+.phase-card-header.v3a{background:#0369a1}
+.phase-card-header.v3b{background:var(--slate-700)}
+.phase-card-header .ph-tag{font-size:9px;font-weight:600;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:100px}
+.phase-card-body{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.phase-what h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:6px}
+.phase-what p{font-size:13px;color:var(--slate-700);line-height:1.65;margin-bottom:10px}
+.phase-scope h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:6px}
+.scope-list{list-style:none;padding:0}
+.scope-list li{font-size:12px;color:var(--slate-600);padding:4px 0;border-bottom:1px solid var(--slate-100);display:flex;gap:6px;align-items:baseline;line-height:1.45}
+.scope-list li::before{content:'✓';color:var(--teal);font-weight:700;font-size:10px;flex-shrink:0}
+.scope-list.out li::before{content:'✕';color:var(--slate-400)}
 
-  /* FOOTER */
-  footer {
-    background: var(--slate-900); color: rgba(255,255,255,0.5);
-    padding: 48px 24px; text-align: center; font-size: 13px; line-height: 1.8;
-  }
-  footer a { color: var(--teal); }
-  footer strong { color: white; font-weight: 600; }
-  .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
-  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); }
-  .footer-links a:hover { color: var(--teal); text-decoration: none; }
+/* ── DECISIONS ── */
+.decision-list{display:flex;flex-direction:column;gap:0}
+.decision-row{padding:14px 16px;border-bottom:1px solid var(--slate-100);display:grid;grid-template-columns:90px 1fr;gap:14px;transition:background .1s}
+.decision-row:first-child{border-radius:var(--radius) var(--radius) 0 0;border-top:1.5px solid var(--slate-200);border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
+.decision-row:last-child{border-radius:0 0 var(--radius) var(--radius);border-bottom:1.5px solid var(--slate-200);border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
+.decision-row:not(:first-child):not(:last-child){border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
+.decision-row:nth-child(even){background:var(--slate-50)}
+.decision-row:hover{background:var(--teal-xlight)}
+.decision-date{font-size:10px;color:var(--slate-400);padding-top:2px;line-height:1.4}
+.decision-content h4{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.decision-content p{font-size:12px;color:var(--slate-600);line-height:1.6}
 
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    .roadmap-grid { grid-template-columns: 1fr; }
-    .diagrams-grid { grid-template-columns: repeat(2, 1fr); }
-    .diagram-item.featured { grid-column: span 1; }
-  }
-  @media (max-width: 768px) {
-    .stats-grid { grid-template-columns: 1fr; gap: 0; }
-    .stat-item { padding: 20px 24px; }
-    .pipeline-7 { flex-direction: column; gap: 8px; }
-    .pipeline-step::after { display: none; }
-    .diagrams-grid { grid-template-columns: 1fr; }
-    .nav-links .hide-mobile { display: none; }
-  }
-  @media (max-width: 480px) {
-    .section { padding: 52px 16px; }
-    .hero { padding: 60px 16px 52px; }
-  }
+/* ── SCOPE ── */
+.scope-section-title{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:12px;margin-top:28px;padding-bottom:6px;border-bottom:1.5px solid var(--slate-200)}
+.scope-section-title:first-child{margin-top:0}
+.scope-table{width:100%;border-collapse:collapse;background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);font-size:13px}
+.scope-table th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-500);background:var(--slate-50);border-bottom:1.5px solid var(--slate-200)}
+.scope-table td{padding:10px 14px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top;line-height:1.5}
+.scope-table tr:last-child td{border-bottom:none}
+.scope-table tr:hover td{background:var(--slate-50)}
+.scope-table td:first-child{font-weight:600;color:var(--slate-800)}
+.scope-table td .version-tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:100px;background:var(--purple-light);color:var(--purple)}
+
+/* ── STACK ── */
+.stack-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.stack-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:white;border:1.5px solid var(--slate-200);border-radius:100px;font-size:12px;font-weight:600;color:var(--slate-700);box-shadow:var(--shadow-sm)}
+.stack-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.stack-table{width:100%;border-collapse:collapse;background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:14px}
+.stack-table th{text-align:left;padding:9px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-500);background:var(--slate-50);border-bottom:1.5px solid var(--slate-200)}
+.stack-table td{padding:10px 14px;border-bottom:1px solid var(--slate-100);font-size:12.5px;color:var(--slate-700);vertical-align:top;line-height:1.5}
+.stack-table tr:last-child td{border-bottom:none}
+.stack-table td:first-child{font-weight:600;color:var(--slate-800);white-space:nowrap}
+.stack-table td:nth-child(2){white-space:nowrap}
+.stack-note{font-size:12.5px;color:var(--slate-500);padding:10px 14px;background:var(--slate-100);border-radius:var(--radius-sm);border-left:3px solid var(--teal)}
+
+/* ── DIAGRAMS ── */
+.diagrams-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.diag-item{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .15s,transform .15s}
+.diag-item:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.diag-item a{display:block;text-decoration:none}
+.diag-img{background:var(--slate-50);padding:12px;display:flex;align-items:center;justify-content:center;min-height:130px;overflow:hidden}
+.diag-img img{max-width:100%;max-height:150px;object-fit:contain}
+.diag-caption{padding:8px 11px;font-size:10.5px;font-weight:600;color:var(--slate-700);border-top:1px solid var(--slate-200)}
+.diag-caption span{font-weight:400;color:var(--slate-400);margin-left:3px;font-size:9.5px}
+.diag-item.span2{grid-column:span 2}
+.diag-item.span2 .diag-img{min-height:175px}
+.diag-item.span2 .diag-img img{max-height:200px}
+
+/* ── FOOTER ── */
+footer{background:var(--slate-900);color:rgba(255,255,255,.4);padding:36px 40px;text-align:center;font-size:12px;line-height:1.8}
+footer strong{color:white;font-weight:600}
+footer a{color:var(--teal)}
+.footer-links{display:flex;gap:18px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.footer-links a{font-size:11px;color:rgba(255,255,255,.3)}
+.footer-links a:hover{color:var(--teal);text-decoration:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  body{padding-left:0}
+  .sidebar{display:none}
+  .mobile-header{display:flex}
+  .roadmap-grid{grid-template-columns:1fr}
+  .phase-card-body{grid-template-columns:1fr}
+  .diagrams-grid{grid-template-columns:repeat(2,1fr)}
+  .diag-item.span2{grid-column:span 1}
+  .flow-step{grid-template-columns:32px 1fr}
+  .flow-col:nth-child(n+3){grid-column:2}
+  #overview,.section,#stats{padding-left:20px;padding-right:20px}
+}
+@media(max-width:560px){
+  .diagrams-grid{grid-template-columns:1fr}
+  .pipeline-row{flex-direction:column}
+  .p-step::after{display:none}
+  .stats-grid{grid-template-columns:1fr;gap:0}
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">PM<span>Rocket</span></div>
-  <div class="nav-links">
-    <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener" class="hide-mobile">Wiki</a>
-    <a href="prototype.html" class="hide-mobile">Prototype</a>
-    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
-    <a href="#" class="primary">Open app ↗</a>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="wordmark">PM<span>Rocket</span></div>
+    <div><span class="sb-status"><span class="sb-dot"></span>Live · July 2026</span></div>
   </div>
-</nav>
+  <nav class="sb-nav">
+    <div class="sb-group-label">Product</div>
+    <a href="#overview" class="active"><span class="ico">🏠</span>Overview</a>
+    <a href="#problem"><span class="ico">🎯</span>The Problem</a>
+    <a href="#pipeline"><span class="ico">⚡</span>How It Works</a>
+    <a href="#capabilities"><span class="ico">✦</span>Key Capabilities</a>
+    <div class="sb-group-label">User Experience</div>
+    <a href="#journeys"><span class="ico">🗺️</span>User Journeys</a>
+    <a href="#flows"><span class="ico">🔄</span>Hero Flow</a>
+    <a href="#personas"><span class="ico">👤</span>Who It's For</a>
+    <div class="sb-group-label">Engineering</div>
+    <a href="#technical"><span class="ico">⚙️</span>Technical Depth</a>
+    <a href="#stack"><span class="ico">🧱</span>Stack</a>
+    <a href="#diagrams"><span class="ico">📐</span>Diagrams</a>
+    <div class="sb-group-label">Product Thinking</div>
+    <a href="#roadmap"><span class="ico">📅</span>Roadmap</a>
+    <a href="#featuremap"><span class="ico">📋</span>Feature Map</a>
+    <a href="#decisions"><span class="ico">📝</span>Decision Log</a>
+    <a href="#scope"><span class="ico">🚫</span>Out of Scope</a>
+  </nav>
+  <div class="sb-ctas">
+    <a href="#" class="sb-btn-primary">Open app →</a>
+    <a href="prototype.html" class="sb-btn-ghost">View prototype</a>
+  </div>
+</aside>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="status-badge">
-    <span class="status-dot"></span>
-    Live · Phase 7d complete · July 2026
-  </div>
+<!-- MOBILE HEADER -->
+<header class="mobile-header">
+  <div class="mob-logo">PM<span>Rocket</span></div>
+  <a href="#" class="mob-cta">Open app →</a>
+</header>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="hero-badge"><span class="dot"></span>Live · Phase 7d complete · July 2026</div>
   <h1>Know your PM archetype.<br>Build your evidence.<br>Know when you're <span>ready</span>.</h1>
-  <p>PMRocket is the navigation layer every aspiring PM is missing. It tells you which role fits your background, what evidence to build for that specific role, and when you're genuinely ready to apply — grounded in real job descriptions, not invented rubrics.</p>
+  <p class="hero-sub">PMRocket is the navigation layer every aspiring PM is missing. It tells you which role fits your background, what evidence to build for that specific role, and when you're genuinely ready to apply — grounded in real job descriptions, not invented rubrics.</p>
   <div class="hero-ctas">
     <a href="#" class="btn btn-primary">Open app →</a>
-    <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener" class="btn btn-secondary">Read the wiki →</a>
-    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+    <a href="prototype.html" class="btn btn-secondary">View prototype →</a>
   </div>
 </section>
 
-<!-- STATS BAR -->
-<div class="stats-bar">
+<!-- STATS -->
+<div id="stats">
   <div class="stats-grid">
     <div class="stat-item">
       <span class="stat-number">140K+</span>
@@ -429,313 +350,485 @@
     </div>
     <div class="stat-item">
       <span class="stat-number">40%</span>
-      <div class="stat-label">of candidates rejected at recruiter screen<br>for insufficient domain depth<br><em>Mind the Product, 2025</em></div>
+      <div class="stat-label">of candidates rejected at recruiter screen for insufficient domain depth<br><em>Mind the Product, 2025</em></div>
     </div>
     <div class="stat-item">
       <span class="stat-number">6–18 mo</span>
-      <div class="stat-label">average directionless prep loop<br>with no credible readiness signal</div>
+      <div class="stat-label">average directionless prep loop with no credible readiness signal</div>
     </div>
   </div>
 </div>
 
-<!-- THE PROBLEM -->
-<section class="section section-alt">
+<!-- PROBLEM -->
+<section id="problem" class="section section-alt">
   <div class="container">
     <div class="section-label">The problem</div>
     <h2 class="section-title">The navigation gap every aspiring PM faces</h2>
-    <p class="section-sub">Every major PM prep platform teaches frameworks and interview techniques. None solves the upstream problem: direction.</p>
+    <div class="problem-intro">Aspiring PMs are drowning in generic content. Bootcamps teach frameworks to everyone equally. Communities celebrate "become a PM" without asking which PM. Candidates build the wrong things, on the wrong timeline, toward the wrong goal. The deeper problem is the absence of a feedback loop. You prepare in the dark. Bootcamp alumni confidently apply before they have shipped anything. Self-taught learners spend a year on case studies but never validate whether a company would care. The system has no signal for readiness — just silence.</div>
     <div class="problem-grid">
       <div class="problem-card">
         <div class="problem-icon">🧭</div>
         <h3>Wrong direction</h3>
-        <p>Platforms assume you know which PM role to target. An engineer wants to build products differently than a consultant moving into PM. A growth PM in fintech faces a different bar than one in consumer. Existing tools treat them identically — no archetype matching, no personalisation.</p>
+        <p>An aspiring engineer wanting to build products needs different evidence than someone from consulting moving into PM. A growth PM candidate in fintech faces a different technical bar than one in consumer. Existing tools treat them identically — no archetype matching, no personalisation based on background. Candidates prepare generically for roles that don't fit them.</p>
       </div>
       <div class="problem-card">
         <div class="problem-icon">📊</div>
         <h3>No market-grounded readiness signal</h3>
-        <p>Existing readiness scores use invented internal rubrics with no connection to what employers actually screen for. Candidates prepare in the dark — no feedback loop, no signal, just silence until they apply and get rejected without knowing why.</p>
+        <p>Existing readiness scores use invented internal rubrics with no connection to what employers actually screen for. Bootcamp alumni confidently apply before they have shipped anything. Self-taught learners spend a year on case studies but never validate whether a company would care. Candidates have no way to know if what they've built is what the market actually wants.</p>
       </div>
       <div class="problem-card">
-        <div class="problem-icon">🗂️</div>
+        <div class="problem-icon">🚪</div>
         <h3>No honest gate</h3>
-        <p>There is no point at which the system tells you "you're ready." Bootcamp alumni confidently apply before they've shipped anything. Self-taught learners spend a year on case studies but never validate whether a company would care. PMRocket is that gate — grounded in real JD data.</p>
+        <p>There is no point at which the system tells you "you're ready." Users apply prematurely, get rejected, and don't know why. The system has no signal for readiness — just silence. PMRocket is that gate — grounded in real JD data, not an invented rubric. When gap ≤ 30% with no critical missing skills, the system tells you you're ready. Not before.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="section">
+<!-- PIPELINE -->
+<section id="pipeline" class="section">
   <div class="container">
     <div class="section-label">How it works</div>
     <h2 class="section-title">A seven-stage career intelligence pipeline</h2>
-    <p class="section-sub">Stages 1–5 are live. Each stage feeds the next. No stage is skippable. Stages 6–7 are on the roadmap.</p>
-
-    <div class="pipeline-7">
-      <div class="pipeline-step live">
-        <div class="step-number">1</div>
-        <div class="step-badge badge-live">Live</div>
+    <p class="section-sub">Each stage feeds the next. No stage is skippable. Stages 1–5 are live. Stages 6–7 are on the roadmap.</p>
+    <div class="pipeline-row">
+      <div class="p-step">
+        <div class="p-step-num">1</div>
+        <div class="p-badge badge-live">Live</div>
         <h3>Intake</h3>
-        <p>15 questions · 3 min · background, skills, domain, geography, goals</p>
+        <p>15 questions · ~3 min · background, skills, goals, geography, domain</p>
       </div>
-      <div class="pipeline-step live">
-        <div class="step-number">2</div>
-        <div class="step-badge badge-live">Live</div>
+      <div class="p-step">
+        <div class="p-step-num">2</div>
+        <div class="p-badge badge-live">Live</div>
         <h3>Archetype Match</h3>
         <p>Weighted model · 4 archetypes · primary + runner-up + confidence %</p>
       </div>
-      <div class="pipeline-step live">
-        <div class="step-number">3</div>
-        <div class="step-badge badge-live">Live</div>
-        <h3>3-Layer Roadmap</h3>
-        <p>Universal · Archetype-specific · Domain × Geography</p>
+      <div class="p-step">
+        <div class="p-step-num">3</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Personalised Roadmap</h3>
+        <p>Layer 1: Universal · Layer 2: Archetype-specific · Layer 3: Domain × Geography</p>
       </div>
-      <div class="pipeline-step live">
-        <div class="step-number">4</div>
-        <div class="step-badge badge-live">Live</div>
+      <div class="p-step">
+        <div class="p-step-num">4</div>
+        <div class="p-badge badge-live">Live</div>
         <h3>Evidence Log</h3>
-        <p>Artefacts · Learning → Practised → Mastered · auto tier unlock</p>
+        <p>Artefacts · 3 tiers: Learning → Practised → Mastered · 15 sub-topics · score auto-updates</p>
       </div>
-      <div class="pipeline-step live">
-        <div class="step-number">5</div>
-        <div class="step-badge badge-live">Live</div>
+      <div class="p-step">
+        <div class="p-step-num">5</div>
+        <div class="p-badge badge-live">Live</div>
         <h3>Readiness Gate</h3>
-        <p>Compared vs real job postings · top 3 gaps named · clear signal: ready or not yet</p>
+        <p>Evidence compared against real job postings · Top 3 gaps named · Clear signal: ready or not yet</p>
       </div>
-      <div class="pipeline-step planned">
-        <div class="step-number">6</div>
-        <div class="step-badge badge-planned">V3a</div>
+      <div class="p-step planned">
+        <div class="p-step-num">6</div>
+        <div class="p-badge badge-planned">V3a</div>
         <h3>Apply</h3>
-        <p>Paste a target JD · evidence-backed resume generated · export PDF</p>
+        <p>Paste target JD · score vs your evidence · generate evidence-backed resume · export PDF</p>
       </div>
-      <div class="pipeline-step planned">
-        <div class="step-number">7</div>
-        <div class="step-badge badge-planned">V3b</div>
-        <h3>Interview & Discover</h3>
-        <p>AI mock interview room · job matching for roles you're evidence-ready for</p>
+      <div class="p-step planned">
+        <div class="p-step-num">7</div>
+        <div class="p-badge badge-planned">V3b</div>
+        <h3>Interview &amp; Discover</h3>
+        <p>AI mock interview · archetype-specific questions · feedback tied to your evidence · job matching</p>
       </div>
     </div>
-
     <div class="diagram-embed">
-      <img src="diagrams/export/07-functional-architecture.svg" alt="Functional Architecture — 7-stage pipeline with infrastructure layer" loading="lazy">
-      <div class="diagram-embed-label">
-        Functional Architecture · D7 ·
+      <img src="diagrams/export/07-functional-architecture.svg" alt="Functional Architecture — 7-stage pipeline with infrastructure layer">
+      <div class="diagram-caption">D7 · Functional Architecture · 7-stage pipeline + infrastructure ·
         <a href="https://app.diagrams.net/#Uhttps://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/07-functional-architecture.drawio" target="_blank" rel="noopener">open in draw.io ↗</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- USER JOURNEYS -->
-<section class="section section-alt">
+<!-- CAPABILITIES -->
+<section id="capabilities" class="section section-alt">
   <div class="container">
-    <div class="section-label">User journeys</div>
-    <h2 class="section-title">The Wanderer's path — confused to confident</h2>
-    <p class="section-sub">Sarah is a backend engineer 3 months into self-directed PM prep. She doesn't know which PM role fits her, what to build, or when to start applying. This is her journey.</p>
-
-    <div class="diagram-embed" style="margin-bottom:20px;">
-      <img src="diagrams/export/08-user-journey-wanderer.svg" alt="User Journey Timeline — from Sign Up to Readiness Gate" loading="lazy">
-      <div class="diagram-embed-label">
-        Wanderer Journey Timeline · D8 ·
-        <a href="https://app.diagrams.net/#Uhttps://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/08-user-journey-wanderer.drawio" target="_blank" rel="noopener">open in draw.io ↗</a>
+    <div class="section-label">Platform capabilities</div>
+    <h2 class="section-title">What the platform does</h2>
+    <p class="section-sub">Eight capabilities across the seven-stage pipeline. Capabilities 1–5 are live. 6–8 are on the roadmap.</p>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-num">1</div>
+        <h3>Weighted archetype matching</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Every intake answer is a signal for every PM archetype. A software engineering background scores highest for Technical PM but also carries signal for AI/Platform PM. The model uses configurable weights stored in the database — not editorial opinion. You get a primary archetype with confidence % and a runner-up with reasoning. No two users get the same result unless their backgrounds are genuinely identical.</p>
       </div>
-    </div>
-
-    <div class="diagram-embed">
-      <img src="diagrams/export/09-product-flow-swimlane.svg" alt="Product Flow Swimlane — User Actions, Platform Response, User Outcome" loading="lazy">
-      <div class="diagram-embed-label">Product Flow Swimlane · D9</div>
-    </div>
-
-    <div class="journey-moments">
-      <div class="moment-card">
-        <div class="moment-stage">Stage 2 — The match moment</div>
-        <h3>Direction in 3 minutes</h3>
-        <p>Sarah answers 15 questions during lunch. After 15 signals the system shows: <strong>Technical PM, 78% confidence</strong>. Reasoning displayed: strong technical depth, shipped code, but zero GTM experience — a gap, not a disqualifier.</p>
-        <div class="moment-quote">"I finally know which direction to point."</div>
+      <div class="cap-card">
+        <div class="cap-num">2</div>
+        <h3>Three-layer personalised curriculum</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Layer 1 (Universal) covers AI literacy and core PM skills every archetype needs. Layer 2 (Archetype) covers skills specific to your match — Technical PM sees system design; Growth PM sees experimentation frameworks. Layer 3 (Domain × Geography) covers requirements specific to your target market and industry. A Technical PM in fintech in North America gets different content from one in India (Dodd-Frank vs RBI requirements).</p>
       </div>
-      <div class="moment-card">
-        <div class="moment-stage">Stage 4 — The evidence loop</div>
-        <h3>Real proof, not invented</h3>
-        <p>Over 3 months Sarah logs 13 artefacts — a shipped GitHub case study, an interview study as a Notion doc, a strategy memo from work. Her readiness score climbs from 22 to 61. Each log takes under 90 seconds and triggers a visible score bump.</p>
-        <div class="moment-quote">"I'm building things that actually count."</div>
+      <div class="cap-card">
+        <div class="cap-num">3</div>
+        <h3>Progressive evidence tiers</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Each artefact has three tiers: Learning, Practised, Mastered. Tiers unlock as you check off sub-topics — no manual promotion. Each artefact has 15 sub-topics split into three equal groups and 5 targeted search keywords to guide what to study. The system celebrates each tier unlock with an animation and shows exactly where you're strong and where you have gaps. Score updates synchronously on every log.</p>
       </div>
-      <div class="moment-card">
-        <div class="moment-stage">Stage 5 — The readiness gate</div>
-        <h3>An honest signal</h3>
-        <p>At score 78 (above threshold of 75), with gap ≤ 30% and no critical missing skills, the system tells Sarah: <strong>✓ You're ready to apply for Technical PM roles in developer tools.</strong> Not before. Not for Growth PM. For this specific role, with this evidence.</p>
-        <div class="moment-quote">"I know I'm ready. And I know why."</div>
+      <div class="cap-card">
+        <div class="cap-num">4</div>
+        <h3>Market-grounded gap analysis</h3>
+        <span class="cap-status">V2a — building</span>
+        <p>The system retrieves the top 25 most similar job descriptions from the corpus using pgvector KNN (cosine similarity, HNSW index). It calculates gap % per skill area by comparing your evidence against JD requirements. An LLM generates a plain-English narrative identifying your top 3 gaps with specific artefacts that would close them fastest. Hidden until 15+ JDs exist for your slice — no false signals from thin data.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">5</div>
+        <h3>Readiness score across five dimensions</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Score is weighted across Technical (30%), Business (25%), Portfolio (25%), Domain (10%), and Product (10%). It auto-updates when you log evidence — no manual refresh. The radar chart on the Readiness page visualises the breakdown by category. The gate is honest: score ≥ 75 and gap ≤ 30% with no critical missing skills before the system tells you you're ready. Not before.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">6</div>
+        <h3>Admin ETL pipeline</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Admin pastes a job description. LLM extracts skill requirements and maps them to the existing taxonomy vocabulary — it cannot invent new skill terms. Admin reviews and approves each skill in a queue UI. System embeds and indexes. No code deployment required to update the curriculum or retune matching weights. The Curriculum Signals panel surfaces Trending (high JD frequency, not in curriculum), Stable, and Declining skills.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">7</div>
+        <h3>Evidence-backed resume generation</h3>
+        <span class="cap-status">V3a — planned</span>
+        <p>Once the readiness gate is reached, the user pastes a specific job description. The system scores their evidence against that JD's requirements, surfaces the strongest matches and any remaining gaps, and generates a resume built entirely from logged evidence. Each bullet links to real proof the user has documented. No keyword stuffing. No invented experience. Every claim is traceable to a logged artefact.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">8</div>
+        <h3>AI interview room + job matching</h3>
+        <span class="cap-status">V3b — planned</span>
+        <p>Mock interviews specific to the user's archetype, domain, and the evidence they have logged. Feedback is tied to how the user would present their actual proof in an interview — not generic PM coaching. Paired with job matching: surfaces open roles that match the user's current evidence level, not just their aspirations. You compete on what you've built, not what you say you can build.</p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- USER JOURNEYS -->
+<section id="journeys" class="section">
+  <div class="container">
+    <div class="section-label">User journeys</div>
+    <h2 class="section-title">The Wanderer's path — confused to confident</h2>
+    <p class="section-sub">Four narrative walk-throughs of the core user flows. Real names, real questions, real score numbers.</p>
+
+    <div class="diagram-embed" style="margin-bottom:14px">
+      <img src="diagrams/export/08-user-journey-wanderer.svg" alt="User Journey Timeline — from Sign Up to Readiness Gate">
+      <div class="diagram-caption">D8 · Wanderer Journey Timeline ·
+        <a href="https://app.diagrams.net/#Uhttps://raw.githubusercontent.com/vcatreya-git/pmrocket/main/docs/diagrams/08-user-journey-wanderer.drawio" target="_blank" rel="noopener">open in draw.io ↗</a>
+      </div>
+    </div>
+    <div class="diagram-embed">
+      <img src="diagrams/export/09-product-flow-swimlane.svg" alt="Product Flow Swimlane — User Actions, Platform Response, User Outcome">
+      <div class="diagram-caption">D9 · Product Flow Swimlane · User actions · Platform response · Outcome</div>
+    </div>
+
+    <div class="journey-cards">
+
+      <div class="journey-card">
+        <h3>Journey 1 — First-time setup: The Wanderer</h3>
+        <div class="j-meta">Sarah · backend engineer · 3 months self-directed prep · uncertain about fit · entry via friend's recommendation</div>
+        <p>Sarah clicks "Get started" and takes a 3-minute intake. Fifteen questions flow one at a time on her phone during lunch:</p>
+        <div class="j-intake">
+          <strong>"What's your background?"</strong> → Software Engineer<br>
+          <strong>"How many years?"</strong> → 5 years<br>
+          <strong>"Have you shipped features?"</strong> → Yes, multiple<br>
+          <strong>"Have you run user interviews?"</strong> → Never<br>
+          <strong>"How comfortable are you with databases?"</strong> → Very comfortable<br>
+          <strong>"How comfortable are you with go-to-market?"</strong> → Not at all<br>
+          <strong>"What excites you?"</strong> → Building developer tools<br>
+          <strong>"What company type?"</strong> → Startup or scale-up<br>
+          <strong>"What geography?"</strong> → North America
+        </div>
+        <div class="j-result">Technical PM · 78% confidence · Runner-up: Growth PM (64%)</div>
+        <p>Sarah sees the reasoning: strong technical background (rare in PM candidates), shipped code (relevant), but zero GTM experience — a gap, not a disqualifier. The system shows adjacent options: she could target Platform PM instead, or upskill in growth to be a stronger Technical PM candidate. Technical PM feels right.</p>
+        <p>She clicks "See my roadmap." The product now knows her archetype, domain (developer tools), geography (North America), and skill profile. Everything from here is personalised to those signals.</p>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 2 — Building evidence: 3-month arc</h3>
+        <div class="j-meta">Sarah · 1 month in · roadmap unlocked · first artefact started</div>
+        <p>Sarah sees her roadmap — artefacts organised in three layers:</p>
+        <ul class="j-gap-list">
+          <li><strong>Universal layer:</strong> Customer Interviews, Business Metrics 101, Shipping Roadmaps — applies to all PMs</li>
+          <li><strong>Technical PM layer:</strong> System Design Trade-offs, Technical Debt Roadmaps, Architecting for Scale</li>
+          <li><strong>Developer Tools domain:</strong> API Design Excellence, Developer Onboarding Flows, CLI UX Patterns</li>
+        </ul>
+        <p>She starts with "Customer Interviews." The artefact has 15 sub-topics tiered across Learning, Practised, and Mastered — with 5 Google-ready search keywords to guide what to study. She ticks sub-topics as she works: reads the interview guide template (✓), watches the technique video (✓), schedules her first interview. A week later she ticks "conducted 1 interview (✓)". By week 3 she's done 4 interviews and unlocks Practised tier — the animation fires, the card glows green, her score bumps 12 points.</p>
+        <p>Over 3 months she completes 12 more artefacts. Her readiness score climbs from 22 to 61. Logged in one place: a shipped feature as a GitHub case study, an interview study as a Notion doc, a strategy memo from work. Real proof, not invented. Every log under 90 seconds.</p>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 3 — The readiness moment</h3>
+        <div class="j-meta">Sarah · 6 months in · readiness score 78 · gap analysis triggered for the first time</div>
+        <p>Her dashboard shows readiness score 78. Breakdown by dimension: Technical Fluency 94, Portfolio Evidence 82, Business Impact 61, Domain Knowledge 74, Product Thinking 68.</p>
+        <p>She clicks "Gap Analysis" for the first time. The system retrieves the 25 most similar Technical PM jobs in developer tools in North America and shows:</p>
+        <ul class="j-gap-list">
+          <li><strong>Top gap #1: "Business metrics and data storytelling"</strong> — 87% of Technical PM jobs in developer tools mention this. She has Customer Interviews and a Shipped Product but no metrics dashboard evidence.</li>
+          <li><strong>Gap #2: "Roadmap prioritisation and trade-offs"</strong> — 72% of jobs. She has System Design Trade-offs but no shipped roadmap doc.</li>
+          <li><strong>Gap #3: "Cross-functional communication"</strong> — 61%. She's shipped features but has no evidence of coordinating across design, engineering, and marketing.</li>
+        </ul>
+        <p>The system recommends three specific artefacts to close each gap — with search keywords and a description of what "Mastered" looks like for each.</p>
+        <div class="j-gate">✓ You're ready to apply for Technical PM roles in developer tools.</div>
+        <p>This isn't arbitrary. The gate is grounded in her evidence and the market data. Score 78 (threshold: 75). Gap 23% (threshold: 30%). No critical missing skills. She's not ready for Growth PM — would need 6 more months of metrics work. Not for Enterprise PM — no sales experience. But for Technical PM in developer tools? The evidence backs it.</p>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 4 — Archetype switch: Marco</h3>
+        <div class="j-meta">Marco · matched to Enterprise PM (82%) · exploring whether Technical PM is a better fit</div>
+        <p>Marco clicks his name, goes to Profile, and sees his alternative archetypes: Technical PM (68%) — "You have low technical depth but some infrastructure experience" and Growth PM (71%) — "Good data skills but limited product analytics experience."</p>
+        <p>He clicks "Try Technical PM" to see that roadmap. The system shows him the reasoning — his Q12 (technical skills self-rating: 4/10) scored only 0.4 for Technical PM versus 0.9 for Enterprise PM. The Technical PM roadmap would require 14 additional artefacts he hasn't started. Enterprise PM roadmap has 3 artefacts left.</p>
+        <p>If Marco switches, his intake stays the same — the system shows a different roadmap. His evidence log is archetype-specific: his enterprise deal story doesn't count as Technical PM proof until he builds system design chops. Switching would reset his readiness score from 71 to 31.</p>
+        <p>Marco realises Enterprise PM is actually the better fit. He goes back. The system doesn't punish the exploration — it shows the cost clearly and lets him decide.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HERO FLOW -->
+<section id="flows" class="section section-alt">
+  <div class="container">
+    <div class="section-label">User flows</div>
+    <h2 class="section-title">The hero flow — step by step</h2>
+    <p class="section-sub">13 steps from landing page to evidence-logging loop. Every screen, every state, every system action.</p>
+
+    <div class="flow-steps">
+
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-col"><h4>Sees</h4><p>PMRocket landing page: "Know your PM archetype. Build your evidence. Know when you're ready."</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Clicks "Get started" or "Sign up with Google"</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Redirected to Clerk auth (email or OAuth). Session created.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-col"><h4>Sees</h4><p>Onboarding splash: "15 questions. 3 minutes. Your navigation starts here."</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Clicks "Begin intake"</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Lands on Q1. <code>user_intake</code> row created.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-col"><h4>Sees</h4><p>Q1–Q4 (Background): Single-select questions. Role history, education, geographic location. Feels like a career assessment.</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Answers each question (1 answer per Q). Can go back.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>State saved to <code>user_intake</code> row after each answer. Green checkmark appears.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-col"><h4>Sees</h4><p>Q5–Q11 (Domain signals): Company size, stage, domain interest, timeline to apply, location preference, salary expectations, PM function focus.</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Single-select answers.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Profile builds in real time. Summary appears: "Your interests: B2B SaaS, Series B–C stage, North America."</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">5</div>
+        <div class="flow-col"><h4>Sees</h4><p>Q12–Q14 (Skills): "Rate your technical depth 1–10," "Rate your product thinking 1–10," "Rate your business acumen 1–10." Skill grid with 1–5 radio buttons.</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Completes grids.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Skills profile surfaces: "Your strength: technical foundation. Area to develop: business acumen."</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">6</div>
+        <div class="flow-col"><h4>Sees</h4><p>Q15 (Activities): Multi-select checklist. "Which PM prep activities have you done? Customer interviews, case studies, shipped features, competitive analysis, metrics frameworks..."</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Checks 5–7 activities.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Checklist saves. Summary: "You've built foundation in {areas}."</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">7</div>
+        <div class="flow-col"><h4>Sees</h4><p>"Computing your match..." Loading state with 2-second animation.</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Waits.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>System runs <code>computeArchetypeMatch()</code> against 15-signal weighted model. All 4 archetypes scored and ranked.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">8</div>
+        <div class="flow-col"><h4>Sees</h4><p>Match Result Hero Card: "You're a Technical PM (78% confidence). Your backup: Growth PM (64%)." Breakdown shows which signals were strongest. Teaser: "You have 24 artefacts to build. Get started to unlock your roadmap."</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Clicks "See my roadmap" or "Sign in"</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Free users hit paywall. Paid/invited users proceed to Evidence Roadmap.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">9</div>
+        <div class="flow-col"><h4>Sees</h4><p>Paywall screen: Pricing card ($5/mo or invite code). "Full roadmap + evidence tracking + readiness score + gap analysis."</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Enters card details OR pastes invite code.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Stripe checkout flow (test mode in Alpha). <code>subscriptions</code> row created. Redirects to Evidence Roadmap.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">10</div>
+        <div class="flow-col"><h4>Sees</h4><p>Evidence Roadmap: 24 artefacts listed. Each shows: title, layer badge (Universal / Archetype / Domain), Learning/Practised/Mastered progress bar. "Search to learn" keyword chips (clickable → Google search).</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Clicks an artefact card.</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Evidence Log Modal opens.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">11</div>
+        <div class="flow-col"><h4>Sees</h4><p>Evidence Log Modal: 15 key_topics split into 3 tiers. Learning tier shows 5 topics as checkboxes. Description field (200 chars). Link field.</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Checks 2 Learning topics. Adds description + link. Clicks "Save evidence."</p></div>
+        <div class="flow-col"><h4>Happens</h4><p><code>POST /api/evidence-log</code> fires. Score recalculation triggered synchronously. "Score updated! +7 pts." Tier unlock animation if triggered.</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">12</div>
+        <div class="flow-col"><h4>Sees</h4><p>Dashboard: Readiness 23/100, Evidence logged 1/24. "Next artefact: Metrics framework design." "3-day streak!" Gap analysis: "Not yet available (seeding JD corpus for your slice)."</p></div>
+        <div class="flow-col"><h4>Does</h4><p>User explores roadmap or clicks "Analyse my gaps."</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>Roadmap re-renders filtered. Gap button shows placeholder (not yet live for this slice).</p></div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num loop-step">↺</div>
+        <div class="flow-col"><h4>Sees</h4><p>User logs evidence regularly. Dashboard updates each time. After 12+ artefacts logged and readiness ≥75 (V2a+), gap analysis becomes available.</p></div>
+        <div class="flow-col"><h4>Does</h4><p>Clicks "Analyse my gaps."</p></div>
+        <div class="flow-col"><h4>Happens</h4><p>RAG gap analysis triggered (K=25 JD retrieval + LLM narrative). Returns top 3 skill gaps + recommended artefacts to close them fastest.</p></div>
+      </div>
+
+    </div>
+
+    <h3 style="font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:6px">Evidence logging loop — timing</h3>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:16px">Target: under 90 seconds from entry to logged evidence. This is the core retention mechanic — each log is a micro-win.</p>
+    <div class="timing-steps">
+      <div class="timing-step"><span class="timing-t">T+0</span><p>User opens Dashboard. Sees gap_pct and "Next artefact: Metrics framework design."</p></div>
+      <div class="timing-step"><span class="timing-t">T+10s</span><p>Clicks "Roadmap" tab. Filters to "Business" category. Clicks "Metrics framework design" card.</p></div>
+      <div class="timing-step"><span class="timing-t">T+20s</span><p>Evidence Log Modal opens. Shows 15 key_topics split into 3 tiers. User checks 3 of 5 Learning topics.</p></div>
+      <div class="timing-step"><span class="timing-t">T+30s</span><p>Types description: "Built a metrics dashboard for fintech app. Tracked onboarding funnel, churn, and revenue per user."</p></div>
+      <div class="timing-step"><span class="timing-t">T+40s</span><p>Pastes link: "https://docs.google.com/spreadsheets/abc123"</p></div>
+      <div class="timing-step"><span class="timing-t">T+45s</span><p>Clicks "Save evidence." Optimistic UI update: card shows 3/5 topics checked. Button disables briefly.</p></div>
+      <div class="timing-step"><span class="timing-t">T+50s</span><p><code>POST /api/evidence-log</code> completes. Score recomputed: Business artefact × Learning multiplier (0.5×) = +14 pts. Total now 37/100. Learning 3/5 = 60% — Practised not yet unlocked.</p></div>
+      <div class="timing-step"><span class="timing-t">T+51s</span><p>Celebration animation: card glows green. "Score updated! +14 pts. Learning tier: 3/5 (60%). Practised tier locked until Learning complete." Streak increments to 4-day.</p></div>
+      <div class="timing-step"><span class="timing-t">T+55s</span><p>Modal closes. Roadmap re-renders. "Metrics framework design" card shows Learning progress (3/5) with "Practised tier locked" hint.</p></div>
+      <div class="timing-step"><span class="timing-t">T+60s</span><p>User clicks another artefact. Loop repeats. Target sustained: &lt;90s end-to-end.</p></div>
+    </div>
+  </div>
+</section>
+
 <!-- PERSONAS -->
-<section class="section">
+<section id="personas" class="section">
   <div class="container">
     <div class="section-label">Who it's for</div>
     <h2 class="section-title">Built for two distinct users</h2>
-    <p class="section-sub">Every feature decision is defended through the lens of a specific persona. No feature creep from hypothetical users.</p>
+    <p class="section-sub">Every feature decision is defended through the lens of a specific persona. No feature creep from hypothetical users. Scope is defended by these lenses, not by feature lists.</p>
     <div class="persona-grid">
       <div class="persona-card">
-        <span class="persona-tag primary">Primary · V1</span>
+        <span class="persona-tag primary">Primary · V1 Live</span>
         <h3>The Wanderer</h3>
-        <p class="persona-desc">Aspiring PM, 3–6 months into self-directed preparation</p>
+        <div class="persona-desc">Aspiring PM · 3–6 months into self-directed preparation · stuck without direction</div>
         <p>Has read the books, watched the talks, built some case studies. Does not know if she is building the right things for the right role. Does not know when to start applying. PMRocket tells her: here is your archetype, here is what matters for your domain and market, here is what you still need.</p>
+        <p style="margin-top:10px">The Wanderer is narrow on purpose. She's not "aspiring PM" broadly — she's someone already 3–6 months into prep who is stuck without direction. This specificity scopes every feature decision: the intake is 15 questions (not 30), the roadmap shows artefacts (not content), the readiness signal is market-grounded (not a course completion %). Every feature is explained by this persona.</p>
       </div>
       <div class="persona-card">
-        <span class="persona-tag secondary">Secondary · V2a</span>
+        <span class="persona-tag secondary">Secondary · V2a Planned</span>
         <h3>The Navigator</h3>
-        <p class="persona-desc">Existing PM levelling up, switching domain, or moving to a new market</p>
-        <p>Has proven she can do PM but needs to prove competence in a new area. PMRocket becomes a career progression tool — maps the specific gaps between where she is and where she wants to be, using real market data as the ground truth. Informed by existing seniority; retrieves only Senior PM JDs for gap analysis.</p>
+        <div class="persona-desc">Existing PM · levelling up, switching domain, or moving to a new market</div>
+        <p>Has proven she can do PM but needs to prove competence in a new area. PMRocket becomes a career progression tool: maps the specific gaps between where she is and where she wants to be, using market data as the ground truth.</p>
+        <p style="margin-top:10px">The match algorithm gives less weight to background signals (Q1–Q4) because they already know their PM type. Q17 (current level: IC1/IC2/Staff/Director) and Q18 (transition goal: level up/switch domain/switch archetype) carry more weight. Gap analysis retrieves JDs at the target seniority level — an IC2 targeting IC3 sees Senior PM JDs, not entry-level. Score computation recognises existing PM experience and doesn't force re-learning foundational artefacts.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- TECHNICAL DEPTH -->
-<section class="section section-alt">
+<section id="technical" class="section section-alt">
   <div class="container">
     <div class="section-label">Technical depth</div>
     <h2 class="section-title">Under the hood</h2>
-    <p class="section-sub">Production-grade design decisions at every layer — not a toy demo.</p>
+    <p class="section-sub">8 production-grade design decisions. Not a toy demo — every layer has a reason.</p>
     <div class="tech-grid">
+
       <div class="tech-card">
-        <div class="tech-card-label">Weighted archetype matching</div>
-        <h3>15-signal normalised scoring</h3>
+        <div class="tech-label">Scoring model</div>
+        <h3>Weighted archetype matching</h3>
         <div class="tech-code">score(A) = Σ[w(q,A) × raw(q,A,answer)]
 ─────────────────────────────
          Σ w(q,A)</div>
-        <p>Every intake answer is a scored signal for every PM archetype. Weights are stored in <code>question_weights</code> table — admin-configurable at runtime, no code deploy required. Q12 (technical skills, weight 9) decides ties within 0.02 of each other. Deterministic and market-grounded, not editorial.</p>
+        <p>The model treats every intake response as a scored signal for every PM archetype. Fifteen signals are grouped into five categories — background, experience, skills, domain, goals — and each carries a configurable weight per archetype stored in a <code>question_weights</code> table. A software engineer answering Q1 scores 1.0 for Technical PM and 0.3 for Consumer PM; the same Q1 for a finance background inverts those scores. Q12 (technical skills self-rating) carries the highest weight (9) for Technical PM and Platform archetypes. Tie-breaking uses Q12 absolute contribution when two archetypes score within 0.02 of each other. Weights are admin-configurable at runtime — no code deployment required.</p>
       </div>
-      <div class="tech-card">
-        <div class="tech-card-label">pgvector HNSW gap analysis</div>
-        <h3>JD-grounded readiness signal</h3>
-        <div class="tech-code">HNSW (m=16, ef=64) → K=25 JD retrieval
-profile embed → cosine similarity
-→ LLM narrative + gap_pct metric</div>
-        <p>On-demand, not auto-triggered. Gap analysis is hidden if fewer than 15 JDs exist for the user's archetype × domain × geography slice — the product never generates a signal from an insufficient corpus. <code>gap_pct = (1 − evidenced / total) × 100</code> is deterministic and computed separately from the LLM narrative.</p>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-label">LLM abstraction layer</div>
-        <h3>Provider-agnostic inference</h3>
-        <div class="tech-code">ACTIVE_LLM_PROVIDER=groq|anthropic|google
-ACTIVE_EMBED_PROVIDER=openai|...</div>
-        <p>All LLM calls route through a factory pattern — <code>getLLMModel()</code> reads the env var and returns the appropriate Vercel AI SDK model instance. Groq (Llama 3.3 70B, free tier) is the default. Swap providers with one environment variable — zero code changes. Designed for Vercel → AWS Fargate portability from day one.</p>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-label">Admin ETL pipeline</div>
-        <h3>Market-current curriculum ops</h3>
-        <div class="tech-code">JD paste → PII strip → LLM extract
-→ admin approve/reject per skill
-→ embed → jd_embeddings → skill_frequency</div>
-        <p>Extraction is vocabulary-constrained — the LLM maps JD text to existing taxonomy terms and cannot introduce new skill names. Curriculum Signals panel surfaces Trending (high JD frequency, not in curriculum), Stable, and Declining skills. No code deployment required to tune the curriculum or reweight matching.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ROADMAP -->
-<section class="section">
-  <div class="container">
-    <div class="section-label">Roadmap</div>
-    <h2 class="section-title">Now · Next · Later</h2>
-    <p class="section-sub">Sequenced by value delivered per user stage, not by technical convenience. Each gate exists because the next stage only has meaning after the previous one works.</p>
-    <div class="roadmap-grid">
-      <div class="roadmap-col">
-        <div class="roadmap-col-header now">
-          <span class="phase-label">Phase 7d · Live</span>
-          Now
-        </div>
-        <div class="roadmap-items">
-          <div class="roadmap-item">
-            <h4>Weighted archetype matching</h4>
-            <p>15 intake signals scored across 4 PM archetypes. Primary + runner-up with confidence %.</p>
-            <span class="benefit">Know which direction to point</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>3-layer personalised roadmap</h4>
-            <p>Universal · Archetype · Domain × Geography. Fintech NA ≠ Fintech India.</p>
-            <span class="benefit">Curriculum that's yours</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>Evidence logging with tiers</h4>
-            <p>Learning → Practised → Mastered. Auto-computed from topic completion. Score updates synchronously.</p>
-            <span class="benefit">Progress you can see</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>Readiness score</h4>
-            <p>Weighted across 5 dimensions: Technical (30%), Business (25%), Portfolio (25%), Domain (10%), Product (10%).</p>
-            <span class="benefit">Honest signal vs. wishful thinking</span>
-          </div>
-        </div>
+      <div class="tech-card">
+        <div class="tech-label">Evidence tiers</div>
+        <h3>Progressive artefact tier unlocking</h3>
+        <div class="tech-code">topic_progress JSONB → completion %
+0–33%  → Learning unlocked
+34–66% → Practised unlocked
+67–100% → Mastered unlocked</div>
+        <p>When a user logs evidence for an artefact, the system splits the artefact's <code>key_topics[]</code> into three equal-size tiers (Learning/Practised/Mastered). The evidence modal presents progressive checkboxes for each tier; completing all checkboxes in Learning automatically unlocks Practised. No manual tier progression logic — tier structure is derived from topic completion percentages. The <code>topic_progress</code> JSONB column tracks which topics the user has marked across all evidence logs for an artefact. Tier animations celebrate promotion and unlock premium features.</p>
       </div>
-      <div class="roadmap-col">
-        <div class="roadmap-col-header next">
-          <span class="phase-label">Phase V2a · Building</span>
-          Next
-        </div>
-        <div class="roadmap-items">
-          <div class="roadmap-item">
-            <h4>JD corpus ETL — full intel</h4>
-            <p>Admin ETL seeding live JD corpus across all archetype × domain × geography slices.</p>
-            <span class="benefit">Gap analysis becomes available</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>RAG gap analysis</h4>
-            <p>pgvector K=25 retrieval + LLM narrative. Top 3 gaps named with specific artefacts to close them.</p>
-            <span class="benefit">Know exactly what's missing</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>Ready-to-apply gate</h4>
-            <p>Score ≥ 75 + gap ≤ 30% + no critical missing skills → explicit "you're ready" signal.</p>
-            <span class="benefit">Confidence to apply, not hope</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>Stripe paywall (live)</h4>
-            <p>Convert test-mode payment flow to live billing. Free: archetype match only. Paid: full roadmap + readiness.</p>
-            <span class="benefit">First revenue event</span>
-          </div>
-        </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Score computation</div>
+        <h3>Readiness score with self-healing</h3>
+        <div class="tech-code">computeAndSaveScore(userId)
+→ rubrics × tier multiplier (0.5/0.8/1.0)
+→ UPSERT readiness_scores
+→ self-heals on GET if row missing</div>
+        <p><code>computeAndSaveScore(userId)</code> aggregates evidence, applies per-category rubrics (Technical artefacts worth 8 pts each, Portfolio artefacts worth 5 pts each), multiplies by completion tier (Learning = 0.5×, Practised = 0.8×, Mastered = 1.0×), and saves to <code>readiness_scores</code> via UPSERT. When a user logs evidence (<code>POST /api/evidence-log</code>), the route awaits score computation synchronously — no fire-and-forget callbacks. The <code>readiness GET</code> endpoint is self-healing: if no score row exists, it computes on demand. Prevents stale data even if the webhook or async job fails.</p>
       </div>
-      <div class="roadmap-col">
-        <div class="roadmap-col-header later">
-          <span class="phase-label">Phase V3+ · Planned</span>
-          Later
-        </div>
-        <div class="roadmap-items">
-          <div class="roadmap-item">
-            <h4>Evidence-backed resume (V3a)</h4>
-            <p>Paste a JD → extract requirements → score vs your evidence → generate resume with real proof. No keyword stuffing.</p>
-            <span class="benefit">Apply with confidence</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>Navigator flow (V2a.1)</h4>
-            <p>Existing PMs transitioning domain or seniority level. Weighted differently — background carries less, transition goal carries more.</p>
-            <span class="benefit">Expand market to working PMs</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>AI interview room (V3b)</h4>
-            <p>Archetype-specific mock interviews. Feedback tied to actual evidence logged, not generic PM coaching.</p>
-            <span class="benefit">Practice with your own proof</span>
-          </div>
-          <div class="roadmap-item">
-            <h4>Job matching (V3b)</h4>
-            <p>Surface open roles the user is evidence-ready for — not based on aspirations, based on logged proof.</p>
-            <span class="benefit">Compete on evidence, not hope</span>
-          </div>
-        </div>
+
+      <div class="tech-card">
+        <div class="tech-label">RAG pipeline</div>
+        <h3>pgvector HNSW gap analysis</h3>
+        <div class="tech-code">text-embedding-3-small (1536d)
+→ HNSW (m=16, ef=64) → K=25
+→ LLM narrative
+gap_pct = (1 − evidenced/total) × 100</div>
+        <p>Gap analysis uses a retrieval-augmented generation pipeline against a live corpus of embedded job descriptions. The system embeds the user's profile (archetype + domain + geography + skill signal) and queries <code>jd_embeddings</code> via pgvector cosine similarity with K=25 retrieval. Retrieved JDs are passed with the user's evidence log to the LLM, which produces a qualitative narrative and identifies the top three skill gaps with recommended artefacts. <code>gap_pct</code> is deterministic and computed separately from the LLM narrative. The gap analysis button is hidden if fewer than 15 JDs exist for the user's slice — the product never generates a signal from an insufficient corpus.</p>
       </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Provider factory</div>
+        <h3>LLM abstraction layer</h3>
+        <div class="tech-code">ACTIVE_LLM_PROVIDER=groq|anthropic|google
+getLLMModel() → Vercel AI SDK instance
+getEmbedModel() → same pattern</div>
+        <p>All LLM calls — ETL skill extraction and gap analysis narrative — route through a factory pattern that decouples the application from any specific provider. <code>getLLMModel()</code> reads the <code>ACTIVE_LLM_PROVIDER</code> env var and returns the appropriate Vercel AI SDK model instance: Groq (Llama 3.3 70B, free tier, default), Anthropic (Claude Sonnet 4.6), or Google (Gemini 2.0 Flash). One env var change swaps providers — zero code changes. Groq runs inference free at portfolio scale; the abstraction means the same code runs in production on Anthropic or Google without modification.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Editorial engine</div>
+        <h3>Admin ETL pipeline</h3>
+        <div class="tech-code">JD paste → PII strip → LLM extract
+(vocab-constrained to skill_frequency)
+→ admin approve/reject per skill
+→ embed → jd_embeddings
+→ skill_frequency recalculation</div>
+        <p>The admin surface keeps the curriculum market-grounded without code deployment. An admin pastes raw JD text; the system calls the LLM extraction endpoint, which strips PII and maps each skill to the existing taxonomy vocabulary — the LLM cannot introduce new skill terms, only map to known entries. The admin reviews each extraction in a queue UI. On approval, the system embeds the full JD and triggers <code>POST /api/aggregate-skill-frequency</code> to recalculate frequencies for the affected slice. The Curriculum Signals panel surfaces Trending, Stable, and Declining skills with one-click actions.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Schema management</div>
+        <h3>Node.js migration runner</h3>
+        <div class="tech-code">scripts/migrate.ts
+→ @neondatabase/serverless
+→ migrations table → compare applied set
+→ run each in tx → failure rolls back
+→ halts with clear error</div>
+        <p>The database schema is managed by 18 pure PostgreSQL SQL files applied in numeric order via a custom Node.js runner at <code>scripts/migrate.ts</code>. No Supabase CLI dependency, no ORM, no framework magic. The runner connects to Neon via <code>@neondatabase/serverless</code>, creates a <code>migrations</code> table on first run to track applied filenames, compares against the applied set, and runs each unapplied migration inside a transaction — failure rolls back and halts the runner with a clear error. The same runner works against any PostgreSQL-compatible database, which matters for the planned Vercel → AWS ECS Fargate transition.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Auth architecture</div>
+        <h3>Clerk TEXT user IDs</h3>
+        <div class="tech-code">users.id TEXT (not UUID)
+format: user_2abc...
+webhook → provision users
+       + user_profiles
+       + subscriptions (single tx)
+lazy provision on every auth'd route</div>
+        <p>The V3 architecture uses Clerk for auth, which required a non-obvious schema change: <code>users.id</code> is <code>TEXT</code>, not <code>UUID</code>. Clerk user IDs follow the format <code>user_2abc...</code> — they are not UUIDs. Every foreign key referencing <code>users.id</code> across the schema is therefore <code>TEXT</code>. User rows are provisioned via a Clerk <code>user.created</code> webhook that inserts into <code>users</code>, <code>user_profiles</code>, and <code>subscriptions</code> in a single transaction. To handle late or failed webhooks, every authenticated API route includes a lazy provision check: if the user row is missing on a valid Clerk session, it is created before the business logic runs.</p>
+      </div>
+
     </div>
   </div>
 </section>
 
 <!-- STACK -->
-<section class="section section-alt">
+<section id="stack" class="section">
   <div class="container">
     <div class="section-label">Stack</div>
     <h2 class="section-title">Free-tier production-grade runtime</h2>
-    <p class="section-sub">~$0/mo until traction. Every architectural decision made for portability to AWS ECS Fargate when the time comes. Docker from day one.</p>
-    <div class="stack-grid">
+    <p class="section-sub">~$0/mo until traction. Estimated monthly cost at Alpha (personal use): $0. Every architectural decision made for portability to AWS ECS Fargate when the time comes.</p>
+    <div class="stack-badges">
       <div class="stack-badge"><span class="dot"></span>Next.js 14 (App Router)</div>
       <div class="stack-badge"><span class="dot"></span>Vercel</div>
       <div class="stack-badge"><span class="dot"></span>Neon (PostgreSQL + pgvector)</div>
@@ -747,172 +840,375 @@ ACTIVE_EMBED_PROVIDER=openai|...</div>
       <div class="stack-badge"><span class="dot"></span>PostHog</div>
       <div class="stack-badge"><span class="dot"></span>Resend</div>
     </div>
-    <div class="stack-note">Standard Node.js API routes only — no Edge Runtime primitives. Ensures Vercel → AWS ECS Fargate portability without code changes when traction justifies the move.</div>
+    <table class="stack-table">
+      <thead><tr><th>Layer</th><th>Tool</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend + API</td><td>Next.js 14 (App Router) on Vercel</td><td>Standard Node.js API routes only — no Edge Runtime (portability rule)</td></tr>
+        <tr><td>Database</td><td>Neon (PostgreSQL + pgvector)</td><td>No pausing on free tier; HNSW index m=16, ef=64 for JD similarity</td></tr>
+        <tr><td>Auth</td><td>Clerk</td><td>Google OAuth + email/password; <code>publicMetadata.role</code> for admin access</td></tr>
+        <tr><td>LLM</td><td>Vercel AI SDK — Groq default (Llama 3.3 70B)</td><td><code>ACTIVE_LLM_PROVIDER</code> env var switches provider; zero code changes</td></tr>
+        <tr><td>Embeddings</td><td>OpenAI text-embedding-3-small (1536 dims)</td><td><code>ACTIVE_EMBED_PROVIDER</code> env var; dimensions locked at schema level</td></tr>
+        <tr><td>Payments</td><td>Stripe (test mode for Alpha)</td><td>Paywall designed from day one; live charges after traction</td></tr>
+        <tr><td>Email</td><td>Resend</td><td>Transactional; free tier (3K/month)</td></tr>
+        <tr><td>Analytics</td><td>PostHog</td><td>Product analytics + funnel tracking; free tier (1M events/month)</td></tr>
+        <tr><td>Product phase</td><td>AWS ECS Fargate + RDS + CloudFront</td><td>Docker from day one; standard API routes ensure Vercel → AWS portability</td></tr>
+      </tbody>
+    </table>
+    <div class="stack-note">Standard Node.js API routes only — no Edge Runtime primitives. Docker from day one. Ensures Vercel → AWS ECS Fargate portability without code changes when traction justifies the move.</div>
   </div>
 </section>
 
 <!-- DIAGRAMS -->
-<section class="section">
+<section id="diagrams" class="section section-alt">
   <div class="container">
-    <div class="section-label">Architecture & flow diagrams</div>
-    <h2 class="section-title">System diagrams</h2>
-    <p class="section-sub">9 diagrams covering functional architecture, user journeys, system context, deployment, and key sequence flows. draw.io source in <code>docs/diagrams/</code>.</p>
+    <div class="section-label">System diagrams</div>
+    <h2 class="section-title">Architecture &amp; flow diagrams</h2>
+    <p class="section-sub">9 diagrams covering functional architecture, user journeys, system context, deployment, and key sequence flows. draw.io source files in <code>docs/diagrams/</code>. All SVGs are self-contained.</p>
     <div class="diagrams-grid">
-
-      <div class="diagram-item featured">
+      <div class="diag-item span2">
         <a href="diagrams/export/07-functional-architecture.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/07-functional-architecture.svg" alt="Functional Architecture — 7 stage pipeline" loading="lazy">
-          </div>
-          <div class="diagram-caption">D7 Functional Architecture <span>7-stage pipeline + infrastructure</span></div>
+          <div class="diag-img"><img src="diagrams/export/07-functional-architecture.svg" alt="Functional Architecture"></div>
+          <div class="diag-caption">D7 Functional Architecture <span>7-stage pipeline + infrastructure</span></div>
         </a>
       </div>
-
-      <div class="diagram-item">
+      <div class="diag-item">
         <a href="diagrams/export/01-system-context.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/01-system-context.svg" alt="System Context" loading="lazy">
-          </div>
-          <div class="diagram-caption">D1 System Context <span>Actors + external systems</span></div>
+          <div class="diag-img"><img src="diagrams/export/01-system-context.svg" alt="System Context"></div>
+          <div class="diag-caption">D1 System Context <span>Actors + external systems</span></div>
         </a>
       </div>
-
-      <div class="diagram-item featured">
+      <div class="diag-item span2">
         <a href="diagrams/export/08-user-journey-wanderer.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/08-user-journey-wanderer.svg" alt="User Journey — Wanderer" loading="lazy">
-          </div>
-          <div class="diagram-caption">D8 Wanderer Journey <span>Milestone timeline — confused to ready</span></div>
+          <div class="diag-img"><img src="diagrams/export/08-user-journey-wanderer.svg" alt="User Journey Wanderer"></div>
+          <div class="diag-caption">D8 Wanderer Journey <span>Milestone timeline — confused to ready</span></div>
         </a>
       </div>
-
-      <div class="diagram-item">
+      <div class="diag-item">
         <a href="diagrams/export/02-component-blocks.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/02-component-blocks.svg" alt="Component Blocks" loading="lazy">
-          </div>
-          <div class="diagram-caption">D2 Component Blocks <span>Logical modules</span></div>
+          <div class="diag-img"><img src="diagrams/export/02-component-blocks.svg" alt="Component Blocks"></div>
+          <div class="diag-caption">D2 Component Blocks <span>Logical modules</span></div>
         </a>
       </div>
-
-      <div class="diagram-item featured">
+      <div class="diag-item span2">
         <a href="diagrams/export/09-product-flow-swimlane.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/09-product-flow-swimlane.svg" alt="Product Flow Swimlane" loading="lazy">
-          </div>
-          <div class="diagram-caption">D9 Product Flow Swimlane <span>User actions · Platform response · Outcome</span></div>
+          <div class="diag-img"><img src="diagrams/export/09-product-flow-swimlane.svg" alt="Product Flow Swimlane"></div>
+          <div class="diag-caption">D9 Product Flow Swimlane <span>User actions · Platform response · Outcome</span></div>
         </a>
       </div>
-
-      <div class="diagram-item">
+      <div class="diag-item">
         <a href="diagrams/export/03-deployment-free-tier.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/03-deployment-free-tier.svg" alt="Deployment (free tier)" loading="lazy">
-          </div>
-          <div class="diagram-caption">D3 Deployment <span>Vercel + Neon + Clerk + Groq</span></div>
+          <div class="diag-img"><img src="diagrams/export/03-deployment-free-tier.svg" alt="Deployment"></div>
+          <div class="diag-caption">D3 Deployment <span>Vercel + Neon + Clerk + Groq</span></div>
         </a>
       </div>
-
-      <div class="diagram-item">
+      <div class="diag-item">
         <a href="diagrams/export/04-sequence-auth.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/04-sequence-auth.svg" alt="Auth sequence" loading="lazy">
-          </div>
-          <div class="diagram-caption">D4 Auth + Provisioning <span>Clerk webhook flow</span></div>
+          <div class="diag-img"><img src="diagrams/export/04-sequence-auth.svg" alt="Auth Sequence"></div>
+          <div class="diag-caption">D4 Auth + Provisioning <span>Clerk webhook flow</span></div>
         </a>
       </div>
-
-      <div class="diagram-item">
+      <div class="diag-item">
         <a href="diagrams/export/05-sequence-gap-analysis.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/05-sequence-gap-analysis.svg" alt="Gap Analysis sequence" loading="lazy">
-          </div>
-          <div class="diagram-caption">D5 Gap Analysis (RAG) <span>pgvector → LLM → gap report</span></div>
+          <div class="diag-img"><img src="diagrams/export/05-sequence-gap-analysis.svg" alt="Gap Analysis"></div>
+          <div class="diag-caption">D5 Gap Analysis (RAG) <span>pgvector → LLM → gap report</span></div>
         </a>
       </div>
-
-      <div class="diagram-item">
+      <div class="diag-item">
         <a href="diagrams/export/06-sequence-etl.svg" target="_blank" rel="noopener">
-          <div class="diagram-img-wrap">
-            <img src="diagrams/export/06-sequence-etl.svg" alt="Admin ETL sequence" loading="lazy">
-          </div>
-          <div class="diagram-caption">D6 Admin ETL <span>JD paste → extract → embed</span></div>
+          <div class="diag-img"><img src="diagrams/export/06-sequence-etl.svg" alt="Admin ETL"></div>
+          <div class="diag-caption">D6 Admin ETL <span>JD paste → extract → embed</span></div>
         </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="section">
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">Now · Next · Later</h2>
+    <p class="section-sub">Sequenced by value delivered per user stage, not by technical convenience. Each gate exists because the next stage only has meaning after the previous one works.</p>
+    <div class="roadmap-grid">
+      <div class="roadmap-col">
+        <div class="roadmap-header now"><span class="phase-sub">Phase 7d · Live</span>Now</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item"><h4>Weighted archetype matching</h4><p>15 signals scored across 4 PM archetypes. Primary + runner-up with confidence %.</p><span class="roadmap-benefit">Know which direction to point</span></div>
+          <div class="roadmap-item"><h4>3-layer personalised roadmap</h4><p>Universal · Archetype · Domain × Geography. Fintech NA ≠ Fintech India.</p><span class="roadmap-benefit">Curriculum that's yours, not a template</span></div>
+          <div class="roadmap-item"><h4>Evidence logging with tiers</h4><p>Learning → Practised → Mastered. Auto-computed from topic completion. Score updates synchronously.</p><span class="roadmap-benefit">Progress you can see and prove</span></div>
+          <div class="roadmap-item"><h4>Readiness score</h4><p>Weighted across 5 dimensions: Technical (30%), Business (25%), Portfolio (25%), Domain (10%), Product (10%).</p><span class="roadmap-benefit">Honest signal, not wishful thinking</span></div>
+          <div class="roadmap-item"><h4>Search keywords</h4><p>5 targeted Google-ready search keywords per artefact.</p><span class="roadmap-benefit">Directed learning, not open-ended searching</span></div>
+          <div class="roadmap-item"><h4>Archetype switcher</h4><p>Explore alternative archetype roadmaps without retaking intake.</p><span class="roadmap-benefit">Confidence in your match</span></div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-header next"><span class="phase-sub">Phase V2a · Building</span>Next</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item"><h4>JD corpus ETL</h4><p>Admin ETL seeding live JD corpus across all archetype × domain × geography slices.</p><span class="roadmap-benefit">Gap analysis becomes available</span></div>
+          <div class="roadmap-item"><h4>RAG gap analysis</h4><p>pgvector K=25 retrieval + LLM narrative. Top 3 gaps named with specific artefacts to close them.</p><span class="roadmap-benefit">Know exactly what's missing</span></div>
+          <div class="roadmap-item"><h4>Ready-to-apply gate</h4><p>Score ≥ 75 + gap ≤ 30% + no critical missing skills → explicit readiness signal.</p><span class="roadmap-benefit">Confidence to apply, not hope</span></div>
+          <div class="roadmap-item"><h4>Curriculum expansion</h4><p>All archetypes, multiple domains, NA + India geography paths.</p><span class="roadmap-benefit">Serve more user slices</span></div>
+          <div class="roadmap-item"><h4>Stripe paywall (live)</h4><p>Convert test-mode to live billing. Free: archetype match only. Paid: full roadmap + readiness.</p><span class="roadmap-benefit">First revenue event</span></div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-header later"><span class="phase-sub">Phase V3+ · Planned</span>Later</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item"><h4>Evidence-backed resume (V3a)</h4><p>Paste a JD → score vs your evidence → generate resume from logged proof. No keyword stuffing.</p><span class="roadmap-benefit">Apply with confidence</span></div>
+          <div class="roadmap-item"><h4>Navigator flow (V2a.1)</h4><p>Existing PMs transitioning domain or seniority. Background weighted less; transition goal weighted more.</p><span class="roadmap-benefit">Expand market to working PMs</span></div>
+          <div class="roadmap-item"><h4>AI interview room (V3b)</h4><p>Archetype-specific mock interviews. Feedback tied to actual evidence logged.</p><span class="roadmap-benefit">Practice with your own proof</span></div>
+          <div class="roadmap-item"><h4>Job matching (V3b)</h4><p>Surface open roles the user is evidence-ready for. Based on proof, not aspirations.</p><span class="roadmap-benefit">Compete on evidence</span></div>
+          <div class="roadmap-item"><h4>In-app coaching (V3c)</h4><p>Grounded in your roadmap and evidence. Channels after value delivery is proven.</p><span class="roadmap-benefit">Personalised guidance</span></div>
+          <div class="roadmap-item"><h4>B2B employer dashboard (V4)</h4><p>Only after B2C-first proven. Different GTM, different buyer, different product.</p><span class="roadmap-benefit">Institutional revenue</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap-seq"><strong>Sequencing principle (locked):</strong> Evidence → Intelligence → Apply → Practice → Channels. Don't add conversational chrome before the product delivers value. Don't build interview practice before gap analysis exists. Don't ship coaching before the navigation and apply flows are proven. This sequencing defends against feature creep and keeps the product focused on the core insight: navigation is the bottleneck.</div>
+  </div>
+</section>
+
+<!-- FEATURE MAP -->
+<section id="featuremap" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Feature map</div>
+    <h2 class="section-title">Phase-by-phase scope</h2>
+    <p class="section-sub">What each phase delivers, what's explicitly excluded, and why the sequencing is locked. Every deferred feature is placed in a phase — nothing is "maybe later."</p>
+    <div class="phase-cards">
+
+      <div class="phase-card">
+        <div class="phase-card-header live">Alpha <span class="ph-tag">Live now</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What it does</h4>
+            <p>Intake + archetype match + personalised roadmap + evidence logging + readiness score.</p>
+            <h4 style="margin-top:12px">Why this phase</h4>
+            <p>Validates the core navigation insight — does matching work? Do users build evidence? Does the readiness signal resonate? All features free to remove adoption friction and focus on signal.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>In scope</h4>
+            <ul class="scope-list">
+              <li>15-question intake (Wanderer path only; Navigator deferred)</li>
+              <li>Weighted archetype matching across 15 signals</li>
+              <li>Seeded 3-layer curriculum (one domain, two archetypes for demo)</li>
+              <li>Evidence logging with progressive tiers</li>
+              <li>Readiness score via curriculum coverage</li>
+              <li>Archetype switcher to test match confidence</li>
+            </ul>
+            <h4 style="margin-top:12px">Out of scope for Alpha</h4>
+            <ul class="scope-list out">
+              <li>Multiple geography slices (North America only)</li>
+              <li>RAG gap analysis (insufficient JD corpus)</li>
+              <li>Paywall enforcement (free for portfolio)</li>
+              <li>Navigator path (existing PMs)</li>
+              <li>Interview practice, coaching, resume builder</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-card-header v2a">V2a — Market-grounded intelligence <span class="ph-tag">Building next</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What it does</h4>
+            <p>Gap analysis grounded in real job descriptions. The system reads your evidence against 80+ actual job postings for your role and tells you the three biggest gaps with recommended artefacts to close them.</p>
+            <h4 style="margin-top:12px">Why after Alpha</h4>
+            <p>Alpha must prove the navigation works before adding intelligence. Gap analysis is only valuable once users have logged evidence and the curriculum is trusted.</p>
+            <h4 style="margin-top:12px">Sequencing logic</h4>
+            <p>Intelligence must come before Apply packaging. You can't build an honest resume without knowing the gaps. You can't practice interviews without knowing what the market cares about.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>In scope</h4>
+            <ul class="scope-list">
+              <li>Expanded curriculum (all archetypes, multiple domains, NA + India)</li>
+              <li>ETL pipeline: paste JD → LLM extract → admin review → embed</li>
+              <li>RAG gap analysis: match profile to 80+ JDs, retrieve top 25, identify gaps</li>
+              <li>Ready-to-apply gate: gap ≤ 30% + no critical missing skills</li>
+              <li>Admin ETL interface: paste, extract, review, approve</li>
+              <li>Paywall enforcement: match free, roadmap + gap paid</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-card-header v3a">V3a — Package proof for a target job <span class="ph-tag">Planned</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What it does</h4>
+            <p>Paste a specific job description. Get a resume draft built from your logged evidence, re-framed for that JD.</p>
+            <h4 style="margin-top:12px">Why here</h4>
+            <p>Only makes sense after gap analysis exists. You draft a resume once you know the specific gaps between you and the role.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>In scope</h4>
+            <ul class="scope-list">
+              <li>Paste target JD or upload PDF</li>
+              <li>Extract JD requirements</li>
+              <li>Generate resume sections using logged evidence</li>
+              <li>Highlight strong areas, call out weak areas honestly</li>
+              <li>Export as PDF</li>
+            </ul>
+            <h4 style="margin-top:12px">Out of scope</h4>
+            <ul class="scope-list out">
+              <li>ATS keyword stuffing</li>
+              <li>Auto-apply</li>
+              <li>Multi-job campaign management</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-card-header v3b">V3b — Practice and discover <span class="ph-tag">Planned</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What it does</h4>
+            <p>Interview room for mock practice. Job matching to find open roles aligned with your evidence level.</p>
+            <h4 style="margin-top:12px">Why here</h4>
+            <p>Practice is only valuable after you've packaged your proof. Mock interview feedback should be specific to how you'd present your evidence — not generic PM coaching. Job matching surfaces roles you're actually ready for, not just roles you aspire to.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>In scope</h4>
+            <ul class="scope-list">
+              <li>AI mock interview room (archetype-specific questions)</li>
+              <li>Feedback tied to actual logged evidence</li>
+              <li>Job matching (roles you're evidence-ready for)</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- WIKI -->
-<section class="section section-alt">
+<!-- DECISION LOG -->
+<section id="decisions" class="section">
   <div class="container">
-    <div class="section-label">Wiki</div>
-    <h2 class="section-title">Documentation</h2>
-    <p class="section-sub">End-to-end product and technical thinking — from problem framing through architecture. Full depth in the GitHub wiki.</p>
-    <div class="wiki-grid">
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">🏠</span>
-        <h3>Home</h3>
-        <p>Product overview, technical depth highlights, stack, current status, and navigation index</p>
-        <span class="wiki-arrow">Open wiki →</span>
-      </a>
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Product-Overview" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">🎯</span>
-        <h3>Product Overview</h3>
-        <p>The problem, goals, functional architecture, key capabilities, personas, and what's out of scope</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki/User-Journeys" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">🗺️</span>
-        <h3>User Journeys</h3>
-        <p>Six narrative walk-throughs with journey timeline and swimlane diagrams</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki/User-Flows" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">🔄</span>
-        <h3>User Flows</h3>
-        <p>Step-by-step flows: hero Wanderer flow, Navigator transition, admin ETL, evidence logging loop</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Feature-Map" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">📋</span>
-        <h3>Feature Map</h3>
-        <p>What's live, what's coming, phase gates, and non-goals — the scope boundary in plain English</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Roadmap" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">📅</span>
-        <h3>Roadmap</h3>
-        <p>Now / Next / Later with user benefits, business signals, and sequencing rationale</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
-      <a href="https://github.com/vcatreya-git/pmrocket/wiki/Decision-Log" target="_blank" rel="noopener" class="wiki-card">
-        <span class="wiki-icon">📝</span>
-        <h3>Decision Log</h3>
-        <p>Key product decisions with reasoning — archetype taxonomy, scope, sequencing, evidence enrichment model</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
-      <a href="prd.html" class="wiki-card">
-        <span class="wiki-icon">📄</span>
-        <h3>PRD</h3>
-        <p>Full product requirements document — problem, personas, features, acceptance criteria</p>
-        <span class="wiki-arrow">Read →</span>
-      </a>
+    <div class="section-label">Product thinking</div>
+    <h2 class="section-title">Key product decisions</h2>
+    <p class="section-sub">The choices that shaped this product — and why each was made this way and not another. These are the decisions that best demonstrate product thinking: problem framing, trade-off reasoning, and scope discipline.</p>
+    <div class="decision-list">
+      <div class="decision-row">
+        <div class="decision-date">2026-07-28</div>
+        <div class="decision-content"><h4>Evidence enrichment: two-step model, not front-loaded fields</h4><p>Adding context, impact, and scale fields to the evidence log modal introduces friction at the learning phase — the most fragile engagement point. A dedicated "enrich for resume" step triggers only when a user approaches the readiness gate (Mastered tier on key artefacts). The LLM can also surface thin entries and prompt for detail at V3a resume draft time. Logging stays low-friction; richness is captured when motivation is highest.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-07-28</div>
+        <div class="decision-content"><h4>Primary market: North America first, India second</h4><p>Builder uses the product personally in North America. India remains a core market for product design and corpus — but North America seeds first. Supersedes India-only primary framing in earlier documents. Corpus seeding, JD retrieval, and geography-specific curriculum start with NA slices.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-07-18</div>
+        <div class="decision-content"><h4>Build strategy: thin vertical slice before full V2a surface</h4><p>One geography × domain × archetype slice runnable end-to-end is more valuable than partial V2a features across many slices. Full V2a docs remain design targets, not the next sprint backlog. A working Technical PM × Fintech × North America slice proves the pipeline before expanding.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-07-18</div>
+        <div class="decision-content"><h4>Stripe / live paywall deferred for Alpha</h4><p>Invite-only or flag-gated access is sufficient for personal use and portfolio demo. Paywall boundary is fully designed and present in the product; live charges are deferred until real traction. This avoids Stripe compliance overhead during a solo exploration phase.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-07-18</div>
+        <div class="decision-content"><h4>Production-grade SaaS craft; free-tier runtime until traction</h4><p>Portfolio goal is to demonstrate PM-level product thinking and production build quality — not a toy demo. Free tiers govern cost and runtime only. Auth, ownership checks, migrations, error handling, paywall design, admin ops, and honest readiness metrics are always present. The roadmap shows a clear transition path to AWS when traction justifies it.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-24</div>
+        <div class="decision-content"><h4>Paywall boundary: match free, roadmap + gap analysis paid</h4><p>Free: intake + archetype match + teaser ("you have X artefacts, Y gaps — locked"). Paid: full evidence roadmap, gap analysis, evidence log, readiness signal. Match result alone is useless without the roadmap — the gap creates genuine pull toward paid. This mirrors the classic freemium insight mechanic: show the problem, charge for the solution.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-24</div>
+        <div class="decision-content"><h4>Navigator path deferred to V2a.1</h4><p>Q16 ("Are you currently a PM?") ships in V2a for data collection only. Q17–Q19 (current level, transition goal, skill focus), level-filtered JD retrieval, and goal-adjusted weights arrive in V2a.1. Reduces 5+ conditional code paths from the V2a critical path. Accelerate if &gt;20% of V2a users answer Q16 = Yes.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-24</div>
+        <div class="decision-content"><h4>Minimum Viable Corpus: 4 slices, 80 JDs at Alpha</h4><p>Technical PM + Enterprise PM × Fintech + B2B SaaS × India = 4 slices × 20 JDs. Gap analysis is hidden for unseeded slices with an honest placeholder ("gap analysis not yet available for your slice"). Expand to Growth PM and Consumer domain post-Alpha based on demand, not calendar.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-24</div>
+        <div class="decision-content"><h4>ETL vocabulary constraint</h4><p>LLM extraction prompt includes the existing <code>skill_frequency.skill_name</code> vocabulary list. Prevents skill name fragmentation in frequency counts — "stakeholder management" and "stakeholder comms" don't become separate entries. New skills surface as outliers for admin review rather than auto-creating new taxonomy entries.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-25</div>
+        <div class="decision-content"><h4>Admin is a decision queue, not a workbench</h4><p>Admin interface surfaces system recommendations; admin accepts or rejects. No manual weight research, no direct JD paste workflow that requires expertise. Every admin screen shows a recommendation with Accept/Reject. The system originates the analysis; the admin governs it. This scales admin work without growing headcount.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-22</div>
+        <div class="decision-content"><h4>Product territory: navigation layer, not content</h4><p>PMRocket must own background-to-role matching + personalised roadmap + readiness signal. Building another content or curriculum platform enters saturated territory (Exponent, NextLeap, Lenny's) with no differentiation. Content is a substitutable commodity; navigation is the moat. The discovery phase validated this as the unmet need.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-03-23</div>
+        <div class="decision-content"><h4>Business model: B2C-first</h4><p>Pain is individual, not institutional. Existing candidates already pay individually for prep products (Exponent at $12/mo, bootcamps at $2K+). B2B institutional buyer (MBA programs, bootcamps) has misaligned incentive metrics — they measure completion and reviews, not readiness accuracy. B2B is Phase 2, only if B2C-first is proven.</p></div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-date">2026-07-19</div>
+        <div class="decision-content"><h4>Feature sequencing: Intelligence → Apply → Practice → Channels</h4><p>Evidence is the source of truth. ETL + RAG gap must exist before job packaging (Apply). Interview practice only makes sense after resume is packaged — feedback must be specific to how you'd present your evidence. Coaching channels last — channels without value delivery are overhead. This sequencing defends against feature creep.</p></div>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- OUT OF SCOPE -->
+<section id="scope" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Scope discipline</div>
+    <h2 class="section-title">Explicit non-goals</h2>
+    <p class="section-sub">Every deferred feature is placed in a phase. Nothing is "maybe later" — it's either planned with a reason or not being built at all. Scope is defended, not assumed.</p>
+
+    <div class="scope-section-title">Not building at all</div>
+    <table class="scope-table">
+      <thead><tr><th>What</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Mock interview marketplace / generic community</td><td>Saturated market; not navigation territory. Exponent and Interviewing.io own this space.</td></tr>
+        <tr><td>Employer dashboard (V1)</td><td>B2C-first. Employer side requires completely different GTM, product design, and legal considerations.</td></tr>
+        <tr><td>Mobile native app</td><td>Web + PWA first. Native is a luxury, not a blocker. No engagement pattern that requires native-only capabilities.</td></tr>
+        <tr><td>ATS keyword stuffing</td><td>Violates the evidence-as-truth principle. Every claim in a resume must trace back to real logged proof.</td></tr>
+        <tr><td>Automated CV generation (pre-gap analysis)</td><td>Can't draft honest resumes before gap analysis exists. A resume built from thin evidence would be weak and misleading.</td></tr>
+        <tr><td>LinkedIn / Indeed scraping</td><td>ToS and legal risk. Paste + career pages first — manual curation keeps quality high and avoids ToS violation.</td></tr>
+        <tr><td>In-app peer review</td><td>Trust in evidence quality must be proven first. Peer review requires a trust layer that doesn't exist at Alpha scale.</td></tr>
+        <tr><td>Coaching channels without value delivery</td><td>Channels before value creation are overhead. Coach chat is only meaningful once the navigation and apply flows are proven.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="scope-section-title">Explicitly deferred (with version and gate)</div>
+    <table class="scope-table">
+      <thead><tr><th>Feature</th><th>Deferred to</th><th>Gate to unlock</th></tr></thead>
+      <tbody>
+        <tr><td>Resume builder</td><td><span class="version-tag">V3a</span></td><td>Gap analysis proven accurate across at least one full archetype × domain slice</td></tr>
+        <tr><td>AI interview room</td><td><span class="version-tag">V3b</span></td><td>Resume builder live and validated</td></tr>
+        <tr><td>Navigator path (existing PM flow)</td><td><span class="version-tag">V2a.1</span></td><td>&gt;20% of V2a users answer "are you currently a PM?" in intake</td></tr>
+        <tr><td>Job matching</td><td><span class="version-tag">V3b</span></td><td>Core apply flows proven; sufficient JD corpus for matching quality</td></tr>
+        <tr><td>B2B employer dashboard</td><td><span class="version-tag">V4</span></td><td>B2C-first proven with real traction and retention</td></tr>
+        <tr><td>India geography slice</td><td><span class="version-tag">V2a expansion</span></td><td>NA slice healthy with seeded JD corpus and active users</td></tr>
+        <tr><td>Growth PM + Consumer domain</td><td><span class="version-tag">V2a expansion</span></td><td>Technical PM + Enterprise PM × Fintech + B2B SaaS slices stable</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <strong>PMRocket</strong> — Career navigation for aspiring Product Managers<br>
-  Built by <strong>Venkat</strong> · Portfolio project — production-grade design, free-tier runtime until traction
+  Built by <strong>Venkat</strong> · Production-grade design · Free-tier runtime until traction
   <div class="footer-links">
-    <a href="https://github.com/vcatreya-git/pmrocket" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://github.com/vcatreya-git/pmrocket/wiki" target="_blank" rel="noopener">Wiki</a>
     <a href="prototype.html">Prototype</a>
+    <a href="prd.html">PRD</a>
   </div>
 </footer>
 
+<script>
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks = document.querySelectorAll('.sb-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.sb-nav a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
 </body>
 </html>

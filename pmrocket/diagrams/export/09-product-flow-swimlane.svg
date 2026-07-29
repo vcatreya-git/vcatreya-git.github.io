@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520">
+<defs>
+  <marker id="arr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+    <path d="M0,0 L9,4 L0,8 Z" fill="#94A3B8"/>
+  </marker>
+  <filter id="sh">
+    <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#00000015"/>
+  </filter>
+</defs>
+<style>
+  .title  { font:700 20px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lane   { font:700 11px system-ui,sans-serif; fill:#475569; }
+  .act    { font:600 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .acts   { font:10.5px system-ui,sans-serif; fill:#475569; text-anchor:middle; }
+  .sys    { font:600 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .syss   { font:10.5px system-ui,sans-serif; fill:#475569; text-anchor:middle; }
+  .out    { font:600 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .outs   { font:10.5px system-ui,sans-serif; fill:#475569; text-anchor:middle; }
+  .col    { font:700 10px system-ui,sans-serif; fill:#94A3B8; letter-spacing:1px; text-anchor:middle; }
+  .edge   { stroke:#94A3B8; stroke-width:1.5; fill:none; marker-end:url(#arr); }
+  .dedge  { stroke:#94A3B8; stroke-width:1.5; fill:none; stroke-dasharray:5,3; marker-end:url(#arr); }
+</style>
+
+<!-- Background -->
+<rect width="1400" height="520" fill="#FFFFFF"/>
+
+<!-- Title -->
+<text x="40" y="36" class="title">PMRocket — Product Flow (Swimlane)</text>
+<text x="40" y="56" class="sub">Three lanes: User action · Platform response · User outcome · Read left → right</text>
+
+<!-- ─── SWIM LANE HEADERS ──────────────────────────────────────────────────── -->
+<!-- Lane 1: User Actions -->
+<rect x="0" y="68" width="134" height="440" fill="#EEF2FF"/>
+<text x="67" y="210" class="lane" style="transform-box:fill-box;transform-origin:center;writing-mode:tb;text-anchor:middle;fill:#4338CA" transform="rotate(-90,67,250)">USER ACTIONS</text>
+
+<!-- Lane 2: Platform -->
+<rect x="0" y="68" width="134" height="440" fill="none"/>
+<rect x="0" y="228" width="134" height="150" fill="#F0FDF4"/>
+<rect x="0" y="378" width="134" height="130" fill="#FFFBEB"/>
+
+<!-- Dividers -->
+<line x1="0" y1="228" x2="1400" y2="228" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="4,2"/>
+<line x1="0" y1="378" x2="1400" y2="378" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+<!-- Lane labels (left side) -->
+<rect x="0" y="68" width="134" height="160" fill="#EEF2FF"/>
+<rect x="0" y="228" width="134" height="150" fill="#ECFDF5"/>
+<rect x="0" y="378" width="134" height="130" fill="#FFFBEB"/>
+<text x="67" y="155" class="lane" transform="rotate(-90,67,155)" style="fill:#4338CA;text-anchor:middle">USER ACTIONS</text>
+<text x="67" y="308" class="lane" transform="rotate(-90,67,308)" style="fill:#047857;text-anchor:middle">PLATFORM RESPONSE</text>
+<text x="67" y="445" class="lane" transform="rotate(-90,67,445)" style="fill:#B45309;text-anchor:middle">USER OUTCOME</text>
+<line x1="134" y1="68" x2="134" y2="508" stroke="#E2E8F0" stroke-width="2"/>
+
+<!-- ─── COLUMN HEADERS ─────────────────────────────────────────────────────── -->
+<!-- 5 columns across the swim lanes -->
+<!-- Col widths: each ~250px, starting at x=144 -->
+<!-- Col 1: 144–384, Col 2: 384–624, Col 3: 624–864, Col 4: 864–1104, Col 5: 1104–1380 -->
+
+<text x="264" y="86" class="col">INTAKE</text>
+<text x="504" y="86" class="col">MATCH + ROADMAP</text>
+<text x="744" y="86" class="col">EVIDENCE BUILDING</text>
+<text x="984" y="86" class="col">GAP ANALYSIS</text>
+<text x="1242" y="86" class="col">READY TO APPLY</text>
+
+<!-- Column dividers -->
+<line x1="384" y1="68" x2="384" y2="508" stroke="#F1F5F9" stroke-width="1.5"/>
+<line x1="624" y1="68" x2="624" y2="508" stroke="#F1F5F9" stroke-width="1.5"/>
+<line x1="864" y1="68" x2="864" y2="508" stroke="#F1F5F9" stroke-width="1.5"/>
+<line x1="1104" y1="68" x2="1104" y2="508" stroke="#F1F5F9" stroke-width="1.5"/>
+
+<!-- ─── ROW 1: USER ACTIONS (y=68–228, midpoint y=148) ───────────────────── -->
+
+<!-- Col 1: Intake action -->
+<rect x="154" y="90" width="220" height="118" rx="6" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="1.5" filter="url(#sh)"/>
+<text x="264" y="110" class="act">Opens PMRocket</text>
+<text x="264" y="128" class="acts">Clicks "Get started"</text>
+<text x="264" y="144" class="acts">Answers 15 questions</text>
+<text x="264" y="160" class="acts">Background, skills, goals</text>
+<text x="264" y="176" class="acts">Geography, domain, company</text>
+<text x="264" y="194" class="acts">~3 min on mobile</text>
+
+<!-- Col 2: Match action -->
+<rect x="394" y="90" width="220" height="118" rx="6" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="1.5" filter="url(#sh)"/>
+<text x="504" y="110" class="act">Reviews archetype match</text>
+<text x="504" y="128" class="acts">Reads confidence reasoning</text>
+<text x="504" y="144" class="acts">Explores runner-up archetype</text>
+<text x="504" y="160" class="acts">Clicks "See my roadmap"</text>
+<text x="504" y="176" class="acts">Browses 3-layer curriculum</text>
+<text x="504" y="194" class="acts">Picks first artefact</text>
+
+<!-- Col 3: Evidence action -->
+<rect x="634" y="90" width="220" height="118" rx="6" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="744" y="110" class="act">Logs artefacts over weeks</text>
+<text x="744" y="128" class="acts">Ticks sub-topic checkboxes</text>
+<text x="744" y="144" class="acts">Links to Notion / GitHub proof</text>
+<text x="744" y="160" class="acts">Checks score on dashboard</text>
+<text x="744" y="176" class="acts">Watches tier unlock (Learning</text>
+<text x="744" y="194" class="acts">→ Practised → Mastered)</text>
+
+<!-- Col 4: Gap action -->
+<rect x="874" y="90" width="220" height="118" rx="6" fill="#FFFFFF" stroke="#FDE68A" stroke-width="1.5" filter="url(#sh)"/>
+<text x="984" y="110" class="act">Clicks "Gap Analysis"</text>
+<text x="984" y="128" class="acts">Reviews top 3 gaps</text>
+<text x="984" y="144" class="acts">Reads LLM narrative</text>
+<text x="984" y="160" class="acts">Picks closing artefact</text>
+<text x="984" y="176" class="acts">Logs more evidence to</text>
+<text x="984" y="194" class="acts">close priority gap</text>
+
+<!-- Col 5: Apply action -->
+<rect x="1114" y="90" width="240" height="118" rx="6" fill="#FFFFFF" stroke="#A5F3FC" stroke-width="1.5" filter="url(#sh)"/>
+<text x="1234" y="110" class="act">Sees "Ready to apply" gate</text>
+<text x="1234" y="128" class="acts">Score ≥ 75 · Gap ≤ 30%</text>
+<text x="1234" y="144" class="acts">Pastes target job description</text>
+<text x="1234" y="160" class="acts">Reviews evidence-backed resume</text>
+<text x="1234" y="176" class="acts">Downloads PDF</text>
+<text x="1234" y="194" class="acts">Applies with proof (V3a)</text>
+
+<!-- ─── ROW 2: PLATFORM RESPONSE (y=228–378, midpoint y=303) ─────────────── -->
+
+<!-- Col 1: Platform response to intake -->
+<rect x="154" y="238" width="220" height="130" rx="6" fill="#ECFDF5" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="264" y="258" class="sys">Weighted scoring engine</text>
+<text x="264" y="274" class="syss">15 signals → 4 archetype vectors</text>
+<text x="264" y="290" class="syss">Configurable weight matrix</text>
+<text x="264" y="306" class="syss">Returns: primary + runner-up</text>
+<text x="264" y="322" class="syss">Confidence % + reasoning text</text>
+<text x="264" y="346" class="syss" style="fill:#047857;font-weight:700">Clerk: user provisioned</text>
+
+<!-- Col 2: Platform response to roadmap -->
+<rect x="394" y="238" width="220" height="130" rx="6" fill="#ECFDF5" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="504" y="258" class="sys">3-layer query execution</text>
+<text x="504" y="274" class="syss">Universal artefacts (all users)</text>
+<text x="504" y="290" class="syss">Archetype artefacts (Technical PM)</text>
+<text x="504" y="306" class="syss">Domain × Geo artefacts</text>
+<text x="504" y="322" class="syss">14 artefacts · 15 topics each</text>
+<text x="504" y="346" class="syss" style="fill:#047857;font-weight:700">Neon DB: roadmap assembled</text>
+
+<!-- Col 3: Platform response to evidence -->
+<rect x="634" y="238" width="220" height="130" rx="6" fill="#ECFDF5" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="744" y="258" class="sys">Evidence log + score compute</text>
+<text x="744" y="274" class="syss">INSERT into evidence_log</text>
+<text x="744" y="290" class="syss">computeAndSaveScore() runs sync</text>
+<text x="744" y="306" class="syss">Weighted score across 5 dimensions</text>
+<text x="744" y="322" class="syss">Tier unlock check per artefact</text>
+<text x="744" y="346" class="syss" style="fill:#047857;font-weight:700">Neon DB: score updated</text>
+
+<!-- Col 4: Platform response to gap -->
+<rect x="874" y="238" width="220" height="130" rx="6" fill="#ECFDF5" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="984" y="258" class="sys">RAG pipeline (Phase 3)</text>
+<text x="984" y="274" class="syss">Embed user profile → vector</text>
+<text x="984" y="290" class="syss">KNN: top 25 similar JDs</text>
+<text x="984" y="306" class="syss">gap_pct per skill category</text>
+<text x="984" y="322" class="syss">LLM: narrative top 3 gaps</text>
+<text x="984" y="346" class="syss" style="fill:#047857;font-weight:700">OpenAI + Groq: analysis ready</text>
+
+<!-- Col 5: Platform response to apply -->
+<rect x="1114" y="238" width="240" height="130" rx="6" fill="#ECFDF5" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="1234" y="258" class="sys">Readiness gate evaluation</text>
+<text x="1234" y="274" class="syss">score ≥ 75 AND gap_pct ≤ 30%</text>
+<text x="1234" y="290" class="syss">JD requirement extraction (V3a)</text>
+<text x="1234" y="306" class="syss">Evidence → resume section map</text>
+<text x="1234" y="322" class="syss">PDF export with proof links</text>
+<text x="1234" y="346" class="syss" style="fill:#047857;font-weight:700">LLM: resume drafted from evidence</text>
+
+<!-- ─── ROW 3: USER OUTCOME (y=378–508, midpoint y=443) ──────────────────── -->
+
+<!-- Col 1 outcome -->
+<rect x="154" y="388" width="220" height="108" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5" filter="url(#sh)"/>
+<text x="264" y="412" class="out">"I know which PM I am"</text>
+<text x="264" y="430" class="outs">Clarity replaces guessing</text>
+<text x="264" y="446" class="outs">Direction before commitment</text>
+<text x="264" y="464" class="outs" style="font-weight:700;fill:#B45309">↑ Match confidence</text>
+
+<!-- Col 2 outcome -->
+<rect x="394" y="388" width="220" height="108" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5" filter="url(#sh)"/>
+<text x="504" y="412" class="out">"I know what to build"</text>
+<text x="504" y="430" class="outs">Off generic prep paths</text>
+<text x="504" y="446" class="outs">Domain-specific roadmap</text>
+<text x="504" y="464" class="outs" style="font-weight:700;fill:#B45309">↑ Roadmap engagement</text>
+
+<!-- Col 3 outcome -->
+<rect x="634" y="388" width="220" height="108" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5" filter="url(#sh)"/>
+<text x="744" y="412" class="out">"Progress I can see"</text>
+<text x="744" y="430" class="outs">Evidence replaces anxiety</text>
+<text x="744" y="446" class="outs">Score climbs: 22 → 52+</text>
+<text x="744" y="464" class="outs" style="font-weight:700;fill:#B45309">↑ Evidence adoption</text>
+
+<!-- Col 4 outcome -->
+<rect x="874" y="388" width="220" height="108" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5" filter="url(#sh)"/>
+<text x="984" y="412" class="out">"I know my gaps"</text>
+<text x="984" y="430" class="outs">Market-grounded signal</text>
+<text x="984" y="446" class="outs">Specific actions, not vague advice</text>
+<text x="984" y="464" class="outs" style="font-weight:700;fill:#B45309">↑ Gap analysis usage</text>
+
+<!-- Col 5 outcome -->
+<rect x="1114" y="388" width="240" height="108" rx="6" fill="#ECFDF5" stroke="#BBF7D0" stroke-width="1.5" filter="url(#sh)"/>
+<text x="1234" y="412" class="out">"Honest signal to apply"</text>
+<text x="1234" y="430" class="outs">Not a gut feel — evidence-backed</text>
+<text x="1234" y="446" class="outs">Resume built from proof, not guesses</text>
+<text x="1234" y="464" class="outs" style="font-weight:700;fill:#047857">↑ Ready-to-apply conversion</text>
+
+<!-- ─── VERTICAL FLOW ARROWS (between user action and platform) ──────────── -->
+<line x1="264" y1="209" x2="264" y2="237" class="edge"/>
+<line x1="504" y1="209" x2="504" y2="237" class="edge"/>
+<line x1="744" y1="209" x2="744" y2="237" class="edge"/>
+<line x1="984" y1="209" x2="984" y2="237" class="edge"/>
+<line x1="1234" y1="209" x2="1234" y2="237" class="edge"/>
+
+<!-- Vertical flow arrows (between platform and outcome) -->
+<line x1="264" y1="369" x2="264" y2="387" class="edge"/>
+<line x1="504" y1="369" x2="504" y2="387" class="edge"/>
+<line x1="744" y1="369" x2="744" y2="387" class="edge"/>
+<line x1="984" y1="369" x2="984" y2="387" class="edge"/>
+<line x1="1234" y1="369" x2="1234" y2="387" class="edge"/>
+
+<!-- Horizontal arrows (between columns in user action row) -->
+<line x1="375" y1="148" x2="393" y2="148" class="edge"/>
+<line x1="615" y1="148" x2="633" y2="148" class="edge"/>
+<line x1="855" y1="148" x2="873" y2="148" class="edge"/>
+<line x1="1095" y1="148" x2="1113" y2="148" class="edge"/>
+
+<!-- Footer -->
+<text x="144" y="515" class="sub">PMRocket D9 · User action → Platform response → User outcome · app.diagrams.net</text>
+</svg>

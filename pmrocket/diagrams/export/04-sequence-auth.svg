@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-p { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">PMRocket — Auth</text>
+<text x="40" y="56" class="sub">Simple happy path</text>
+
+<!-- row 1 -->
+<rect x="40" y="140" width="120" height="55" rx="12" class="box-gray"/>
+  <text x="100" y="172" class="lab">1. Sign up</text>
+<rect x="220" y="140" width="120" height="55" rx="12" class="box-p"/>
+  <text x="280" y="172" class="lab">2. Clerk</text>
+<rect x="400" y="140" width="140" height="55" rx="12" class="box"/>
+  <text x="470" y="172" class="lab">3. Webhook</text>
+<rect x="600" y="140" width="150" height="55" rx="12" class="box-g"/>
+  <text x="675" y="172" class="lab">4. DB user</text>
+
+<!-- row 2 -->
+<rect x="220" y="280" width="140" height="55" rx="12" class="box"/>
+  <text x="290" y="312" class="lab">5. auth()</text>
+<rect x="420" y="280" width="160" height="55" rx="12" class="box-g"/>
+  <text x="500" y="312" class="lab">6. Load user</text>
+<rect x="640" y="280" width="130" height="55" rx="12" class="box"/>
+  <text x="705" y="312" class="lab">7. App</text>
+
+<!-- straight same-row links (gaps between boxes only) -->
+<path d="M160,168 H220" class="edge-s" marker-end="url(#a)"/>
+<path d="M340,168 H400" class="edge-s" marker-end="url(#a)"/>
+<path d="M540,168 H600" class="edge-s" marker-end="url(#a)"/>
+
+<!-- Clerk → auth() vertical (open space under Clerk) -->
+<path d="M280,195 V280" class="edge-s" marker-end="url(#a)"/>
+
+<!-- row 2 chain -->
+<path d="M360,308 H420" class="edge-s" marker-end="url(#a)"/>
+<path d="M580,308 H640" class="edge-s" marker-end="url(#a)"/>
+
+<text x="40" y="390" class="legend">Lazy provision if webhook is late.</text>
+</svg>

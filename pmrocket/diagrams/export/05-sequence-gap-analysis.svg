@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="680" viewBox="0 0 820 680">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .edge { stroke:#CBD5E1; stroke-width:1.5; fill:none; }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; }
+</style>
+
+<text x="40" y="36" class="title">PMRocket — Gap analysis</text>
+<text x="40" y="56" class="sub">App owns gap_pct · LLM narrates</text>
+
+<!-- main spine (center) -->
+<rect x="310" y="90" width="200" height="50" rx="12" class="box-gray"/>
+  <text x="410" y="120" class="lab">Analyse my gaps</text>
+<rect x="310" y="180" width="200" height="50" rx="12" class="box"/>
+  <text x="410" y="210" class="lab">API + checks</text>
+<rect x="310" y="270" width="200" height="50" rx="12" class="box"/>
+  <text x="410" y="300" class="lab">Load data</text>
+
+<!-- branch row -->
+<rect x="60" y="400" width="160" height="55" rx="12" class="box-g"/>
+  <text x="140" y="432" class="lab">gap_pct</text>
+<rect x="310" y="400" width="200" height="55" rx="12" class="box-o"/>
+  <text x="410" y="432" class="lab">Embed profile</text>
+<rect x="600" y="400" width="160" height="55" rx="12" class="box-g"/>
+  <text x="680" y="432" class="lab">KNN JDs</text>
+
+<!-- join -->
+<rect x="310" y="560" width="200" height="55" rx="12" class="box"/>
+  <text x="410" y="592" class="lab">LLM + save</text>
+
+<!-- spine vertical (gaps between boxes only) -->
+<path d="M410,140 V180" class="edge-s" marker-end="url(#a)"/>
+<path d="M410,230 V270" class="edge-s" marker-end="url(#a)"/>
+<path d="M410,320 V400" class="edge-s" marker-end="url(#a)"/>
+
+<!-- Load data → gap_pct: left via open space below Load, no box cross -->
+<path d="M310,295 H140 V400" class="edge" marker-end="url(#a)"/>
+
+<!-- Embed profile → KNN (same row, gap between boxes) -->
+<path d="M510,428 H600" class="edge" marker-end="url(#a)"/>
+
+<!-- Embed → LLM+save -->
+<path d="M410,455 V560" class="edge-s" marker-end="url(#a)"/>
+
+<!-- gap_pct → LLM+save: down then right in open space under branch row -->
+<path d="M140,455 V592 H310" class="edge" marker-end="url(#a)"/>
+
+<!-- KNN → LLM+save: down then left -->
+<path d="M680,455 V592 H510" class="edge" marker-end="url(#a)"/>
+
+</svg>

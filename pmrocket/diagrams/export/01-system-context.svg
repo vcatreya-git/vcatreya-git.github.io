@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2 { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .edge { stroke:#CBD5E1; stroke-width:1.5; fill:none; }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">PMRocket — System Context</text>
+<text x="40" y="56" class="sub">Primary relationships only · orthogonal gutters</text>
+
+<rect x="50" y="150" width="140" height="64" rx="12" class="box-gray"/>
+  <text x="120" y="187" class="lab">Aspiring PM</text>
+<rect x="50" y="300" width="140" height="64" rx="12" class="box-gray"/>
+  <text x="120" y="337" class="lab">Admin</text>
+
+<rect x="320" y="200" width="200" height="100" rx="12" class="box"/>
+  <text x="420" y="245" class="lab">PMRocket</text>
+  <text x="420" y="262" class="lab2">Next.js app</text>
+
+<rect x="680" y="90" width="150" height="52" rx="12" class="box-p"/>
+  <text x="755" y="121" class="lab">Clerk</text>
+<rect x="680" y="180" width="150" height="52" rx="12" class="box-g"/>
+  <text x="755" y="211" class="lab">Neon</text>
+<rect x="680" y="270" width="150" height="52" rx="12" class="box-o"/>
+  <text x="755" y="301" class="lab">LLM</text>
+<rect x="680" y="360" width="150" height="52" rx="12" class="box-o"/>
+  <text x="755" y="391" class="lab">Embeddings</text>
+<rect x="680" y="450" width="150" height="52" rx="12" class="box-p"/>
+  <text x="755" y="481" class="lab">Stripe etc.</text>
+
+<!-- actors → app via gutter x=250 -->
+<path d="M190,182 H250 V230 H320" class="edge-s" marker-end="url(#a)"/>
+<path d="M190,332 H250 V270 H320" class="edge-s" marker-end="url(#a)"/>
+
+<!-- app → externals via gutter x=560, unique exit ports on right edge -->
+<path d="M520,210 H560 V116 H680" class="edge" marker-end="url(#a)"/>
+<path d="M520,230 H560 V206 H680" class="edge" marker-end="url(#a)"/>
+<path d="M520,250 H560 V296 H680" class="edge" marker-end="url(#a)"/>
+<path d="M520,270 H560 V386 H680" class="edge" marker-end="url(#a)"/>
+<path d="M520,290 H560 V476 H680" class="edge" marker-end="url(#a)"/>
+
+<text x="40" y="540" class="legend">Auth · DB · AI · payments. Free-tier runtime.</text>
+</svg>

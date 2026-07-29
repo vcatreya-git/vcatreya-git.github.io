@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .edge { stroke:#CBD5E1; stroke-width:1.5; fill:none; }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; }
+</style>
+
+<text x="40" y="36" class="title">PMRocket — Admin ETL</text>
+<text x="40" y="56" class="sub">Human approve before live</text>
+
+<!-- top pipeline -->
+<rect x="40" y="150" width="100" height="55" rx="12" class="box-gray"/>
+  <text x="90" y="182" class="lab">Paste JD</text>
+<rect x="190" y="150" width="100" height="55" rx="12" class="box"/>
+  <text x="240" y="182" class="lab">Queue</text>
+<rect x="340" y="150" width="120" height="55" rx="12" class="box-o"/>
+  <text x="400" y="182" class="lab">Extract</text>
+<rect x="510" y="150" width="100" height="55" rx="12" class="box-gray"/>
+  <text x="560" y="182" class="lab">Preview</text>
+<rect x="660" y="150" width="100" height="55" rx="12" class="box"/>
+  <text x="710" y="182" class="lab">Confirm</text>
+
+<!-- outputs (right, stacked with gap) -->
+<rect x="840" y="100" width="120" height="50" rx="12" class="box-g"/>
+  <text x="900" y="130" class="lab">skills</text>
+<rect x="840" y="210" width="120" height="50" rx="12" class="box-g"/>
+  <text x="900" y="240" class="lab">embed</text>
+
+<!-- bottom -->
+<rect x="40" y="310" width="200" height="55" rx="12" class="box"/>
+  <text x="140" y="342" class="lab">Curriculum UI</text>
+<rect x="320" y="310" width="180" height="55" rx="12" class="box-g"/>
+  <text x="410" y="342" class="lab">Add artefact</text>
+
+<!-- pipeline links (gaps only) -->
+<path d="M140,178 H190" class="edge-s" marker-end="url(#a)"/>
+<path d="M290,178 H340" class="edge-s" marker-end="url(#a)"/>
+<path d="M460,178 H510" class="edge-s" marker-end="url(#a)"/>
+<path d="M610,178 H660" class="edge-s" marker-end="url(#a)"/>
+
+<!-- Confirm → skills / embed via gutter x=800 (open between confirm and outputs) -->
+<path d="M760,165 H800 V125 H840" class="edge" marker-end="url(#a)"/>
+<path d="M760,190 H800 V235 H840" class="edge" marker-end="url(#a)"/>
+
+<!-- Confirm → Curriculum UI: down in open space under pipeline, then left (lane y=270) -->
+<path d="M710,205 V270 H140 V310" class="edge" marker-end="url(#a)"/>
+
+<!-- Curriculum → Add artefact -->
+<path d="M240,338 H320" class="edge-s" marker-end="url(#a)"/>
+
+</svg>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="760" viewBox="0 0 1220 760">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .gt { font:600 11px system-ui,sans-serif; fill:#94A3B8; }
+  .edge { stroke:#CBD5E1; stroke-width:1.5; fill:none; }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; }
+</style>
+
+<text x="40" y="36" class="title">PMRocket — Component Blocks</text>
+<text x="40" y="56" class="sub">Orthogonal gutters · no connector labels · no box crossings</text>
+
+<text x="50" y="100" class="gt">CLIENT</text>
+<text x="290" y="100" class="gt">APP</text>
+<text x="560" y="100" class="gt">MODULES</text>
+<text x="820" y="100" class="gt">NEON</text>
+<text x="1060" y="100" class="gt">EXTERNAL</text>
+
+<!-- CLIENT -->
+<rect x="40" y="130" width="140" height="48" rx="12" class="box"/>
+  <text x="110" y="159" class="lab">Next.js UI</text>
+<rect x="40" y="230" width="140" height="48" rx="12" class="box-gray"/>
+  <text x="110" y="259" class="lab">Admin UI</text>
+
+<!-- APP -->
+<rect x="280" y="130" width="180" height="48" rx="12" class="box"/>
+  <text x="370" y="159" class="lab">Auth / middleware</text>
+<rect x="280" y="230" width="180" height="48" rx="12" class="box"/>
+  <text x="370" y="259" class="lab">Intake</text>
+<rect x="280" y="330" width="180" height="52" rx="12" class="box"/>
+  <text x="370" y="361" class="lab">Matching</text>
+<rect x="280" y="430" width="180" height="52" rx="12" class="box"/>
+  <text x="370" y="461" class="lab">Roadmap</text>
+<rect x="280" y="530" width="180" height="52" rx="12" class="box"/>
+  <text x="370" y="561" class="lab">Evidence</text>
+<rect x="280" y="630" width="180" height="52" rx="12" class="box"/>
+  <text x="370" y="661" class="lab">Gap analysis</text>
+
+<!-- MODULES -->
+<rect x="540" y="230" width="150" height="48" rx="12" class="box"/>
+  <text x="615" y="259" class="lab">ETL (admin)</text>
+<rect x="540" y="330" width="150" height="48" rx="12" class="box"/>
+  <text x="615" y="359" class="lab">Stripe module</text>
+<rect x="540" y="430" width="150" height="52" rx="12" class="box-o"/>
+  <text x="615" y="461" class="lab">lib/llm.ts</text>
+
+<!-- NEON -->
+<rect x="800" y="130" width="160" height="48" rx="12" class="box-g"/>
+  <text x="880" y="159" class="lab">users</text>
+<rect x="800" y="330" width="160" height="52" rx="12" class="box-g"/>
+  <text x="880" y="361" class="lab">matches · weights</text>
+<rect x="800" y="430" width="160" height="52" rx="12" class="box-g"/>
+  <text x="880" y="461" class="lab">artefacts</text>
+<rect x="800" y="530" width="160" height="52" rx="12" class="box-g"/>
+  <text x="880" y="561" class="lab">evidence_log</text>
+<rect x="800" y="630" width="160" height="52" rx="12" class="box-g"/>
+  <text x="880" y="661" class="lab">embeddings</text>
+
+<!-- EXTERNAL -->
+<rect x="1050" y="130" width="110" height="48" rx="12" class="box-p"/>
+  <text x="1105" y="159" class="lab">Clerk</text>
+<rect x="1050" y="330" width="110" height="48" rx="12" class="box-o"/>
+  <text x="1105" y="359" class="lab">LLM</text>
+<rect x="1050" y="430" width="110" height="48" rx="12" class="box-o"/>
+  <text x="1105" y="459" class="lab">Embed</text>
+<rect x="1050" y="530" width="110" height="48" rx="12" class="box-p"/>
+  <text x="1105" y="559" class="lab">Stripe</text>
+
+<!-- CONNECTORS
+  Vertical gutters: 230 (client-app), 500 (app-mod), 745 (mod-neon), 1005 (neon-ext)
+  Horizontal lanes: 110 (overhead), 204, 304, 406, 506, 606
+-->
+
+<!-- Next.js UI → Auth -->
+<path d="M180,154 H280" class="edge-s" marker-end="url(#a)"/>
+
+<!-- Admin UI → ETL via lane y=204 (above Intake / ETL) -->
+<path d="M180,254 H230 V204 H615 V230" class="edge-s" marker-end="url(#a)"/>
+
+<!-- APP vertical chain (open space between stacked boxes) -->
+<path d="M370,178 V230" class="edge-s" marker-end="url(#a)"/>
+<path d="M370,278 V330" class="edge-s" marker-end="url(#a)"/>
+<path d="M370,382 V430" class="edge-s" marker-end="url(#a)"/>
+<path d="M370,482 V530" class="edge-s" marker-end="url(#a)"/>
+<path d="M370,582 V630" class="edge-s" marker-end="url(#a)"/>
+
+<!-- Auth → users (clear row, no modules) -->
+<path d="M460,154 H800" class="edge" marker-end="url(#a)"/>
+
+<!-- Auth → Clerk via overhead lane y=110 (avoids users box) -->
+<path d="M370,130 V110 H1105 V130" class="edge" marker-end="url(#a)"/>
+
+<!-- Matching → matches via lane y=300 -->
+<path d="M460,356 H500 V300 H880 V330" class="edge" marker-end="url(#a)"/>
+
+<!-- Roadmap → artefacts via lane y=400 -->
+<path d="M460,456 H500 V400 H880 V430" class="edge" marker-end="url(#a)"/>
+
+<!-- Evidence → evidence_log (no module on this row) -->
+<path d="M460,556 H800" class="edge" marker-end="url(#a)"/>
+
+<!-- Gap → embeddings -->
+<path d="M460,656 H800" class="edge" marker-end="url(#a)"/>
+
+<!-- ETL → embeddings via gutter 745 -->
+<path d="M690,254 H745 V656 H800" class="edge" marker-end="url(#a)"/>
+
+<!-- Stripe module → Stripe via lane y=506 -->
+<path d="M690,354 H745 V506 H1105 V530" class="edge" marker-end="url(#a)"/>
+
+<!-- lib/llm → LLM via lane y=288 (staggered from Matching) -->
+<path d="M690,446 H745 V288 H1105 V330" class="edge" marker-end="url(#a)"/>
+
+<!-- lib/llm → Embed via lane y=412 (staggered from Roadmap) -->
+<path d="M690,456 H745 V412 H1105 V430" class="edge" marker-end="url(#a)"/>
+
+</svg>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="560" viewBox="0 0 1040 560">
+<defs>
+  <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+    <path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .title { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab2 { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .edge { stroke:#CBD5E1; stroke-width:1.5; fill:none; }
+  .edge-s { stroke:#94A3B8; stroke-width:1.6; fill:none; }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+</style>
+
+<text x="40" y="36" class="title">PMRocket — Deployment</text>
+<text x="40" y="56" class="sub">Free-tier runtime · orthogonal gutters</text>
+
+<rect x="40" y="230" width="120" height="60" rx="12" class="box-gray"/>
+  <text x="100" y="265" class="lab">Browser</text>
+
+<rect x="260" y="215" width="200" height="90" rx="12" class="box"/>
+  <text x="360" y="252" class="lab">Next.js · Vercel</text>
+  <text x="360" y="270" class="lab2">app + API</text>
+
+<rect x="580" y="90" width="150" height="52" rx="12" class="box-p"/>
+  <text x="655" y="121" class="lab">Clerk</text>
+<rect x="580" y="180" width="150" height="52" rx="12" class="box-g"/>
+  <text x="655" y="211" class="lab">Neon</text>
+<rect x="580" y="270" width="150" height="52" rx="12" class="box-o"/>
+  <text x="655" y="301" class="lab">LLM</text>
+<rect x="580" y="360" width="150" height="52" rx="12" class="box-o"/>
+  <text x="655" y="391" class="lab">Embeddings</text>
+
+<rect x="850" y="180" width="130" height="52" rx="12" class="box-p"/>
+  <text x="915" y="211" class="lab">Stripe</text>
+<rect x="850" y="270" width="130" height="52" rx="12" class="box-p"/>
+  <text x="915" y="301" class="lab">Resend</text>
+<rect x="850" y="360" width="130" height="52" rx="12" class="box-p"/>
+  <text x="915" y="391" class="lab">PostHog</text>
+
+<!-- Browser → Next.js -->
+<path d="M160,260 H260" class="edge-s" marker-end="url(#a)"/>
+
+<!-- Next.js → core services via gutter x=520, unique exit y on right edge -->
+<path d="M460,230 H520 V116 H580" class="edge" marker-end="url(#a)"/>
+<path d="M460,245 H520 V206 H580" class="edge" marker-end="url(#a)"/>
+<path d="M460,265 H520 V296 H580" class="edge" marker-end="url(#a)"/>
+<path d="M460,285 H520 V386 H580" class="edge" marker-end="url(#a)"/>
+
+<!-- Next.js → Stripe / Resend / PostHog via overhead + under lanes (never through service boxes) -->
+<path d="M400,215 V70 H790 V206 H850" class="edge" marker-end="url(#a)"/>
+<path d="M340,305 V440 H790 V296 H850" class="edge" marker-end="url(#a)"/>
+<path d="M380,305 V460 H790 V386 H850" class="edge" marker-end="url(#a)"/>
+
+<text x="40" y="530" class="legend">Free tier until traction.</text>
+</svg>

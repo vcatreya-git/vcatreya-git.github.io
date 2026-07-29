@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="620" viewBox="0 0 1700 620">
+<defs>
+  <marker id="arr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+    <path d="M0,0 L9,4 L0,8 Z" fill="#94A3B8"/>
+  </marker>
+  <marker id="arr-plan" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+    <path d="M0,0 L9,4 L0,8 Z" fill="#CBD5E1"/>
+  </marker>
+  <filter id="sh" x="-2%" y="-2%" width="104%" height="104%">
+    <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000018"/>
+  </filter>
+</defs>
+<style>
+  .title  { font:700 20px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .gt     { font:700 9px system-ui,sans-serif; fill:#94A3B8; letter-spacing:1.5px; }
+  .snum   { font:700 9px system-ui,sans-serif; fill:rgba(255,255,255,0.75); letter-spacing:1px; text-anchor:middle; }
+  .sname  { font:700 13px system-ui,sans-serif; fill:#FFFFFF; text-anchor:middle; }
+  .snum-p { font:700 9px system-ui,sans-serif; fill:rgba(100,116,139,0.75); letter-spacing:1px; text-anchor:middle; }
+  .sname-p{ font:700 13px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .bd     { font:600 11px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .bds    { font:10.5px system-ui,sans-serif; fill:#475569; text-anchor:middle; }
+  .bds-p  { font:10.5px system-ui,sans-serif; fill:#94A3B8; text-anchor:middle; }
+  .out    { font:600 10px system-ui,sans-serif; fill:#64748B; text-anchor:middle; font-style:italic; }
+  .badge  { font:700 9px system-ui,sans-serif; text-anchor:middle; letter-spacing:0.5px; }
+  .inf    { font:700 13px system-ui,sans-serif; fill:#FFFFFF; text-anchor:middle; }
+  .infs   { font:11px system-ui,sans-serif; fill:rgba(255,255,255,0.85); text-anchor:middle; }
+  .edge   { stroke:#94A3B8; stroke-width:2; fill:none; marker-end:url(#arr); }
+  .edge-p { stroke:#CBD5E1; stroke-width:2; fill:none; stroke-dasharray:5,3; marker-end:url(#arr-plan); }
+</style>
+
+<!-- Background -->
+<rect width="1700" height="620" fill="#FFFFFF"/>
+
+<!-- Title -->
+<text x="40" y="38" class="title">PMRocket — Functional Architecture</text>
+<text x="40" y="58" class="sub">7-stage career navigation pipeline · Stages 1–5 live · Stages 6–7 planned (V3a / V3b)</text>
+
+<!-- ─── LIVE PIPELINE CONTAINER ────────────────────────────────────────────── -->
+<rect x="28" y="72" width="1068" height="296" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+<text x="46" y="90" class="gt">LIVE — NAVIGATION + INTELLIGENCE (STAGES 1–5)</text>
+
+<!-- ─── PLANNED CONTAINER ──────────────────────────────────────────────────── -->
+<rect x="1108" y="72" width="562" height="296" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="6,3"/>
+<text x="1126" y="90" class="gt">PLANNED — APPLY + PRACTICE (V3a / V3b)</text>
+
+<!-- ─── STAGE 1: INTAKE ─────────────────────────────────────────────────────── -->
+<rect x="46" y="100" width="186" height="252" rx="7" fill="#EEF2FF" stroke="#4338CA" stroke-width="1.5" filter="url(#sh)"/>
+<rect x="46" y="100" width="186" height="50" rx="7" fill="#4338CA"/>
+<rect x="46" y="132" width="186" height="18" fill="#4338CA"/>
+<text x="139" y="118" class="snum">STAGE 1</text>
+<text x="139" y="139" class="sname">Intake</text>
+<text x="139" y="172" class="bd">15 questions · ~3 min</text>
+<text x="139" y="190" class="bds">Background &amp; skills</text>
+<text x="139" y="206" class="bds">Goals &amp; domain</text>
+<text x="139" y="222" class="bds">Geography · company pref</text>
+<text x="139" y="238" class="bds">PM activities tried</text>
+<rect x="66" y="322" width="146" height="18" rx="9" fill="#C7D2FE" stroke="#6366F1" stroke-width="1"/>
+<text x="139" y="335" class="out" style="fill:#4338CA">→ 15 weighted signals</text>
+
+<!-- ARROW 1→2 -->
+<line x1="233" y1="226" x2="252" y2="226" class="edge"/>
+
+<!-- ─── STAGE 2: MATCH ──────────────────────────────────────────────────────── -->
+<rect x="254" y="100" width="186" height="252" rx="7" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.5" filter="url(#sh)"/>
+<rect x="254" y="100" width="186" height="50" rx="7" fill="#6D28D9"/>
+<rect x="254" y="132" width="186" height="18" fill="#6D28D9"/>
+<text x="347" y="118" class="snum">STAGE 2</text>
+<text x="347" y="139" class="sname">Archetype Match</text>
+<text x="347" y="172" class="bd">Weighted scoring model</text>
+<text x="347" y="190" class="bds">4 archetypes × 15 signals</text>
+<text x="347" y="206" class="bds">Primary + runner-up</text>
+<text x="347" y="222" class="bds">Confidence % + reasoning</text>
+<text x="347" y="238" class="bds">Configurable weights</text>
+<rect x="274" y="322" width="146" height="18" rx="9" fill="#DDD6FE" stroke="#7C3AED" stroke-width="1"/>
+<text x="347" y="335" class="out" style="fill:#6D28D9">→ Archetype locked</text>
+
+<!-- ARROW 2→3 -->
+<line x1="441" y1="226" x2="460" y2="226" class="edge"/>
+
+<!-- ─── STAGE 3: ROADMAP ────────────────────────────────────────────────────── -->
+<rect x="462" y="100" width="186" height="252" rx="7" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" filter="url(#sh)"/>
+<rect x="462" y="100" width="186" height="50" rx="7" fill="#047857"/>
+<rect x="462" y="132" width="186" height="18" fill="#047857"/>
+<text x="555" y="118" class="snum">STAGE 3</text>
+<text x="555" y="139" class="sname">Personalised Roadmap</text>
+<text x="555" y="172" class="bd">3-layer curriculum</text>
+<text x="555" y="190" class="bds">Universal (AI + core PM)</text>
+<text x="555" y="206" class="bds">Archetype-specific</text>
+<text x="555" y="222" class="bds">Domain × Geography</text>
+<text x="555" y="238" class="bds">14 artefacts · 15 topics</text>
+<rect x="482" y="322" width="146" height="18" rx="9" fill="#A7F3D0" stroke="#059669" stroke-width="1"/>
+<text x="555" y="335" class="out" style="fill:#047857">→ Evidence checklist</text>
+
+<!-- ARROW 3→4 -->
+<line x1="649" y1="226" x2="668" y2="226" class="edge"/>
+
+<!-- ─── STAGE 4: EVIDENCE ───────────────────────────────────────────────────── -->
+<rect x="670" y="100" width="186" height="252" rx="7" fill="#FFFBEB" stroke="#B45309" stroke-width="1.5" filter="url(#sh)"/>
+<rect x="670" y="100" width="186" height="50" rx="7" fill="#B45309"/>
+<rect x="670" y="132" width="186" height="18" fill="#B45309"/>
+<text x="763" y="118" class="snum">STAGE 4</text>
+<text x="763" y="139" class="sname">Evidence Log</text>
+<text x="763" y="172" class="bd">Log artefacts as built</text>
+<text x="763" y="190" class="bds">3 tiers: Learning → Mastered</text>
+<text x="763" y="206" class="bds">Sub-topic checks per tier</text>
+<text x="763" y="222" class="bds">5 search keywords/artefact</text>
+<text x="763" y="238" class="bds">Score auto-updates</text>
+<rect x="690" y="322" width="146" height="18" rx="9" fill="#FDE68A" stroke="#D97706" stroke-width="1"/>
+<text x="763" y="335" class="out" style="fill:#92400E">→ Score: 5 dimensions</text>
+
+<!-- ARROW 4→5 -->
+<line x1="857" y1="226" x2="876" y2="226" class="edge"/>
+
+<!-- ─── STAGE 5: READINESS ──────────────────────────────────────────────────── -->
+<rect x="878" y="100" width="186" height="252" rx="7" fill="#ECFEFF" stroke="#0E7490" stroke-width="1.5" filter="url(#sh)"/>
+<rect x="878" y="100" width="186" height="50" rx="7" fill="#0E7490"/>
+<rect x="878" y="132" width="186" height="18" fill="#0E7490"/>
+<text x="971" y="118" class="snum">STAGE 5</text>
+<text x="971" y="139" class="sname">Readiness Gate</text>
+<text x="971" y="172" class="bd">Compared vs real job postings</text>
+<text x="971" y="190" class="bds">Top 3 gaps named with specifics</text>
+<text x="971" y="206" class="bds">Exact artefacts to close each gap</text>
+<text x="971" y="222" class="bds">Clear signal: ready or not yet</text>
+<text x="971" y="238" class="bds">No invented rubric — market data</text>
+<rect x="898" y="322" width="146" height="18" rx="9" fill="#A5F3FC" stroke="#0891B2" stroke-width="1"/>
+<text x="971" y="335" class="out" style="fill:#0E7490">→ Ready to apply signal</text>
+
+<!-- ─── ARROW 5→6 (live to planned) ──────────────────────────────────────── -->
+<line x1="1065" y1="226" x2="1108" y2="226" class="edge-p"/>
+
+<!-- ─── STAGE 6: APPLY ─────────────────────────────────────────────────────── -->
+<rect x="1126" y="100" width="240" height="252" rx="7" fill="#FAFAFA" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,3"/>
+<rect x="1126" y="100" width="240" height="50" rx="7" fill="#94A3B8"/>
+<rect x="1126" y="132" width="240" height="18" fill="#94A3B8"/>
+<text x="1246" y="118" class="snum">STAGE 6 · V3a</text>
+<text x="1246" y="139" class="sname" style="fill:#FFFFFF">Apply</text>
+<!-- V3a badge -->
+<rect x="1310" y="104" width="44" height="18" rx="9" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="1332" y="117" class="badge" style="fill:#64748B">V3a</text>
+<text x="1246" y="168" class="bd" style="fill:#64748B">Paste target JD</text>
+<text x="1246" y="186" class="bds-p">Extract JD requirements</text>
+<text x="1246" y="202" class="bds-p">Score your evidence vs JD</text>
+<text x="1246" y="218" class="bds-p">Enrich thin entries for resume</text>
+<text x="1246" y="234" class="bds-p">Generate evidence-backed resume</text>
+<text x="1246" y="250" class="bds-p">Export PDF · honest, no stuffing</text>
+<rect x="1146" y="322" width="200" height="18" rx="9" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="1246" y="335" class="out" style="fill:#94A3B8">→ Role-targeted resume</text>
+
+<!-- ARROW 6→7 -->
+<line x1="1367" y1="226" x2="1400" y2="226" class="edge-p"/>
+
+<!-- ─── STAGE 7: INTERVIEW PREP ────────────────────────────────────────────── -->
+<rect x="1402" y="100" width="240" height="252" rx="7" fill="#FAFAFA" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,3"/>
+<rect x="1402" y="100" width="240" height="50" rx="7" fill="#94A3B8"/>
+<rect x="1402" y="132" width="240" height="18" fill="#94A3B8"/>
+<text x="1522" y="118" class="snum">STAGE 7 · V3b</text>
+<text x="1522" y="139" class="sname" style="fill:#FFFFFF">Interview &amp; Discover</text>
+<!-- V3b badge -->
+<rect x="1590" y="104" width="44" height="18" rx="9" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="1612" y="117" class="badge" style="fill:#64748B">V3b</text>
+<text x="1522" y="168" class="bd" style="fill:#64748B">AI mock interview room</text>
+<text x="1522" y="186" class="bds-p">Archetype-specific questions</text>
+<text x="1522" y="202" class="bds-p">Feedback tied to your evidence</text>
+<text x="1522" y="218" class="bds-p">Job matching via RAG</text>
+<text x="1522" y="234" class="bds-p">Roles you're ready for, not just</text>
+<text x="1522" y="250" class="bds-p">roles you aspire to</text>
+<rect x="1422" y="322" width="200" height="18" rx="9" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="1522" y="335" class="out" style="fill:#94A3B8">→ Interview-ready · matched roles</text>
+
+<!-- ─── INFRASTRUCTURE BAND ─────────────────────────────────────────────────── -->
+<text x="40" y="398" class="gt" style="fill:#64748B">INFRASTRUCTURE</text>
+
+<!-- Clerk -->
+<rect x="28" y="410" width="378" height="100" rx="7" fill="#4F46E5" filter="url(#sh)"/>
+<text x="217" y="444" class="inf">Clerk</text>
+<text x="217" y="462" class="infs">Auth · Google OAuth · email/password</text>
+<text x="217" y="480" class="infs">Webhook + lazy provision · invite gate</text>
+<text x="217" y="498" class="infs">publicMetadata.role (admin / invited)</text>
+
+<!-- Neon -->
+<rect x="420" y="410" width="378" height="100" rx="7" fill="#047857" filter="url(#sh)"/>
+<text x="609" y="444" class="inf">Neon PostgreSQL + pgvector</text>
+<text x="609" y="462" class="infs">HNSW index m=16, ef=64 · 1536 dims</text>
+<text x="609" y="480" class="infs">Artefacts · evidence · scores · JD corpus</text>
+<text x="609" y="498" class="infs">migrations 001–023 · TEXT user IDs</text>
+
+<!-- OpenAI -->
+<rect x="812" y="410" width="378" height="100" rx="7" fill="#0369A1" filter="url(#sh)"/>
+<text x="1001" y="444" class="inf">OpenAI Embeddings</text>
+<text x="1001" y="462" class="infs">text-embedding-3-small · 1536 dims</text>
+<text x="1001" y="480" class="infs">JD text → vector · profile → vector</text>
+<text x="1001" y="498" class="infs">ACTIVE_EMBED_PROVIDER env var</text>
+
+<!-- Groq / LLM -->
+<rect x="1204" y="410" width="468" height="100" rx="7" fill="#7C3AED" filter="url(#sh)"/>
+<text x="1438" y="444" class="inf">Groq LLM · Llama 3.3 70B</text>
+<text x="1438" y="462" class="infs">Gap narrative · ETL skill extraction</text>
+<text x="1438" y="480" class="infs">Resume generation (V3a) · Interview Q&amp;A (V3b)</text>
+<text x="1438" y="498" class="infs">ACTIVE_LLM_PROVIDER env var · zero code swap</text>
+
+<!-- ─── LEGEND ─────────────────────────────────────────────────────────────── -->
+<rect x="28" y="528" width="16" height="16" rx="3" fill="#4338CA"/>
+<text x="50" y="540" class="sub">Stages 1–5: Live (Alpha)</text>
+<rect x="220" y="528" width="16" height="16" rx="3" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,2"/>
+<text x="242" y="540" class="sub">Stages 6–7: Planned (V3a / V3b)</text>
+
+<!-- Footer -->
+<text x="40" y="610" class="sub">PMRocket D7 v2 · app.diagrams.net</text>
+<text x="1660" y="610" class="sub" style="text-anchor:end">Seven-stage career navigation pipeline</text>
+</svg>
