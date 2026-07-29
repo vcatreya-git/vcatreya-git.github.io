@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMRocket — Discovery Report</title>
+<style>
+:root {
+  --teal: #0D9488;
+  --teal-dark: #0F766E;
+  --teal-light: #CCFBF1;
+  --teal-xlight: #F0FDFA;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --white: #ffffff;
+  --sidebar-w: 224px;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--white);color:var(--slate-800);line-height:1.7;font-size:15px;padding-left:var(--sidebar-w)}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--slate-200);z-index:200;display:flex;flex-direction:column;overflow-y:auto}
+.sb-logo{padding:16px 14px 12px;border-bottom:1px solid var(--slate-200)}
+.sb-logo .wordmark{font-size:16px;font-weight:800;color:var(--slate-900);letter-spacing:-0.3px}
+.sb-logo .wordmark span{color:var(--teal)}
+.sb-logo .doc-type{font-size:10px;color:var(--slate-400);margin-top:3px}
+.sb-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate-400);padding:12px 14px 3px}
+.sb-nav{padding:4px 6px;flex:1}
+.sb-nav a{display:flex;align-items:center;gap:7px;padding:6px 8px;font-size:12.5px;font-weight:500;color:var(--slate-500);border-radius:var(--radius-sm);text-decoration:none;transition:all .12s;margin-bottom:1px}
+.sb-nav a:hover{background:var(--slate-100);color:var(--slate-800)}
+.sb-nav a.active{background:var(--teal-xlight);color:var(--teal-dark);font-weight:600}
+.sb-ctas{padding:10px;border-top:1px solid var(--slate-200)}
+.sb-ctas a{display:block;text-align:center;padding:7px;font-size:12.5px;font-weight:600;border-radius:var(--radius-sm);text-decoration:none;margin-bottom:5px}
+.sb-btn-ghost{color:var(--slate-600);border:1px solid var(--slate-200)}
+.sb-btn-ghost:hover{background:var(--slate-100)}
+
+/* CONTENT */
+.content{max-width:860px;margin:0 auto;padding:48px 40px 80px}
+.page-title{font-size:28px;font-weight:800;color:var(--slate-900);letter-spacing:-0.5px;margin-bottom:4px}
+.page-meta{font-size:13px;color:var(--slate-400);margin-bottom:8px}
+.page-version{display:inline-block;font-size:11px;font-weight:600;color:var(--teal-dark);background:var(--teal-light);padding:3px 10px;border-radius:100px;margin-bottom:32px}
+
+h2{font-size:20px;font-weight:700;color:var(--slate-900);margin:40px 0 12px;padding-top:8px;border-top:1px solid var(--slate-200)}
+h3{font-size:16px;font-weight:700;color:var(--slate-800);margin:28px 0 10px}
+p{margin-bottom:14px;color:var(--slate-700)}
+
+.finding-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0 32px}
+.finding{background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius);padding:16px}
+.finding-num{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.finding p{font-size:13px;margin:0;color:var(--slate-700)}
+
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:13px}
+th{background:var(--slate-50);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate-500);padding:8px 12px;text-align:left;border-bottom:2px solid var(--slate-200)}
+td{padding:9px 12px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 28px}
+.stat{background:var(--teal-xlight);border:1px solid var(--teal-light);border-radius:var(--radius);padding:16px;text-align:center}
+.stat-val{font-size:24px;font-weight:800;color:var(--teal-dark);display:block}
+.stat-label{font-size:11px;color:var(--slate-500);margin-top:4px}
+
+.insight{background:var(--slate-50);border-left:3px solid var(--teal);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 18px;margin:16px 0;font-size:14px;color:var(--slate-700)}
+
+.competitor-card{background:var(--white);border:1px solid var(--slate-200);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.competitor-name{font-weight:700;font-size:14px;color:var(--slate-900);margin-bottom:4px}
+.competitor-meta{font-size:11px;color:var(--slate-400);margin-bottom:8px}
+.competitor-card p{font-size:13px;margin:0;color:var(--slate-600)}
+
+.carry-forward{counter-reset:cf}
+.cf-item{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+.cf-num{flex-shrink:0;width:28px;height:28px;background:var(--teal);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.cf-item p{margin:0;font-size:14px;color:var(--slate-700)}
+.cf-item strong{color:var(--slate-900)}
+
+@media(max-width:768px){
+  body{padding-left:0}
+  .sidebar{display:none}
+  .finding-grid{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="wordmark">PM<span>Rocket</span></div>
+    <div class="doc-type">Discovery Report · v3.0</div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-group-label">Sections</div>
+    <a href="#summary" class="active">10 Findings</a>
+    <a href="#market">Market Signal</a>
+    <a href="#context">2026 Context</a>
+    <a href="#demand">What Employers Need</a>
+    <a href="#company-size">Company-Size Breakdown</a>
+    <a href="#competitors">Competitor Landscape</a>
+    <a href="#gap">The Structural Gap</a>
+    <a href="#candidates">The Candidate Side</a>
+    <a href="#internal">Internal Transition Path</a>
+    <a href="#wtp">Willingness to Pay</a>
+    <a href="#why-now">Why Now</a>
+    <a href="#carry">What the Product Must Do</a>
+  </div>
+  <div class="sb-ctas">
+    <a href="index.html" class="sb-btn-ghost">← Back to docs</a>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="page-title">Discovery Report</div>
+  <div class="page-meta">PMRocket · Supply + Demand Research · 2026-03-22</div>
+  <div class="page-version">v3.0 · 10 Findings</div>
+
+  <section id="summary">
+    <h2>10 Findings That Ground Everything Downstream</h2>
+    <div class="finding-grid">
+      <div class="finding">
+        <div class="finding-num">Finding 1</div>
+        <p><strong>The PM market is large but badly signalled.</strong> 140,000+ PM roles open in the US as of March 2026. The problem is not volume — it is that candidates cannot distinguish realistic mid-market roles from near-zero-probability FAANG applications. Signal failure, not opportunity failure.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 2</div>
+        <p><strong>The 2026 layoff wave adds urgency and noise simultaneously.</strong> 55,875 tech workers cut in 74 days. Salesforce explicitly cut PM, data analytics, and marketing roles. More experienced candidates flooding a market already saturated with aspiring PMs, compressing application-to-offer rates toward ~4% across the board.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 3</div>
+        <p><strong>Demand is bifurcating by seniority.</strong> Senior PM demand grew 87% YoY in India; 13% YoY in the UK. Entry-level PM roles fell ~15% YoY globally. Startups in India recorded a 58% decline in junior PM positions. Every employer trend points the same direction: fewer spots at the bottom, higher bar for everyone.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 4</div>
+        <p><strong>Domain depth has become the primary hiring filter.</strong> Candidates who have worked <em>near</em> a domain but have never <em>owned</em> regulated or specialised product in it fail the screening round. 40% of candidates face rejection at the domain-expertise filter alone (Mind the Product, 2025).</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 5</div>
+        <p><strong>What employers test for has fundamentally changed.</strong> The old model — memorise CIRCLES, recite strategy frameworks — is dead. Companies now evaluate portfolio evidence, SQL fluency, measurable business impact, and AI/ML literacy. Poor communication cited by 85% of product leaders as the top failure reason.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 6</div>
+        <p><strong>AI PM roles are the highest-growth and highest-bar segment.</strong> AI PM postings grew 300% since 2023. US base $180K–$250K; total comp up to $492K at senior level. Companies want PMs who can define evaluation sets and manage model training lifecycles — not PMs who simply "use AI tools."</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 7</div>
+        <p><strong>The internal transition path (28% of hires) is completely unserved.</strong> From the employer side, internal candidates are explicitly preferred — lower risk, known quantity, domain context from day one. No platform helps engineers, analysts, or designers navigate this path.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 8</div>
+        <p><strong>The structural gap is navigation, not content.</strong> Every platform delivers content or drills. None tells a specific candidate which PM role to target given their background, what to build for that archetype, and when they are genuinely ready to apply. This navigation layer is the white space.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 9</div>
+        <p><strong>Willingness to pay is validated.</strong> Aspiring PMs already pay $200–$500/session for coaching and $2,000–$7,000 for bootcamps. Two buyer archetypes: Hope Buyers (served by existing market) and Truth Seekers (6–18 months in, still failing — underserved, highest WTP for navigation).</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding 10</div>
+        <p><strong>No kill conditions are triggered.</strong> The problem is real, the gap is unoccupied, the market is growing, and urgency is at its highest point in the 2021–2026 window.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="market">
+    <h2>The Market Signal</h2>
+    <div class="stat-row">
+      <div class="stat"><span class="stat-val">140K+</span><div class="stat-label">Open PM roles in the US (LinkedIn, March 2026)</div></div>
+      <div class="stat"><span class="stat-val">~4%</span><div class="stat-label">Application-to-offer rate across all PM applications</div></div>
+      <div class="stat"><span class="stat-val">0.12%</span><div class="stat-label">Cold application-to-offer rate (3% × 4% funnel)</div></div>
+    </div>
+    <p>The PM market is large by any measure. LinkedIn shows 140,000+ open PM roles in the US. ZipRecruiter shows 125,000+. Glassdoor's filtered view shows 17,848. The discrepancy is itself a signal: the market is not transparent, and candidates routinely apply to roles that are already filled, frozen, or written for someone internal.</p>
+    <p>Globally, approximately 850,000 people work as Product Managers — 47% in the US, 17% in India, 12% in the UK. A sourced candidate is five times more likely to be hired than someone who applied cold. This ratio is the core argument for navigation.</p>
+
+    <h3>Geography</h3>
+    <table>
+      <thead><tr><th>Market</th><th>Trend</th><th>Key detail</th></tr></thead>
+      <tbody>
+        <tr><td><strong>United States</strong></td><td>Under acute pressure</td><td>2026 layoff wave concentrated in tech. Entry-level PM roles down ~15% YoY. Junior PM roles at mid-sized companies grew 243% in 2025 — off a small base, concentrated in B2B SaaS and AI infrastructure.</td></tr>
+        <tr><td><strong>India</strong></td><td>Fastest-growing globally</td><td>PM hiring grew 42% YoY; senior roles grew 87% YoY. 1,750+ GCCs transitioning to product innovation hubs. APM salaries: ₹22.5 LPA start; ₹65 LPA+ senior. Concentration in Bengaluru, Hyderabad, Pune.</td></tr>
+        <tr><td><strong>United Kingdom</strong></td><td>Steady at senior level</td><td>Senior PM demand grew 13% YoY. Fintech and insurance hiring aggressively. Most rigorous employer-side data: Mind the Product survey (50+ UK hiring managers, 2025).</td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight">The most important structural fact about 2025–2026: the PM market is bifurcating sharply by seniority. Senior roles in demand. Entry-level roles contracting globally. Aspiring PMs must target more carefully than at any previous point.</div>
+  </section>
+
+  <section id="context">
+    <h2>The 2026 Context</h2>
+    <p>Three forces converging in March 2026 create the highest urgency window in the 2021–2026 period.</p>
+    <table>
+      <thead><tr><th>Force</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td><strong>The layoff wave</strong></td><td>55,875 tech cuts in 74 days. Salesforce eliminated PM, data analytics, and marketing roles — signalling that generalist PMs without measurable impact metrics are the first to go. Displaced senior PMs now compete with aspiring PMs for the same mid-market roles.</td></tr>
+        <tr><td><strong>AI compression of the junior tier</strong></td><td>AI is automating spec writing, competitive tracking, user feedback triage, and roadmap input organisation. Companies are hiring fewer junior PMs while expecting mid-level output. The bar for "entry level" has moved to what used to be PM-2. Candidates without portfolio evidence are invisible.</td></tr>
+        <tr><td><strong>AI PM demand surge</strong></td><td>AI PM roles grew 300% since 2023 — highest-paid, fastest-growing PM segment. But demand is highly selective: companies need PMs who understand model trade-offs, define evaluation frameworks for non-deterministic systems, and manage AI product lifecycles. The skill gap is the widest it has ever been in this segment.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="demand">
+    <h2>What Employers Actually Need</h2>
+    <p>Sources: Mind the Product UK Hiring Manager Survey (50+ hiring managers, February 2025), Consortia PM Recruitment Insights (September 2025), IPL India report, Aakash Gupta 2026 PM requirements data.</p>
+
+    <h3>What Hiring Managers Cannot Find</h3>
+    <table>
+      <thead><tr><th>Gap</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Domain depth</strong></td><td>40% of candidates rejected at screening for domain expertise mismatch (Mind the Product, 2025). Failure mode: candidates who worked <em>near</em> a domain but never <em>owned</em> a regulated or specialised product within it.</td></tr>
+        <tr><td><strong>Generalism no longer enough</strong></td><td>Only 16% of UK hiring managers prioritise new product initiatives in 2025 (down from 32% in 2023). Consortia: "Gone are the days when being a solid generalist was enough."</td></tr>
+        <tr><td><strong>Business outcome articulation</strong></td><td>Candidates describe activities (ran user interviews, built roadmaps) rather than outcomes (reduced support tickets 23% in 6 weeks). Connecting product decisions to commercial impact with specific metrics is rare.</td></tr>
+        <tr><td><strong>Portfolio evidence</strong></td><td>82% of PMs walk into interviews without a portfolio. Data literacy is now expected — what differentiates is demonstrated SQL, A/B test design and analysis, Mixpanel proficiency. SQL roles command a 22% salary premium. SQL + testing proficiency boosts callbacks by 45%.</td></tr>
+        <tr><td><strong>Technical fluency</strong></td><td>For AI PM roles: define evaluation sets for model outputs, manage training data pipelines, understand model drift. "Proven experience building golden evaluation sets is becoming table stakes" (Consortia, 2025).</td></tr>
+        <tr><td><strong>Communication and judgment</strong></td><td>85% of product leaders cite poor communication as the top reason for product failures — more than double the 42% who attributed failures to technical issues.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>How Companies Actually Screen</h3>
+    <table>
+      <thead><tr><th>Stage</th><th>What's tested</th><th>Drop-off</th></tr></thead>
+      <tbody>
+        <tr><td>1. Recruiter screen (30 min)</td><td>Minimum requirements, salary fit, basic role alignment</td><td>~50% advance</td></tr>
+        <tr><td>2. Hiring manager screen (30 min)</td><td>Domain fit, cultural alignment, initial skills probe</td><td>40–50% of step 1 advance</td></tr>
+        <tr><td>3. Portfolio / work sample review</td><td>PRD excerpt, product critique, or case study</td><td>Increasingly used as gate before panel rounds</td></tr>
+        <tr><td>4. Panel interviews (3–5 rounds)</td><td>Product sense, strategy, metrics/data, behavioural, cross-functional</td><td>~27% receive an offer</td></tr>
+      </tbody>
+    </table>
+    <div class="insight"><strong>Primary rejection filter:</strong> domain expertise mismatch — caught at the recruiter screen. Candidates who enter the process without understanding what the first gate tests invest their preparation energy in the wrong place.</div>
+  </section>
+
+  <section id="company-size">
+    <h2>Company-Size Breakdown</h2>
+    <table>
+      <thead><tr><th>Company type</th><th>What the PM role actually is</th><th>What they can't find</th></tr></thead>
+      <tbody>
+        <tr><td><strong>FAANG / Mega-tech</strong></td><td>Specialised, deep, influence at scale. Minimal operational scope, maximum strategic leverage.</td><td>Candidates who think at both user depth and system scale simultaneously.</td></tr>
+        <tr><td><strong>Mid-market / Scale-ups</strong></td><td>Owns a surface or domain end-to-end. Strategy + execution + stakeholder alignment simultaneously.</td><td>Candidates with demonstrated domain ownership, not just adjacent experience.</td></tr>
+        <tr><td><strong>Early-stage startups</strong></td><td>Wears multiple hats. Ships fast, often with incomplete data, high ambiguity.</td><td>PMs who can operate without structure or clear OKR frameworks.</td></tr>
+        <tr><td><strong>Enterprise / large non-tech</strong></td><td>Manages complex stakeholder landscape; navigates organisational politics; slower cycle.</td><td>PMs who can influence without authority in matrix organisations.</td></tr>
+        <tr><td><strong>GCCs (India)</strong></td><td>Balances global product vision with local execution; reports to HQ product org.</td><td>PMs who combine global strategic thinking with India-context execution and AI/ML literacy.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="competitors">
+    <h2>Competitor Landscape</h2>
+    <p>The existing preparation market is rich in content and poor in navigation. Five categories:</p>
+
+    <div class="competitor-card">
+      <div class="competitor-name">Exponent / IGotAnOffer</div>
+      <div class="competitor-meta">Global · $12–$79/month · Interview prep</div>
+      <p>Structured video courses, question bank drawn from FAANG interviews, peer mock interviews. Assumes the candidate already knows their target role. Does not help with role selection, gap identification, or readiness calibration.</p>
+    </div>
+    <div class="competitor-card">
+      <div class="competitor-name">NextLeap (acquired PM School) / Upraised</div>
+      <div class="competitor-meta">India · ₹27,499–₹75,000+ · Bootcamp cohorts</div>
+      <p>India's largest PM prep providers. 8-week live cohort, one-size-fits-all curriculum regardless of whether participant is an engineer, MBA, consultant, or designer. Neither publishes placement outcome data. Neither provides background-to-role matching or a readiness signal.</p>
+    </div>
+    <div class="competitor-card">
+      <div class="competitor-name">Lenny's Newsletter / The Product Folks</div>
+      <div class="competitor-meta">Global · Free–$150/year · Content + community</div>
+      <p>Exceptional quality content targeting practising PMs, not aspiring ones. The Product Folks (30,000+ members) is community-driven and structurally incapable of providing personalised preparation paths. Reforge requires 6+ years PM experience — irrelevant for anyone trying to break in.</p>
+    </div>
+    <div class="competitor-card">
+      <div class="competitor-name">1-on-1 Coaching</div>
+      <div class="competitor-meta">US · $200–$500/session · Not scalable</div>
+      <p>Quality varies significantly by coach and is not outcome-calibrated. This pricing data validates WTP for a navigation product — aspiring PMs are already paying for guidance at this rate when they can find it.</p>
+    </div>
+    <div class="insight"><strong>What no platform does:</strong> Tell a specific candidate which PM archetype suits their background, which companies are realistic targets, what specific evidence to build for that archetype, and when they are genuinely ready to apply.</div>
+  </section>
+
+  <section id="gap">
+    <h2>The Structural Gap: Navigation Over Content</h2>
+    <p>The gap is the same from both sides of the market. From the candidate side: aspiring PMs cannot distinguish which roles are realistic, what to build, or when they are ready. From the employer side: hiring managers screen on domain depth and business impact evidence — the exact things that no prep platform helps candidates build in a targeted way.</p>
+
+    <h3>Three components of the navigation gap</h3>
+    <table>
+      <thead><tr><th>Gap</th><th>What's missing</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Archetype mapping</strong></td><td>Technical PM, growth PM, consumer PM, B2B enterprise PM, AI PM, and platform PM are distinct roles with different skill requirements. An engineer transitioning to PM has different strengths and gaps than an MBA. No platform maps the candidate's background to the right archetype.</td></tr>
+        <tr><td><strong>Evidence-based preparation</strong></td><td>Companies test for PRDs with clear success metrics, A/B test documentation with business impact, domain-specific product analysis. The supply side still largely teaches frameworks. No platform helps candidates build the specific evidence artefacts that hiring managers now require.</td></tr>
+        <tr><td><strong>Readiness signal</strong></td><td>"I've been preparing for eight months and I still don't know if I'm ready" is the most common expressed frustration across PM career communities. No platform tells a candidate when they are genuinely ready to apply.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="candidates">
+    <h2>The Candidate Side</h2>
+    <p>The typical aspiring PM experiences preparation as: initial enthusiasm → platform discovery → content consumption → mock interview practice → first applications → rejections with no feedback → renewed content consumption → repeat. The loop continues for 6–18 months without external calibration.</p>
+    <div class="insight">The most common and damaging belief: <strong>"I need to learn more."</strong> The actual problem is targeting error (wrong archetype, wrong company size, wrong domain) or evidence gap (right knowledge, no proof). Both are navigation failures, not content failures.</div>
+    <table>
+      <thead><tr><th>Funnel stage</th><th>Rate</th></tr></thead>
+      <tbody>
+        <tr><td>Application → Recruiter screen</td><td>3% advance</td></tr>
+        <tr><td>Recruiter screen → Hiring manager screen</td><td>~50% advance</td></tr>
+        <tr><td>Hiring manager screen → Panel interviews</td><td>40–50% advance</td></tr>
+        <tr><td>Panel interviews → Offer</td><td>~27%</td></tr>
+      </tbody>
+    </table>
+    <ul style="margin:0 0 16px 20px;color:var(--slate-700)">
+      <li>42% of successful PMs transitioned via company switch from adjacent role; 28% via internal move; only 7% direct from school</li>
+      <li>82% of PMs enter interviews without a portfolio (Aakash Gupta, 2024)</li>
+      <li>Application-to-offer rate: ~4% overall; ~0.12% for cold applications</li>
+    </ul>
+  </section>
+
+  <section id="internal">
+    <h2>The Internal Transition Path</h2>
+    <p>28% of successful first PM hires came via internal moves. From the employer perspective, internal candidates are explicitly preferred: lower risk, known track record, domain context from day one, faster to productivity.</p>
+    <p>The internal path typically looks like: engineer/analyst/designer → product-adjacent work → informal PM ownership → formal PM title. The bottleneck is not skill — it is visibility. Internal candidates who fail to transition don't know how to frame their readiness to their manager, what evidence to build within their current role, or how to benchmark against the company's expectations.</p>
+    <div class="insight">No platform currently addresses this use case. All existing tools assume the candidate is applying externally, building a portfolio from scratch, and preparing for a formal interview process.</div>
+  </section>
+
+  <section id="wtp">
+    <h2>Willingness to Pay</h2>
+    <table>
+      <thead><tr><th>Buyer archetype</th><th>Behaviour</th><th>WTP</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hope Buyers</strong></td><td>In early aspiration stage. Want a credential or structured framework to feel like they're making progress. Already served by NextLeap, Upraised, Product School. Churn when the credential does not produce results.</td><td>₹27K–₹75K (India) · $299–$999 (US)</td></tr>
+        <tr><td><strong>Truth Seekers</strong></td><td>6–18 months in the market. Completed at least one bootcamp. Still failing. Identified that the problem is not knowledge — it is targeting, evidence, or positioning. Highest WTP for a navigation product. Have already spent ₹27K–₹150K and will pay again for something that actually works.</td><td>₹10K–₹50K digital (India) · $500–$2,000 (US)</td></tr>
+      </tbody>
+    </table>
+    <p>The WTP ceiling for navigation — something that tells them which role to target, shows them what to build, and signals when they are ready — is higher than for any content platform. The value proposition is resolution of a stuck state rather than education.</p>
+  </section>
+
+  <section id="why-now">
+    <h2>Why Now</h2>
+    <p>Five forces converge in March 2026, making the navigation gap more urgent than at any previous point:</p>
+    <table>
+      <thead><tr><th>#</th><th>Force</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>The 2026 layoff wave</td><td>Expanded the experienced PM candidate pool competing with aspiring PMs — raising the stakes for precise targeting.</td></tr>
+        <tr><td>2</td><td>AI compression of junior roles</td><td>Raised the entry bar to where candidates without portfolio evidence are invisible to recruiters.</td></tr>
+        <tr><td>3</td><td>Domain depth as primary employer filter</td><td>Generic preparation is actively counter-productive — it builds the wrong things for the wrong bar.</td></tr>
+        <tr><td>4</td><td>AI PM demand surge</td><td>Created a high-WTP, underserved segment needing a specific technical preparation path, not a generic PM curriculum.</td></tr>
+        <tr><td>5</td><td>Internal transition path unaddressed</td><td>28% of hires, employer-preferred, completely unserved by any existing platform.</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">These five forces did not all exist simultaneously in 2021, 2022, or 2023. They converge in 2026 in a way that makes the absence of a navigation platform acutely felt by both the candidate and the employer.</div>
+  </section>
+
+  <section id="carry">
+    <h2>What the Product Must Do</h2>
+    <p>Seven carry-forward points that ground every product decision downstream.</p>
+    <div class="carry-forward">
+      <div class="cf-item"><div class="cf-num">1</div><p><strong>The core product is navigation, not content.</strong> PMRocket must resist the pull to become another curriculum platform. The job-to-be-done: "Tell me which PM role I should target, show me exactly what I need to build and know, and tell me when I'm genuinely ready to apply."</p></div>
+      <div class="cf-item"><div class="cf-num">2</div><p><strong>Background-to-role matching must be the entry mechanic.</strong> The first thing PMRocket does must be intake: understand the user's background, target companies, domain exposure, and timeline. Map them to a PM archetype. This is the feature hiring managers confirm is missing from the market.</p></div>
+      <div class="cf-item"><div class="cf-num">3</div><p><strong>Evidence-building is more valuable than knowledge delivery.</strong> PMRocket's preparation paths must guide users to build artefacts (PRDs with success metrics, A/B test documentation, product critiques), not just consume content about them.</p></div>
+      <div class="cf-item"><div class="cf-num">4</div><p><strong>The readiness signal is the stickiest and most defensible feature.</strong> A dynamic, evidence-based readiness score calibrated against what companies actually screen for — the feature that keeps users engaged, creates a retention loop, and is impossible to replicate with a static curriculum.</p></div>
+      <div class="cf-item"><div class="cf-num">5</div><p><strong>The internal transition path is a distinct product surface.</strong> 28% of hires, employer-preferred, completely unserved. Requires different flows: readiness framing for a manager conversation, within-role portfolio building, stakeholder alignment — not external application prep.</p></div>
+      <div class="cf-item"><div class="cf-num">6</div><p><strong>Domain specificity must be built into every preparation path.</strong> Fintech PM in India needs UPI/RBI/NPCI knowledge. Fintech PM in US needs ACH/OCC/Dodd-Frank. Every path PMRocket generates must be domain-anchored — not generic case study templates.</p></div>
+      <div class="cf-item"><div class="cf-num">7</div><p><strong>AI PM is a distinct, high-priority archetype.</strong> 300% growth in AI PM postings, 25–40% salary premium, specific technical bar (eval set design, model lifecycle understanding, non-deterministic product trade-offs). A first-class archetype — not an add-on module.</p></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sb-nav a');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.sb-nav a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
