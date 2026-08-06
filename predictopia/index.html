@@ -1,477 +1,285 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Predictopia — Multi-Sport Prediction Pools</title>
+<title>Predictopia — Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --blue: #3949FF;
-  --blue-dark: #2733D6;
-  --blue-light: #E7E9FF;
-  --blue-xlight: #F4F5FF;
-  --coral: #E8492F;
-  --coral-light: #FDE4DF;
-  --slate-900: #0f172a;
-  --slate-800: #1e293b;
-  --slate-700: #334155;
-  --slate-600: #475569;
-  --slate-500: #64748b;
-  --slate-400: #94a3b8;
-  --slate-300: #cbd5e1;
-  --slate-200: #e2e8f0;
-  --slate-100: #f1f5f9;
-  --slate-50: #f8fafc;
-  --white: #ffffff;
-  --sidebar-w: 224px;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow: 0 4px 16px rgba(0,0,0,0.07);
+:root,[data-theme="light"]{
+  --bg:#f7f8fb; --bg2:#eef1f7; --panel:#fff; --panel2:#f4f6fa; --line:#e2e6ef;
+  --text:#141821; --muted:#565e70; --dim:#8b93a5;
+  --accent:#3949ff; --accent-rgb:57,73,255; --accent-dim:rgba(57,73,255,.08);
+  --on-accent:#fff;
+  --coral:#e8492f; --ok:#0e9f6e; --ok-dim:rgba(14,159,110,.1);
+  --warn:#b45309; --font:'Inter',system-ui,sans-serif; --display:'Sora',system-ui,sans-serif;
+  --glow1:rgba(57,73,255,.06); --glow2:rgba(14,159,110,.05);
+  --radius:20px; --radius-sm:14px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[data-theme="dark"]{
+  --bg:#0b0e09; --bg2:#131810; --panel:#181f14; --panel2:#1f281a; --line:#2b3626;
+  --text:#f0f4e8; --muted:#a3b099; --dim:#78846d;
+  --accent:#c8f542; --accent-rgb:200,245,66; --accent-dim:rgba(200,245,66,.13);
+  --on-accent:#11170d;
+  --coral:#ff8064; --ok:#4ade80; --ok-dim:rgba(74,222,128,.13);
+  --warn:#fbbf24; --glow1:rgba(200,245,66,.07); --glow2:rgba(255,128,100,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--white);color:var(--slate-800);line-height:1.6;font-size:15px;padding-left:var(--sidebar-w)}
-a{color:var(--blue);text-decoration:none}
-a:hover{text-decoration:underline}
-code{font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:12px;background:var(--slate-100);padding:1px 5px;border-radius:3px;color:var(--blue-dark)}
-
-/* ── SIDEBAR ── */
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--slate-200);z-index:200;display:flex;flex-direction:column;overflow-y:auto}
-.sb-logo{padding:16px 14px 12px;border-bottom:1px solid var(--slate-200);flex-shrink:0}
-.sb-logo .wordmark{font-size:16px;font-weight:800;color:var(--slate-900);letter-spacing:-0.3px}
-.sb-logo .wordmark span{color:var(--blue)}
-.sb-status{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;font-weight:600;color:var(--blue-dark);background:var(--blue-light);padding:2px 8px;border-radius:100px}
-.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.sb-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate-400);padding:12px 14px 3px}
-.sb-nav{padding:4px 6px;flex:1}
-.sb-nav a{display:flex;align-items:center;gap:7px;padding:6px 8px;font-size:12.5px;font-weight:500;color:var(--slate-500);border-radius:var(--radius-sm);text-decoration:none;transition:all .12s;margin-bottom:1px;line-height:1.3}
-.sb-nav a .ico{font-size:13px;flex-shrink:0}
-.sb-nav a:hover{background:var(--slate-100);color:var(--slate-800)}
-.sb-nav a.active{background:var(--blue-xlight);color:var(--blue-dark);font-weight:600}
-.sb-ctas{padding:10px;border-top:1px solid var(--slate-200);flex-shrink:0}
-.sb-ctas a{display:block;text-align:center;padding:7px;font-size:12.5px;font-weight:600;border-radius:var(--radius-sm);text-decoration:none;margin-bottom:5px;transition:all .12s}
-.sb-btn-primary{background:var(--blue);color:white}
-.sb-btn-primary:hover{background:var(--blue-dark);text-decoration:none}
-.sb-btn-ghost{color:var(--slate-600);border:1px solid var(--slate-200)}
-.sb-btn-ghost:hover{background:var(--slate-100);color:var(--slate-800);text-decoration:none}
-
-/* ── MOBILE HEADER ── */
-.mobile-header{display:none;position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);padding:0 16px;height:52px;align-items:center;justify-content:space-between}
-.mob-logo{font-size:15px;font-weight:800;color:var(--slate-900)}
-.mob-logo span{color:var(--blue)}
-.mob-cta{background:var(--blue);color:white;padding:6px 13px;border-radius:var(--radius-sm);font-size:12px;font-weight:600}
-
-/* ── LAYOUT ── */
-.section{padding:72px 40px}
-.section-alt{background:var(--slate-50)}
-.section-dark{background:var(--slate-900)}
-.container{max-width:1020px;margin:0 auto}
-.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);margin-bottom:6px}
-.section-title{font-size:clamp(20px,2.5vw,30px);font-weight:800;color:var(--slate-900);letter-spacing:-.6px;margin-bottom:8px;line-height:1.2}
-.section-sub{font-size:14px;color:var(--slate-500);max-width:580px;margin-bottom:40px;line-height:1.65}
-.section-sub-wide{max-width:760px}
-
-/* ── HERO ── */
-#overview{background:linear-gradient(155deg,var(--blue-xlight) 0%,var(--white) 55%);padding:80px 40px 72px;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:5px;background:var(--blue-light);color:var(--blue-dark);font-size:11px;font-weight:600;padding:4px 13px;border-radius:100px;margin-bottom:20px}
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s infinite}
-#overview h1{font-size:clamp(26px,3.8vw,44px);font-weight:800;color:var(--slate-900);letter-spacing:-1.5px;line-height:1.1;max-width:680px;margin:0 auto 16px}
-#overview h1 span{color:var(--blue)}
-#overview .hero-sub{font-size:clamp(13px,1.6vw,16px);color:var(--slate-600);max-width:620px;margin:0 auto 28px;line-height:1.7}
-.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:600;transition:all .15s;text-decoration:none}
-.btn-primary{background:var(--blue);color:white;box-shadow:0 2px 10px rgba(57,73,255,.25)}
-.btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px);text-decoration:none}
-.btn-secondary{background:white;color:var(--slate-800);border:1.5px solid var(--slate-200)}
-.btn-secondary:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-xlight);text-decoration:none}
-
-/* ── STATS ── */
-#stats{background:var(--slate-900);padding:40px}
-.stats-grid{max-width:1020px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08)}
-.stat-item{background:var(--slate-900);padding:26px 28px;text-align:center}
-.stat-number{font-size:clamp(22px,3vw,34px);font-weight:800;color:var(--blue-light);letter-spacing:-1px;display:block;margin-bottom:5px}
-.stat-label{font-size:12px;color:rgba(255,255,255,.45);line-height:1.5}
-
-/* ── PROBLEM ── */
-.problem-intro{font-size:14px;color:var(--slate-700);line-height:1.7;max-width:760px;margin-bottom:32px;padding:16px 20px;background:white;border-radius:var(--radius);border-left:4px solid var(--blue);box-shadow:var(--shadow-sm)}
-.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.problem-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
-.problem-icon{width:36px;height:36px;background:var(--blue-xlight);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:16px}
-.problem-card h3{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:6px}
-.problem-card p{font-size:13px;color:var(--slate-600);line-height:1.65}
-
-/* ── FLOW ── */
-.flow-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
-.flow-step{display:grid;grid-template-columns:32px 1fr 1fr;gap:12px;align-items:start;background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
-.flow-step-num{display:flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--blue);color:white;border-radius:50%;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px}
-.flow-col h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:4px}
-.flow-col p{font-size:12.5px;color:var(--slate-700);line-height:1.55}
-
-/* ── CAPABILITIES ── */
-.cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.cap-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm)}
-.cap-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--blue);color:white;border-radius:50%;font-size:10px;font-weight:700;margin-bottom:8px}
-.cap-card h3{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:5px}
-.cap-card p{font-size:12px;color:var(--slate-600);line-height:1.6}
-
-/* ── PERSONAS ── */
-.persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.persona-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
-.persona-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:100px;margin-bottom:10px}
-.persona-tag.primary{background:var(--blue-light);color:var(--blue-dark)}
-.persona-tag.secondary{background:var(--slate-200);color:var(--slate-600)}
-.persona-card h3{font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
-.persona-desc{font-size:12px;color:var(--slate-400);font-style:italic;margin-bottom:10px}
-.persona-card p{font-size:13px;color:var(--slate-600);line-height:1.65}
-
-/* ── TECHNICAL ── */
-.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
-.tech-card{background:var(--slate-900);border-radius:var(--radius);padding:22px}
-.tech-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue-light);margin-bottom:7px}
-.tech-card h3{font-size:14px;font-weight:700;color:white;margin-bottom:10px}
-.tech-code{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--blue);border-radius:var(--radius-sm);padding:10px 12px;font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--blue-light);margin-bottom:12px;white-space:pre;line-height:1.6;overflow-x:auto}
-.tech-card p{font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.65}
-.tech-card code{background:rgba(255,255,255,.1);color:#a5b4fc;padding:1px 5px;border-radius:3px}
-
-/* ── ROADMAP ── */
-.roadmap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.roadmap-col{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
-.roadmap-header{padding:12px 16px;font-size:13px;font-weight:700;color:white}
-.roadmap-header.now{background:var(--blue)}
-.roadmap-header.next{background:var(--coral)}
-.roadmap-header.later{background:var(--slate-700)}
-.roadmap-header .phase-sub{font-size:9px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:1px}
-.roadmap-body{padding:12px}
-.roadmap-item{padding:9px 11px;margin-bottom:6px;background:var(--slate-50);border-radius:var(--radius-sm);border:1px solid var(--slate-100)}
-.roadmap-item:last-child{margin-bottom:0}
-.roadmap-item h4{font-size:11.5px;font-weight:700;color:var(--slate-900);margin-bottom:2px}
-.roadmap-item p{font-size:11px;color:var(--slate-500);line-height:1.5}
-
-/* ── DECISIONS ── */
-.decision-list{display:flex;flex-direction:column;gap:0}
-.decision-row{padding:14px 16px;border-bottom:1px solid var(--slate-100);display:grid;grid-template-columns:110px 1fr;gap:14px}
-.decision-row:first-child{border-radius:var(--radius) var(--radius) 0 0;border-top:1.5px solid var(--slate-200);border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
-.decision-row:last-child{border-radius:0 0 var(--radius) var(--radius);border-bottom:1.5px solid var(--slate-200);border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
-.decision-row:not(:first-child):not(:last-child){border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
-.decision-row:nth-child(even){background:var(--slate-50)}
-.decision-row:hover{background:var(--blue-xlight)}
-.decision-cat{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);padding-top:3px;line-height:1.4}
-.decision-content h4{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
-.decision-content p{font-size:12px;color:var(--slate-600);line-height:1.6}
-
-/* ── SCOPE ── */
-.scope-table{width:100%;border-collapse:collapse;background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);font-size:13px}
-.scope-table th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-500);background:var(--slate-50);border-bottom:1.5px solid var(--slate-200)}
-.scope-table td{padding:10px 14px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top;line-height:1.5}
-.scope-table tr:last-child td{border-bottom:none}
-.scope-table tr:hover td{background:var(--slate-50)}
-.scope-table td:first-child{font-weight:600;color:var(--slate-800)}
-
-/* ── FOOTER ── */
-footer{background:var(--slate-900);color:rgba(255,255,255,.4);padding:36px 40px;text-align:center;font-size:12px;line-height:1.8}
-footer strong{color:white;font-weight:600}
-footer a{color:var(--blue-light)}
-.footer-links{display:flex;gap:18px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.footer-links a{font-size:11px;color:rgba(255,255,255,.3)}
-.footer-links a:hover{color:var(--blue-light);text-decoration:none}
-
-/* ── RESPONSIVE ── */
-@media(max-width:900px){
-  body{padding-left:0}
-  .sidebar{display:none}
-  .mobile-header{display:flex}
-  .roadmap-grid{grid-template-columns:1fr}
-  .flow-step{grid-template-columns:32px 1fr}
-  .flow-col:nth-child(3){grid-column:2}
-  #overview,.section,#stats{padding-left:20px;padding-right:20px}
+body{
+  font-family:var(--font);font-size:15px;color:var(--text);
+  background:radial-gradient(1000px 500px at 8% -10%,var(--glow1),transparent 55%),
+             radial-gradient(800px 450px at 100% 0%,var(--glow2),transparent 50%),var(--bg);
+  min-height:100vh;transition:background-color .25s,color .25s;
 }
-@media(max-width:560px){
-  .stats-grid{grid-template-columns:1fr 1fr;gap:0}
-  .decision-row{grid-template-columns:1fr}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:ui-monospace,monospace;font-size:12px;background:var(--panel2);padding:2px 6px;border-radius:6px;color:var(--text);border:1px solid var(--line)}
+
+.shell{max-width:920px;margin:0 auto;padding:28px 18px 72px}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo-mark{width:40px;height:40px;border-radius:12px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:18px}
+.brand-text .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.brand-text .name{font-family:var(--display);font-size:18px;font-weight:800;letter-spacing:-.02em}
+.brand-text .name span{color:var(--accent)}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.theme-toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.theme-toggle button{border:0;background:transparent;color:var(--dim);cursor:pointer;font-size:12px;font-weight:700;
+  padding:8px 14px;border-radius:999px;font-family:var(--font);transition:.15s}
+.theme-toggle button.on{background:var(--accent);color:var(--on-accent)}
+
+.nav-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-pills a{
+  font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:999px;
+  background:var(--panel);border:1px solid var(--line);color:var(--muted);text-decoration:none;transition:.14s
+}
+.nav-pills a:hover,.nav-pills a.on{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);text-decoration:none}
+
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.display{font-family:var(--display);font-size:clamp(26px,4vw,34px);line-height:1.12;letter-spacing:-.02em;margin-bottom:10px}
+.sub{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:18px;max-width:560px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px}
+.card + .card{margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px}
+.tile h3{font-family:var(--display);font-size:15px;margin-bottom:6px;letter-spacing:-.01em}
+.tile p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:999px}
+.chip-accent{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(var(--accent-rgb),.25)}
+.chip-ok{background:var(--ok-dim);color:var(--ok);border:1px solid rgba(14,159,110,.28)}
+.chip-muted{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font);font-weight:700;font-size:13.5px;padding:12px 18px;border-radius:14px;
+  border:0;cursor:pointer;text-decoration:none;transition:.14s;min-height:44px
+}
+.btn-accent{background:var(--accent);color:var(--on-accent)}
+.btn-accent:hover{filter:brightness(1.05);text-decoration:none}
+.btn-ghost{background:var(--panel);color:var(--text);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+
+.section{margin-top:36px}
+.section h2{font-family:var(--display);font-size:20px;letter-spacing:-.02em;margin-bottom:8px}
+.section .lead{color:var(--muted);font-size:14px;line-height:1.55;margin-bottom:14px;max-width:560px}
+
+.flow{display:flex;flex-direction:column;gap:0}
+.flow-step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.flow-step:last-child{border-bottom:0}
+.flow-n{
+  flex-shrink:0;width:32px;height:32px;border-radius:10px;background:var(--accent-dim);color:var(--accent);
+  font-family:var(--display);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center
+}
+.flow-step h4{font-size:14px;font-weight:700;margin-bottom:3px}
+.flow-step p{font-size:13px;color:var(--muted);margin:0;line-height:1.45}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.stat .n{font-family:var(--display);font-size:22px;color:var(--accent);letter-spacing:-.02em}
+.stat .l{font-size:11px;color:var(--dim);font-weight:600;margin-top:4px;line-height:1.35}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:1px solid var(--line)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
+td:first-child{color:var(--text);font-weight:600}
+tr:last-child td{border-bottom:0}
+
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+footer .links{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:600}
+footer .meta{font-size:12px;color:var(--dim)}
+
+@media(max-width:720px){
+  .grid,.grid-3,.stat-row{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
+<div class="shell">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sb-logo">
-    <div class="wordmark">Predict<span>opia</span></div>
-    <div><span class="sb-status"><span class="sb-dot"></span>Prototype + architecture · v2</span></div>
-  </div>
-  <nav class="sb-nav">
-    <div class="sb-group-label">Product</div>
-    <a href="#overview" class="active"><span class="ico">🏠</span>Overview</a>
-    <a href="#pivot"><span class="ico">🎯</span>The v1 → v2 pivot</a>
-    <a href="#architecture"><span class="ico">⚡</span>How it works</a>
-    <a href="#capabilities"><span class="ico">✦</span>Prototype capabilities</a>
-    <div class="sb-group-label">User Experience</div>
-    <a href="#personas"><span class="ico">👤</span>Who it's for</a>
-    <div class="sb-group-label">Engineering</div>
-    <a href="architecture.html"><span class="ico">📐</span>Architecture</a>
-    <a href="#technical"><span class="ico">⚙️</span>Technical depth</a>
-    <div class="sb-group-label">Product Thinking</div>
-    <a href="#roadmap"><span class="ico">📅</span>Status &amp; roadmap</a>
-    <a href="#decisions"><span class="ico">📝</span>Key decisions</a>
-    <a href="#scope"><span class="ico">🚫</span>Out of scope</a>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-mark">P</div>
+      <div class="brand-text">
+        <div class="eyebrow">Docs</div>
+        <div class="name">Predict<span>opia</span></div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="theme-toggle" id="themeToggle">
+        <button type="button" data-t="light" class="on">Light</button>
+        <button type="button" data-t="dark">Dark</button>
+      </div>
+      <a class="btn btn-ghost" href="../">Portfolio</a>
+      <a class="btn btn-accent" href="prototype.html">Open prototype</a>
+    </div>
+  </header>
+
+  <nav class="nav-pills" aria-label="Docs">
+    <a href="index.html" class="on">Overview</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="prototype.html">Prototype</a>
   </nav>
-  <div class="sb-ctas">
-    <a href="prototype.html" class="sb-btn-primary">Open prototype →</a>
-    <a href="architecture.html" class="sb-btn-ghost">Architecture</a>
-    <a href="../" class="sb-btn-ghost">← Back to portfolio</a>
-  </div>
-</aside>
 
-<!-- MOBILE HEADER -->
-<header class="mobile-header">
-  <div class="mob-logo">Predict<span>opia</span></div>
-  <a href="prototype.html" class="mob-cta">Open prototype →</a>
-</header>
+  <section>
+    <div class="kicker">Multi-sport prediction pools</div>
+    <h1 class="display">Private leagues for friends &amp; family — any tournament, one app.</h1>
+    <p class="sub">Create a group once. Spin up a pool for cricket, football, or the next season. Members opt in, pick winners before kickoff, and track scores and settlements without spreadsheets.</p>
+    <div class="cta-row">
+      <a class="btn btn-accent" href="prototype.html">Try the interactive prototype</a>
+      <a class="btn btn-ghost" href="architecture.html">Architecture &amp; diagrams</a>
+    </div>
+    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px">
+      <span class="chip chip-accent">Clickable prototype</span>
+      <span class="chip chip-ok">Architecture drafted</span>
+      <span class="chip chip-muted">Backend not live yet</span>
+    </div>
+  </section>
 
-<!-- OVERVIEW -->
-<section id="overview">
-  <div class="hero-badge"><span class="dot"></span>In design · v2 · prototype + architecture · Aug 2026</div>
-  <h1>One prediction pool app for <span>every sport</span> your group follows.</h1>
-  <p class="hero-sub">Predictopia v1 shipped in a 9-day solo sprint as an IPL-2026-only app — then sat dormant nine months a year by design. That scoping mistake became the v2 thesis: a Group (persistent people) / Pool (tournament instance) split and a generic prediction-event model, so cricket, football, or the next sport a family adds all run through one schema. Currently a full clickable prototype validating the PRD before a line of v2 backend code gets written.</p>
-  <div class="hero-ctas">
-    <a href="prototype.html" class="btn btn-primary">Open interactive prototype →</a>
-    <a href="architecture.html" class="btn btn-secondary">Architecture &amp; diagrams</a>
-    <a href="../" class="btn btn-secondary">← Back to portfolio</a>
+  <div class="stat-row">
+    <div class="stat"><div class="n">2</div><div class="l">Sports in the prototype</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">Event model for all picks</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">Pool tabs for members</div></div>
+    <div class="stat"><div class="n">$0</div><div class="l">Target cost at family scale</div></div>
   </div>
-</section>
 
-<!-- STATS BAR -->
-<div id="stats">
-  <div class="stats-grid">
-    <div class="stat-item">
-      <span class="stat-number">2</span>
-      <div class="stat-label">sports live in the<br>prototype — cricket + football</div>
+  <section class="section" id="how">
+    <h2>How it works</h2>
+    <p class="lead">Three layers: people, tournament, and predictions.</p>
+    <div class="card">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-n">1</div>
+          <div>
+            <h4>Group</h4>
+            <p>Persistent circle of people. Join via invite link; admins admit or deny. Survives every future season.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">2</div>
+          <div>
+            <h4>Pool</h4>
+            <p>One competition under a group (e.g. IPL or Premier League). Members opt in — no auto-enroll. Admin sets buy-in, periods, and prizes (tracking only).</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">3</div>
+          <div>
+            <h4>Predict</h4>
+            <p>One-tap outcomes before cutoff. Admin specials (polls) use the same event model. Scores and boards update when results resolve.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-n">4</div>
+          <div>
+            <h4>Money tab</h4>
+            <p>Who won what, what you’re owed, settled or not — like Splitwise for the pool. Cash moves offline (UPI / cash).</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stat-item">
-      <span class="stat-number">50+</span>
-      <div class="stat-label">dated design decisions<br>logged with reasoning</div>
+  </section>
+
+  <section class="section" id="app">
+    <h2>In the app</h2>
+    <p class="lead">Pool navigation is four tabs for everyone, plus Manage for admins.</p>
+    <div class="grid">
+      <div class="tile"><h3>Predict</h3><p>Today’s open picks and specials. Cutoff countdown. Sync across pools that share a competition.</p></div>
+      <div class="tile"><h3>Board</h3><p>Standings with period filter. Members list. Reveal of others’ picks after lock (collapsible).</p></div>
+      <div class="tile"><h3>Me</h3><p>Your points and per-event score breakdown — why each point landed.</p></div>
+      <div class="tile"><h3>Money</h3><p>Your owed / settled first, then full winners. Close period lives here for admins.</p></div>
     </div>
-    <div class="stat-item">
-      <span class="stat-number">1</span>
-      <div class="stat-label">generic event model —<br>outcomes and specials share it</div>
+    <div class="card" style="margin-top:12px">
+      <h3 style="font-family:var(--display);font-size:15px;margin-bottom:6px">Manage <span class="chip chip-muted" style="margin-left:6px">admin only</span></h3>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.5">Economics, prize split, buy-in collected, push / resolve specials. Never mixed into the Board.</p>
     </div>
-    <div class="stat-item">
-      <span class="stat-number">$0</span>
-      <div class="stat-label">monthly cost target<br>at family/friends scale</div>
+  </section>
+
+  <section class="section" id="who">
+    <h2>Who it’s for</h2>
+    <div class="grid-3">
+      <div class="tile"><h3>Group admin</h3><p>Owns the circle, admits members, creates pools, stays trusted for money rules.</p></div>
+      <div class="tile"><h3>Pool admin</h3><p>Runs the season — specials, period close, settlement toggles.</p></div>
+      <div class="tile"><h3>Member</h3><p>Predicts, checks the board, sees what they’re owed. Senior-friendly targets and copy.</p></div>
     </div>
-  </div>
+  </section>
+
+  <section class="section" id="stack">
+    <h2>Stack (planned)</h2>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead><tr><th>Layer</th><th>Choice</th></tr></thead>
+        <tbody>
+          <tr><td>App</td><td>Next.js PWA · Vercel</td></tr>
+          <tr><td>Auth</td><td>Auth.js · Google only</td></tr>
+          <tr><td>Data</td><td>Supabase Postgres · RLS · portable identity GUC</td></tr>
+          <tr><td>Sports</td><td>CricketData.org + API-Football (adapter)</td></tr>
+          <tr><td>Jobs</td><td>GitHub Actions → authenticated job routes</td></tr>
+          <tr><td>Notify</td><td>Web Push · Resend email fallback</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lead" style="margin-top:12px">Details and draw.io diagrams: <a href="architecture.html">Architecture</a>.</p>
+  </section>
+
+  <section class="section" id="status">
+    <h2>Status</h2>
+    <div class="grid">
+      <div class="tile"><h3>Done</h3><p>PRD, roadmap, interactive prototype, architecture draft + public diagrams.</p></div>
+      <div class="tile"><h3>Next</h3><p>Backend milestones: auth → groups/pools → predict → specials → money → push.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="links">
+      <a href="prototype.html">Prototype</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="../">Portfolio</a>
+    </div>
+    <div class="meta">Predictopia · private pools · tracking only, never betting</div>
+  </footer>
 </div>
 
-<!-- THE PIVOT -->
-<section id="pivot" class="section">
-  <div class="container">
-    <div class="section-label">The Problem</div>
-    <h2 class="section-title">v1 worked. Then cricket season ended.</h2>
-    <p class="section-sub section-sub-wide">v1 was a genuine success at family scale — one-tap picks, auto-lock before toss, on-demand scoring, offline prize tracking, built solo in 9 days on Next.js + Supabase. But it was hardcoded to IPL 2026: the schema, the copy, the scoring rules all assumed cricket, one tournament, one window each year. Outside March–May, the app — and the family habit around it — just stopped.</p>
-    <div class="problem-grid">
-      <div class="problem-card">
-        <div class="problem-icon">📅</div>
-        <h3>~9 months dead time/year</h3>
-        <p>A tournament-bound app is only as alive as its tournament. The real product opportunity was multi-sport, year-round — v1's scope was the bug, not the build quality.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">🔁</div>
-        <h3>Every new season = re-invite everyone</h3>
-        <p>v1 conflated "the people" with "the season." A new pool meant a new link, a new round of WhatsApp invites, and starting the group's trust graph from zero.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">🧩</div>
-        <h3>One-off event types don't scale</h3>
-        <p>Special contests ("who makes the Top 4?") would have needed their own bolted-on data model per sport if outcomes and specials weren't unified from day one.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ARCHITECTURE -->
-<section id="architecture" class="section section-alt">
-  <div class="container">
-    <div class="section-label">How It Works</div>
-    <h2 class="section-title">Group and Pool are two different lifetimes — the schema finally says so</h2>
-    <p class="section-sub section-sub-wide">The core v2 move: separate "the people" from "the tournament instance." A Group is created once and persists — a family, a college WhatsApp circle. A Pool is a specific competition running under that Group, and reuses the Group's membership automatically. New Pools stop requiring new invites; new Group members aren't retroactively dropped into pools already mid-season.</p>
-    <div class="flow-steps">
-      <div class="flow-step">
-        <div class="flow-step-num">1</div>
-        <div class="flow-col"><h4>Group created once</h4><p>"The Family" — persists forever, membership is durable across every future tournament.</p></div>
-        <div class="flow-col"><h4>Result</h4><p>No re-invite tax. A second Pool under the same Group needs zero new links shared.</p></div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-step-num">2</div>
-        <div class="flow-col"><h4>Pool = one tournament instance</h4><p>"Family Cup — IPL 2026," "Office Banter — EPL 25/26." Opt-in per Pool, never auto-enrolled.</p></div>
-        <div class="flow-col"><h4>Result</h4><p>Someone in the Group can skip a sport they don't follow without it reading as a dead leaderboard slot.</p></div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-step-num">3</div>
-        <div class="flow-col"><h4>Every prediction is a generic "event"</h4><p>Question + answer format + point value + resolve state — one structure for match outcomes AND admin-authored special events.</p></div>
-        <div class="flow-col"><h4>Result</h4><p>Admin-authored specials shipped in MVP with zero schema rework, because the model was built to support them from day one.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CAPABILITIES -->
-<section id="capabilities" class="section">
-  <div class="container">
-    <div class="section-label">Key Capabilities</div>
-    <h2 class="section-title">What the prototype already validates</h2>
-    <p class="section-sub">Every screen below is clickable in the live prototype — this isn't a mockup, it's the actual interaction design being pressure-tested before backend work starts.</p>
-    <div class="cap-grid">
-      <div class="cap-card"><div class="cap-num">1</div><h3>Group/Pool opt-in</h3><p>Pool participation is explicit per member — never auto-enrolled off Group membership.</p></div>
-      <div class="cap-card"><div class="cap-num">2</div><h3>Autopilot scoring</h3><p>Match outcomes score themselves from a results feed — admin only intervenes for disputes.</p></div>
-      <div class="cap-card"><div class="cap-num">3</div><h3>Period-filtered leaderboards</h3><p>One running overall total is the source of truth; weekly/gameweek/N-match payouts are a filter on the same records, not a second ledger.</p></div>
-      <div class="cap-card"><div class="cap-num">4</div><h3>Per-event dispute drill-down</h3><p>Every point traces to one event record — self-service "why do I have this score," no admin recalculation.</p></div>
-      <div class="cap-card"><div class="cap-num">5</div><h3>Delegatable Group Admin</h3><p>Persistent, delegatable role at the Group layer, independent of who administers any one Pool.</p></div>
-      <div class="cap-card"><div class="cap-num">6</div><h3>Offline prize tracking</h3><p>Buy-in Collected/Not-collected and prize Owed/Settled tracked separately — the app never moves money itself.</p></div>
-      <div class="cap-card"><div class="cap-num">7</div><h3>Admin-authored specials</h3><p>Single/multi-choice polls with custom or team-list options, pushed to a pool on the same generic event model.</p></div>
-      <div class="cap-card"><div class="cap-num">8</div><h3>Cross-pool home + money rollup</h3><p>Every pool a member's in, with rank and next action, in one view — plus a real cross-pool "you've won" total.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- PERSONAS -->
-<section id="personas" class="section section-alt">
-  <div class="container">
-    <div class="section-label">Who It's For</div>
-    <h2 class="section-title">Two roles, one design north star</h2>
-    <div class="persona-grid">
-      <div class="persona-card">
-        <span class="persona-tag primary">Primary</span>
-        <h3>The Pool Admin</h3>
-        <div class="persona-desc">Usually the one who set up the WhatsApp group in the first place</div>
-        <p>Creates the Pool, sets buy-in and prize splits, pushes specials, closes periods. If admin pain is eliminated, the pool survives — every design decision optimises for their workload approaching zero after setup.</p>
-      </div>
-      <div class="persona-card">
-        <span class="persona-tag secondary">Secondary</span>
-        <h3>The Member</h3>
-        <div class="persona-desc">Wants to predict, see the board, and get their money — nothing else</div>
-        <p>One-tap picks, cutoff countdowns, a Board that's never cluttered with admin actions, and a Money tab that's honest about what they're owed and what's settled.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TECHNICAL -->
-<section id="technical" class="section">
-  <div class="container">
-    <div class="section-label">Technical Depth</div>
-    <h2 class="section-title">Portable by design, not vendor-locked</h2>
-    <p class="section-sub section-sub-wide">Same free-tier-until-traction discipline as the rest of this portfolio: Postgres + app-owned domain logic, auth mapped to an internal user id rather than a vendor's, sports data behind a swappable provider adapter.</p>
-    <div class="tech-grid">
-      <div class="tech-card">
-        <div class="tech-label">Stack</div>
-        <h3>Next.js + Supabase, kept from v1</h3>
-        <div class="tech-code">Next.js (App Router) PWA
-Auth.js — Google only
-Supabase Postgres + RLS
-Vercel + GitHub Actions cron
-CricketData + API-Football</div>
-        <p>Domain/schema rewrite matters more than an infra change. Auth.js + portable GUC identity (not auth.uid). Jobs via GitHub Actions for sub-daily reminders. See <a href="architecture.html">architecture diagrams</a>.</p>
-      </div>
-      <div class="tech-card">
-        <div class="tech-label">Data model</div>
-        <h3>Group / Pool / generic event</h3>
-        <div class="tech-code">Group  → persistent people
-Pool   → tournament instance
-Event  → outcome | special
-         (question, answer
-          format, points,
-          resolve state)</div>
-        <p>Outcomes and admin-authored specials are instances of one structure — the thing that let specials ship in MVP with no schema change.</p>
-      </div>
-      <div class="tech-card">
-        <div class="tech-label">Access control</div>
-        <h3>Hybrid RLS + API routes</h3>
-        <div class="tech-code">Auth.js → app.user_id GUC
-RLS     → membership + reveal
-Jobs    → app_jobs + JOB_SECRET
-DB      → lock triggers</div>
-        <p>Reveal of others' picks is an RLS rule after lock — not UI-only. Cutoff enforced by DB trigger. Full path on the <a href="architecture.html#identity">identity diagram</a>.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ROADMAP -->
-<section id="roadmap" class="section section-alt">
-  <div class="container">
-    <div class="section-label">Status &amp; Roadmap</div>
-    <h2 class="section-title">PRD approved · prototype live · architecture drafted · build next</h2>
-    <p class="section-sub section-sub-wide">v2 went prototype-first to pressure-test Group/Pool, navigation, and money labelling. PRD and roadmap are approved; architecture (stack, event spine, RLS, jobs) is drafted with draw.io diagrams published. Backend milestones M1–M6 are next — no production v2 API yet.</p>
-    <div class="roadmap-grid">
-      <div class="roadmap-col">
-        <div class="roadmap-header now"><span class="phase-sub">Now</span>Architecture → build</div>
-        <div class="roadmap-body">
-          <div class="roadmap-item"><h4>Architecture published</h4><p>Stack, five invariants, event spine, RLS identity path, scoring &amp; settlement — <a href="architecture.html">diagrams on this site</a>.</p></div>
-          <div class="roadmap-item"><h4>M1 foundation next</h4><p>Auth.js, catalog, blank schema migrations, schedule job — first real v2 backend work.</p></div>
-        </div>
-      </div>
-      <div class="roadmap-col">
-        <div class="roadmap-header next"><span class="phase-sub">Next</span>Core product slices</div>
-        <div class="roadmap-body">
-          <div class="roadmap-item"><h4>M2–M3 Group · Pool · Predict</h4><p>Admit/deny, opt-in pools, one-tap picks, autopilot results scoring.</p></div>
-          <div class="roadmap-item"><h4>M4–M5 Specials · Money</h4><p>Admin specials, period close, owed/settled tracking (no payments).</p></div>
-        </div>
-      </div>
-      <div class="roadmap-col">
-        <div class="roadmap-header later"><span class="phase-sub">Later</span>Open questions</div>
-        <div class="roadmap-body">
-          <div class="roadmap-item"><h4>Real-money legal stance</h4><p>Proceeding as-is at friends/family scale; India's real-money-gaming regulation stays genuinely open beyond that scope.</p></div>
-          <div class="roadmap-item"><h4>Notifications</h4><p>Unsolved since v1 — a real retention hole, deliberately deferred past MVP.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- KEY DECISIONS -->
-<section id="decisions" class="section">
-  <div class="container">
-    <div class="section-label">Key Decisions</div>
-    <h2 class="section-title">A sample of 50+ logged, dated, with reasoning</h2>
-    <p class="section-sub">The full decision log runs to over fifty dated entries — including several reversals, kept visible rather than silently rewritten. A representative sample:</p>
-    <div class="decision-list">
-      <div class="decision-row"><div class="decision-cat">Architecture</div><div class="decision-content"><h4>Group vs. Pool split</h4><p>v1 conflated people with season. v2: Group persists, Pool is a tournament instance under it, reusing Group membership automatically.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Data model</div><div class="decision-content"><h4>Generic "event" for outcomes and specials</h4><p>One structure, not two — the reason admin-authored specials shipped in MVP with zero schema rework.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Scoring</div><div class="decision-content"><h4>One running total; periods are a filter</h4><p>Admin can pay out at arbitrary intervals without a separate ledger — period leaderboards are a lens over the same per-event records.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Money</div><div class="decision-content"><h4>Tracking only, never a payment gateway</h4><p>Buy-in and prizes settle offline (UPI/cash) — app shows Collected/Not-collected and Owed/Settled, never moves money itself.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Trust</div><div class="decision-content"><h4>Group join is the vetting gate, not Pool opt-in</h4><p>An admitted stranger gets standing access to the whole Group across every future Pool — so the admit/deny gate moved to match, off the old v1 per-pool approval model.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Navigation</div><div class="decision-content"><h4>Reveal folded into Board, Money promoted to a tab</h4><p>Freed a tab slot without exceeding five — full navigation/IA redesign, discussed and locked before building, shipped 2026-08-06.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Correctness</div><div class="decision-content"><h4>Tie-split budget bug, caught and fixed</h4><p>An external review pass caught a "shrink" tie rule that could overspend the prize pot — corrected to a budget-safe formula before it reached build.</p></div></div>
-      <div class="decision-row"><div class="decision-cat">Scope</div><div class="decision-content"><h4>Pool creation restricted to Group Admins</h4><p>Reversed an earlier "any member can create a Pool" call once real financial terms (buy-in, fee %, prize splits) were in scope — the Group Admin who vets membership should also see a Pool's economics before it goes live.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- OUT OF SCOPE -->
-<section id="scope" class="section section-alt">
-  <div class="container">
-    <div class="section-label">Out of Scope</div>
-    <h2 class="section-title">Scope defence is a product skill</h2>
-    <table class="scope-table">
-      <tr><th>Cut</th><th>Why</th></tr>
-      <tr><td>In-app payments</td><td>App tracks buy-in/prizes offline; a real payment gateway is a different regulatory and engineering surface entirely.</td></tr>
-      <tr><td>Group-level money rollup</td><td>Money stays Pool-scoped in MVP — a Group aggregate view across every Pool under it is a deliberate v2.1 cut, not an oversight.</td></tr>
-      <tr><td>Push notifications</td><td>No notification channel exists yet — Profile ships opt-in toggles now so the preference exists before the channel does.</td></tr>
-      <tr><td>Public pool discovery</td><td>All v1/v2 pools are private, invite-only. Search/browse only makes sense once enough pools exist to browse.</td></tr>
-      <tr><td>Numeric-distance stat predictions</td><td>Considered for things like "guess the number of sixes" — rejected: needs a scoring curve per stat plus tie-break logic, and reads too fantasy-sports-adjacent next to the real-money legal question.</td></tr>
-    </table>
-  </div>
-</section>
-
-<footer>
-  <div><strong>Predictopia</strong> — a solo side project, built and designed with Claude Code.</div>
-  <div class="footer-links">
-    <a href="prototype.html">Interactive prototype</a>
-    <a href="../">Portfolio</a>
-  </div>
-</footer>
-
+<script>
+const root=document.documentElement;
+const saved=localStorage.getItem('predictopia-docs-theme');
+if(saved) root.setAttribute('data-theme',saved);
+function paintTheme(){
+  const t=root.getAttribute('data-theme')||'light';
+  document.querySelectorAll('#themeToggle button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+}
+paintTheme();
+document.getElementById('themeToggle').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-t]'); if(!b) return;
+  root.setAttribute('data-theme',b.dataset.t);
+  localStorage.setItem('predictopia-docs-theme',b.dataset.t);
+  paintTheme();
+});
+</script>
 </body>
 </html>
