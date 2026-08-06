@@ -1,0 +1,3366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictopia — Polished Prototype</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#e2e8f0;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;padding:20px 0;
+}
+h1.page-title{font-size:12px;color:#64748b;margin-bottom:16px;text-transform:uppercase;letter-spacing:3px;font-weight:700;}
+
+/* Mobile shell */
+.phone{
+  width:390px;height:844px;
+  background:#f8fafc;
+  border:3px solid #cbd5e1;
+  border-radius:44px;
+  position:relative;overflow:hidden;
+  display:none;flex-direction:column;
+  box-shadow:0 25px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+}
+.phone.active{display:flex;}
+
+/* Status bar */
+.status-bar{
+  height:48px;background:#000080;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;font-size:12px;color:#94a3b8;flex-shrink:0;
+  font-weight:500;
+}
+.status-bar .app-name{font-weight:800;font-size:15px;color:#fff;letter-spacing:-0.3px;}
+
+/* Screen label */
+.screen-label{
+  background:#000080;color:#fff;
+  font-size:9px;text-align:center;padding:3px 0;
+  text-transform:uppercase;letter-spacing:2px;flex-shrink:0;font-weight:700;
+}
+
+/* Screen content */
+.screen-content{
+  flex:1;overflow-y:auto;padding:20px;
+  background:#f8fafc;color:#0f172a;
+}
+.screen-content::-webkit-scrollbar{width:3px;}
+.screen-content::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;}
+
+/* Bottom nav */
+.bottom-nav{
+  height:72px;background:#000080;
+  border-top:none;display:flex;flex-shrink:0;
+  padding-bottom:8px;
+}
+.bottom-nav .nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:11px;color:#94a3b8;cursor:pointer;gap:4px;
+  transition:all 0.2s;font-weight:500;
+  min-height:48px;
+}
+.bottom-nav .nav-item:hover{color:#e2e8f0;}
+.bottom-nav .nav-item.active-nav{color:#fff;}
+.bottom-nav .nav-item.active-nav .nav-icon{
+  background:rgba(22,163,74,0.15);border-radius:12px;padding:4px 14px;
+}
+.bottom-nav .nav-icon{font-size:22px;transition:all 0.2s;}
+
+/* Tab bar */
+.tab-bar{
+  display:flex;border-bottom:2px solid #e2e8f0;flex-shrink:0;
+  background:#fff;margin:0 -20px;padding:0 12px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-bar .tab{
+  flex:none;padding:8px 12px;text-align:center;font-size:11px;
+  cursor:pointer;color:#94a3b8;font-weight:600;
+  border-bottom:3px solid transparent;transition:all 0.2s;
+  min-height:40px;display:flex;align-items:center;justify-content:center;
+  white-space:nowrap;
+}
+.tab-bar .tab:hover{color:#475569;}
+.tab-bar .tab.active-tab{color:#000080;border-bottom-color:#000080;}
+
+/* Locked field */
+.locked-field{
+  background:#f1f5f9;border:2px solid #e2e8f0;border-radius:12px;
+  padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;
+  justify-content:space-between;opacity:0.7;cursor:not-allowed;
+}
+.locked-field .locked-label{font-size:13px;color:#475569;font-weight:600;}
+.locked-field .locked-value{font-size:15px;color:#0f172a;font-weight:800;}
+.locked-field .locked-icon{font-size:14px;color:#94a3b8;margin-left:8px;}
+
+/* Cards */
+.card{
+  background:#fff;padding:16px;margin-bottom:10px;cursor:pointer;
+  border-radius:16px;transition:all 0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  border:1px solid #f1f5f9;
+}
+.card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08);transform:translateY(-1px);}
+.card:active{transform:translateY(0);box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+
+/* Match card — bet365 inspired */
+.match-card{
+  display:flex;background:#fff;margin-bottom:8px;
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  border:1px solid #f1f5f9;
+}
+.match-team{
+  flex:1;padding:18px 10px;text-align:center;cursor:pointer;
+  transition:all 0.15s;position:relative;min-height:72px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.match-team:hover{background:rgba(0,0,0,0.02);}
+.match-team.selected{
+  box-shadow:inset 0 0 0 3px #000080;
+  background:rgba(22,163,74,0.06);
+}
+.match-team.locked{cursor:default;opacity:0.45;}
+.match-vs{
+  padding:18px 8px;display:flex;align-items:center;
+  font-weight:800;font-size:11px;color:#94a3b8;letter-spacing:1px;
+}
+
+/* Buttons */
+.btn{
+  display:block;width:100%;padding:16px;border:none;
+  background:#000080;color:#fff;text-align:center;
+  font-size:16px;font-weight:700;cursor:pointer;margin-top:10px;
+  border-radius:14px;transition:all 0.2s;letter-spacing:0.3px;
+  min-height:52px;
+  font-family:inherit;
+}
+.btn:hover{background:#15803d;transform:translateY(-1px);box-shadow:0 4px 16px rgba(22,163,74,0.3);}
+.btn:active{transform:translateY(0);}
+.btn-sm{padding:12px;font-size:14px;margin-top:6px;min-height:44px;}
+.btn-danger{background:#dc2626;}
+.btn-danger:hover{background:#b91c1c;box-shadow:0 4px 16px rgba(220,38,38,0.3);}
+.btn-secondary{background:#fff;color:#000080;border:2px solid #000080;}
+.btn-secondary:hover{background:#f0fdf4;box-shadow:0 4px 16px rgba(22,163,74,0.15);}
+.btn-ghost{
+  background:#fff;color:#000080;border:2px solid #e2e8f0;
+  padding:10px 18px;font-size:13px;display:inline-block;width:auto;
+  border-radius:10px;font-weight:600;cursor:pointer;transition:all 0.2s;
+  min-height:40px;font-family:inherit;
+}
+.btn-ghost:hover{border-color:#000080;background:#f0fdf4;}
+
+/* Text */
+h2{font-size:22px;margin-bottom:10px;color:#0f172a;font-weight:800;letter-spacing:-0.3px;}
+h3{font-size:16px;margin-bottom:6px;color:#0f172a;font-weight:700;}
+p,.text{font-size:14px;color:#64748b;line-height:1.6;}
+.text-sm{font-size:12px;color:#94a3b8;font-weight:500;}
+.text-center{text-align:center;}
+
+/* Badge */
+.badge{
+  display:inline-block;padding:4px 10px;
+  font-size:11px;background:#f1f5f9;color:#475569;
+  border-radius:20px;font-weight:600;letter-spacing:0.3px;
+  border:1px solid #e2e8f0;
+}
+.badge-creator{background:#fef3c7;color:#92400e;border-color:#fde68a;}
+.badge-admin{background:#d1fae5;color:#065f46;border-color:#a7f3d0;}
+.badge-member{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe;}
+
+/* Input */
+.input{
+  width:100%;padding:14px 16px;border:2px solid #e2e8f0;
+  background:#fff;font-size:15px;margin-bottom:12px;
+  font-family:inherit;border-radius:12px;color:#0f172a;outline:none;
+  transition:border-color 0.2s;min-height:48px;
+}
+.input:focus{border-color:#000080;box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
+.input-label{font-size:13px;color:#475569;margin-bottom:6px;font-weight:600;}
+
+/* FAB */
+.fab{
+  position:absolute;bottom:88px;right:20px;
+  width:56px;height:56px;border-radius:50%;border:none;
+  background:#000080;display:flex;align-items:center;justify-content:center;
+  font-size:28px;cursor:pointer;z-index:10;color:#fff;
+  box-shadow:0 6px 24px rgba(22,163,74,0.4);transition:all 0.2s;
+}
+.fab:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(22,163,74,0.5);}
+
+/* Team grid */
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.team-tile{
+  border:3px solid #e2e8f0;padding:16px 10px;text-align:center;
+  cursor:pointer;background:#fff;border-radius:14px;transition:all 0.2s;
+  min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.team-tile:hover{border-color:#94a3b8;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.team-tile.selected-team{border-width:3px;box-shadow:0 4px 16px rgba(0,0,0,0.1);}
+
+/* Countdown */
+.countdown{font-size:13px;color:#ea580c;text-align:center;margin:6px 0;font-weight:600;}
+
+/* Nudge (who hasn't predicted) */
+.nudge-box{
+  background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;
+  padding:12px 14px;margin-top:6px;margin-bottom:10px;
+}
+.nudge-text{font-size:13px;color:#92400e;font-weight:600;line-height:1.5;}
+.nudge-names{font-weight:700;color:#78350f;}
+.btn-nudge{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;color:#b45309;border:2px solid #f59e0b;
+  padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;
+  border-radius:10px;margin-top:8px;transition:all 0.2s;
+  min-height:44px;font-family:inherit;
+}
+.btn-nudge:hover{background:#fffbeb;border-color:#d97706;}
+
+/* Everyone's picks (after cutoff) */
+.picks-card{
+  background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+  padding:14px;margin-bottom:10px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.picks-header{
+  font-size:13px;font-weight:700;color:#64748b;margin-bottom:10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.picks-team-group{margin-bottom:10px;}
+.picks-team-label{
+  font-size:14px;font-weight:800;margin-bottom:4px;
+  display:flex;align-items:center;gap:6px;
+}
+.picks-team-count{
+  font-size:12px;font-weight:600;color:#64748b;
+  background:#f1f5f9;border-radius:10px;padding:1px 8px;
+}
+.picks-names{font-size:13px;color:#475569;line-height:1.7;font-weight:500;}
+.btn-share-picks{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;color:#000080;border:2px solid #000080;
+  padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;
+  border-radius:10px;margin-top:6px;transition:all 0.2s;
+  min-height:44px;font-family:inherit;
+}
+.btn-share-picks:hover{background:#f0f4ff;}
+
+/* Leaderboard */
+.lb-row{
+  display:flex;align-items:center;padding:12px 12px;
+  font-size:14px;border-radius:10px;margin-bottom:3px;
+  transition:background 0.15s;
+}
+.lb-row:hover{background:#f8fafc;}
+.lb-rank{width:32px;font-weight:800;text-align:center;color:#0f172a;font-size:15px;}
+.lb-avatar{width:32px;text-align:center;font-size:20px;}
+.lb-name{flex:1;margin-left:10px;color:#0f172a;font-weight:500;}
+.lb-pts{width:60px;text-align:right;font-weight:800;color:#0f172a;font-size:15px;}
+.lb-streak{width:32px;text-align:center;font-size:13px;}
+.lb-row.highlight{background:#f0fdf4;border:2px solid #bbf7d0;}
+
+/* Top bar */
+.top-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.back-btn{
+  cursor:pointer;font-size:18px;padding:8px 12px;
+  background:#fff;border-radius:10px;color:#0f172a;
+  border:2px solid #e2e8f0;transition:all 0.2s;
+  min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;
+  font-weight:700;
+}
+.back-btn:hover{background:#f1f5f9;border-color:#cbd5e1;}
+.top-bar-title{flex:1;font-size:17px;font-weight:800;color:#0f172a;}
+.top-bar-action{
+  font-size:12px;cursor:pointer;border:2px solid #e2e8f0;
+  padding:8px 14px;color:#475569;border-radius:10px;
+  background:#fff;transition:all 0.2s;font-weight:600;
+  min-height:40px;display:flex;align-items:center;
+  font-family:inherit;
+}
+.top-bar-action:hover{background:#f1f5f9;border-color:#cbd5e1;}
+
+/* Debug bar */
+.nav-debug{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#000080;color:#000080;font-size:10px;
+  padding:6px 12px;font-family:'SF Mono',monospace;z-index:100;
+  letter-spacing:0.5px;
+}
+
+/* Toggle */
+.toggle{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:5px 12px;font-size:12px;cursor:pointer;
+  border-radius:20px;font-weight:600;transition:all 0.2s;
+  min-height:32px;font-family:inherit;border:none;
+}
+.toggle-on{background:#d1fae5;color:#065f46;}
+.toggle-off{background:#fee2e2;color:#991b1b;}
+
+/* Pin */
+.pin-icon{cursor:pointer;font-size:18px;display:inline-flex;align-items:center;justify-content:center;transition:all 0.2s;min-width:36px;min-height:36px;}
+.pin-icon.pinned{color:#f59e0b;}
+.pin-icon.unpinned{color:#cbd5e1;}
+
+/* Pool card */
+.pool-card{
+  background:#fff;padding:16px;margin-bottom:10px;cursor:pointer;
+  position:relative;border-radius:16px;transition:all 0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  border:1px solid #f1f5f9;
+}
+.pool-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08);transform:translateY(-1px);}
+.pool-card:active{transform:translateY(0);}
+.pool-card.pinned-card{border:2px solid #fbbf24;background:#fffbeb;}
+
+/* Pending card */
+.pending-card{
+  border:2px solid #fbbf24;background:#fffbeb;
+  padding:14px;margin-bottom:10px;border-radius:14px;
+}
+
+/* Screenshot card */
+.screenshot-card{
+  border:3px solid #000080;padding:24px;background:#fff;
+  border-radius:20px;position:relative;
+  box-shadow:0 4px 16px rgba(22,163,74,0.12);
+}
+
+/* Confirm overlay */
+.confirm-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,0.5);
+  display:flex;align-items:center;justify-content:center;z-index:20;
+  backdrop-filter:blur(4px);
+}
+.confirm-box{
+  background:#fff;padding:28px;width:300px;text-align:center;
+  border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+
+/* Box */
+.box{
+  background:#fff;padding:16px;margin-bottom:12px;
+  border-radius:14px;border:1px solid #e2e8f0;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
+.box-label{
+  font-size:11px;color:#64748b;text-transform:uppercase;
+  letter-spacing:1.2px;margin-bottom:8px;font-weight:700;
+}
+
+/* List row */
+.list-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#475569;
+  min-height:40px;
+}
+.list-row:last-child{border-bottom:none;}
+
+/* Section divider */
+.section{margin-top:20px;margin-bottom:10px;}
+
+/* Emoji picker */
+.emoji-pick{
+  font-size:24px;cursor:pointer;width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;border:2px solid #e2e8f0;
+  transition:all 0.2s;background:#fff;
+}
+.emoji-pick:hover{border-color:#94a3b8;background:#f8fafc;}
+.emoji-pick.selected-emoji{border-color:#000080;background:#f0fdf4;box-shadow:0 0 0 3px rgba(22,163,74,0.15);}
+
+/* Slider */
+.slider-track{
+  width:100%;height:8px;background:#e2e8f0;
+  border-radius:4px;position:relative;margin:14px 0;cursor:pointer;
+}
+.slider-fill{height:100%;background:#000080;border-radius:4px;transition:width 0.2s;}
+.slider-thumb{
+  position:absolute;top:50%;transform:translate(-50%,-50%);
+  width:24px;height:24px;background:#000080;border-radius:50%;
+  cursor:pointer;box-shadow:0 2px 8px rgba(22,163,74,0.3);
+  border:3px solid #fff;
+}
+
+/* Achievement card */
+.achievement-card{
+  background:#fff;padding:16px;margin-bottom:10px;border-radius:14px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #f1f5f9;
+}
+.achievement-card.earned{border:2px solid #fbbf24;background:#fffbeb;}
+.achievement-card.locked{opacity:0.4;}
+.ach-icon{font-size:32px;}
+.ach-info{flex:1;}
+.ach-title{font-size:15px;font-weight:700;color:#0f172a;}
+.ach-desc{font-size:12px;color:#64748b;margin-top:3px;}
+
+/* Prize row */
+.prize-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;
+}
+.prize-row:last-child{border-bottom:none;}
+
+/* Budget item */
+.budget-item{
+  display:flex;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;
+}
+.budget-item:last-child{border-bottom:none;}
+
+/* Hero gradient */
+.hero-gradient{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a2f 50%,#1e293b 100%);
+  border-radius:20px;padding:28px 20px;margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.hero-gradient::after{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:120px;height:120px;background:rgba(22,163,74,0.15);
+  border-radius:50%;
+}
+
+/* Podium */
+.podium{display:flex;align-items:flex-end;gap:8px;margin-bottom:16px;}
+.podium-item{
+  flex:1;background:#fff;border-radius:14px;text-align:center;
+  padding:14px 8px;border:1px solid #e2e8f0;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  transition:all 0.2s;
+}
+.podium-item.first{
+  border:2px solid #fbbf24;background:#fffbeb;
+  padding:18px 8px;margin-bottom:8px;
+  box-shadow:0 4px 16px rgba(251,191,36,0.2);
+}
+
+/* Stat card */
+.stat-card{
+  flex:1;background:#fff;border:1px solid #e2e8f0;
+  border-radius:14px;padding:14px;text-align:center;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* Google button */
+.google-btn{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;padding:16px;border:2px solid #e2e8f0;
+  background:#fff;color:#0f172a;font-size:16px;font-weight:600;
+  border-radius:14px;cursor:pointer;transition:all 0.2s;
+  min-height:56px;font-family:inherit;
+}
+.google-btn:hover{background:#f8fafc;border-color:#cbd5e1;box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.google-btn svg{width:20px;height:20px;}
+
+/* Competition card */
+.comp-card{
+  background:#fff;padding:14px 16px;margin-bottom:8px;
+  border-radius:14px;border:1px solid #f1f5f9;
+  border-left:4px solid #f59e0b;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Showcase card */
+.showcase-card{
+  background:#fff;padding:14px 16px;margin-bottom:8px;
+  border-radius:14px;border:1px solid #f1f5f9;
+  border-left:4px solid #6366f1;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Team pick grid */
+.team-pick-grid{
+  display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;
+}
+.team-pick-btn{
+  width:56px;height:56px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:11px;cursor:pointer;
+  border:3px solid #e2e8f0;transition:all 0.15s;
+  position:relative;
+}
+.team-pick-btn:hover{border-color:#94a3b8;transform:scale(1.05);}
+.team-pick-btn.picked{border-width:3px;transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.12);}
+.team-pick-btn .pick-check{
+  position:absolute;top:-4px;right:-4px;
+  width:18px;height:18px;background:#16a34a;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#fff;font-weight:700;
+}
+
+/* Wizard step indicator */
+.wizard-steps{
+  display:flex;align-items:center;
+  background:#000080;margin:-20px -20px 20px -20px;
+  padding:14px 16px;gap:0;
+}
+.wizard-step{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;color:#94a3b8;
+  cursor:pointer;transition:all 0.2s;
+  padding:6px 8px;border-radius:8px;
+  white-space:nowrap;
+}
+.wizard-step.active{color:#fff;background:rgba(255,255,255,0.12);}
+.wizard-step.completed{color:#4ade80;cursor:pointer;}
+.wizard-step.future{color:#64748b;cursor:default;}
+.wizard-arrow{color:#64748b;font-size:14px;margin:0 2px;flex-shrink:0;}
+
+/* Wizard competition card */
+.wiz-comp-card{
+  background:#fffbeb;padding:14px 16px;margin-bottom:10px;
+  border-radius:14px;border:1px solid #fde68a;
+  border-left:4px solid #f59e0b;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Wizard inline form */
+.wiz-inline-form{
+  background:#fff;padding:16px;margin-bottom:12px;
+  border-radius:14px;border:2px solid #000080;
+  box-shadow:0 4px 16px rgba(0,0,128,0.1);
+}
+
+/* Wizard toggle switch */
+.wiz-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px;background:#fff;border-radius:14px;
+  border:1px solid #e2e8f0;margin-bottom:10px;
+  cursor:pointer;transition:all 0.2s;
+  min-height:56px;
+}
+.wiz-toggle.on{border-color:#000080;background:#f0f4ff;}
+.wiz-toggle-track{
+  width:48px;height:28px;border-radius:14px;
+  background:#e2e8f0;position:relative;transition:all 0.2s;
+  flex-shrink:0;
+}
+.wiz-toggle.on .wiz-toggle-track{background:#000080;}
+.wiz-toggle-thumb{
+  width:22px;height:22px;border-radius:50%;
+  background:#fff;position:absolute;top:3px;left:3px;
+  transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);
+}
+.wiz-toggle.on .wiz-toggle-thumb{left:23px;}
+
+/* Review summary card */
+.review-card{
+  background:#fff;padding:20px;border-radius:16px;
+  border:2px solid #e2e8f0;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  font-size:14px;line-height:1.8;
+}
+</style>
+</head>
+<body>
+<h1 class="page-title">Predictopia &mdash; Polished Prototype</h1>
+<div id="app"></div>
+<div class="nav-debug" id="navDebug">Screen: landing | Depth: 0</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const state = {
+  screen: 'landing',
+  user: null,
+  isNewUser: true,
+  selectedTeam: null,
+  selectedAvatar: null,
+  displayName: '',
+  pools: [],
+  currentPool: null,
+  currentPoolTab: 'predict',
+  leaderboardTab: 'overall',
+  adminDashSection: 'requests',
+  activeBottomTab: 'pools',
+  depth: 0,
+  predictions: {},
+  pinnedPools: { p1: true },
+  confirmDialog: null,
+  commissionPct: 20,
+  selectedTier: 'top3',
+  midSeasonRule: 'zero',
+  createPoolIcon: null,
+  expectedMembers: 20,
+  createPoolBuyin: 500,
+  createPoolName: '',
+  createWizardStep: 1,
+  // League style wizard state
+  wizLeagueStyle: 'chunks', // 'weekly', 'chunks', 'season'
+  wizChunkSize: 10,
+  wizPerChunkPot: 1000,
+  wizPerChunkTier: 'top3',
+  wizOverallPot: 1000,
+  wizOverallTier: 'top3',
+  wizOneOffTop4: true,
+  wizOneOffTop4Pot: 0,
+  wizOneOffTop4Tier: 'top3',
+  wizOneOffWinner: true,
+  wizOneOffWinnerPot: 0,
+  wizOneOffWinnerTier: 'winner',
+  wizPlayoffMatches: [],  // e.g. [{id:'q1', name:'Qualifier 1', matchNum:71, pot:0, tier:'winner'}]
+  wizCompetitions: [],     // auto-generated from league style
+  pendingRequests: [{ name: 'Rohit', id: 'req1', avatar: '\u{1F3CF}' }],
+  shareCardType: 'leaderboard',
+  // Competition model
+  top4Picks: {},       // poolId -> [abbr, abbr, abbr, abbr]
+  top4Locked: {},      // poolId -> true/false
+  seasonWinner: {},    // poolId -> abbr
+  seasonWinnerLocked: {}, // poolId -> true/false
+  competitions: [
+    { id:'c1', name:'Matches 1-10', matchFrom:1, matchTo:10, pot:1000, tier:'top3' },
+    { id:'c2', name:'Matches 11-20', matchFrom:11, matchTo:20, pot:1000, tier:'top3' },
+    { id:'c3', name:'Matches 21-30', matchFrom:21, matchTo:30, pot:1000, tier:'top3' },
+    { id:'c4', name:'Matches 31-40', matchFrom:31, matchTo:40, pot:1000, tier:'top3' },
+    { id:'c5', name:'Matches 41-50', matchFrom:41, matchTo:50, pot:1000, tier:'top3' },
+    { id:'c6', name:'Matches 51-60', matchFrom:51, matchTo:60, pot:1000, tier:'top3' },
+    { id:'c7', name:'Matches 61-70', matchFrom:61, matchTo:70, pot:1000, tier:'top3' },
+    { id:'c8', name:'Overall Season', matchFrom:1, matchTo:70, pot:1000, tier:'top3' },
+    { id:'c9', name:'Top 4 Picks', matchFrom:0, matchTo:0, pot:0, tier:'top3' },
+    { id:'c10', name:'Season Winner', matchFrom:0, matchTo:0, pot:0, tier:'winner' },
+    { id:'c11', name:'Qualifier 1', matchFrom:71, matchTo:71, pot:500, tier:'winner' },
+    { id:'c12', name:'Final', matchFrom:74, matchTo:74, pot:500, tier:'top3' },
+  ],
+  compFormOpen: false,
+  compEditId: null,
+  compFormName: '',
+  compFormFrom: '',
+  compFormTo: '',
+  compFormPot: '',
+  compFormTier: 'top3',
+  totalBudget: 10000,
+};
+
+// ============================================================
+// DATA
+// ============================================================
+const TEAMS = [
+  { abbr:'CSK', name:'Chennai Super Kings', color:'#FDB913', bg:'#0066B2', text:'#fff' },
+  { abbr:'MI', name:'Mumbai Indians', color:'#004BA0', bg:'#004BA0', text:'#fff' },
+  { abbr:'RCB', name:'Royal Challengers', color:'#EC1C24', bg:'#2B2B2B', text:'#fff' },
+  { abbr:'DC', name:'Delhi Capitals', color:'#004C93', bg:'#004C93', text:'#fff' },
+  { abbr:'KKR', name:'Kolkata Knight Riders', color:'#3A225D', bg:'#B49E2E', text:'#fff' },
+  { abbr:'SRH', name:'Sunrisers Hyderabad', color:'#F26522', bg:'#F26522', text:'#fff' },
+  { abbr:'PBKS', name:'Punjab Kings', color:'#ED1B24', bg:'#ED1B24', text:'#fff' },
+  { abbr:'RR', name:'Rajasthan Royals', color:'#E73895', bg:'#E73895', text:'#fff' },
+  { abbr:'GT', name:'Gujarat Titans', color:'#1C1C1C', bg:'#1C1C1C', text:'#fff' },
+  { abbr:'LSG', name:'Lucknow Super Giants', color:'#004BA0', bg:'#A5DEFF', text:'#1e293b' },
+];
+
+const AVATARS = ['\u{1F3CF}','\u{1F60E}','\u{1F981}','\u{1F42F}','\u{1F451}','\u{1F525}','\u26A1','\u{1F4AA}','\u{1F3AF}','\u{1F3C6}','\u{1F48E}','\u2B50','\u{1F680}','\u{1F985}','\u{1F40D}','\u{1F3AA}'];
+
+const POOL_ICONS = ['\u{1F3CF}','\u26A1','\u{1F525}','\u{1F3C6}','\u{1F48E}','\u{1F451}','\u{1F981}','\u{1F42F}','\u{1F3AF}','\u2B50','\u{1F680}','\u{1F4AA}'];
+
+const MATCHES = [
+  { id:'m1', teamA:'CSK', teamB:'MI', date:'Mar 28', time:'7:30 PM', cutoffIn:'2h 30m', status:'open' },
+  { id:'m2', teamA:'RCB', teamB:'SRH', date:'Mar 29', time:'3:30 PM', cutoffIn:'1d 20h', status:'open' },
+  { id:'m3', teamA:'DC', teamB:'KKR', date:'Mar 29', time:'7:30 PM', cutoffIn:'1d 24h', status:'open' },
+  { id:'m4', teamA:'PBKS', teamB:'RR', date:'Mar 30', time:'7:30 PM', cutoffIn:'2d 24h', status:'upcoming' },
+  { id:'m5', teamA:'GT', teamB:'LSG', date:'Mar 31', time:'7:30 PM', cutoffIn:'3d 24h', status:'upcoming' },
+  { id:'m6', teamA:'MI', teamB:'RCB', date:'Apr 1', time:'7:30 PM', cutoffIn:'4d 24h', status:'upcoming' },
+];
+
+const SAMPLE_POOLS = [
+  { id:'p1', name:'Family IPL 2026', icon:'\u{1F3CF}', role:'Creator', members:12, buyin:500, commission:20, tier:'top3', adminName:'You', invested:500, won:200 },
+  { id:'p2', name:'Office Predictions', icon:'\u26A1', role:'Member', members:15, buyin:0, commission:0, tier:'winner', adminName:'Ravi', invested:0, won:0 },
+];
+
+const LEADERBOARD = {
+  weekly: [
+    { rank:1, name:'Priya', pts:6, streak:3, avatar:'\u{1F525}' },
+    { rank:2, name:'Venkat', pts:4, streak:2, avatar:'\u{1F3CF}' },
+    { rank:3, name:'Karthik', pts:4, streak:0, avatar:'\u{1F981}' },
+    { rank:4, name:'Arjun', pts:2, streak:0, avatar:'\u26A1' },
+    { rank:5, name:'Meera', pts:2, streak:1, avatar:'\u{1F3AF}' },
+  ],
+  monthly: [
+    { rank:1, name:'Venkat', pts:14, streak:5, avatar:'\u{1F3CF}' },
+    { rank:2, name:'Arjun', pts:12, streak:0, avatar:'\u26A1' },
+    { rank:3, name:'Priya', pts:10, streak:3, avatar:'\u{1F525}' },
+    { rank:4, name:'Meera', pts:8, streak:2, avatar:'\u{1F3AF}' },
+    { rank:5, name:'Karthik', pts:6, streak:0, avatar:'\u{1F981}' },
+  ],
+  overall: [
+    { rank:1, name:'Venkat', pts:18, streak:5, avatar:'\u{1F3CF}' },
+    { rank:2, name:'Priya', pts:16, streak:3, avatar:'\u{1F525}' },
+    { rank:3, name:'Arjun', pts:14, streak:0, avatar:'\u26A1' },
+    { rank:4, name:'Meera', pts:12, streak:2, avatar:'\u{1F3AF}' },
+    { rank:5, name:'Karthik', pts:10, streak:0, avatar:'\u{1F981}' },
+  ]
+};
+
+function getLB() { return LEADERBOARD[state.leaderboardTab] || LEADERBOARD.overall; }
+
+const MEMBERS_LIST = [
+  { name:'Venkat', role:'Creator', paid:true, pts:18, won:200, avatar:'\u{1F3CF}' },
+  { name:'Priya', role:'Admin', paid:true, pts:16, won:100, avatar:'\u{1F525}' },
+  { name:'Arjun', role:'Member', paid:true, pts:14, won:0, avatar:'\u26A1' },
+  { name:'Meera', role:'Member', paid:false, pts:12, won:0, avatar:'\u{1F3AF}' },
+  { name:'Karthik', role:'Member', paid:false, pts:10, won:50, avatar:'\u{1F981}' },
+];
+
+// Who hasn't predicted yet — keyed by match id
+const UNPREDICTED_MEMBERS = {
+  m1: ['Karthik', 'Deepa', 'Meera', 'Raj'],
+  m2: ['Deepa', 'Raj', 'Kumar', 'Sita', 'Amma'],
+  m3: ['Meera', 'Raj'],
+  m4: ['Karthik', 'Deepa', 'Meera', 'Raj', 'Kumar', 'Sita'],
+  m5: ['Deepa', 'Raj', 'Karthik'],
+  m6: ['Meera'],
+};
+
+// Everyone's picks for cutoff-passed matches
+const SAMPLE_PREDICTIONS_REVEALED = [
+  {
+    id: 'mx1', teamA: 'RCB', teamB: 'DC', date: 'Mar 27', time: '7:30 PM', status: 'cutoff_passed',
+    picks: {
+      RCB: ['Venkat', 'Arjun', 'Dad', 'Mom', 'Kumar', 'Ravi', 'Sita'],
+      DC:  ['Priya', 'Uncle', 'Raj', 'Amma', 'Karthik'],
+    }
+  },
+  {
+    id: 'mx2', teamA: 'CSK', teamB: 'SRH', date: 'Mar 26', time: '3:30 PM', status: 'cutoff_passed',
+    picks: {
+      CSK: ['Venkat', 'Priya', 'Arjun', 'Mom', 'Karthik', 'Sita', 'Ravi', 'Amma'],
+      SRH: ['Dad', 'Kumar', 'Uncle', 'Raj'],
+    }
+  },
+];
+
+// Past prediction results for "Your History" in Predict tab
+const PAST_PREDICTIONS = [
+  { teamA:'RCB', teamB:'DC', date:'Mar 27', pick:'RCB', winner:'RCB', correct:true },
+  { teamA:'CSK', teamB:'SRH', date:'Mar 26', pick:'CSK', winner:'CSK', correct:true },
+  { teamA:'MI', teamB:'KKR', date:'Mar 25', pick:'MI', winner:'KKR', correct:false },
+  { teamA:'GT', teamB:'PBKS', date:'Mar 24', pick:'GT', winner:'GT', correct:true },
+  { teamA:'RR', teamB:'LSG', date:'Mar 23', pick:'RR', winner:'LSG', correct:false },
+];
+
+// Prize winners data for Prizes tab
+const PRIZE_WINNERS = {
+  'Matches 1-10': { status:'completed', winners:[
+    { rank:1, name:'Venkat', amount:1000, paid:true },
+    { rank:2, name:'Priya', amount:666, paid:true },
+    { rank:3, name:'Arjun', amount:334, paid:false },
+  ]},
+  'Matches 11-20': { status:'in_progress', matchesPlayed:6, totalMatches:10, endsAfter:'Match 20' },
+  'Qualifier 1': { status:'not_played' },
+  'Final': { status:'not_played' },
+  'Top 4 Picks': { status:'pending', note:'Results after league stage' },
+  'Season Winner': { status:'pending', note:'Results after final' },
+};
+
+const TIERS = {
+  winner: { label:'Winner Takes All', ranks:1 },
+  top3: { label:'Top 3', ranks:3 },
+  top5: { label:'Top 5', ranks:5 },
+  top10: { label:'Top 10', ranks:10 },
+};
+
+function teamColor(abbr) {
+  const t = TEAMS.find(x => x.abbr === abbr);
+  return t ? t.color : '#000080';
+}
+
+function teamBg(abbr) {
+  const t = TEAMS.find(x => x.abbr === abbr);
+  return t ? (t.bg || t.color) : '#1e293b';
+}
+
+function teamTextColor(abbr) {
+  const t = TEAMS.find(x => x.abbr === abbr);
+  return t ? t.text : '#fff';
+}
+
+function roleBadge(role) {
+  const cls = role === 'Creator' ? 'badge-creator' : role === 'Admin' ? 'badge-admin' : 'badge-member';
+  return `<span class="badge ${cls}">${role}</span>`;
+}
+
+function computePrizes(buyin, members, commPct, tierKey) {
+  const total = buyin * members;
+  const commission = Math.round(total * commPct / 100);
+  const pool = total - commission;
+  const tier = TIERS[tierKey];
+  if (!tier) return { total, commission, pool, prizes: [] };
+  const ranks = tier.ranks;
+  let totalShares = 0;
+  for (let i = 1; i <= ranks; i++) totalShares += i;
+  const perShare = pool / totalShares;
+  const prizes = [];
+  for (let i = 0; i < ranks; i++) {
+    const rank = i + 1;
+    const shares = ranks - i;
+    prizes.push({ rank, amount: Math.round(perShare * shares) });
+  }
+  return { total, commission, pool, prizes };
+}
+
+function compAllocated() {
+  return state.competitions.reduce((sum, c) => sum + (c.pot || 0), 0);
+}
+
+function compPrizeSplit(pot, tierKey) {
+  const tier = TIERS[tierKey];
+  if (!tier) return [];
+  const ranks = tier.ranks;
+  let totalShares = 0;
+  for (let i = 1; i <= ranks; i++) totalShares += i;
+  const perShare = pot / totalShares;
+  const prizes = [];
+  for (let i = 0; i < ranks; i++) {
+    const rank = i + 1;
+    const shares = ranks - i;
+    prizes.push({ rank, amount: Math.round(perShare * shares) });
+  }
+  return prizes;
+}
+
+function tierEmoji(rank) {
+  if (rank === 1) return '\u{1F947}';
+  if (rank === 2) return '\u{1F948}';
+  if (rank === 3) return '\u{1F949}';
+  return '#' + rank;
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const PARENT_MAP = {
+  landing: null, auth: 'landing', onboarding: null,
+  joinPreview: null, joinRequestSent: null,
+  myPools: null, predict: null, profile: null,
+  poolHome: 'myPools', createPool: 'myPools',
+  adminDash: 'poolHome',
+  achievements: 'profile', editProfile: 'profile',
+  shareCards: 'poolHome',
+};
+
+function nav(screen, opts = {}) {
+  state.screen = screen;
+  if (opts.pool !== undefined) state.currentPool = opts.pool;
+  if (opts.tab) state.currentPoolTab = opts.tab;
+  if (opts.lbTab) state.leaderboardTab = opts.lbTab;
+  if (opts.adminSection) state.adminDashSection = opts.adminSection;
+  if (opts.bottomTab) state.activeBottomTab = opts.bottomTab;
+  if (opts.depth !== undefined) state.depth = opts.depth;
+  if (opts.shareType) state.shareCardType = opts.shareType;
+  state.confirmDialog = null;
+  render();
+}
+
+function goBack() {
+  // Wizard: back within steps before going to parent
+  if (state.screen === 'createPool' && state.createWizardStep > 1) {
+    state.createWizardStep--;
+    render();
+    return;
+  }
+  const parent = PARENT_MAP[state.screen];
+  if (!parent) return;
+  let bottomTab = state.activeBottomTab;
+  if (['myPools','poolHome','createPool','adminDash','shareCards'].includes(parent)) bottomTab = 'pools';
+  if (['predict'].includes(parent)) bottomTab = 'predict';
+  if (['profile','achievements','editProfile'].includes(parent)) bottomTab = 'profile';
+  nav(parent, { bottomTab, depth: Math.max(0, state.depth - 1) });
+}
+
+function goTab(tabName) {
+  const map = { pools:'myPools', predict:'predict', profile:'profile' };
+  nav(map[tabName], { bottomTab:tabName, depth:0 });
+}
+
+// ============================================================
+// SVG Icons for bottom nav
+// ============================================================
+const NAV_ICONS = {
+  pools: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+  predict: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+  profile: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+};
+
+// ============================================================
+// RENDER ENGINE
+// ============================================================
+function showToast(msg) {
+  let t = document.getElementById('app-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'app-toast';
+    t.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000080;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:200;transition:opacity 0.3s;box-shadow:0 4px 12px rgba(0,0,128,0.3);';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(function() { t.style.opacity = '0'; }, 2500);
+}
+
+function render() {
+  // Preserve scroll position to prevent scroll-to-top on re-render
+  const scrollContainer = document.querySelector('.phone.active .screen-content');
+  const savedScroll = scrollContainer ? scrollContainer.scrollTop : 0;
+  const app = document.getElementById('app');
+  const debug = document.getElementById('navDebug');
+  debug.textContent = `Screen: ${state.screen} | Depth: ${state.depth} | Tab: ${state.activeBottomTab} | User: ${state.user ? state.displayName || 'logged in' : 'anon'}`;
+
+  const screens = {
+    landing: renderLanding, auth: renderAuth, onboarding: renderOnboarding,
+    joinPreview: renderJoinPreview, joinRequestSent: renderJoinRequestSent,
+    myPools: renderMyPools, createPool: renderCreatePool, poolHome: renderPoolHome,
+    adminDash: renderAdminDash,
+    predict: renderPredict, profile: renderProfile,
+    achievements: renderAchievements, editProfile: renderEditProfile,
+    shareCards: renderShareCards,
+  };
+  const renderFn = screens[state.screen] || renderLanding;
+  app.innerHTML = renderFn();
+  bindEvents();
+  // Restore scroll position after re-render
+  const newScrollContainer = document.querySelector('.phone.active .screen-content');
+  if (newScrollContainer && savedScroll > 0) {
+    newScrollContainer.scrollTop = savedScroll;
+  }
+}
+
+// ============================================================
+// PHONE SHELL
+// ============================================================
+function phone(label, content, opts = {}) {
+  const isAuth = state.user !== null;
+  const showNav = isAuth && !opts.noNav;
+
+  const bottomNav = showNav ? `
+    <div class="bottom-nav">
+      <div class="nav-item ${state.activeBottomTab === 'pools' ? 'active-nav' : ''}" data-action="tabPools">
+        <span class="nav-icon">${NAV_ICONS.pools}</span><span>My Pools</span>
+      </div>
+      <div class="nav-item ${state.activeBottomTab === 'predict' ? 'active-nav' : ''}" data-action="tabPredict">
+        <span class="nav-icon">${NAV_ICONS.predict}</span><span>Predict</span>
+      </div>
+      <div class="nav-item ${state.activeBottomTab === 'profile' ? 'active-nav' : ''}" data-action="tabProfile">
+        <span class="nav-icon">${NAV_ICONS.profile}</span><span>Profile</span>
+      </div>
+    </div>
+  ` : '';
+
+  const overlay = state.confirmDialog ? `
+    <div class="confirm-overlay">
+      <div class="confirm-box">
+        <h3 style="margin-bottom:10px;color:#0f172a;">${state.confirmDialog.title}</h3>
+        <p style="margin-bottom:20px;color:#64748b;font-size:14px;">${state.confirmDialog.message}</p>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" style="flex:1;margin:0;font-size:14px;" data-action="confirmCancel">Cancel</button>
+          <button class="btn btn-danger" style="flex:1;margin:0;font-size:14px;" data-action="confirmOk">Confirm</button>
+        </div>
+      </div>
+    </div>
+  ` : '';
+
+  return `
+    <div class="phone active">
+      <div class="status-bar"><span>9:41</span><span class="app-name">Predictopia</span><span>5G 100%</span></div>
+      <div class="screen-label">${label}${state.depth > 0 ? ' \u00b7 depth ' + state.depth : ''}</div>
+      <div class="screen-content">${content}</div>
+      ${bottomNav}
+      ${overlay}
+    </div>
+  `;
+}
+
+function backBar(title, rightAction) {
+  return `
+    <div class="top-bar">
+      <div class="back-btn" data-action="goBack">\u2190</div>
+      <div class="top-bar-title">${title}</div>
+      ${rightAction || ''}
+    </div>
+  `;
+}
+
+// ============================================================
+// MATCH CARD COMPONENT
+// ============================================================
+function matchCard(m, size, poolId) {
+  const pId = poolId || state.currentPool || 'default';
+  const poolPreds = (state.predictions[pId]) || {};
+  const predA = poolPreds[m.id] === m.teamA;
+  const predB = poolPreds[m.id] === m.teamB;
+  const big = size !== 'small';
+  const padY = big ? '20px' : '14px';
+  const tA = TEAMS.find(x => x.abbr === m.teamA);
+  const tB = TEAMS.find(x => x.abbr === m.teamB);
+  const blockSize = big ? 48 : 36;
+  const fontSize = big ? 14 : 10;
+  const borderR = big ? 14 : 10;
+
+  function teamBlock(team, teamData, isPicked) {
+    const isCSK = team === 'CSK';
+    return `
+      <div class="match-team ${isPicked ? 'selected' : ''}" data-action="predict" data-match="${m.id}" data-team="${team}" data-pool="${pId}" style="padding:${padY} 10px;background:${isPicked ? (teamData?teamData.color:'#ccc') + '12' : '#fff'};border:3px solid ${isPicked ? (teamData?teamData.color:'#ccc') : '#e2e8f0'};border-radius:14px;transition:all 0.15s ease;cursor:pointer;${isPicked ? 'transform:scale(1.03);box-shadow:0 4px 16px ' + (teamData?teamData.color:'#ccc') + '30;' : ''}">
+        <div style="width:${blockSize}px;height:${blockSize}px;background:${teamData?teamData.color:'#ccc'};border-radius:${borderR}px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:${fontSize}px;color:${isCSK?'#0066B2':'#fff'};margin-bottom:6px;box-shadow:0 2px 8px ${teamData?teamData.color:'#ccc'}40;">${team}</div>
+        ${big ? `<div style="font-size:10px;color:#64748b;font-weight:500;">${teamData?teamData.name:''}</div>` : ''}
+        <div style="font-size:12px;margin-top:4px;font-weight:700;color:${isPicked ? (teamData?teamData.color:'#000080') : '#94a3b8'};">${isPicked ? '✅ LOCKED IN!' : big ? 'Tap to pick' : 'Tap'}</div>
+      </div>`;
+  }
+
+  return `
+    <div class="match-card">
+      ${teamBlock(m.teamA, tA, predA)}
+      <div class="match-vs" style="flex-direction:column;gap:2px;">
+        <span style="font-weight:900;font-size:${big?13:11}px;color:#94a3b8;">VS</span>
+      </div>
+      ${teamBlock(m.teamB, tB, predB)}
+    </div>`;
+}
+
+// ============================================================
+// 1. LANDING
+// ============================================================
+function renderLanding() {
+  return phone('Landing Page', `
+    <div style="padding-top:40px;text-align:center;">
+      <div class="hero-gradient" style="margin:0 -20px 24px -20px;padding:40px 20px;border-radius:0;">
+        <div style="font-size:48px;margin-bottom:12px;position:relative;z-index:1;">\u{1F3CF}</div>
+        <h2 style="font-size:28px;color:#fff;margin-bottom:6px;position:relative;z-index:1;">Predict. Compete. Win.</h2>
+        <p style="color:#94a3b8;font-size:15px;position:relative;z-index:1;">IPL match predictions with friends & family</p>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:32px;">
+        <div style="flex:1;padding:20px 10px;background:#fff;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid #f1f5f9;">
+          <div style="width:44px;height:44px;background:#f0fdf4;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:22px;">\u{1F3AF}</div>
+          <div style="font-size:13px;color:#0f172a;font-weight:600;">Create Pool</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Your group, your rules</div>
+        </div>
+        <div style="flex:1;padding:20px 10px;background:#fff;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid #f1f5f9;">
+          <div style="width:44px;height:44px;background:#eff6ff;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:22px;">\u{1F517}</div>
+          <div style="font-size:13px;color:#0f172a;font-weight:600;">Share Link</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Invite via WhatsApp</div>
+        </div>
+        <div style="flex:1;padding:20px 10px;background:#fff;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid #f1f5f9;">
+          <div style="width:44px;height:44px;background:#fffbeb;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:22px;">\u{1F3C6}</div>
+          <div style="font-size:13px;color:#0f172a;font-weight:600;">Win Prizes</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Bragging rights + money</div>
+        </div>
+      </div>
+
+      <button class="btn" data-action="goAuth" style="font-size:18px;padding:18px;">Sign In to Start</button>
+      <div style="margin-top:40px;font-size:12px;color:#94a3b8;">About &middot; Privacy &middot; Terms</div>
+    </div>
+  `, { noNav: true });
+}
+
+// ============================================================
+// 2. SIGN IN
+// ============================================================
+function renderAuth() {
+  return phone('Sign In', `
+    <div style="padding-top:60px;text-align:center;">
+      <div style="width:80px;height:80px;background:#f0fdf4;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:40px;box-shadow:0 4px 16px rgba(22,163,74,0.1);">\u{1F3CF}</div>
+      <h2 style="font-size:26px;margin-bottom:4px;">Welcome back!</h2>
+      <p style="margin-bottom:40px;font-size:15px;">Sign in to start predicting</p>
+      <button class="google-btn" data-action="googleAuth">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Sign in with Google
+      </button>
+      <div style="margin-top:60px;font-size:12px;color:#94a3b8;">By continuing, you agree to our Terms & Privacy Policy</div>
+    </div>
+  `, { noNav: true });
+}
+
+// ============================================================
+// 3. ONBOARDING
+// ============================================================
+function renderOnboarding() {
+  return phone('Onboarding', `
+    <div style="padding-top:8px;">
+      <h2 style="font-size:24px;">Welcome to Predictopia!</h2>
+      <p style="margin-bottom:20px;font-size:15px;">Let's set up your profile</p>
+
+      <div class="input-label">Display Name</div>
+      <input class="input" type="text" id="nameInput" placeholder="Your name" value="${state.displayName || 'Venkat Chandrasekhar'}">
+
+      <div class="input-label" style="margin-top:4px;">Pick Your Avatar</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+        ${AVATARS.map((e, i) =>
+          `<div class="emoji-pick ${state.selectedAvatar === i ? 'selected-emoji' : ''}" data-action="pickAvatar" data-idx="${i}">${e}</div>`
+        ).join('')}
+      </div>
+
+      <div class="input-label">Pick Your Favourite IPL Team</div>
+      <p style="font-size:13px;color:#ea580c;font-weight:600;margin-bottom:10px;">Tap your team to continue</p>
+      <div class="team-grid">
+        ${TEAMS.map(t => {
+          const isSelected = state.selectedTeam === t.abbr;
+          const isCSK = t.abbr === 'CSK';
+          return `
+          <div class="team-tile ${isSelected ? 'selected-team' : ''}" data-action="selectTeam" data-team="${t.abbr}" style="border-color:${isSelected ? t.color : '#e2e8f0'};${isSelected ? 'background:'+t.color+'15;box-shadow:0 4px 16px '+t.color+'30;' : ''}">
+            <div style="width:40px;height:40px;background:${t.color};border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:${isCSK?'#0066B2':'#fff'};margin-bottom:4px;box-shadow:0 2px 8px ${t.color}40;">${t.abbr}</div>
+            <div style="font-size:11px;color:#475569;font-weight:500;">${t.name}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <button class="btn" data-action="completeOnboarding" style="margin-top:20px;font-size:17px;">Continue</button>
+    </div>
+  `, { noNav: true });
+}
+
+// ============================================================
+// 4. MY POOLS (depth 0)
+// ============================================================
+function renderMyPools() {
+  const pools = SAMPLE_POOLS;
+  const sorted = [...pools].sort((a, b) => {
+    const aP = state.pinnedPools[a.id] ? 1 : 0;
+    const bP = state.pinnedPools[b.id] ? 1 : 0;
+    return bP - aP;
+  });
+
+  return phone('My Pools', `
+    <h2 style="margin-bottom:14px;">My Pools</h2>
+    ${sorted.map(p => {
+      const pinned = state.pinnedPools[p.id];
+      const won = p.won || 0;
+      const invested = p.invested || 0;
+      return `
+      <div class="pool-card ${pinned ? 'pinned-card' : ''}" data-action="openPool" data-pool="${p.id}">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span class="pin-icon ${pinned ? 'pinned' : 'unpinned'}" data-action="togglePin" data-pool="${p.id}">${pinned ? '\u2605' : '\u2606'}</span>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="font-size:20px;">${p.icon}</span>
+              <span style="font-size:16px;font-weight:800;color:#0f172a;">${p.name}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              ${roleBadge(p.role)}
+              <span class="badge">${p.members} members</span>
+            </div>
+            ${p.buyin > 0 ? `
+              <div style="font-size:13px;color:#475569;margin-bottom:6px;">
+                ${won > 0 ? `Won <span style="color:#000080;font-weight:700;">\u20B9${won}</span> so far \u{1F3C6}` : 'No winnings yet — keep predicting!'}
+              </div>
+            ` : '<div style="font-size:13px;color:#94a3b8;margin-bottom:6px;">Free pool \u2014 no buy-in</div>'}
+            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;">
+              <span style="font-size:13px;color:#92400e;font-weight:600;">CSK vs MI \u2014 Predict now!</span>
+              <span style="font-size:16px;">\u{1F449}</span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+    <div class="fab" data-action="goCreatePool">+</div>
+  `);
+}
+
+// ============================================================
+// 5. CREATE POOL (depth 1)
+// ============================================================
+function renderCreatePool() {
+  const step = state.createWizardStep;
+  const stepLabels = ['Basics', 'Competitions', 'Review'];
+
+  const stepIndicator = `
+    <div class="wizard-steps">
+      ${stepLabels.map((label, i) => {
+        const num = i + 1;
+        const isActive = num === step;
+        const isCompleted = num < step;
+        const isFuture = num > step;
+        const cls = isActive ? 'active' : isCompleted ? 'completed' : 'future';
+        const clickable = isCompleted ? `data-action="wizJumpStep" data-step="${num}"` : '';
+        return `
+          ${i > 0 ? '<span class="wizard-arrow">\u2192</span>' : ''}
+          <div class="wizard-step ${cls}" ${clickable}>
+            ${isCompleted ? '\u2705' : num} ${label}
+          </div>`;
+      }).join('')}
+    </div>`;
+
+  let content = '';
+  if (step === 1) content = renderWizStep1();
+  else if (step === 2) content = renderWizStep2();
+  else if (step === 3) content = renderWizStep3();
+
+  return phone('Create Pool', `
+    ${backBar('Create Pool')}
+    ${stepIndicator}
+    ${content}
+  `);
+}
+
+function wizPrizePool() {
+  const total = state.createPoolBuyin * state.expectedMembers;
+  const commission = Math.round(total * state.commissionPct / 100);
+  return total - commission;
+}
+
+function wizTotalMatches() { return 70; }
+
+function wizGenerateChunks() {
+  const total = wizTotalMatches();
+  const size = Math.max(1, state.wizChunkSize);
+  const chunks = [];
+  for (let i = 0; i < total; i += size) {
+    const from = i + 1;
+    const to = Math.min(i + size, total);
+    chunks.push({ from, to, label: `Matches ${from}-${to}` });
+  }
+  return chunks;
+}
+
+function wizAllocated() {
+  let sum = 0;
+  if (state.wizLeagueStyle === 'chunks') {
+    const chunks = wizGenerateChunks();
+    sum += chunks.length * (state.wizPerChunkPot || 0);
+  } else if (state.wizLeagueStyle === 'weekly') {
+    sum += 12 * (state.wizPerChunkPot || 0); // ~12 weeks
+  }
+  if (state.wizLeagueStyle !== 'season') {
+    sum += state.wizOverallPot || 0;
+  }
+  if (state.wizLeagueStyle === 'season') {
+    sum += state.wizOverallPot || 0;
+  }
+  if (state.wizOneOffTop4) sum += state.wizOneOffTop4Pot || 0;
+  if (state.wizOneOffWinner) sum += state.wizOneOffWinnerPot || 0;
+  state.wizPlayoffMatches.forEach(p => { sum += p.pot || 0; });
+  return sum;
+}
+
+function renderWizStep1() {
+  const total = state.createPoolBuyin * state.expectedMembers;
+  const commission = Math.round(total * state.commissionPct / 100);
+  const prizePool = total - commission;
+
+  return `
+    <div class="input-label">Pool Name</div>
+    <input class="input" type="text" placeholder="e.g. Family IPL 2026" value="${state.createPoolName}" data-action="setPoolName" id="wizPoolName">
+
+    <div class="input-label">Pool Icon</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+      ${POOL_ICONS.map((e, i) =>
+        `<div class="emoji-pick ${state.createPoolIcon === i ? 'selected-emoji' : ''}" data-action="pickPoolIcon" data-idx="${i}">${e}</div>`
+      ).join('')}
+    </div>
+
+    <div class="input-label">Buy-in Amount (\u20B9)</div>
+    <input class="input" type="number" placeholder="500" value="${state.createPoolBuyin}" data-action="setBuyin">
+
+    <div class="input-label">Expected Members</div>
+    <input class="input" type="number" placeholder="20" value="${state.expectedMembers}" data-action="setExpMembers">
+
+    <div class="input-label">Commission: <span style="color:#000080;font-weight:800;">${state.commissionPct}%</span></div>
+    <div class="slider-track" data-action="commSlider">
+      <div class="slider-fill" style="width:${state.commissionPct * 2}%;"></div>
+      <div class="slider-thumb" style="left:${state.commissionPct * 2}%;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:500;">
+      <span>0%</span><span>50%</span>
+    </div>
+    <div style="font-size:14px;color:#000080;font-weight:700;margin-bottom:14px;">
+      Your fee: \u20B9${commission.toLocaleString()}
+    </div>
+
+    <div class="box" style="border:2px solid #e2e8f0;background:#f8fafc;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:#64748b;font-weight:600;">Prize pool preview</span>
+        <span style="font-size:18px;font-weight:800;color:#000080;">\u20B9${prizePool.toLocaleString()}</span>
+      </div>
+      <div style="font-size:12px;color:#94a3b8;margin-top:4px;">\u20B9${state.createPoolBuyin} \u00d7 ${state.expectedMembers} = \u20B9${total.toLocaleString()} \u2212 ${state.commissionPct}% commission</div>
+    </div>
+
+    <button class="btn" data-action="wizNext" style="font-size:17px;margin-top:16px;">Next \u2192</button>
+  `;
+}
+
+function renderWizStep2() {
+  const prizePool = wizPrizePool();
+  const allocated = wizAllocated();
+  const overAllocated = allocated > prizePool;
+  const style = state.wizLeagueStyle;
+
+  let html = '';
+
+  // ── League Style Selection ──
+  html += `<h3 style="margin-bottom:4px;">How do you want to split the season?</h3>
+    <p style="font-size:13px;color:#64748b;margin-bottom:14px;">Choose a structure for recurring competitions.</p>`;
+
+  const styleOptions = [
+    { key:'weekly', title:'By Calendar Week', desc:'Mon\u2013Sun \u00b7 ~12 weeks', desc2:'Uneven match counts per week' },
+    { key:'chunks', title:'By Match Chunks', desc:'Equal groups of N matches', desc2:null },
+    { key:'season', title:'Season Only', desc:'One leaderboard, no splits', desc2:null },
+  ];
+
+  styleOptions.forEach(opt => {
+    const isActive = style === opt.key;
+    html += `
+      <div style="border:2px solid ${isActive ? '#000080' : '#e2e8f0'};background:${isActive ? '#f0f4ff' : '#fff'};
+        border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;min-height:56px;"
+        data-action="wizSetLeagueStyle" data-style="${opt.key}">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid ${isActive ? '#000080' : '#cbd5e1'};
+            display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            ${isActive ? '<div style="width:10px;height:10px;border-radius:50%;background:#000080;"></div>' : ''}
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:15px;font-weight:700;color:#0f172a;">${opt.title}</div>
+            <div style="font-size:13px;color:#64748b;margin-top:2px;">${opt.desc}</div>
+          </div>
+        </div>
+        ${opt.key === 'chunks' && isActive ? `
+          <div style="display:flex;align-items:center;gap:10px;margin-top:12px;margin-left:30px;">
+            <span style="font-size:13px;font-weight:600;color:#475569;">Chunk size:</span>
+            <input class="input" type="number" value="${state.wizChunkSize}" id="wizChunkSize"
+              data-action="wizSetChunkSize" style="width:70px;margin:0;padding:10px;text-align:center;font-weight:700;">
+          </div>` : ''}
+        ${opt.desc2 ? `<div style="font-size:12px;color:#94a3b8;margin-top:4px;margin-left:30px;">${opt.desc2}</div>` : ''}
+      </div>`;
+  });
+
+  // ── Auto-generated chunk list ──
+  if (style === 'chunks') {
+    const chunks = wizGenerateChunks();
+    html += `
+      <div class="box" style="margin-bottom:14px;padding:12px 16px;">
+        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">
+          Auto-generated: ${chunks.length} chunks
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${chunks.map(ch => `<span style="font-size:12px;font-weight:600;padding:4px 10px;background:#f1f5f9;border-radius:8px;color:#475569;border:1px solid #e2e8f0;">${ch.label}</span>`).join('')}
+        </div>
+      </div>`;
+  } else if (style === 'weekly') {
+    html += `
+      <div class="box" style="margin-bottom:14px;padding:12px 16px;">
+        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">
+          Auto-generated: ~12 calendar weeks
+        </div>
+        <div style="font-size:13px;color:#475569;">Week 1 (Mon\u2013Sun), Week 2, ... Week 12 \u2014 based on IPL schedule dates</div>
+      </div>`;
+  }
+
+  // ── Prize config for recurring competitions ──
+  if (style !== 'season') {
+    const periodLabel = style === 'chunks' ? 'Per-chunk' : 'Per-week';
+    html += `
+      <div class="box" style="margin-bottom:14px;">
+        <div class="box-label">Recurring Prize Config</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;font-weight:600;color:#475569;width:90px;">${periodLabel} pot:</span>
+          <span style="font-size:14px;color:#475569;">\u20B9</span>
+          <input class="input" type="number" value="${state.wizPerChunkPot}" id="wizPerChunkPot"
+            data-action="wizSetPerChunkPot" style="width:90px;margin:0;padding:10px;text-align:right;font-weight:700;">
+          <select class="input" data-action="wizSetPerChunkTier" id="wizPerChunkTier"
+            style="width:auto;margin:0;padding:10px 8px;font-weight:600;font-size:13px;">
+            ${['winner','top3','top5','top10'].map(k => `<option value="${k}" ${state.wizPerChunkTier===k?'selected':''}>${TIERS[k].label}</option>`).join('')}
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span style="font-size:13px;font-weight:600;color:#475569;width:90px;">Overall:</span>
+          <span style="font-size:14px;color:#475569;">\u20B9</span>
+          <input class="input" type="number" value="${state.wizOverallPot}" id="wizOverallPot"
+            data-action="wizSetOverallPot" style="width:90px;margin:0;padding:10px;text-align:right;font-weight:700;">
+          <select class="input" data-action="wizSetOverallTier" id="wizOverallTier"
+            style="width:auto;margin:0;padding:10px 8px;font-weight:600;font-size:13px;">
+            ${['winner','top3','top5','top10'].map(k => `<option value="${k}" ${state.wizOverallTier===k?'selected':''}>${TIERS[k].label}</option>`).join('')}
+          </select>
+        </div>
+      </div>`;
+  } else {
+    // Season only: just overall
+    html += `
+      <div class="box" style="margin-bottom:14px;">
+        <div class="box-label">Season Prize Config</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span style="font-size:13px;font-weight:600;color:#475569;width:90px;">Overall pot:</span>
+          <span style="font-size:14px;color:#475569;">\u20B9</span>
+          <input class="input" type="number" value="${state.wizOverallPot}" id="wizOverallPot"
+            data-action="wizSetOverallPot" style="width:90px;margin:0;padding:10px;text-align:right;font-weight:700;">
+          <select class="input" data-action="wizSetOverallTier" id="wizOverallTier"
+            style="width:auto;margin:0;padding:10px 8px;font-weight:600;font-size:13px;">
+            ${['winner','top3','top5','top10'].map(k => `<option value="${k}" ${state.wizOverallTier===k?'selected':''}>${TIERS[k].label}</option>`).join('')}
+          </select>
+        </div>
+      </div>`;
+  }
+
+  // ── One-off Competitions ──
+  html += `
+    <div style="border-top:2px solid #e2e8f0;margin:16px 0 12px 0;padding-top:14px;">
+      <div style="font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">One-off Competitions</div>
+    </div>`;
+
+  // Top 4 Playoff Picks
+  html += `
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:${state.wizOneOffTop4?'#f0f4ff':'#fff'};border:1px solid ${state.wizOneOffTop4?'#000080':'#e2e8f0'};border-radius:12px;margin-bottom:10px;">
+      <input type="checkbox" ${state.wizOneOffTop4?'checked':''} data-action="wizToggleOneOff" data-key="top4"
+        style="width:20px;height:20px;margin-top:2px;cursor:pointer;accent-color:#000080;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:700;color:#0f172a;">Top 4 Playoff Picks</div>
+        <div style="font-size:12px;color:#64748b;">Pick 4 teams making playoffs \u00b7 Locked before first match</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        <span style="font-size:12px;color:#475569;">Pot:</span>
+        <span style="font-size:13px;color:#475569;">\u20B9</span>
+        <input class="input" type="number" value="${state.wizOneOffTop4Pot}" id="wizTop4Pot"
+          data-action="wizSetOneOffPot" data-key="top4"
+          style="width:60px;margin:0;padding:8px;text-align:right;font-weight:700;font-size:13px;">
+        <select class="input" data-action="wizSetOneOffTier" data-key="top4" id="wizTop4Tier"
+          style="width:auto;margin:0;padding:8px 4px;font-weight:600;font-size:11px;">
+          ${['winner','top3','top5'].map(k => `<option value="${k}" ${state.wizOneOffTop4Tier===k?'selected':''}>${TIERS[k].label}</option>`).join('')}
+        </select>
+      </div>
+    </div>`;
+
+  // Season Winner
+  html += `
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:${state.wizOneOffWinner?'#f0f4ff':'#fff'};border:1px solid ${state.wizOneOffWinner?'#000080':'#e2e8f0'};border-radius:12px;margin-bottom:10px;">
+      <input type="checkbox" ${state.wizOneOffWinner?'checked':''} data-action="wizToggleOneOff" data-key="winner"
+        style="width:20px;height:20px;margin-top:2px;cursor:pointer;accent-color:#000080;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:700;color:#0f172a;">Season Winner</div>
+        <div style="font-size:12px;color:#64748b;">Pick the IPL champion \u00b7 Locked before first match</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        <span style="font-size:12px;color:#475569;">Pot:</span>
+        <span style="font-size:13px;color:#475569;">\u20B9</span>
+        <input class="input" type="number" value="${state.wizOneOffWinnerPot}" id="wizWinnerPot"
+          data-action="wizSetOneOffPot" data-key="winner"
+          style="width:60px;margin:0;padding:8px;text-align:right;font-weight:700;font-size:13px;">
+        <select class="input" data-action="wizSetOneOffTier" data-key="winner" id="wizWinnerTier"
+          style="width:auto;margin:0;padding:8px 4px;font-weight:600;font-size:11px;">
+          ${['winner','top3','top5'].map(k => `<option value="${k}" ${state.wizOneOffWinnerTier===k?'selected':''}>${TIERS[k].label}</option>`).join('')}
+        </select>
+      </div>
+    </div>`;
+
+  // ── Playoff Matches ──
+  html += `
+    <div style="border-top:1px solid #e2e8f0;margin:14px 0 10px 0;padding-top:12px;">
+      <div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Playoff Matches (optional)</div>
+    </div>`;
+
+  const playoffDefs = [
+    { id:'q1', name:'Qualifier 1', matchNum:71 },
+    { id:'el', name:'Eliminator', matchNum:72 },
+    { id:'q2', name:'Qualifier 2', matchNum:73 },
+    { id:'fi', name:'Final', matchNum:74 },
+  ];
+
+  playoffDefs.forEach(pd => {
+    const existing = state.wizPlayoffMatches.find(p => p.id === pd.id);
+    if (existing) {
+      html += `
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;margin-bottom:8px;">
+          <div style="flex:1;min-width:0;">
+            <span style="font-size:13px;font-weight:700;color:#0f172a;">${pd.name}</span>
+            <span style="font-size:12px;color:#64748b;"> \u00b7 Match ${pd.matchNum}</span>
+          </div>
+          <span style="font-size:12px;color:#475569;">Pot:</span>
+          <span style="font-size:12px;color:#475569;">\u20B9</span>
+          <input class="input" type="number" value="${existing.pot}" data-action="wizSetPlayoffPot" data-id="${pd.id}"
+            style="width:60px;margin:0;padding:8px;text-align:right;font-weight:700;font-size:13px;">
+          <select class="input" data-action="wizSetPlayoffTier" data-id="${pd.id}"
+            style="width:auto;margin:0;padding:8px 4px;font-weight:600;font-size:11px;">
+            ${['winner','top3'].map(k => `<option value="${k}" ${existing.tier===k?'selected':''}>${TIERS[k].label}</option>`).join('')}
+          </select>
+          <div style="font-size:16px;cursor:pointer;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;color:#dc2626;"
+            data-action="wizRemovePlayoff" data-id="${pd.id}">\u2715</div>
+        </div>`;
+    } else {
+      html += `
+        <button class="btn-ghost" data-action="wizAddPlayoff" data-id="${pd.id}" data-name="${pd.name}" data-match="${pd.matchNum}"
+          style="display:block;width:100%;text-align:left;margin-bottom:6px;padding:10px 14px;font-size:13px;">
+          + Add ${pd.name}
+        </button>`;
+    }
+  });
+
+  // ── Budget Summary ──
+  const chunks = style === 'chunks' ? wizGenerateChunks() : [];
+  const numRecurring = style === 'chunks' ? chunks.length : style === 'weekly' ? 12 : 0;
+  const recurringLabel = style === 'chunks' ? `${numRecurring} chunks` : style === 'weekly' ? '~12 weeks' : '';
+  const recurringTotal = numRecurring * (state.wizPerChunkPot || 0);
+  const overallTotal = state.wizOverallPot || 0;
+  const top4Total = state.wizOneOffTop4 ? (state.wizOneOffTop4Pot || 0) : 0;
+  const winnerTotal = state.wizOneOffWinner ? (state.wizOneOffWinnerPot || 0) : 0;
+  const playoffTotal = state.wizPlayoffMatches.reduce((s, p) => s + (p.pot || 0), 0);
+  const statusColor = overAllocated ? '#dc2626' : '#16a34a';
+  const statusIcon = overAllocated ? '\u26A0\uFE0F' : '\u2705';
+  const diff = allocated - prizePool;
+
+  html += `
+    <div style="border-top:2px solid #e2e8f0;margin:18px 0 0 0;padding-top:14px;">
+      <div style="font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Budget Summary</div>
+      <div style="font-size:13px;color:#475569;line-height:2;">
+        ${style !== 'season' ? `${recurringLabel} \u00d7 \u20B9${(state.wizPerChunkPot||0).toLocaleString()} = \u20B9${recurringTotal.toLocaleString()}<br>` : ''}
+        Overall = \u20B9${overallTotal.toLocaleString()}<br>
+        ${state.wizOneOffTop4 ? `Top 4 Picks = \u20B9${top4Total.toLocaleString()}<br>` : ''}
+        ${state.wizOneOffWinner ? `Season Winner = \u20B9${winnerTotal.toLocaleString()}<br>` : ''}
+        ${state.wizPlayoffMatches.map(p => `${p.name} = \u20B9${(p.pot||0).toLocaleString()}<br>`).join('')}
+      </div>
+      <div style="border-top:1px solid #e2e8f0;margin-top:8px;padding-top:10px;">
+        <span style="font-size:15px;font-weight:800;color:${statusColor};">
+          Allocated: \u20B9${allocated.toLocaleString()} / \u20B9${prizePool.toLocaleString()} ${statusIcon}
+        </span>
+        ${overAllocated ? `<div style="font-size:13px;color:#dc2626;font-weight:600;margin-top:4px;">Over by \u20B9${diff.toLocaleString()}</div>` : ''}
+        ${!overAllocated && diff < 0 ? `<div style="font-size:12px;color:#64748b;margin-top:4px;">Remaining: \u20B9${Math.abs(diff).toLocaleString()}</div>` : ''}
+      </div>
+    </div>`;
+
+  // Nav buttons
+  html += `
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-secondary" data-action="wizBack" style="flex:1;margin:0;font-size:15px;">\u2190 Back</button>
+      <button class="btn" data-action="wizNext" style="flex:1;margin:0;font-size:15px;">Next \u2192</button>
+    </div>
+  `;
+
+  return html;
+}
+
+function renderWizStep3() {
+  const total = state.createPoolBuyin * state.expectedMembers;
+  const commission = Math.round(total * state.commissionPct / 100);
+  const prizePool = total - commission;
+  const allocated = wizAllocated();
+  const diff = allocated - prizePool;
+  const overAllocated = diff > 0;
+  const statusColor = overAllocated ? '#dc2626' : '#16a34a';
+  const statusIcon = overAllocated ? '\u26A0\uFE0F' : '\u2705';
+  const poolName = state.createPoolName || 'My New Pool';
+  const poolIcon = state.createPoolIcon !== null ? POOL_ICONS[state.createPoolIcon] : '\u{1F3CF}';
+  const style = state.wizLeagueStyle;
+
+  const chunks = style === 'chunks' ? wizGenerateChunks() : [];
+  const numRecurring = style === 'chunks' ? chunks.length : style === 'weekly' ? 12 : 0;
+  const styleLabel = style === 'chunks' ? `Match Chunks (${state.wizChunkSize} per chunk)` : style === 'weekly' ? 'Calendar Week' : 'Season Only';
+
+  let compsHtml = '';
+
+  // Recurring
+  if (style !== 'season') {
+    const recurringLabel = style === 'chunks' ? `${numRecurring} chunks` : '~12 weeks';
+    const recurringTotal = numRecurring * (state.wizPerChunkPot || 0);
+    const perChunkTierLabel = TIERS[state.wizPerChunkTier] ? TIERS[state.wizPerChunkTier].label : '';
+    const overallTierLabel = TIERS[state.wizOverallTier] ? TIERS[state.wizOverallTier].label : '';
+    compsHtml += `
+      <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-weight:600;color:#0f172a;">${recurringLabel} \u00d7 \u20B9${(state.wizPerChunkPot||0).toLocaleString()}</span>
+          <span style="font-weight:700;color:#000080;">= \u20B9${recurringTotal.toLocaleString()}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b;">${perChunkTierLabel}</div>
+      </div>
+      <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-weight:600;color:#0f172a;">Overall</span>
+          <span style="font-weight:700;color:#000080;">\u20B9${(state.wizOverallPot||0).toLocaleString()}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b;">${overallTierLabel}</div>
+      </div>`;
+  } else {
+    const overallTierLabel = TIERS[state.wizOverallTier] ? TIERS[state.wizOverallTier].label : '';
+    compsHtml += `
+      <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-weight:600;color:#0f172a;">Overall</span>
+          <span style="font-weight:700;color:#000080;">\u20B9${(state.wizOverallPot||0).toLocaleString()}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b;">${overallTierLabel}</div>
+      </div>`;
+  }
+
+  // One-offs
+  compsHtml += `
+    <div style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-top:12px;margin-bottom:6px;">One-offs</div>`;
+
+  if (state.wizOneOffTop4) {
+    const pot = state.wizOneOffTop4Pot || 0;
+    const tierLabel = TIERS[state.wizOneOffTop4Tier] ? TIERS[state.wizOneOffTop4Tier].label : '';
+    compsHtml += `
+      <div style="padding:6px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;">
+        <span style="color:#0f172a;">Top 4 Picks</span>
+        <span style="font-weight:600;color:${pot>0?'#000080':'#94a3b8'};">${pot > 0 ? '\u20B9'+pot.toLocaleString()+' '+tierLabel : '\u20B90 (bragging)'}</span>
+      </div>`;
+  }
+  if (state.wizOneOffWinner) {
+    const pot = state.wizOneOffWinnerPot || 0;
+    const tierLabel = TIERS[state.wizOneOffWinnerTier] ? TIERS[state.wizOneOffWinnerTier].label : '';
+    compsHtml += `
+      <div style="padding:6px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;">
+        <span style="color:#0f172a;">Season Winner</span>
+        <span style="font-weight:600;color:${pot>0?'#000080':'#94a3b8'};">${pot > 0 ? '\u20B9'+pot.toLocaleString()+' '+tierLabel : '\u20B90 (bragging)'}</span>
+      </div>`;
+  }
+  state.wizPlayoffMatches.forEach(p => {
+    const tierLabel = TIERS[p.tier] ? TIERS[p.tier].label : '';
+    compsHtml += `
+      <div style="padding:6px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;">
+        <span style="color:#0f172a;">${p.name}</span>
+        <span style="font-weight:600;color:${(p.pot||0)>0?'#000080':'#94a3b8'};">${(p.pot||0) > 0 ? '\u20B9'+(p.pot||0).toLocaleString()+' '+tierLabel : '\u20B90'}</span>
+      </div>`;
+  });
+
+  return `
+    <h3 style="margin-bottom:12px;">Review & Confirm</h3>
+    <div class="review-card">
+      <div style="font-size:20px;font-weight:800;color:#0f172a;margin-bottom:12px;">
+        ${poolIcon} ${poolName}
+      </div>
+
+      <div style="border-bottom:1px solid #e2e8f0;padding-bottom:12px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="color:#64748b;">Buy-in</span>
+          <span style="font-weight:700;color:#0f172a;">\u20B9${state.createPoolBuyin} \u00d7 ${state.expectedMembers} = \u20B9${total.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="color:#64748b;">Commission (${state.commissionPct}%)</span>
+          <span style="font-weight:700;color:#dc2626;">\u20B9${commission.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:#64748b;">Prize Pool</span>
+          <span style="font-weight:800;color:#000080;font-size:16px;">\u20B9${prizePool.toLocaleString()}</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
+          League Style: ${styleLabel}
+        </div>
+        ${compsHtml}
+      </div>
+
+      <div style="border-top:2px solid #e2e8f0;padding-top:10px;">
+        <span style="font-size:15px;font-weight:800;color:${statusColor};">
+          Allocated: \u20B9${allocated.toLocaleString()} / \u20B9${prizePool.toLocaleString()} ${statusIcon}
+        </span>
+        ${overAllocated ? `<div style="font-size:13px;color:#dc2626;font-weight:600;margin-top:4px;">Over by \u20B9${diff.toLocaleString()}</div>` : ''}
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button class="btn btn-secondary" data-action="wizBack" style="flex:1;margin:0;font-size:15px;">\u2190 Back to edit</button>
+      <button class="btn" data-action="createPoolDone" style="flex:1;margin:0;font-size:17px;${overAllocated ? 'opacity:0.4;pointer-events:none;' : ''}">${overAllocated ? 'Over budget — go back to adjust' : 'Create Pool \u2192'}</button>
+    </div>
+  `;
+}
+
+// ============================================================
+// 6. POOL HOME (depth 1)
+// ============================================================
+function renderPoolHome() {
+  const pool = state.currentPool ? SAMPLE_POOLS.find(p => p.id === state.currentPool) : SAMPLE_POOLS[0];
+  if (!pool) { return phone('Pool', '<div style="padding:20px;text-align:center;">Pool not found. <div data-action="tabPools" style="color:#000080;cursor:pointer;margin-top:10px;">Go to My Pools</div></div>'); }
+  const name = pool.name;
+  const isAdmin = pool.role === 'Creator' || pool.role === 'Admin';
+  const tab = state.currentPoolTab || 'predict';
+
+  let tabContent = '';
+  if (tab === 'predict') tabContent = renderPredictPoolTab(pool);
+  else if (tab === 'activity') tabContent = renderActivityTab(pool);
+  else if (tab === 'board') tabContent = renderLeaderboardTab();
+  else if (tab === 'members') tabContent = renderMembersTab(isAdmin);
+  else if (tab === 'prizes') tabContent = renderPrizesWinnersTab(pool, isAdmin);
+
+  const rightActions = `
+    <div style="display:flex;gap:6px;">
+      <div class="top-bar-action" data-action="sharePoolLink">\u{1F517}</div>
+      ${isAdmin ? '<div class="top-bar-action" data-action="goAdminDash">\u2699</div>' : ''}
+    </div>
+  `;
+
+  return phone('Pool Home', `
+    ${backBar(pool ? pool.icon + ' ' + name : 'Pool', rightActions)}
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <span class="badge">${pool ? pool.members : 0} members</span>
+      ${isAdmin && state.pendingRequests.length > 0 ? `<span class="badge badge-creator">${state.pendingRequests.length} pending</span>` : ''}
+    </div>
+    <div class="tab-bar">
+      <div class="tab ${tab === 'predict' ? 'active-tab' : ''}" data-action="poolTab" data-tab="predict">Predict</div>
+      <div class="tab ${tab === 'activity' ? 'active-tab' : ''}" data-action="poolTab" data-tab="activity">Activity</div>
+      <div class="tab ${tab === 'board' ? 'active-tab' : ''}" data-action="poolTab" data-tab="board">Board</div>
+      <div class="tab ${tab === 'members' ? 'active-tab' : ''}" data-action="poolTab" data-tab="members">Members</div>
+      <div class="tab ${tab === 'prizes' ? 'active-tab' : ''}" data-action="poolTab" data-tab="prizes">Prizes</div>
+    </div>
+    <div style="padding-top:12px;">${tabContent}</div>
+  `);
+}
+
+// -- Predict Tab (Pool Home) --
+function renderPredictPoolTab(pool) {
+  if (!pool) return '<div class="box"><p class="text-center" style="color:#94a3b8;">No pool data available.</p></div>';
+  const poolId = pool.id || 'default';
+  const allMatches = MATCHES.slice(0, 6);
+  const preds = (state.predictions[poolId]) || {};
+  const unpredicted = allMatches.filter(m => !preds[m.id]);
+  const predicted = allMatches.filter(m => preds[m.id]);
+
+  let html = '';
+
+  // PREDICT NOW section — unpredicted matches (Duolingo style)
+  if (unpredicted.length > 0) {
+    const m = unpredicted[0];
+    html += `
+      <div class="box-label" style="color:#000080;">\u{1F3CF} Predict Now (${unpredicted.length})</div>
+      ${matchCard(m, 'big', poolId)}
+      <div class="countdown">\u23F0 Closes in ${m.cutoffIn} \u00b7 ${m.date}, ${m.time}</div>
+    `;
+    if (unpredicted.length > 1) {
+      html += unpredicted.slice(1).map(am => `
+        ${matchCard(am, 'small', poolId)}
+        <div class="countdown" style="font-size:12px;margin-bottom:6px;">${am.date} \u00b7 ${am.cutoffIn}</div>
+      `).join('');
+    }
+  } else {
+    html += `
+      <div style="text-align:center;padding:20px;background:#f0f9ff;border-radius:12px;margin-bottom:12px;">
+        <div style="font-size:24px;margin-bottom:6px;">\u{1F3AF}</div>
+        <div style="font-size:14px;font-weight:700;color:#000080;">All predictions locked in!</div>
+        <div style="font-size:12px;color:#64748b;margin-top:4px;">You're all set. Results will update after the matches.</div>
+      </div>
+    `;
+  }
+
+  // YOUR PICKS section — predicted matches (no nudge boxes here)
+  if (predicted.length > 0) {
+    html += `<div class="section" style="margin-top:16px;">
+      <div class="box-label" style="color:#64748b;">\u2705 Your Picks (${predicted.length})</div>`;
+    html += predicted.map(m => {
+      const pick = preds[m.id];
+      const pickColor = teamColor(pick);
+      return `
+        <div class="box" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:6px;border-left:4px solid ${pickColor};cursor:pointer;" data-action="editPick" data-match="${m.id}" data-pool="${poolId}">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#0f172a;">${m.teamA} vs ${m.teamB}</div>
+            <div style="font-size:11px;color:#64748b;">${m.date} \u00b7 ${m.cutoffIn} left</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:13px;font-weight:800;color:${pickColor};">${pick}</span>
+            <span style="font-size:10px;color:#94a3b8;">Edit</span>
+          </div>
+        </div>`;
+    }).join('');
+    html += '</div>';
+  }
+
+  // ── TOP 4 PLAYOFF PICKS ──
+  html += `<div style="margin-top:16px;"></div>`;
+  html += renderTop4Card(poolId);
+
+  // ── SEASON WINNER PREDICTION ──
+  html += renderSeasonWinnerCard(poolId);
+
+  // ── YOUR PAST PREDICTIONS (last 5 with results) ──
+  html += `
+    <div class="section" style="margin-top:20px;">
+      <div class="box-label" style="color:#64748b;">Your Recent Results</div>
+      ${PAST_PREDICTIONS.map(pp => {
+        const pickColor = teamColor(pp.pick);
+        return '<div class="box" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:4px;border-left:4px solid ' + pickColor + ';">' +
+          '<div>' +
+            '<div style="font-size:13px;font-weight:700;color:#0f172a;">' + pp.teamA + ' vs ' + pp.teamB + '</div>' +
+            '<div style="font-size:11px;color:#64748b;">' + pp.date + ' \u00b7 Picked: <span style="font-weight:700;color:' + pickColor + ';">' + pp.pick + '</span></div>' +
+          '</div>' +
+          '<span style="font-size:18px;">' + (pp.correct ? '\u2705' : '\u274C') + '</span>' +
+        '</div>';
+      }).join('')}
+    </div>
+  `;
+
+  return html;
+}
+
+// -- Activity Tab (Pool Home) --
+function renderActivityTab(pool) {
+  if (!pool) return '<div class="box"><p class="text-center" style="color:#94a3b8;">No pool data available.</p></div>';
+  const poolId = pool.id || 'default';
+  const allMatches = MATCHES.slice(0, 6);
+  const preds = (state.predictions[poolId]) || {};
+  const predicted = allMatches.filter(m => preds[m.id]);
+
+  let html = '';
+
+  // WHO HASN'T PREDICTED — nudge section
+  const openMatches = allMatches.filter(m => m.status === 'open');
+  const matchesWithMissing = openMatches.filter(m => (UNPREDICTED_MEMBERS[m.id] || []).length > 0);
+
+  if (matchesWithMissing.length > 0) {
+    html += `<div class="box-label" style="color:#92400e;">\u26A0\uFE0F Who Hasn't Predicted</div>`;
+    html += matchesWithMissing.map(m => {
+      const missing = UNPREDICTED_MEMBERS[m.id] || [];
+      const missingNames = missing.join(', ');
+      const nudgeMsg = '\u{1F3CF} ' + m.teamA + ' vs ' + m.teamB + ' in ' + m.cutoffIn + '! ' + missingNames + " haven't predicted. predictopia.app/join/abc123";
+      return `
+        <div class="nudge-box">
+          <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">${m.teamA} vs ${m.teamB} \u00b7 ${m.date}</div>
+          <div class="nudge-text">${missing.length} haven't predicted: <span class="nudge-names">${missingNames}</span></div>
+          <button class="btn-nudge" data-action="nudgeMembers" data-msg="${nudgeMsg.replace(/"/g, '&quot;')}">Share \u2192</button>
+        </div>`;
+    }).join('');
+  }
+
+  // CUTOFF PASSED — everyone's picks revealed (grouped by team)
+  html += `
+    <div class="section" style="margin-top:16px;">
+      <div class="box-label" style="color:#64748b;">Everyone's Picks (After Cutoff)</div>`;
+  html += SAMPLE_PREDICTIONS_REVEALED.map(rm => {
+    const colorA = teamColor(rm.teamA);
+    const colorB = teamColor(rm.teamB);
+    const picksA = rm.picks[rm.teamA] || [];
+    const picksB = rm.picks[rm.teamB] || [];
+    const shareMsg = '\u{1F3CF} ' + rm.teamA + ' vs ' + rm.teamB + ' predictions! ' + rm.teamA + ' (' + picksA.length + '): ' + picksA.slice(0,3).join(', ') + (picksA.length > 3 ? '...' : '') + ' ' + rm.teamB + ' (' + picksB.length + '): ' + picksB.slice(0,3).join(', ') + (picksB.length > 3 ? '...' : '') + ' Join: predictopia.app/join/abc123';
+    return `
+      <div class="picks-card">
+        <div class="picks-header">
+          <span>${rm.teamA} vs ${rm.teamB} \u00b7 ${rm.date}</span>
+          <span style="color:#16a34a;font-size:12px;">Cutoff passed \u2705</span>
+        </div>
+        <div class="picks-team-group">
+          <div class="picks-team-label">
+            <span style="color:${colorA};">${rm.teamA}</span>
+            <span class="picks-team-count">${picksA.length}</span>
+          </div>
+          <div class="picks-names">${picksA.join(', ')}</div>
+        </div>
+        <div class="picks-team-group" style="margin-bottom:4px;">
+          <div class="picks-team-label">
+            <span style="color:${colorB};">${rm.teamB}</span>
+            <span class="picks-team-count">${picksB.length}</span>
+          </div>
+          <div class="picks-names">${picksB.join(', ')}</div>
+        </div>
+        <button class="btn-share-picks" data-action="sharePicks" data-msg="${shareMsg.replace(/"/g, '&quot;')}">Share \u2192</button>
+      </div>`;
+  }).join('');
+  html += '</div>';
+
+  // ── SHOWCASE PREDICTIONS ──
+  html += renderShowcaseSection(poolId);
+
+  html += `<button class="btn btn-sm btn-secondary" data-action="goShareCards" style="margin-top:10px;">Share Screenshot Card</button>`;
+
+  return html;
+}
+
+// -- Prizes Tab: Winners by competition --
+function renderPrizesWinnersTab(pool, isAdmin) {
+  let html = '';
+
+  Object.entries(PRIZE_WINNERS).forEach(function(entry) {
+    const compName = entry[0];
+    const data = entry[1];
+
+    html += '<div class="box" style="margin-bottom:10px;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+    html += '<div style="font-size:14px;font-weight:800;color:#0f172a;">' + compName + '</div>';
+    if (data.status === 'completed') {
+      html += '<button class="btn-share-picks" data-action="sharePrizeWinner" data-comp="' + compName + '" style="font-size:11px;padding:6px 12px;">Share</button>';
+    }
+    html += '</div>';
+
+    if (data.status === 'completed') {
+      data.winners.forEach(function(w) {
+        const emoji = w.rank === 1 ? '\u{1F947}' : w.rank === 2 ? '\u{1F948}' : '\u{1F949}';
+        const paidLabel = w.paid ? '<span style="color:#16a34a;font-weight:600;">Paid \u2705</span>' : '<span style="color:#ea580c;font-weight:600;">Pending</span>';
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;">' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:16px;">' + emoji + '</span>' +
+            '<span style="font-size:14px;font-weight:700;color:#0f172a;">' + w.name + '</span>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<span style="font-size:14px;font-weight:800;color:#000080;">\u20B9' + w.amount.toLocaleString() + '</span>' +
+            paidLabel +
+          '</div>' +
+        '</div>';
+      });
+    } else if (data.status === 'in_progress') {
+      html += '<div style="font-size:13px;color:#64748b;padding:8px 0;">' +
+        'Ends after ' + data.endsAfter + ' \u00b7 ' + data.matchesPlayed + '/' + data.totalMatches + ' matches played' +
+      '</div>';
+      html += '<div style="height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-top:4px;">' +
+        '<div style="height:100%;background:#000080;border-radius:3px;width:' + Math.round(data.matchesPlayed / data.totalMatches * 100) + '%;"></div>' +
+      '</div>';
+    } else if (data.status === 'not_played') {
+      html += '<div style="font-size:13px;color:#94a3b8;padding:8px 0;">Not yet played</div>';
+    } else if (data.status === 'pending') {
+      html += '<div style="font-size:13px;color:#94a3b8;padding:8px 0;">' + data.note + '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  return html;
+}
+
+// -- Top 4 Picks Component --
+function renderTop4Card(poolId) {
+  const picks = state.top4Picks[poolId] || [];
+  const locked = state.top4Locked[poolId] || false;
+  const count = picks.length;
+
+  if (locked) {
+    return `
+      <div class="card" style="border:2px solid #f59e0b;background:#fffbeb;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:18px;">\u{1F3CF}</span>
+          <span style="font-size:15px;font-weight:800;color:#0f172a;">Your Top 4 Playoff Picks</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          ${picks.map(abbr => {
+            const t = TEAMS.find(x => x.abbr === abbr);
+            return `<div style="padding:6px 14px;background:${t?t.color:'#ccc'};color:${t&&t.abbr==='CSK'?'#0066B2':'#fff'};border-radius:10px;font-weight:800;font-size:13px;">${abbr}</div>`;
+          }).join('')}
+        </div>
+        <div style="font-size:13px;color:#16a34a;font-weight:700;">\u{1F512} Locked \u2714</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="card" style="border:2px solid #f59e0b;background:#fffbeb;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <span style="font-size:18px;">\u{1F3CF}</span>
+        <span style="font-size:15px;font-weight:800;color:#0f172a;">Your Top 4 Playoff Picks</span>
+      </div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:10px;">Pick 4 teams — no specific order</div>
+      <div class="team-pick-grid">
+        ${TEAMS.map(t => {
+          const isPicked = picks.includes(t.abbr);
+          const isCSK = t.abbr === 'CSK';
+          return `
+            <div class="team-pick-btn ${isPicked ? 'picked' : ''}"
+                 data-action="toggleTop4" data-team="${t.abbr}" data-pool="${poolId}"
+                 style="background:${t.color};color:${isCSK?'#0066B2':'#fff'};${isPicked ? 'border-color:'+t.color+';box-shadow:0 4px 12px '+t.color+'40;' : ''}">
+              ${t.abbr}
+              ${isPicked ? '<div class="pick-check">\u2714</div>' : ''}
+            </div>`;
+        }).join('')}
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+        <span style="font-size:13px;font-weight:700;color:${count === 4 ? '#16a34a' : '#64748b'};">Selected: ${count}/4 ${count === 4 ? '\u2714' : ''}</span>
+        <button class="btn btn-sm" style="width:auto;padding:10px 20px;margin:0;${count < 4 ? 'opacity:0.4;pointer-events:none;' : ''}" data-action="lockTop4" data-pool="${poolId}">Lock my picks</button>
+      </div>
+    </div>
+  `;
+}
+
+// -- Season Winner Component --
+function renderSeasonWinnerCard(poolId) {
+  const pick = state.seasonWinner[poolId] || null;
+  const locked = state.seasonWinnerLocked[poolId] || false;
+
+  if (locked && pick) {
+    const t = TEAMS.find(x => x.abbr === pick);
+    return `
+      <div class="card" style="border:2px solid #f59e0b;background:#fffbeb;margin-top:10px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:18px;">\u{1F3C6}</span>
+          <span style="font-size:15px;font-weight:800;color:#0f172a;">Who wins IPL 2026?</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="padding:6px 14px;background:${t?t.color:'#ccc'};color:${t&&t.abbr==='CSK'?'#0066B2':'#fff'};border-radius:10px;font-weight:800;font-size:13px;">${pick}</div>
+          <span style="font-size:13px;color:#16a34a;font-weight:700;">\u{1F512} Locked \u2714</span>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="card" style="border:2px solid #f59e0b;background:#fffbeb;margin-top:10px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <span style="font-size:18px;">\u{1F3C6}</span>
+        <span style="font-size:15px;font-weight:800;color:#0f172a;">Who wins IPL 2026?</span>
+      </div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:10px;">Pick one team</div>
+      <div class="team-pick-grid">
+        ${TEAMS.map(t => {
+          const isPicked = pick === t.abbr;
+          const isCSK = t.abbr === 'CSK';
+          return `
+            <div class="team-pick-btn ${isPicked ? 'picked' : ''}"
+                 data-action="pickSeasonWinner" data-team="${t.abbr}" data-pool="${poolId}"
+                 style="background:${t.color};color:${isCSK?'#0066B2':'#fff'};${isPicked ? 'border-color:'+t.color+';box-shadow:0 4px 12px '+t.color+'40;' : ''}">
+              ${t.abbr}
+              ${isPicked ? '<div class="pick-check">\u2714</div>' : ''}
+            </div>`;
+        }).join('')}
+      </div>
+      ${pick ? `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+          <span style="font-size:13px;font-weight:700;color:#16a34a;">Your pick: ${pick}</span>
+          <button class="btn btn-sm" style="width:auto;padding:10px 20px;margin:0;" data-action="lockSeasonWinner" data-pool="${poolId}">Lock my pick</button>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+// -- Showcase Section --
+function renderShowcaseSection(poolId) {
+  const sampleTop4 = [
+    { name:'Venkat', picks:['CSK','MI','KKR','RR'] },
+    { name:'Priya', picks:['MI','RCB','CSK','DC'] },
+    { name:'Arjun', picks:['CSK','MI','SRH','GT'] },
+  ];
+  const sampleWinners = [
+    { name:'Venkat', pick:'MI' },
+    { name:'Priya', pick:'CSK' },
+    { name:'Arjun', pick:'RCB' },
+    { name:'Meera', pick:'CSK' },
+  ];
+
+  return `
+    <div class="section" style="margin-top:20px;">
+      <div class="box-label" style="color:#6366f1;">Showcase Predictions</div>
+      <div class="showcase-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-size:14px;font-weight:700;color:#0f172a;">Top 4 Picks</div>
+          <button class="btn-share-picks" data-action="shareShowcase" data-type="top4" style="font-size:11px;padding:6px 12px;">Share</button>
+        </div>
+        ${sampleTop4.map(p => `
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f1f5f9;">
+            <span style="font-size:13px;font-weight:600;color:#475569;width:60px;">${p.name}</span>
+            <div style="display:flex;gap:4px;">
+              ${p.picks.map(abbr => {
+                const t = TEAMS.find(x => x.abbr === abbr);
+                return `<span style="padding:2px 8px;background:${t?t.color:'#ccc'};color:${t&&t.abbr==='CSK'?'#0066B2':'#fff'};border-radius:6px;font-weight:800;font-size:10px;">${abbr}</span>`;
+              }).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="showcase-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-size:14px;font-weight:700;color:#0f172a;">Season Winner</div>
+          <button class="btn-share-picks" data-action="shareShowcase" data-type="winner" style="font-size:11px;padding:6px 12px;">Share</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          ${sampleWinners.map(p => {
+            const t = TEAMS.find(x => x.abbr === p.pick);
+            return `<div style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+              <span style="font-size:12px;font-weight:600;color:#475569;">${p.name}:</span>
+              <span style="padding:2px 6px;background:${t?t.color:'#ccc'};color:${t&&t.abbr==='CSK'?'#0066B2':'#fff'};border-radius:4px;font-weight:800;font-size:10px;">${p.pick}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// -- Leaderboard Tab --
+function renderLeaderboardTab() {
+  const lt = state.leaderboardTab;
+  const compOptions = state.competitions.map(c => ({ key: c.id, label: c.name }));
+  compOptions.push({ key:'overall', label:'Overall Season' });
+  const currentLabel = compOptions.find(c => c.key === lt)?.label || 'Overall Season';
+  return `
+    <div style="margin-bottom:14px;">
+      <select style="width:100%;padding:12px 16px;border:2px solid #000080;border-radius:12px;font-size:14px;font-weight:700;color:#000080;background:#f0fdf4;cursor:pointer;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg fill=\\'%23000080\\' viewBox=\\'0 0 24 24\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M7 10l5 5 5-5z\\'/></svg>');background-repeat:no-repeat;background-position:right 12px center;background-size:20px;" data-action="lbDropdown">
+        ${compOptions.map(c => `<option value="${c.key}" ${lt === c.key ? 'selected' : ''}>${c.label}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="podium">
+      <div class="podium-item" style="margin-top:16px;">
+        <div style="font-size:13px;font-weight:700;color:#64748b;">#2</div>
+        <div style="font-size:24px;margin:6px 0;">${getLB()[1].avatar}</div>
+        <div style="font-size:13px;font-weight:700;color:#0f172a;">${getLB()[1].name}</div>
+        <div style="font-size:14px;color:#000080;font-weight:800;">${getLB()[1].pts} pts</div>
+        ${getLB()[1].streak > 0 ? `<div style="font-size:11px;color:#ea580c;font-weight:600;">\u{1F525} x${getLB()[1].streak}</div>` : ''}
+      </div>
+      <div class="podium-item first">
+        <div style="font-size:22px;">\u{1F451}</div>
+        <div style="font-size:28px;margin:6px 0;">${getLB()[0].avatar}</div>
+        <div style="font-size:15px;font-weight:800;color:#0f172a;">${getLB()[0].name}</div>
+        <div style="font-size:16px;color:#000080;font-weight:800;">${getLB()[0].pts} pts</div>
+        <div style="font-size:12px;color:#ea580c;font-weight:700;">\u{1F525} x${getLB()[0].streak}</div>
+      </div>
+      <div class="podium-item" style="margin-top:24px;">
+        <div style="font-size:13px;font-weight:700;color:#64748b;">#3</div>
+        <div style="font-size:24px;margin:6px 0;">${getLB()[2].avatar}</div>
+        <div style="font-size:13px;font-weight:700;color:#0f172a;">${getLB()[2].name}</div>
+        <div style="font-size:14px;color:#000080;font-weight:800;">${getLB()[2].pts} pts</div>
+      </div>
+    </div>
+
+    <div class="box" style="padding:8px;">
+      ${getLB().map(l => `
+        <div class="lb-row ${l.name === 'Venkat' ? 'highlight' : ''}">
+          <div class="lb-rank">#${l.rank}</div>
+          <div class="lb-avatar">${l.avatar}</div>
+          <div class="lb-name" style="font-weight:${l.name === 'Venkat' ? '700' : '500'};">${l.name}${l.name === 'Venkat' ? ' (You)' : ''}</div>
+          <div class="lb-streak">${l.streak > 0 ? '\u{1F525}x' + l.streak : ''}</div>
+          <div class="lb-pts">${l.pts}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <button class="btn btn-sm btn-secondary" data-action="goShareCards" style="margin-top:10px;">Share Leaderboard</button>
+  `;
+}
+
+// -- Members Tab --
+function renderMembersTab(isAdmin) {
+  const paidCount = MEMBERS_LIST.filter(m => m.paid).length;
+  const unpaidCount = MEMBERS_LIST.length - paidCount;
+
+  return `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:15px;font-weight:700;color:#0f172a;">${MEMBERS_LIST.length} members</span>
+      ${isAdmin ? `<span style="font-size:13px;color:#000080;font-weight:600;">${paidCount} paid</span><span style="color:#cbd5e1;">\u00b7</span><span style="font-size:13px;color:#dc2626;font-weight:600;">${unpaidCount} unpaid</span>` : ''}
+    </div>
+
+    ${isAdmin && state.pendingRequests.length > 0 ? `
+      <div class="pending-card">
+        <div class="box-label" style="color:#92400e;">Pending Requests (${state.pendingRequests.length})</div>
+        ${state.pendingRequests.map(r => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:22px;">${r.avatar}</span>
+              <span style="font-weight:700;color:#0f172a;font-size:14px;">${r.name}</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="toggle toggle-on" data-action="approveReq" data-id="${r.id}">Approve</button>
+              <button class="toggle toggle-off" data-action="rejectReq" data-id="${r.id}">Reject</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    ${MEMBERS_LIST.map((m, i) => `
+      <div style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:24px;">${m.avatar}</span>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:14px;font-weight:700;color:#0f172a;">${m.name}</span>
+              ${roleBadge(m.role)}
+            </div>
+            <div style="font-size:13px;color:#64748b;margin-top:2px;font-weight:500;">${m.pts} pts${m.won > 0 ? ' · <span style="color:#000080;font-weight:700;">Won ₹' + m.won + '</span>' : ''}</div>
+          </div>
+          ${isAdmin ? `<button class="toggle ${m.paid ? 'toggle-on' : 'toggle-off'}" data-action="togglePaid" data-idx="${i}">${m.paid ? 'Paid' : 'Unpaid'}</button>` : ''}
+        </div>
+        ${isAdmin && m.role === 'Member' ? `
+          <div style="display:flex;gap:8px;margin-top:8px;margin-left:42px;">
+            <button class="btn-ghost" style="font-size:12px;padding:6px 12px;" data-action="makeAdmin" data-idx="${i}" data-name="${m.name}">Make admin</button>
+            <button class="btn-ghost" style="font-size:12px;padding:6px 12px;color:#dc2626;border-color:#fecaca;" data-action="removeMember" data-idx="${i}" data-name="${m.name}">Remove</button>
+          </div>
+        ` : ''}
+      </div>
+    `).join('')}
+  `;
+}
+
+// -- Prizes Tab --
+function renderPrizesTab(pool, isAdmin) {
+  const prizeData = computePrizes(pool.buyin, pool.members, pool.commission || 20, pool.tier || 'top3');
+
+  // Competition-based prize structure
+  const comps = state.competitions || [];
+  const tierLabels = { winner:'Winner Takes All', top3:'Top 3 (3x/2x/1x)', top5:'Top 5', top10:'Top 10' };
+
+  // Sample payout history grouped by competition
+  const payoutHistory = [
+    { comp:'Matches 1-10', winner:'Venkat', rank:1, amount:1000, paid:true },
+    { comp:'Matches 1-10', winner:'Priya', rank:2, amount:666, paid:true },
+    { comp:'Matches 1-10', winner:'Arjun', rank:3, amount:334, paid:false },
+    { comp:'Matches 11-20', winner:'Priya', rank:1, amount:1000, paid:false },
+  ];
+
+  // Group payouts by competition
+  const payoutGroups = {};
+  payoutHistory.forEach(ph => {
+    if (!payoutGroups[ph.comp]) payoutGroups[ph.comp] = [];
+    payoutGroups[ph.comp].push(ph);
+  });
+
+  return `
+    ${isAdmin ? `
+    <div class="box" style="border:2px solid #fbbf24;background:#fffbeb;">
+      <div class="box-label" style="color:#92400e;">Budget (Admin Only)</div>
+      <div class="budget-item"><span style="color:#475569;">Total Pool</span><span style="color:#0f172a;font-weight:800;">\u20B9${prizeData.total.toLocaleString()}</span></div>
+      <div class="budget-item"><span style="color:#475569;">Commission (${pool.commission || 20}%)</span><span style="color:#dc2626;font-weight:700;">-\u20B9${prizeData.commission.toLocaleString()}</span></div>
+      <div class="budget-item"><span style="color:#475569;">Prize Pool</span><span style="color:#000080;font-weight:800;">\u20B9${prizeData.pool.toLocaleString()}</span></div>
+    </div>` : ''}
+
+    <div class="box">
+      <div class="box-label">\u{1F3C6} What You Can Win</div>
+      ${comps.map(c => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">${c.name}</div>
+            <div style="font-size:11px;color:#94a3b8;">${tierLabels[c.tier] || c.tier}</div>
+          </div>
+          <span style="color:#000080;font-weight:800;font-size:15px;">\u20B9${(c.pot || 0).toLocaleString()}</span>
+        </div>
+      `).join('')}
+      ${comps.length === 0 ? '<div style="font-size:13px;color:#94a3b8;padding:10px 0;">No competitions configured yet</div>' : ''}
+    </div>
+
+    <div class="section">
+      <div class="box-label">Payout History</div>
+      ${Object.keys(payoutGroups).length > 0 ? Object.entries(payoutGroups).map(([comp, payouts]) => `
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:700;color:#000080;margin-bottom:6px;border-left:3px solid #fbbf24;padding-left:8px;">${comp}</div>
+          ${payouts.map((ph, i) => `
+            <div class="list-row">
+              <div>
+                <span style="font-weight:700;color:#0f172a;">${ph.rank === 1 ? '\u{1F947}' : ph.rank === 2 ? '\u{1F948}' : '\u{1F949}'} ${ph.winner}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-weight:800;color:#0f172a;">\u20B9${ph.amount.toLocaleString()}</span>
+                ${isAdmin ? `
+                  <button class="toggle ${ph.paid ? 'toggle-on' : 'toggle-off'}" data-action="markPaid" data-idx="${i}">${ph.paid ? 'Paid' : 'Mark paid'}</button>
+                ` : `
+                  <span style="font-size:12px;font-weight:600;color:${ph.paid ? '#000080' : '#ea580c'};">${ph.paid ? 'Paid' : 'Pending'}</span>
+                `}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('') : '<div style="font-size:13px;color:#94a3b8;padding:10px 0;">No payouts yet</div>'}
+    </div>
+  `;
+}
+
+// ============================================================
+// 7. PREDICT (depth 0)
+// ============================================================
+function renderPredict() {
+  const openMatches = MATCHES.filter(m => m.status === 'open');
+  const upcomingMatches = MATCHES.filter(m => m.status === 'upcoming');
+
+  return phone('Predict', `
+    <h2>Predict</h2>
+    <p style="margin-bottom:4px;">Pick winners across all your pools</p>
+
+    <div class="box-label" style="color:#000080;margin-top:12px;">\u{1F3CF} Today's Predictions</div>
+    ${SAMPLE_POOLS.map(pool => {
+      const poolPreds = (state.predictions && state.predictions[pool.id]) || {};
+      const unpredicted = openMatches.filter(m => !poolPreds[m.id]);
+      const predicted = openMatches.filter(m => poolPreds[m.id]);
+      const badgeCls = pool.role === 'Creator' ? 'badge-creator' : pool.role === 'Admin' ? 'badge-admin' : 'badge-member';
+      return `
+      <div class="section">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:18px;">${pool.icon}</span>
+          <span style="font-size:15px;font-weight:700;color:#0f172a;">${pool.name}</span>
+          <span class="badge ${badgeCls}">${pool.role}</span>
+        </div>
+        ${unpredicted.length > 0 ? unpredicted.map(m => `
+          <div style="margin-bottom:10px;">
+            ${matchCard(m, 'big', pool.id)}
+            <div class="countdown">\u23F0 Closes in ${m.cutoffIn} \u00b7 ${m.date}</div>
+          </div>
+        `).join('') : `
+          <div style="text-align:center;padding:14px;background:#f0f9ff;border-radius:12px;margin-bottom:8px;">
+            <div style="font-size:14px;font-weight:700;color:#000080;">All locked in for open matches!</div>
+          </div>
+        `}
+        ${predicted.length > 0 ? `
+          <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px;">\u2705 ${predicted.length} pick${predicted.length > 1 ? 's' : ''} locked</div>
+        ` : ''}
+      </div>`;
+    }).join('')}
+
+    ${renderPredictCompetitions()}
+
+    <div class="section">
+      <div class="box-label">Upcoming</div>
+      ${upcomingMatches.map(m => {
+        const tA = TEAMS.find(x => x.abbr === m.teamA);
+        const tB = TEAMS.find(x => x.abbr === m.teamB);
+        return `
+        <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;background:${tA?tA.color:'#ccc'};border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:8px;color:${tA&&tA.abbr==='CSK'?'#0066B2':'#fff'};">${m.teamA}</div>
+            <span style="font-weight:800;font-size:12px;color:#94a3b8;">VS</span>
+            <div style="width:28px;height:28px;background:${tB?tB.color:'#ccc'};border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:8px;color:${tB&&tB.abbr==='CSK'?'#0066B2':'#fff'};">${m.teamB}</div>
+          </div>
+          <div style="font-size:13px;color:#64748b;font-weight:500;">${m.date}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `);
+}
+
+// ============================================================
+// 8. ADMIN DASHBOARD (depth 2) — merged with Pool Settings
+// ============================================================
+function renderAdminDash() {
+  const sec = state.adminDashSection;
+  const pool = state.currentPool ? SAMPLE_POOLS.find(p => p.id === state.currentPool) : SAMPLE_POOLS[0];
+  const prizeData = computePrizes(pool.buyin, pool.members, pool.commission || 20, pool.tier || 'top3');
+  const isCreator = pool && pool.role === 'Creator';
+
+  return phone('Pool Admin', `
+    ${backBar('Pool Admin')}
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+      ${['settings','requests'].map(s => {
+        const label = s === 'competitions' ? 'Comps' : s.charAt(0).toUpperCase() + s.slice(1);
+        return `<div style="padding:10px 14px;font-size:12px;font-weight:600;border-radius:10px;cursor:pointer;border:2px solid ${sec === s ? '#000080' : '#e2e8f0'};background:${sec === s ? '#f0fdf4' : '#fff'};color:${sec === s ? '#000080' : '#475569'};min-height:40px;display:flex;align-items:center;transition:all 0.2s;" data-action="adminSec" data-sec="${s}">${label}${s === 'requests' && state.pendingRequests.length > 0 ? ' (' + state.pendingRequests.length + ')' : ''}</div>`;
+      }).join('')}
+    </div>
+
+    ${sec === 'settings' ? `
+      <div class="input-label">Pool Name</div>
+      <input class="input" type="text" id="settingsPoolName" value="${pool ? pool.name : ''}">
+
+      <div class="input-label">Pool Icon</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+        ${POOL_ICONS.map((e, i) =>
+          '<div class="emoji-pick ' + (i === 0 ? 'selected-emoji' : '') + '" data-action="pickPoolIcon" data-idx="' + i + '">' + e + '</div>'
+        ).join('')}
+      </div>
+
+      <div class="locked-field">
+        <div><span class="locked-label">Commission</span><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Locked after first match</div></div>
+        <div style="display:flex;align-items:center;"><span class="locked-value">${state.commissionPct}%</span><span class="locked-icon">\u{1F512}</span></div>
+      </div>
+
+      <div class="locked-field">
+        <div><span class="locked-label">Buy-in</span><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Locked after first match</div></div>
+        <div style="display:flex;align-items:center;"><span class="locked-value">\u20B9${pool.buyin}</span><span class="locked-icon">\u{1F512}</span></div>
+      </div>
+
+      <div class="locked-field">
+        <div><span class="locked-label">League Style</span><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Locked after first match</div></div>
+        <div style="display:flex;align-items:center;"><span class="locked-value">Chunks</span><span class="locked-icon">\u{1F512}</span></div>
+      </div>
+
+      ${renderAdminCompetitions()}
+
+      <button class="btn btn-secondary" data-action="leavePool" style="margin-top:10px;">Leave Pool</button>
+      ${isCreator ? '<button class="btn btn-danger" data-action="confirmDeletePool" style="margin-top:10px;">Delete Pool</button>' : ''}
+    ` : ''}
+
+    ${sec === 'requests' ? `
+      <div class="box-label">Pending Join Requests</div>
+      ${state.pendingRequests.length > 0 ? state.pendingRequests.map(r => `
+        <div class="pending-card" style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:24px;">${r.avatar}</span>
+            <span style="font-weight:700;color:#0f172a;font-size:15px;">${r.name}</span>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="toggle toggle-on" data-action="approveReq" data-id="${r.id}">Approve</button>
+            <button class="toggle toggle-off" data-action="rejectReq" data-id="${r.id}">Reject</button>
+          </div>
+        </div>
+      `).join('') : '<div class="box"><p class="text-center" style="color:#94a3b8;font-size:14px;">No pending requests</p></div>'}
+
+      <div class="box-label" style="margin-top:16px;">Pool Budget</div>
+      <div class="box" style="border:2px solid #000080;">
+        <div class="budget-item"><span style="color:#475569;">Total Pool (${pool.members} x \u20B9${pool.buyin})</span><span style="color:#0f172a;font-weight:800;">\u20B9${prizeData.total}</span></div>
+        <div class="budget-item"><span style="color:#475569;">Commission (${pool.commission || 20}%)</span><span style="color:#ea580c;font-weight:700;">\u20B9${prizeData.commission}</span></div>
+        <div class="budget-item"><span style="color:#475569;">Allocated</span><span style="color:#000080;font-weight:700;">\u20B9${prizeData.pool}</span></div>
+        <div class="budget-item"><span style="color:#475569;">Paid Out</span><span style="color:#0f172a;font-weight:700;">\u20B9${2660}</span></div>
+        <div class="budget-item"><span style="color:#475569;font-weight:700;">Remaining</span><span style="color:#ea580c;font-weight:800;">\u20B9${prizeData.pool - 2660}</span></div>
+      </div>
+    ` : ''}
+
+  `);
+}
+
+// ============================================================
+// 10. JOIN POOL (via shared link)
+// ============================================================
+function renderJoinPreview() {
+  const pool = SAMPLE_POOLS[0];
+  const isPaid = pool.buyin > 0;
+  return phone('Join Pool', `
+    <div style="padding-top:40px;text-align:center;">
+      <div style="width:80px;height:80px;background:#f0fdf4;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:40px;box-shadow:0 4px 16px rgba(22,163,74,0.1);">${pool.icon}</div>
+      <h2 style="font-size:22px;">${pool.name}</h2>
+      <div style="display:flex;justify-content:center;gap:8px;margin:12px 0;">
+        <span class="badge">${pool.members} members</span>
+      </div>
+      ${isPaid ? `
+        <div class="box" style="margin:20px 0;text-align:center;border:2px solid #fbbf24;background:#fffbeb;">
+          <div style="font-size:32px;font-weight:900;color:#92400e;">\u20B9${pool.buyin}</div>
+          <div style="font-size:14px;color:#92400e;margin-top:4px;font-weight:500;">Season buy-in \u00b7 Pay admin offline</div>
+        </div>
+        <button class="btn" data-action="requestToJoin" style="font-size:17px;">Request to Join</button>
+        <div style="font-size:13px;color:#64748b;margin-top:10px;font-weight:500;">Admin will review your request</div>
+      ` : `
+        <div class="box" style="margin:20px 0;text-align:center;">
+          <div style="font-size:22px;color:#000080;font-weight:800;">Free Pool</div>
+          <div style="font-size:14px;color:#64748b;margin-top:4px;">No buy-in required</div>
+        </div>
+        <button class="btn" data-action="autoJoin" style="font-size:17px;">Join Pool</button>
+      `}
+    </div>
+  `, { noNav: true });
+}
+
+function renderJoinRequestSent() {
+  return phone('Request Sent', `
+    <div style="padding-top:60px;text-align:center;">
+      <div style="width:80px;height:80px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <span style="font-size:36px;color:#000080;">\u2713</span>
+      </div>
+      <h2 style="font-size:24px;">Request Sent!</h2>
+      <p style="margin:12px 0;font-size:15px;">Your request to join <b style="color:#0f172a;">Family IPL 2026</b> has been sent to the admin.</p>
+      <div class="box" style="margin:20px 0;border:2px solid #fbbf24;background:#fffbeb;">
+        <div style="font-size:14px;color:#92400e;font-weight:600;">Buy-in: \u20B9500 \u2014 pay admin when approved</div>
+      </div>
+      <button class="btn btn-secondary" data-action="simApprove">[Demo: Simulate Admin Approves]</button>
+      <div style="font-size:12px;color:#94a3b8;margin-top:6px;">Testing helper \u2014 not in real app</div>
+    </div>
+  `, { noNav: true });
+}
+
+// ============================================================
+// 11. PROFILE (depth 0)
+// ============================================================
+function renderProfile() {
+  return phone('Profile', `
+    <div style="text-align:center;padding-top:8px;">
+      <div style="width:72px;height:72px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:36px;border:3px solid #000080;box-shadow:0 4px 16px rgba(22,163,74,0.15);">\u{1F3CF}</div>
+      <h2 style="font-size:22px;margin-bottom:4px;">${state.displayName || 'Venkat'}</h2>
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;">
+        <span class="badge badge-creator">CSK Fan</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+      <div class="stat-card">
+        <div style="font-size:24px;font-weight:900;color:#000080;">3</div>
+        <div style="font-size:13px;color:#64748b;font-weight:500;margin-top:2px;">Pools</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size:24px;font-weight:900;color:#ea580c;">24</div>
+        <div style="font-size:13px;color:#64748b;font-weight:500;margin-top:2px;">Predictions</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size:24px;font-weight:900;color:#0f172a;">75%</div>
+        <div style="font-size:13px;color:#64748b;font-weight:500;margin-top:2px;">Win Rate</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-label">Active Streaks</div>
+      <div class="list-row"><span style="font-weight:600;font-size:14px;">\u{1F525} Hot Streak</span><span style="color:#dc2626;font-weight:800;font-size:15px;">5 matches</span></div>
+      <div class="list-row"><span style="font-weight:600;font-size:14px;">\u{1F3C6} Best: Perfect Week</span><span style="color:#ea580c;font-weight:600;">Mar 22\u201328</span></div>
+    </div>
+
+    <div class="box" style="opacity:0.4;border-style:dashed;">
+      <div class="box-label">My Money \u2014 V1.1</div>
+      <div style="text-align:center;font-size:13px;color:#94a3b8;font-weight:500;">Cross-pool earnings summary coming soon</div>
+    </div>
+
+    <div class="card" data-action="goAchievements" style="display:flex;align-items:center;justify-content:space-between;padding:18px;">
+      <span style="color:#0f172a;font-weight:600;font-size:15px;">\u{1F3C6} Achievements</span>
+      <span style="color:#94a3b8;font-size:18px;">\u2192</span>
+    </div>
+
+    <div class="card" data-action="goEditProfile" style="display:flex;align-items:center;justify-content:space-between;padding:18px;">
+      <span style="color:#0f172a;font-weight:600;font-size:15px;">\u270E Edit Profile</span>
+      <span style="color:#94a3b8;font-size:18px;">\u2192</span>
+    </div>
+
+    <div class="card" data-action="goEditProfile" style="display:flex;align-items:center;justify-content:space-between;padding:18px;">
+      <span style="color:#0f172a;font-weight:600;font-size:15px;">\u{1F3CF} Change Favourite Team</span>
+      <span style="color:#94a3b8;font-size:18px;">\u2192</span>
+    </div>
+  `);
+}
+
+// ============================================================
+// 12. EDIT PROFILE (depth 1)
+// ============================================================
+function renderEditProfile() {
+  return phone('Edit Profile', `
+    ${backBar('Edit Profile')}
+
+    <div class="input-label">Display Name</div>
+    <input class="input" type="text" id="editNameInput" value="${state.displayName || 'Venkat'}">
+
+    <div class="input-label">Avatar Emoji</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+      ${AVATARS.map((e, i) =>
+        `<div class="emoji-pick ${(state.selectedAvatar === i || (state.selectedAvatar === null && i === 0)) ? 'selected-emoji' : ''}" data-action="pickAvatar" data-idx="${i}">${e}</div>`
+      ).join('')}
+    </div>
+
+    <div class="input-label">Change Favourite Team</div>
+    <div class="box" style="max-height:220px;overflow-y:auto;padding:8px;">
+      ${TEAMS.map(t => `
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 8px;border-bottom:1px solid #f1f5f9;cursor:pointer;border-radius:10px;min-height:52px;transition:background 0.15s;${(state.selectedTeam || 'CSK') === t.abbr ? 'background:#f0fdf4;' : ''}" data-action="selectTeamEdit" data-team="${t.abbr}">
+          <div style="width:44px;height:44px;background:${t.color};border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:${t.abbr==='CSK'?'#0066B2':'#fff'};box-shadow:0 2px 8px ${t.color}30;">${t.abbr}</div>
+          <span style="color:#0f172a;font-size:14px;font-weight:500;flex:1;">${t.name}</span>
+          ${(state.selectedTeam || 'CSK') === t.abbr ? '<span style="color:#000080;font-size:18px;font-weight:700;">\u2713</span>' : ''}
+        </div>
+      `).join('')}
+    </div>
+
+    <button class="btn" style="margin-top:20px;font-size:16px;" data-action="saveEditProfile">Save Changes</button>
+  `);
+}
+
+// ============================================================
+// 13. ACHIEVEMENTS (depth 1)
+// ============================================================
+function renderAchievements() {
+  const achievements = [
+    { icon:'\u{1F525}', title:'Hot Streak', desc:'5+ correct predictions in a row', earned:true },
+    { icon:'\u{1F3AF}', title:'Perfect Week', desc:'All predictions correct in a week', earned:true },
+    { icon:'\u{1F48E}', title:'Team Loyalist', desc:'Always pick your favourite team', earned:false },
+    { icon:'\u{1F3C6}', title:'Upset Caller', desc:'Correctly predict 3+ upsets', earned:false },
+    { icon:'\u{1F680}', title:'Early Bird', desc:'Predict before anyone else, 10 times', earned:false },
+    { icon:'\u{1F451}', title:'Weekly Champion', desc:'Win a weekly prize', earned:false },
+  ];
+
+  return phone('Achievements', `
+    ${backBar('Achievements')}
+    <p style="margin-bottom:14px;font-size:14px;">Earn badges by predicting. Share to brag!</p>
+
+    ${achievements.map(a => `
+      <div class="achievement-card ${a.earned ? 'earned' : 'locked'}">
+        <div class="ach-icon">${a.icon}</div>
+        <div class="ach-info">
+          <div class="ach-title">${a.title}</div>
+          <div class="ach-desc">${a.desc}</div>
+        </div>
+        ${a.earned ? '<button class="btn-ghost" style="font-size:12px;padding:8px 14px;" data-action="shareAchievement">Share</button>' : '<div style="font-size:12px;color:#94a3b8;font-weight:600;">\u{1F512} Locked</div>'}
+      </div>
+    `).join('')}
+  `);
+}
+
+// ============================================================
+// SHARE CARDS (depth 2 from Pool Home)
+// ============================================================
+function renderShareCards() {
+  return phone('Share Card', `
+    ${backBar('Share Card')}
+    <p style="margin-bottom:14px;font-size:14px;">Pick a card to share in WhatsApp</p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+      ${['leaderboard','payout','predictions','achievements'].map(t =>
+        `<div style="padding:10px 14px;font-size:12px;font-weight:600;border-radius:10px;cursor:pointer;border:2px solid ${state.shareCardType === t ? '#000080' : '#e2e8f0'};background:${state.shareCardType === t ? '#f0fdf4' : '#fff'};color:${state.shareCardType === t ? '#000080' : '#475569'};min-height:40px;display:flex;align-items:center;transition:all 0.2s;" data-action="pickShareType" data-type="${t}">${t.charAt(0).toUpperCase() + t.slice(1)}</div>`
+      ).join('')}
+    </div>
+
+    <div class="screenshot-card">
+      ${state.shareCardType === 'leaderboard' ? `
+        <div style="text-align:center;font-weight:800;color:#0f172a;margin-bottom:12px;font-size:16px;">\u{1F3C6} Family IPL 2026</div>
+        ${getLB().slice(0, 5).map(l =>
+          `<div class="lb-row"><div class="lb-rank">#${l.rank}</div><div class="lb-avatar">${l.avatar}</div><div class="lb-name" style="font-weight:600;">${l.name}</div><div class="lb-pts">${l.pts}</div></div>`
+        ).join('')}
+      ` : state.shareCardType === 'payout' ? `
+        <div style="text-align:center;font-weight:800;color:#0f172a;margin-bottom:12px;font-size:16px;">\u{1F4B0} Week 1 Payouts</div>
+        <div class="list-row"><span style="color:#92400e;font-weight:700;">#1 Venkat</span><span style="color:#0f172a;font-weight:800;">\u20B91,600</span></div>
+        <div class="list-row"><span style="color:#475569;font-weight:600;">#2 Priya</span><span style="color:#0f172a;font-weight:700;">\u20B91,060</span></div>
+      ` : state.shareCardType === 'predictions' ? `
+        <div style="text-align:center;font-weight:800;color:#0f172a;margin-bottom:12px;font-size:16px;">\u{1F3AF} My Predictions</div>
+        <div class="list-row"><span style="font-weight:600;">CSK vs MI</span><span style="color:${teamColor('CSK')};font-weight:800;">CSK \u2713</span></div>
+        <div class="list-row"><span style="font-weight:600;">RCB vs SRH</span><span style="color:${teamColor('RCB')};font-weight:800;">RCB</span></div>
+      ` : `
+        <div style="text-align:center;font-weight:800;color:#0f172a;margin-bottom:12px;font-size:16px;">\u{1F525} Hot Streak!</div>
+        <div style="text-align:center;font-size:48px;margin:16px 0;">\u{1F525}</div>
+        <div style="text-align:center;color:#ea580c;font-weight:800;font-size:18px;">5 correct in a row!</div>
+      `}
+      <div style="text-align:center;margin-top:16px;padding-top:14px;border-top:2px solid #e2e8f0;">
+        <div style="display:inline-block;padding:10px 16px;border:2px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
+          <div style="font-size:11px;color:#94a3b8;font-weight:600;">[QR Code]</div>
+          <div style="font-size:12px;color:#000080;font-weight:700;">predictopia.app/join/abc123</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" style="margin-top:14px;font-size:16px;" data-action="saveShareCard">Save & Share</button>
+  `);
+}
+
+// ============================================================
+// PREDICT TAB — ACTIVE COMPETITIONS
+// ============================================================
+function renderPredictCompetitions() {
+  const poolId = 'p1'; // default pool for predict view
+  const top4 = state.top4Picks[poolId] || [];
+  const top4Locked = state.top4Locked[poolId] || false;
+  const winner = state.seasonWinner[poolId] || null;
+  const winnerLocked = state.seasonWinnerLocked[poolId] || false;
+
+  let html = '<div class="box-label" style="color:#f59e0b;margin-top:20px;">\u{1F3C6} Your Competitions</div>';
+
+  // Active competitions from state
+  state.competitions.forEach(c => {
+    const matchLabel = c.matchFrom === c.matchTo ? `Match ${c.matchFrom}` : `${c.matchFrom}-${c.matchTo}`;
+    const played = Math.min(6, c.matchTo) - c.matchFrom + 1;
+    const total = c.matchTo - c.matchFrom + 1;
+    html += `
+      <div class="comp-card" style="margin-bottom:8px;">
+        <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px;">${c.name}</div>
+        <div style="font-size:12px;color:#64748b;">${Math.min(played, total)}/${total} matches played</div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <span style="font-size:12px;color:#000080;font-weight:700;">Your rank: #2 \u00b7 10 pts</span>
+          <span style="font-size:12px;color:#92400e;font-weight:600;">Prize: \u20B9${c.pot.toLocaleString()} ${TIERS[c.tier] ? TIERS[c.tier].label : ''}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  // Top 4 Picks in predict tab
+  html += `
+    <div class="comp-card" style="border-left-color:#6366f1;margin-bottom:8px;">
+      <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px;">Top 4 Picks</div>
+      ${top4Locked && top4.length === 4 ?
+        `<div style="font-size:12px;color:#16a34a;font-weight:600;">\u{1F512} Locked: ${top4.join(', ')}</div>` :
+        `<div style="font-size:12px;color:#ea580c;font-weight:600;">Not locked yet \u2014 go to Pool Home</div>`
+      }
+    </div>
+  `;
+
+  // Season Winner in predict tab
+  html += `
+    <div class="comp-card" style="border-left-color:#6366f1;margin-bottom:8px;">
+      <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px;">Season Winner</div>
+      ${winnerLocked && winner ?
+        `<div style="font-size:12px;color:#16a34a;font-weight:600;">\u{1F512} Locked: ${winner}</div>` :
+        `<div style="font-size:12px;color:#ea580c;font-weight:600;">Not locked yet \u2014 go to Pool Home</div>`
+      }
+    </div>
+  `;
+
+  return html;
+}
+
+// ============================================================
+// ADMIN COMPETITIONS BUILDER
+// ============================================================
+function renderAdminCompetitions() {
+  const allocated = compAllocated();
+  const remaining = state.totalBudget - allocated;
+
+  // Separate recurring chunks from one-offs
+  const chunks = state.competitions.filter(c => c.type === 'recurring' || (!c.type && c.matchFrom !== c.matchTo && c.name.startsWith('Matches')));
+  const oneOffs = state.competitions.filter(c => !chunks.includes(c));
+  const chunkPot = chunks.length > 0 ? chunks[0].pot : 0;
+  const chunkTier = chunks.length > 0 ? chunks[0].tier : 'top3';
+  const overallComp = oneOffs.find(c => c.name === 'Overall Season' || c.name === 'Overall');
+
+  let html = `
+    <div style="margin-bottom:14px;">
+      <div class="box-label" style="margin:0;">Competition Structure</div>
+      <div style="font-size:11px;color:#94a3b8;margin-top:2px;">League style locked \u{1F512}. Adjust pots and distribution.</div>
+    </div>
+
+    <div class="box" style="border-left:4px solid #000080;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:8px;">Recurring: ${chunks.length} chunks \u{1F512}</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+        <label style="font-size:12px;color:#475569;font-weight:600;white-space:nowrap;">Per chunk:</label>
+        <span style="font-size:11px;color:#475569;">\u20B9</span>
+        <input type="number" value="${chunkPot}" style="width:80px;padding:8px;border:2px solid #000080;border-radius:8px;font-size:14px;font-weight:700;color:#000080;text-align:center;" data-action="adminAllChunksPot">
+        <select style="flex:1;padding:8px;border:2px solid #000080;border-radius:8px;font-size:12px;font-weight:600;color:#000080;" data-action="adminAllChunksTier">
+          ${Object.entries(TIERS).map(([k,v]) => `<option value="${k}" ${chunkTier === k ? 'selected' : ''}>${v.label}</option>`).join('')}
+        </select>
+      </div>
+      <div style="font-size:11px;color:#64748b;">${chunks.length} \u00d7 \u20B9${chunkPot.toLocaleString()} = \u20B9${(chunks.length * chunkPot).toLocaleString()}</div>
+    </div>
+  `;
+
+  // Overall
+  if (overallComp) {
+    html += `
+    <div class="box" style="border-left:4px solid #000080;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:8px;">Overall Season</div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <label style="font-size:12px;color:#475569;font-weight:600;white-space:nowrap;">Pot:</label>
+        <span style="font-size:11px;color:#475569;">\u20B9</span>
+        <input type="number" value="${overallComp.pot}" style="width:80px;padding:8px;border:2px solid #000080;border-radius:8px;font-size:14px;font-weight:700;color:#000080;text-align:center;" data-action="adminOneOffPot" data-id="${overallComp.id}">
+        <select style="flex:1;padding:8px;border:2px solid #000080;border-radius:8px;font-size:12px;font-weight:600;color:#000080;" data-action="adminOneOffTier" data-id="${overallComp.id}">
+          ${Object.entries(TIERS).map(([k,v]) => `<option value="${k}" ${overallComp.tier === k ? 'selected' : ''}>${v.label}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    `;
+  }
+
+  // One-offs (excluding overall)
+  const otherOneOffs = oneOffs.filter(c => c !== overallComp);
+  if (otherOneOffs.length > 0) {
+    html += `<div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:8px;">One-off Competitions</div>`;
+    otherOneOffs.forEach(c => {
+      html += `
+      <div class="comp-card" style="margin-bottom:8px;">
+        <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:6px;">${c.name}</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span style="font-size:11px;color:#475569;">\u20B9</span>
+          <input type="number" value="${c.pot}" style="width:80px;padding:8px;border:2px solid #000080;border-radius:8px;font-size:14px;font-weight:700;color:#000080;text-align:center;" data-action="adminOneOffPot" data-id="${c.id}">
+          <select style="flex:1;padding:8px;border:2px solid #000080;border-radius:8px;font-size:12px;font-weight:600;color:#000080;" data-action="adminOneOffTier" data-id="${c.id}">
+            ${Object.entries(TIERS).map(([k,v]) => `<option value="${k}" ${c.tier === k ? 'selected' : ''}>${v.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      `;
+    });
+  }
+
+  // Budget summary with validation
+  const overBudget = allocated > state.totalBudget;
+  const overBy = allocated - state.totalBudget;
+  const paidOut = 2660; // sample amount already paid
+
+  html += `
+    <div class="box" style="border:2px solid ${overBudget ? '#dc2626' : '#16a34a'};margin-top:12px;${overBudget ? 'background:#fef2f2;' : ''}">
+      <div style="font-size:15px;font-weight:800;color:${overBudget ? '#dc2626' : '#16a34a'};margin-bottom:8px;">
+        Allocated: \u20B9${allocated.toLocaleString()} / \u20B9${state.totalBudget.toLocaleString()} ${overBudget ? '\u26A0\uFE0F' : '\u2705'}
+      </div>
+      ${overBudget ? '<div style="font-size:13px;color:#dc2626;font-weight:600;margin-bottom:8px;">Over by \u20B9' + overBy.toLocaleString() + ' \u2014 reduce pot amounts to save</div>' : ''}
+      <div class="budget-item"><span style="color:#475569;font-weight:600;">Remaining</span><span style="color:${remaining >= 0 ? '#16a34a' : '#dc2626'};font-weight:800;">\u20B9${remaining.toLocaleString()}</span></div>
+      <div class="budget-item"><span style="color:#475569;font-weight:600;">Already Paid Out</span><span style="color:#0f172a;font-weight:700;">\u20B9${paidOut.toLocaleString()}</span></div>
+      <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Pots cannot be reduced below amounts already paid out.</div>
+    </div>
+
+    <button class="btn" data-action="saveSettings" style="margin-top:12px;${overBudget ? 'opacity:0.4;pointer-events:none;background:#94a3b8;' : ''}">
+      ${overBudget ? 'Over budget \u2014 adjust to save' : 'Save Changes'}
+    </button>
+  `;
+
+  // Add/Edit form
+  if (state.compFormOpen) {
+    const isEdit = state.compEditId !== null;
+    html += `
+      <div class="box" style="margin-top:14px;border:2px solid #f59e0b;background:#fffbeb;">
+        <div class="box-label" style="color:#92400e;">${isEdit ? 'Edit' : 'New'} Competition</div>
+        <div class="input-label">Name</div>
+        <input class="input" type="text" id="compNameInput" placeholder="e.g. First 10 Matches" value="${state.compFormName}">
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;">
+            <div class="input-label">From Match</div>
+            <input class="input" type="number" id="compFromInput" placeholder="1" value="${state.compFormFrom}">
+          </div>
+          <div style="flex:1;">
+            <div class="input-label">To Match</div>
+            <input class="input" type="number" id="compToInput" placeholder="10" value="${state.compFormTo}">
+          </div>
+        </div>
+        <div class="input-label">Pot Amount (\u20B9)</div>
+        <input class="input" type="number" id="compPotInput" placeholder="2000" value="${state.compFormPot}">
+        <div class="input-label">Distribution</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+          ${['winner','top3','top5','top10'].map(key => {
+            const t = TIERS[key];
+            return `<div style="padding:8px 12px;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;border:2px solid ${state.compFormTier === key ? '#000080' : '#e2e8f0'};background:${state.compFormTier === key ? '#f0fdf4' : '#fff'};color:${state.compFormTier === key ? '#000080' : '#475569'};transition:all 0.2s;" data-action="pickCompTier" data-tier="${key}">${t ? t.label : key}</div>`;
+          }).join('')}
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm" style="flex:1;" data-action="saveComp">Save</button>
+          <button class="btn btn-sm btn-secondary" style="flex:1;" data-action="cancelComp">Cancel</button>
+        </div>
+      </div>
+    `;
+  }
+
+  return html;
+}
+
+// ============================================================
+// EVENT BINDING
+// ============================================================
+function bindEvents() {
+  document.querySelectorAll('[data-action]').forEach(el => {
+    const evtType = (el.tagName === 'INPUT' || el.tagName === 'SELECT') ? 'change' : 'click';
+    el.addEventListener(evtType, (e) => {
+      if (evtType === 'click') e.stopPropagation();
+      const action = el.dataset.action;
+      handleAction(action, el, e);
+    });
+    // Also listen for input events on text inputs to capture as-you-type
+    if (el.tagName === 'INPUT' && el.type === 'text' && el.dataset.action === 'setPoolName') {
+      el.addEventListener('input', (e) => {
+        state.createPoolName = el.value;
+      });
+    }
+  });
+}
+
+function handleAction(action, el, event) {
+  switch(action) {
+    case 'goAuth': nav('auth', { depth:0 }); break;
+    case 'googleAuth':
+      state.user = { name:'Venkat' };
+      state.displayName = 'Venkat Chandrasekhar';
+      if (state.isNewUser) {
+        nav('onboarding', { depth:0 });
+      } else {
+        nav('myPools', { bottomTab:'pools', depth:0 });
+      }
+      break;
+
+    case 'pickAvatar':
+      state.selectedAvatar = parseInt(el.dataset.idx);
+      render();
+      break;
+    case 'selectTeam':
+      state.selectedTeam = el.dataset.team;
+      render();
+      setTimeout(() => {
+        state.isNewUser = false;
+        nav('myPools', { bottomTab:'pools', depth:0 });
+      }, 400);
+      break;
+    case 'completeOnboarding':
+      state.isNewUser = false;
+      nav('myPools', { bottomTab:'pools', depth:0 });
+      break;
+
+    case 'tabPools': goTab('pools'); break;
+    case 'tabPredict': goTab('predict'); break;
+    case 'tabProfile': goTab('profile'); break;
+
+    case 'goBack': goBack(); break;
+
+    case 'openPool':
+      nav('poolHome', { pool:el.dataset.pool, bottomTab:'pools', depth:1, tab:'predict' });
+      break;
+    case 'togglePin':
+      const pid = el.dataset.pool;
+      state.pinnedPools[pid] = !state.pinnedPools[pid];
+      render();
+      break;
+    case 'goCreatePool':
+      state.createWizardStep = 1;
+      state.createPoolName = '';
+      state.createPoolIcon = null;
+      state.createPoolBuyin = 500;
+      state.expectedMembers = 20;
+      state.commissionPct = 20;
+      state.wizLeagueStyle = 'chunks';
+      state.wizChunkSize = 10;
+      state.wizPerChunkPot = 1000;
+      state.wizPerChunkTier = 'top3';
+      state.wizOverallPot = 1000;
+      state.wizOverallTier = 'top3';
+      state.wizOneOffTop4 = true;
+      state.wizOneOffTop4Pot = 0;
+      state.wizOneOffTop4Tier = 'top3';
+      state.wizOneOffWinner = true;
+      state.wizOneOffWinnerPot = 0;
+      state.wizOneOffWinnerTier = 'winner';
+      state.wizPlayoffMatches = [];
+      state.wizCompetitions = [];
+      nav('createPool', { bottomTab:'pools', depth:1 });
+      break;
+
+    case 'pickPoolIcon':
+      state.createPoolIcon = parseInt(el.dataset.idx);
+      render();
+      break;
+    case 'pickTier':
+      state.selectedTier = el.dataset.tier;
+      render();
+      break;
+    case 'setMidSeason':
+      state.midSeasonRule = el.dataset.rule;
+      document.querySelectorAll('[data-action="setMidSeason"]').forEach(function(btn) {
+        const isActive = btn.dataset.rule === state.midSeasonRule;
+        btn.style.borderColor = isActive ? '#000080' : '#e2e8f0';
+        btn.style.background = isActive ? '#f0fdf4' : '#fff';
+        btn.style.color = isActive ? '#000080' : '#475569';
+      });
+      break;
+    case 'commSlider': {
+      const rect = el.getBoundingClientRect();
+      const x = (event || window.event).clientX || rect.left + rect.width / 2;
+      const pct = Math.round(Math.max(0, Math.min(50, ((x - rect.left) / rect.width) * 50)));
+      state.commissionPct = Math.round(pct / 5) * 5;
+      render();
+    }
+      break;
+    case 'setBuyin':
+      state.createPoolBuyin = Math.max(0, parseInt(el.value) || 0);
+      render();
+      break;
+    case 'setExpMembers':
+      state.expectedMembers = Math.max(1, Math.min(100, parseInt(el.value) || 1));
+      render();
+      break;
+    case 'createPoolDone': {
+      const newPoolId = 'p' + (SAMPLE_POOLS.length + 1);
+      const wizName = state.createPoolName || 'My New Pool';
+      const wizIcon = state.createPoolIcon !== null ? POOL_ICONS[state.createPoolIcon] : '\u{1F3CF}';
+      SAMPLE_POOLS.push({
+        id: newPoolId,
+        name: wizName,
+        icon: wizIcon,
+        role: 'Creator',
+        members: 1,
+        buyin: state.createPoolBuyin,
+        commission: state.commissionPct,
+        tier: 'top3',
+        adminName: 'You',
+        invested: 0,
+        won: 0
+      });
+      // Generate competitions from league style config
+      const genComps = [];
+      const ls = state.wizLeagueStyle;
+      if (ls === 'chunks') {
+        const cks = wizGenerateChunks();
+        cks.forEach((ch, i) => {
+          genComps.push({ id:'gc'+(i+1), name:ch.label, matchFrom:ch.from, matchTo:ch.to, pot:state.wizPerChunkPot, tier:state.wizPerChunkTier });
+        });
+      } else if (ls === 'weekly') {
+        for (let w = 1; w <= 12; w++) {
+          genComps.push({ id:'gw'+w, name:'Week '+w, matchFrom:0, matchTo:0, pot:state.wizPerChunkPot, tier:state.wizPerChunkTier });
+        }
+      }
+      if (state.wizOverallPot > 0) {
+        genComps.push({ id:'govr', name:'Overall', matchFrom:1, matchTo:70, pot:state.wizOverallPot, tier:state.wizOverallTier });
+      }
+      state.wizPlayoffMatches.forEach(p => {
+        genComps.push({ id:'gp'+p.id, name:p.name, matchFrom:p.matchNum, matchTo:p.matchNum, pot:p.pot, tier:p.tier });
+      });
+      state.competitions = genComps;
+      showToast('Pool created! Share the link to invite members.');
+      nav('poolHome', { pool: newPoolId, bottomTab:'pools', depth:1, tab:'predict' });
+      break;
+    }
+
+    // ── WIZARD NAVIGATION ──
+    case 'wizNext':
+      if (state.createWizardStep === 1) {
+        // Capture pool name from input before advancing
+        const nameEl1 = document.getElementById('wizPoolName');
+        if (nameEl1) state.createPoolName = nameEl1.value.trim();
+      }
+      if (state.createWizardStep < 3) {
+        state.createWizardStep++;
+        render();
+      }
+      break;
+    case 'wizBack':
+      if (state.createWizardStep === 1) {
+        goBack();
+      } else {
+        if (state.createWizardStep === 2) {
+          // Capture pool name if going back to step 1 from step 2
+        }
+        state.createWizardStep--;
+        render();
+      }
+      break;
+    case 'wizJumpStep': {
+      const targetStep = parseInt(el.dataset.step);
+      if (targetStep < state.createWizardStep) {
+        state.createWizardStep = targetStep;
+        render();
+      }
+      break;
+    }
+    case 'setPoolName': {
+      state.createPoolName = el.value.trim();
+      break;
+    }
+
+    // ── WIZARD LEAGUE STYLE & COMPETITIONS ──
+    case 'wizSetLeagueStyle':
+      state.wizLeagueStyle = el.dataset.style;
+      render();
+      break;
+    case 'wizSetChunkSize': {
+      const csEl = document.getElementById('wizChunkSize');
+      state.wizChunkSize = Math.max(1, Math.min(70, parseInt(csEl ? csEl.value : el.value) || 10));
+      render();
+      break;
+    }
+    case 'wizSetPerChunkPot': {
+      const pcEl = document.getElementById('wizPerChunkPot');
+      state.wizPerChunkPot = Math.max(0, parseInt(pcEl ? pcEl.value : el.value) || 0);
+      render();
+      break;
+    }
+    case 'wizSetPerChunkTier': {
+      const ptEl = document.getElementById('wizPerChunkTier');
+      state.wizPerChunkTier = ptEl ? ptEl.value : el.value;
+      render();
+      break;
+    }
+    case 'wizSetOverallPot': {
+      const opEl = document.getElementById('wizOverallPot');
+      state.wizOverallPot = Math.max(0, parseInt(opEl ? opEl.value : el.value) || 0);
+      render();
+      break;
+    }
+    case 'wizSetOverallTier': {
+      const otEl = document.getElementById('wizOverallTier');
+      state.wizOverallTier = otEl ? otEl.value : el.value;
+      render();
+      break;
+    }
+    case 'wizToggleOneOff': {
+      const oKey = el.dataset.key;
+      if (oKey === 'top4') state.wizOneOffTop4 = !state.wizOneOffTop4;
+      else if (oKey === 'winner') state.wizOneOffWinner = !state.wizOneOffWinner;
+      render();
+      break;
+    }
+    case 'wizSetOneOffPot': {
+      const ooKey = el.dataset.key;
+      const val = Math.max(0, parseInt(el.value) || 0);
+      if (ooKey === 'top4') state.wizOneOffTop4Pot = val;
+      else if (ooKey === 'winner') state.wizOneOffWinnerPot = val;
+      render();
+      break;
+    }
+    case 'wizSetOneOffTier': {
+      const otKey = el.dataset.key;
+      if (otKey === 'top4') state.wizOneOffTop4Tier = el.value;
+      else if (otKey === 'winner') state.wizOneOffWinnerTier = el.value;
+      render();
+      break;
+    }
+    case 'wizAddPlayoff': {
+      state.wizPlayoffMatches.push({
+        id: el.dataset.id,
+        name: el.dataset.name,
+        matchNum: parseInt(el.dataset.match),
+        pot: 0,
+        tier: 'winner'
+      });
+      render();
+      break;
+    }
+    case 'wizRemovePlayoff': {
+      state.wizPlayoffMatches = state.wizPlayoffMatches.filter(p => p.id !== el.dataset.id);
+      render();
+      break;
+    }
+    case 'wizSetPlayoffPot': {
+      const pm = state.wizPlayoffMatches.find(p => p.id === el.dataset.id);
+      if (pm) pm.pot = Math.max(0, parseInt(el.value) || 0);
+      render();
+      break;
+    }
+    case 'wizSetPlayoffTier': {
+      const pm2 = state.wizPlayoffMatches.find(p => p.id === el.dataset.id);
+      if (pm2) pm2.tier = el.value;
+      render();
+      break;
+    }
+
+    case 'poolTab':
+      state.currentPoolTab = el.dataset.tab;
+      render();
+      break;
+    case 'lbTab':
+      state.leaderboardTab = el.dataset.lbtab;
+      render();
+      break;
+    case 'lbDropdown':
+      state.leaderboardTab = el.value;
+      render();
+      break;
+
+    case 'sharePoolLink':
+      showToast('Link copied: predictopia.app/join/abc123');
+      break;
+    case 'goAdminDash':
+      nav('adminDash', { depth:2, adminSection:'requests' });
+      break;
+    case 'goShareCards':
+      nav('shareCards', { depth:2 });
+      break;
+
+    case 'predict': {
+      const pp = el.dataset.pool || state.currentPool || 'default';
+      if (!state.predictions[pp]) state.predictions[pp] = {};
+      state.predictions[pp][el.dataset.match] = el.dataset.team;
+      showToast(el.dataset.team + ' locked in!');
+      render();
+      break;
+    }
+    case 'editPick':
+      { const ep = el.dataset.pool || state.currentPool || 'default';
+      if (state.predictions[ep]) delete state.predictions[ep][el.dataset.match]; }
+      showToast('Pick cleared — choose again');
+      render();
+      break;
+
+    case 'nudgeMembers':
+      showToast(el.dataset.msg);
+      break;
+
+    case 'sharePicks':
+      showToast(el.dataset.msg);
+      break;
+    case 'shareShowcase':
+      if (el.dataset.type === 'top4') {
+        showToast('Share: 🏏 Top 4 Playoff Picks! Venkat: CSK,MI,KKR,RR · Priya: MI,RCB,CSK,DC · Join: predictopia.app/join/abc123');
+      } else {
+        showToast('Share: 🏆 Who wins IPL 2026? Venkat: MI · Priya: CSK · Arjun: RCB · Join: predictopia.app/join/abc123');
+      }
+      break;
+    case 'sharePrizeWinner':
+      showToast('Share: 🏆 ' + el.dataset.comp + ' winner: Venkat ₹1,000! Join: predictopia.app/join/abc123');
+      break;
+
+    case 'togglePaid':
+      const idx = parseInt(el.dataset.idx);
+      MEMBERS_LIST[idx].paid = !MEMBERS_LIST[idx].paid;
+      render();
+      break;
+    case 'makeAdmin':
+      const maIdx = parseInt(el.dataset.idx);
+      if (!isNaN(maIdx) && MEMBERS_LIST[maIdx]) {
+        MEMBERS_LIST[maIdx].role = 'Admin';
+        showToast(`${MEMBERS_LIST[maIdx].name} is now an Admin`);
+        render();
+      }
+      break;
+    case 'removeMember':
+      state.confirmDialog = { title:'Remove Member', message:`Remove ${el.dataset.name} from this pool? This cannot be undone.` };
+      render();
+      break;
+    case 'approveReq':
+      state.pendingRequests = state.pendingRequests.filter(r => r.id !== el.dataset.id);
+      showToast('Request approved');
+      render();
+      break;
+    case 'rejectReq':
+      state.pendingRequests = state.pendingRequests.filter(r => r.id !== el.dataset.id);
+      showToast('Request rejected');
+      render();
+      break;
+
+    case 'adminSec':
+      state.adminDashSection = el.dataset.sec;
+      render();
+      break;
+    case 'pickShareType':
+      state.shareCardType = el.dataset.type;
+      render();
+      break;
+
+    case 'requestToJoin':
+      nav('joinRequestSent', { depth:0 });
+      break;
+    case 'autoJoin':
+      state.isNewUser = false;
+      nav('myPools', { bottomTab:'pools', depth:0 });
+      break;
+    case 'simApprove':
+      state.isNewUser = false;
+      nav('myPools', { bottomTab:'pools', depth:0 });
+      break;
+
+    case 'goAchievements':
+      nav('achievements', { bottomTab:'profile', depth:1 });
+      break;
+    case 'goEditProfile':
+      nav('editProfile', { bottomTab:'profile', depth:1 });
+      break;
+
+    case 'confirmDeletePool':
+      state.confirmDialog = { title:'Delete Pool', message:'This cannot be undone. All pool data, members, and history will be permanently deleted.' };
+      render();
+      break;
+
+    case 'confirmCancel':
+      state.confirmDialog = null;
+      render();
+      break;
+    case 'confirmOk':
+      state.confirmDialog = null;
+      nav('myPools', { bottomTab:'pools', depth:0 });
+      break;
+
+    case 'markPaid':
+      showToast('Marked as paid');
+      break;
+    case 'shareAchievement':
+      showToast('Achievement card ready to share!');
+      break;
+    case 'copyPoolLink':
+      showToast('Link copied: predictopia.app/join/abc123');
+      break;
+    case 'saveSettings':
+      showToast('Settings saved');
+      break;
+    case 'leavePool':
+      state.confirmDialog = { title:'Leave Pool', message:'You will lose access to this pool. Are you sure?' };
+      render();
+      break;
+    case 'saveShareCard':
+      showToast('Card saved — ready to share!');
+      break;
+    case 'saveEditProfile':
+      showToast('Profile updated');
+      nav('profile', { bottomTab:'profile', depth:0 });
+      break;
+    case 'selectTeamEdit':
+      state.selectedTeam = el.dataset.team;
+      render();
+      break;
+
+    // ── TOP 4 PICKS ──
+    case 'toggleTop4': {
+      const tp = el.dataset.pool || 'default';
+      const team = el.dataset.team;
+      if (!state.top4Picks[tp]) state.top4Picks[tp] = [];
+      const arr = state.top4Picks[tp];
+      const idx4 = arr.indexOf(team);
+      if (idx4 >= 0) {
+        arr.splice(idx4, 1);
+      } else if (arr.length < 4) {
+        arr.push(team);
+      } else {
+        showToast('Max 4 teams — deselect one first');
+      }
+      render();
+      break;
+    }
+    case 'lockTop4': {
+      const lp = el.dataset.pool || 'default';
+      if ((state.top4Picks[lp] || []).length === 4) {
+        state.top4Locked[lp] = true;
+        showToast('Top 4 picks locked!');
+        render();
+      }
+      break;
+    }
+
+    // ── SEASON WINNER ──
+    case 'pickSeasonWinner': {
+      const sp = el.dataset.pool || 'default';
+      state.seasonWinner[sp] = el.dataset.team;
+      render();
+      break;
+    }
+    case 'lockSeasonWinner': {
+      const swp = el.dataset.pool || 'default';
+      if (state.seasonWinner[swp]) {
+        state.seasonWinnerLocked[swp] = true;
+        showToast('Season winner pick locked!');
+        render();
+      }
+      break;
+    }
+
+    // ── COMPETITION BUILDER ──
+    case 'toggleCompForm':
+      state.compFormOpen = !state.compFormOpen;
+      state.compEditId = null;
+      state.compFormName = '';
+      state.compFormFrom = '';
+      state.compFormTo = '';
+      state.compFormPot = '';
+      state.compFormTier = 'top3';
+      render();
+      break;
+    case 'editComp': {
+      state.compEditId = el.dataset.id;
+      render();
+      // Auto-scroll to the editing card
+      setTimeout(() => {
+        const card = document.getElementById('comp-' + el.dataset.id);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+      break;
+    }
+    case 'adminAllChunksPot': {
+      const newPot = Math.max(0, parseInt(el.value) || 0);
+      state.competitions.forEach(c => {
+        if (c.type === 'recurring' || (!c.type && c.matchFrom !== c.matchTo && c.name.startsWith('Matches'))) {
+          c.pot = newPot;
+        }
+      });
+      render();
+      break;
+    }
+    case 'adminAllChunksTier': {
+      state.competitions.forEach(c => {
+        if (c.type === 'recurring' || (!c.type && c.matchFrom !== c.matchTo && c.name.startsWith('Matches'))) {
+          c.tier = el.value;
+        }
+      });
+      render();
+      break;
+    }
+    case 'adminOneOffPot': {
+      const comp = state.competitions.find(c => c.id === el.dataset.id);
+      if (comp) comp.pot = Math.max(0, parseInt(el.value) || 0);
+      render();
+      break;
+    }
+    case 'adminOneOffTier': {
+      const comp = state.competitions.find(c => c.id === el.dataset.id);
+      if (comp) comp.tier = el.value;
+      render();
+      break;
+    }
+    case 'deleteComp': {
+      state.competitions = state.competitions.filter(c => c.id !== el.dataset.id);
+      showToast('Competition deleted');
+      render();
+      break;
+    }
+    case 'pickCompTier':
+      state.compFormTier = el.dataset.tier;
+      render();
+      break;
+    case 'saveComp': {
+      const nameEl = document.getElementById('compNameInput');
+      const fromEl = document.getElementById('compFromInput');
+      const toEl = document.getElementById('compToInput');
+      const potEl = document.getElementById('compPotInput');
+      const name = nameEl ? nameEl.value.trim() : '';
+      const from = fromEl ? parseInt(fromEl.value) : 0;
+      const to = toEl ? parseInt(toEl.value) : 0;
+      const pot = potEl ? parseInt(potEl.value) : 0;
+      if (!name || !from || !to || !pot) {
+        showToast('Fill in all fields');
+        break;
+      }
+      if (state.compEditId) {
+        const comp = state.competitions.find(c => c.id === state.compEditId);
+        if (comp) {
+          comp.name = name;
+          comp.matchFrom = from;
+          comp.matchTo = to;
+          comp.pot = pot;
+          comp.tier = state.compFormTier;
+        }
+        showToast('Competition updated');
+      } else {
+        state.competitions.push({
+          id: 'c' + (Date.now()),
+          name, matchFrom: from, matchTo: to, pot, tier: state.compFormTier
+        });
+        showToast('Competition added');
+      }
+      state.compFormOpen = false;
+      state.compEditId = null;
+      render();
+      break;
+    }
+    case 'cancelComp':
+      state.compFormOpen = false;
+      state.compEditId = null;
+      render();
+      break;
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+render();
+</script>
+</body>
+</html>

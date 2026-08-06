@@ -900,27 +900,28 @@
 
     <div class="project-grid">
       <article class="project-card">
-        <div class="project-badge">Code complete · IPL 2026</div>
+        <div class="project-badge">In design · v2 multi-sport rewrite</div>
         <h3>Predictopia</h3>
         <p class="blurb">
-          Family IPL prediction leagues that run themselves — one-tap picks, auto-lock before toss,
-          on-demand result scoring, weekly/monthly/season leaderboards, and offline prize tracking.
-          Designed to eliminate 17–35 hours of seasonal admin labour. Built solo in a 9-day sprint using
-          Claude Code: Next.js + Supabase (10 tables, RLS nuclear fix, Realtime), on-demand API thrift
-          pattern, and an Nx commission prize engine. Full product lifecycle: PRD → architecture → code.
+          A family/friends prediction-pool platform, mid architectural rewrite: v1 shipped as an
+          IPL-2026-only app (9-day solo sprint, Next.js + Supabase), then went dormant outside cricket
+          season by design — the scoping mistake became the v2 thesis. v2 generalises to any sport via
+          a Group (persistent people) / Pool (tournament instance) split and a generic "event" data
+          model, so match outcomes and admin-authored special events share one schema with no rebuild
+          per sport. Currently a full clickable prototype validating the PRD before build — Group/Pool
+          opt-in, autopilot scoring, period-filtered leaderboards, per-event dispute drill-down,
+          delegatable Group Admin roles, and offline prize tracking with admin-only economics.
         </p>
         <div class="tag-row">
           <span class="tag">Next.js</span>
           <span class="tag">Supabase</span>
-          <span class="tag">Vercel</span>
-          <span class="tag">Realtime</span>
-          <span class="tag">Event-driven</span>
-          <span class="tag">RLS</span>
+          <span class="tag">Product architecture</span>
+          <span class="tag">Data modelling</span>
+          <span class="tag">PRD → prototype</span>
         </div>
         <div class="project-links">
-          <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Open app →</a>
+          <a class="btn btn-primary" href="predictopia/prototype.html" target="_blank" rel="noopener">Open prototype →</a>
           <a class="btn btn-secondary" href="predictopia/" target="_blank" rel="noopener">Documentation</a>
-          <a class="btn btn-secondary" href="predictopia/help/" target="_blank" rel="noopener">User guide</a>
         </div>
       </article>
 

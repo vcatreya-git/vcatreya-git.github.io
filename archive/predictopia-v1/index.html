@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictopia — Multi-Group Sports Prediction Leagues</title>
+<style>
+:root {
+  --teal: #0D9488;
+  --teal-dark: #0F766E;
+  --teal-light: #CCFBF1;
+  --teal-xlight: #F0FDFA;
+  --orange: #EA580C;
+  --orange-light: #FED7AA;
+  --orange-xlight: #FFF7ED;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --white: #ffffff;
+  --sidebar-w: 224px;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--white);color:var(--slate-800);line-height:1.6;font-size:15px;padding-left:var(--sidebar-w)}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:12px;background:var(--slate-100);padding:1px 5px;border-radius:3px;color:var(--teal-dark)}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--slate-200);z-index:200;display:flex;flex-direction:column;overflow-y:auto}
+.sb-logo{padding:16px 14px 12px;border-bottom:1px solid var(--slate-200);flex-shrink:0}
+.sb-logo .wordmark{font-size:16px;font-weight:800;color:var(--slate-900);letter-spacing:-0.3px}
+.sb-logo .wordmark span{color:var(--teal)}
+.sb-status{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;font-weight:600;color:var(--teal-dark);background:var(--teal-light);padding:2px 8px;border-radius:100px}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sb-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--slate-400);padding:12px 14px 3px}
+.sb-nav{padding:4px 6px;flex:1}
+.sb-nav a{display:flex;align-items:center;gap:7px;padding:6px 8px;font-size:12.5px;font-weight:500;color:var(--slate-500);border-radius:var(--radius-sm);text-decoration:none;transition:all .12s;margin-bottom:1px;line-height:1.3}
+.sb-nav a .ico{font-size:13px;flex-shrink:0}
+.sb-nav a:hover{background:var(--slate-100);color:var(--slate-800)}
+.sb-nav a.active{background:var(--teal-xlight);color:var(--teal-dark);font-weight:600}
+.sb-ctas{padding:10px;border-top:1px solid var(--slate-200);flex-shrink:0}
+.sb-ctas a{display:block;text-align:center;padding:7px;font-size:12.5px;font-weight:600;border-radius:var(--radius-sm);text-decoration:none;margin-bottom:5px;transition:all .12s}
+.sb-btn-primary{background:var(--teal);color:white}
+.sb-btn-primary:hover{background:var(--teal-dark);text-decoration:none}
+.sb-btn-ghost{color:var(--slate-600);border:1px solid var(--slate-200)}
+.sb-btn-ghost:hover{background:var(--slate-100);color:var(--slate-800);text-decoration:none}
+
+/* ── MOBILE HEADER ── */
+.mobile-header{display:none;position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--slate-200);padding:0 16px;height:52px;align-items:center;justify-content:space-between}
+.mob-logo{font-size:15px;font-weight:800;color:var(--slate-900)}
+.mob-logo span{color:var(--teal)}
+.mob-cta{background:var(--teal);color:white;padding:6px 13px;border-radius:var(--radius-sm);font-size:12px;font-weight:600}
+
+/* ── LAYOUT ── */
+.section{padding:72px 40px}
+.section-alt{background:var(--slate-50)}
+.section-dark{background:var(--slate-900)}
+.container{max-width:1020px;margin:0 auto}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:6px}
+.section-title{font-size:clamp(20px,2.5vw,30px);font-weight:800;color:var(--slate-900);letter-spacing:-.6px;margin-bottom:8px;line-height:1.2}
+.section-sub{font-size:14px;color:var(--slate-500);max-width:580px;margin-bottom:40px;line-height:1.65}
+.section-sub-wide{max-width:760px}
+
+/* ── HERO ── */
+#overview{background:linear-gradient(155deg,var(--teal-xlight) 0%,var(--white) 55%);padding:80px 40px 72px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:var(--teal-light);color:var(--teal-dark);font-size:11px;font-weight:600;padding:4px 13px;border-radius:100px;margin-bottom:20px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+#overview h1{font-size:clamp(26px,3.8vw,44px);font-weight:800;color:var(--slate-900);letter-spacing:-1.5px;line-height:1.1;max-width:660px;margin:0 auto 16px}
+#overview h1 span{color:var(--teal)}
+#overview .hero-sub{font-size:clamp(13px,1.6vw,16px);color:var(--slate-600);max-width:600px;margin:0 auto 28px;line-height:1.7}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:600;transition:all .15s;text-decoration:none}
+.btn-primary{background:var(--teal);color:white;box-shadow:0 2px 10px rgba(13,148,136,.25)}
+.btn-primary:hover{background:var(--teal-dark);transform:translateY(-1px);text-decoration:none}
+.btn-secondary{background:white;color:var(--slate-800);border:1.5px solid var(--slate-200)}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-xlight);text-decoration:none}
+
+/* ── STATS ── */
+#stats{background:var(--slate-900);padding:40px}
+.stats-grid{max-width:1020px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08)}
+.stat-item{background:var(--slate-900);padding:26px 28px;text-align:center}
+.stat-number{font-size:clamp(24px,3.2vw,38px);font-weight:800;color:var(--teal);letter-spacing:-1px;display:block;margin-bottom:5px}
+.stat-label{font-size:12px;color:rgba(255,255,255,.45);line-height:1.5}
+
+/* ── PROBLEM ── */
+.problem-intro{font-size:14px;color:var(--slate-700);line-height:1.7;max-width:760px;margin-bottom:32px;padding:16px 20px;background:white;border-radius:var(--radius);border-left:4px solid var(--teal);box-shadow:var(--shadow-sm)}
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.problem-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.problem-icon{width:36px;height:36px;background:var(--teal-xlight);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:16px}
+.problem-card h3{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:6px}
+.problem-card p{font-size:13px;color:var(--slate-600);line-height:1.65}
+
+/* ── PIPELINE ── */
+.pipeline-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:36px}
+.p-step{flex:1;min-width:118px;background:white;border:1.5px solid var(--teal);border-radius:var(--radius);padding:16px 12px;position:relative;text-align:center;box-shadow:var(--shadow-sm)}
+.p-step.planned{border-style:dashed;border-color:var(--slate-300);background:var(--slate-50)}
+.p-step:not(:last-child)::after{content:'→';position:absolute;right:-11px;top:50%;transform:translateY(-50%);color:var(--teal);font-size:14px;font-weight:700;z-index:1}
+.p-step.planned:not(:last-child)::after{color:var(--slate-400)}
+.p-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--teal);color:white;border-radius:50%;font-size:10px;font-weight:700;margin-bottom:6px}
+.p-step.planned .p-step-num{background:var(--slate-400)}
+.p-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 6px;border-radius:100px;margin-bottom:6px}
+.badge-live{background:var(--teal-light);color:var(--teal-dark)}
+.badge-planned{background:var(--slate-200);color:var(--slate-600)}
+.p-step h3{font-size:11px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.p-step.planned h3{color:var(--slate-500)}
+.p-step p{font-size:10px;color:var(--slate-500);line-height:1.5}
+
+/* ── CAPABILITIES ── */
+.cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.cap-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm)}
+.cap-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--teal);color:white;border-radius:50%;font-size:10px;font-weight:700;margin-bottom:8px}
+.cap-card h3{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:5px}
+.cap-card .cap-status{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:6px;display:block}
+.cap-card .cap-status.live-tag{color:var(--teal-dark)}
+.cap-card p{font-size:12px;color:var(--slate-600);line-height:1.6}
+
+/* ── JOURNEYS ── */
+.journey-cards{display:flex;flex-direction:column;gap:20px;margin-top:32px}
+.journey-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.journey-card h3{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:4px}
+.journey-card .j-meta{font-size:11px;color:var(--slate-400);margin-bottom:14px;font-style:italic}
+.journey-card p{font-size:13px;color:var(--slate-600);line-height:1.7;margin-bottom:8px}
+.journey-card p:last-child{margin-bottom:0}
+.j-decisions{margin:10px 0;padding-left:0;list-style:none}
+.j-decisions li{font-size:13px;color:var(--slate-600);padding:6px 10px;margin-bottom:4px;background:var(--slate-50);border-radius:var(--radius-sm);border-left:3px solid var(--teal)}
+.j-result{background:var(--teal-xlight);border-radius:var(--radius-sm);padding:12px 14px;margin:10px 0;font-size:13px;color:var(--teal-dark);font-weight:600}
+
+/* ── FLOWS ── */
+.flow-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:40px}
+.flow-step{display:grid;grid-template-columns:32px 1fr 1fr 1fr;gap:12px;align-items:start;background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.flow-step-num{display:flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--teal);color:white;border-radius:50%;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px}
+.flow-col h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:4px}
+.flow-col p{font-size:12px;color:var(--slate-700);line-height:1.55}
+.flow-col code{font-size:11px}
+
+/* ── PERSONAS ── */
+.persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.persona-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.persona-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:100px;margin-bottom:10px}
+.persona-tag.primary{background:var(--teal-light);color:var(--teal-dark)}
+.persona-tag.secondary{background:var(--slate-200);color:var(--slate-600)}
+.persona-card h3{font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.persona-desc{font-size:12px;color:var(--slate-400);font-style:italic;margin-bottom:10px}
+.persona-card p{font-size:13px;color:var(--slate-600);line-height:1.65}
+
+/* ── TECHNICAL ── */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.tech-card{background:var(--slate-900);border-radius:var(--radius);padding:22px}
+.tech-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:7px}
+.tech-card h3{font-size:14px;font-weight:700;color:white;margin-bottom:10px}
+.tech-code{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--teal);border-radius:var(--radius-sm);padding:10px 12px;font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--teal-light);margin-bottom:12px;white-space:pre;line-height:1.6;overflow-x:auto}
+.tech-card p{font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.65}
+.tech-card code{background:rgba(255,255,255,.1);color:#5eead4;padding:1px 5px;border-radius:3px}
+
+/* ── ROADMAP ── */
+.roadmap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.roadmap-col{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.roadmap-header{padding:12px 16px;font-size:13px;font-weight:700;color:white}
+.roadmap-header.now{background:var(--teal)}
+.roadmap-header.next{background:var(--orange)}
+.roadmap-header.later{background:var(--slate-700)}
+.roadmap-header .phase-sub{font-size:9px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:1px}
+.roadmap-body{padding:12px}
+.roadmap-item{padding:9px 11px;margin-bottom:6px;background:var(--slate-50);border-radius:var(--radius-sm);border:1px solid var(--slate-100)}
+.roadmap-item:last-child{margin-bottom:0}
+.roadmap-item h4{font-size:11.5px;font-weight:700;color:var(--slate-900);margin-bottom:2px}
+.roadmap-item p{font-size:11px;color:var(--slate-500);line-height:1.5}
+.roadmap-benefit{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:600;color:var(--teal);background:var(--teal-xlight);padding:2px 7px;border-radius:100px}
+.roadmap-seq{margin-top:28px;padding:16px 20px;background:var(--slate-900);border-radius:var(--radius);color:rgba(255,255,255,.7);font-size:13px;line-height:1.7}
+.roadmap-seq strong{color:var(--teal)}
+
+/* ── FEATURE MAP ── */
+.phase-cards{display:flex;flex-direction:column;gap:16px}
+.phase-card{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.phase-card-header{padding:12px 18px;font-size:13px;font-weight:700;color:white;display:flex;align-items:center;gap:8px}
+.phase-card-header.v1{background:var(--teal)}
+.phase-card-header.v11{background:var(--orange)}
+.phase-card-header.v2{background:var(--slate-700)}
+.phase-card-header .ph-tag{font-size:9px;font-weight:600;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:100px}
+.phase-card-body{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.phase-what h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:6px}
+.phase-what p{font-size:13px;color:var(--slate-700);line-height:1.65;margin-bottom:10px}
+.phase-scope h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);margin-bottom:6px}
+.scope-list{list-style:none;padding:0}
+.scope-list li{font-size:12px;color:var(--slate-600);padding:4px 0;border-bottom:1px solid var(--slate-100);display:flex;gap:6px;align-items:baseline;line-height:1.45}
+.scope-list li::before{content:'✓';color:var(--teal);font-weight:700;font-size:10px;flex-shrink:0}
+.scope-list.out li::before{content:'✕';color:var(--slate-400)}
+
+/* ── DECISIONS ── */
+.decision-list{display:flex;flex-direction:column;gap:0}
+.decision-row{padding:14px 16px;border-bottom:1px solid var(--slate-100);display:grid;grid-template-columns:110px 1fr;gap:14px;transition:background .1s}
+.decision-row:first-child{border-radius:var(--radius) var(--radius) 0 0;border-top:1.5px solid var(--slate-200);border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
+.decision-row:last-child{border-radius:0 0 var(--radius) var(--radius);border-bottom:1.5px solid var(--slate-200);border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
+.decision-row:not(:first-child):not(:last-child){border-left:1.5px solid var(--slate-200);border-right:1.5px solid var(--slate-200)}
+.decision-row:nth-child(even){background:var(--slate-50)}
+.decision-row:hover{background:var(--teal-xlight)}
+.decision-cat{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-400);padding-top:3px;line-height:1.4}
+.decision-content h4{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.decision-content p{font-size:12px;color:var(--slate-600);line-height:1.6}
+
+/* ── SCOPE ── */
+.scope-section-title{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:12px;margin-top:28px;padding-bottom:6px;border-bottom:1.5px solid var(--slate-200)}
+.scope-section-title:first-child{margin-top:0}
+.scope-table{width:100%;border-collapse:collapse;background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);font-size:13px}
+.scope-table th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-500);background:var(--slate-50);border-bottom:1.5px solid var(--slate-200)}
+.scope-table td{padding:10px 14px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top;line-height:1.5}
+.scope-table tr:last-child td{border-bottom:none}
+.scope-table tr:hover td{background:var(--slate-50)}
+.scope-table td:first-child{font-weight:600;color:var(--slate-800)}
+
+/* ── STACK ── */
+.stack-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.stack-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:white;border:1.5px solid var(--slate-200);border-radius:100px;font-size:12px;font-weight:600;color:var(--slate-700);box-shadow:var(--shadow-sm)}
+.stack-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.stack-table{width:100%;border-collapse:collapse;background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:14px}
+.stack-table th{text-align:left;padding:9px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-500);background:var(--slate-50);border-bottom:1.5px solid var(--slate-200)}
+.stack-table td{padding:10px 14px;border-bottom:1px solid var(--slate-100);font-size:12.5px;color:var(--slate-700);vertical-align:top;line-height:1.5}
+.stack-table tr:last-child td{border-bottom:none}
+.stack-table td:first-child{font-weight:600;color:var(--slate-800);white-space:nowrap}
+.stack-note{font-size:12.5px;color:var(--slate-500);padding:10px 14px;background:var(--slate-100);border-radius:var(--radius-sm);border-left:3px solid var(--teal)}
+
+/* ── DIAGRAMS ── */
+.diagrams-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.diag-item{background:white;border:1.5px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);padding:16px}
+.diag-label{font-size:11px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.diag-desc{font-size:11px;color:var(--slate-500);line-height:1.5}
+.diag-note{font-size:10px;color:var(--teal);margin-top:6px;font-weight:600}
+
+/* ── FOOTER ── */
+footer{background:var(--slate-900);color:rgba(255,255,255,.4);padding:36px 40px;text-align:center;font-size:12px;line-height:1.8}
+footer strong{color:white;font-weight:600}
+footer a{color:var(--teal)}
+.footer-links{display:flex;gap:18px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.footer-links a{font-size:11px;color:rgba(255,255,255,.3)}
+.footer-links a:hover{color:var(--teal);text-decoration:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  body{padding-left:0}
+  .sidebar{display:none}
+  .mobile-header{display:flex}
+  .roadmap-grid{grid-template-columns:1fr}
+  .phase-card-body{grid-template-columns:1fr}
+  .diagrams-grid{grid-template-columns:repeat(2,1fr)}
+  .flow-step{grid-template-columns:32px 1fr}
+  .flow-col:nth-child(n+3){grid-column:2}
+  #overview,.section,#stats{padding-left:20px;padding-right:20px}
+}
+@media(max-width:560px){
+  .diagrams-grid{grid-template-columns:1fr}
+  .pipeline-row{flex-direction:column}
+  .p-step::after{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:0}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="wordmark">Predict<span>opia</span></div>
+    <div><span class="sb-status"><span class="sb-dot"></span>Code complete · July 2026</span></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-group-label">Product</div>
+    <a href="#overview" class="active"><span class="ico">🏠</span>Overview</a>
+    <a href="#problem"><span class="ico">🎯</span>The Problem</a>
+    <a href="#pipeline"><span class="ico">⚡</span>How It Works</a>
+    <a href="#capabilities"><span class="ico">✦</span>Key Capabilities</a>
+    <div class="sb-group-label">User Experience</div>
+    <a href="#journeys"><span class="ico">🗺️</span>User Journeys</a>
+    <a href="#flows"><span class="ico">🔄</span>Core Flows</a>
+    <a href="#personas"><span class="ico">👤</span>Who It's For</a>
+    <div class="sb-group-label">Engineering</div>
+    <a href="#technical"><span class="ico">⚙️</span>Technical Depth</a>
+    <a href="#stack"><span class="ico">🧱</span>Stack</a>
+    <a href="#diagrams"><span class="ico">📐</span>Diagrams</a>
+    <div class="sb-group-label">Product Thinking</div>
+    <a href="#roadmap"><span class="ico">📅</span>Roadmap</a>
+    <a href="#featuremap"><span class="ico">📋</span>Feature Map</a>
+    <a href="#decisions"><span class="ico">📝</span>Decision Log</a>
+    <a href="#scope"><span class="ico">🚫</span>Out of Scope</a>
+  </nav>
+  <div class="sb-ctas">
+    <a href="#" class="sb-btn-primary">Open app →</a>
+    <a href="prototype.html" class="sb-btn-ghost">View prototype</a>
+  </div>
+</aside>
+
+<!-- MOBILE HEADER -->
+<header class="mobile-header">
+  <div class="mob-logo">Predict<span>opia</span></div>
+  <a href="#" class="mob-cta">Open app →</a>
+</header>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="hero-badge"><span class="dot"></span>Code complete · IPL 2026 side project · July 2026</div>
+  <h1>Run your family's prediction league<br>without the <span>spreadsheet tax</span>.</h1>
+  <p class="hero-sub">Predictopia is a mobile-first web app for multi-group sports prediction leagues — one-tap picks, auto-lock before toss, on-demand scoring, leaderboards, and offline prize tracking. After pool setup, the admin's job is zero.</p>
+  <div class="hero-ctas">
+    <a href="#" class="btn btn-primary">Open app →</a>
+    <a href="prototype.html" class="btn btn-secondary">View prototype →</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div id="stats">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-number">84</span>
+      <div class="stat-label">IPL matches<br>pre-seeded</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">15</span>
+      <div class="stat-label">DB tables across<br>7 migrations</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">$0</span>
+      <div class="stat-label">Monthly cost<br>at family scale</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">9</span>
+      <div class="stat-label">Day build sprint<br>to code-complete</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem" class="section">
+  <div class="container">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">17–35 hours of unpaid seasonal admin work</h2>
+    <p class="section-sub section-sub-wide">Every IPL season, someone in the family group becomes an unpaid administrator. They collect predictions over WhatsApp, enter them into a Google Sheet with colour-coded rows, tally scores after each match, manage payments, and remind everyone who hasn't predicted yet. Over 70+ matches, that's a second job — and if they burn out, the pool dies.</p>
+    <div class="problem-intro">
+      The core insight: <strong>the problem isn't that nobody has built a prediction app</strong>. It's that existing tools require setup by someone technical, don't handle offline money flows, and weren't designed for a family WhatsApp group. Predictopia is built for real ops — the ones that actually happen in Indian family sports groups.
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">📊</div>
+        <h3>Manual score tallying</h3>
+        <p>15–30 minutes per match day entering predictions, checking results, and updating the sheet. One person carries the load for 70+ matches.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💬</div>
+        <h3>WhatsApp prediction chaos</h3>
+        <p>Messages flood the group before each match. Late predictions, changed picks, and "I sent mine before toss" disputes are impossible to audit.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <h3>Offline money friction</h3>
+        <p>UPI and cash payments arrive at different times. Tracking who paid, who's approved, and who owes what requires a separate system from the predictions.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔗</div>
+        <h3>Per-match link spam</h3>
+        <p>Admins send a new predictions link before every match. Members miss predictions when the link is buried in chat. Reminders add to the noise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline" class="section section-alt">
+  <div class="container">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Six stages — admin's job ends at stage 2</h2>
+    <p class="section-sub">Once the pool is set up and the link is shared, all admin work is eliminated. The app handles schedule imports, prediction collection, auto-lock, scoring, and prize tracking automatically.</p>
+    <div class="pipeline-row">
+      <div class="p-step">
+        <div class="p-step-num">1</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Create pool</h3>
+        <p>Set name, buy-in, commission, and prize tier. Live preview shows exact prize amounts before anyone joins.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">2</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Share one link</h3>
+        <p>Permanent join link — pin it once in WhatsApp. Never send per-match links again.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">3</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Members predict</h3>
+        <p>One-tap Team A or B per fixture, up to ~30 min before scheduled start. Change until cutoff.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">4</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Auto lock &amp; reveal</h3>
+        <p>Predictions lock at cutoff. After cutoff, everyone sees all picks — banter content for the group.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">5</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Score &amp; rank</h3>
+        <p>First tap on a completed match triggers result fetch. 2/0/1 points; leaderboards update instantly.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">6</div>
+        <div class="p-badge badge-live">Live</div>
+        <h3>Prize tracking</h3>
+        <p>Nx formula computes exact amounts. Admin marks paid after UPI/cash — offline money, in-app truth.</p>
+      </div>
+    </div>
+    <div class="stack-note">
+      <strong>Portfolio insight:</strong> Stages 1–2 are admin-only setup. Stages 3–6 run without admin intervention after the link is shared. This is the core product bet — eliminate the seasonal admin tax, not digitise the spreadsheet.
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities" class="section">
+  <div class="container">
+    <div class="section-label">Key Capabilities</div>
+    <h2 class="section-title">What Predictopia delivers</h2>
+    <p class="section-sub">Every feature maps to a specific job-to-be-done for either the pool admin or the predicting member.</p>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-num">1</div>
+        <h3>Permanent pool link</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>One link, shared once, pinnable in WhatsApp. No per-match links, no re-sharing. The link never changes even if pool settings do.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">2</div>
+        <h3>Multi-admin model</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Creator / Admin / Member roles — the WhatsApp mental model. Creator controls money and pool existence; admins handle daily ops. Creator cannot be removed.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">3</div>
+        <h3>Cutoff-enforced predictions</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Fixed cutoff ~30 min before scheduled start. Server-enforced, not client-side. Predictions lock automatically — no admin action needed.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">4</div>
+        <h3>Commission prize engine</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Admin sets 0–50% commission. Nx distribution formula computes exact amounts. Ties split equally with rank inversion guard. Live preview at creation.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">5</div>
+        <h3>API-thrifty result fetch</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>First user to open a completed match triggers one CricketData API call. ON CONFLICT DO NOTHING caches it — one call per match total, across all users.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">6</div>
+        <h3>Join request + paid states</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Approve ≠ Paid. Request → admin approves → admin marks Paid after UPI/cash arrives. Offline money is a first-class state machine.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">7</div>
+        <h3>Multi-pool predictions</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Predictions scoped (pool_id, user_id, match_id). One account, multiple families, different strategies per pool. Streaks and badges are pool-isolated.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">8</div>
+        <h3>Screenshot-native sharing</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>Every shareable card embeds a QR code and pool join link. navigator.share on mobile. Distribution designed into UX — every screenshot is an invite.</p>
+      </div>
+      <div class="cap-card">
+        <div class="cap-num">9</div>
+        <h3>Accessibility for seniors</h3>
+        <span class="cap-status live-tag">Live</span>
+        <p>48px minimum tap targets, high contrast, large text, clear labels. Designed so a 58-year-old non-tech family member can predict unassisted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER JOURNEYS -->
+<section id="journeys" class="section section-alt">
+  <div class="container">
+    <div class="section-label">User Journeys</div>
+    <h2 class="section-title">Six journeys. One product truth.</h2>
+    <p class="section-sub section-sub-wide">Persona-driven narratives — every feature maps to a named person with a concrete seasonal job. The journeys also function as a scope defence: features not serving these six scenarios were explicitly deferred.</p>
+    <div class="journey-cards">
+
+      <div class="journey-card">
+        <h3>Journey 1: Admin sets up the family IPL pool (Day 0)</h3>
+        <div class="j-meta">Venkat — pool organiser — reducing 17–35 hours of unpaid seasonal labour to zero</div>
+        <p>Venkat organises the family WhatsApp cricket league every year. Historically he spends 15–30 minutes per match day on Google Sheets — entry columns, coloured cells, reminder messages, manual score tallies. Over 70+ IPL matches that is 17–35 hours of unpaid seasonal work. If he burns out mid-season, the pool dies. He is also the distribution channel — he creates pools and invites members.</p>
+        <p>He signs in with Google (no new password — family will not install a separate app). Onboarding takes three beats: display name, emoji avatar, favourite IPL team. The favourite team tints the nav accent so the app feels personal on first open.</p>
+        <p>He creates "Family IPL 2026" with ₹500 buy-in, 10% commission (admin-only, never shown to members), Top 3 distribution. As he adjusts expected headcount, the live prize preview recalculates exact amounts — answering the WhatsApp question that used to dominate setup night. He copies the permanent join link and pins it once in the family group. Setup done.</p>
+        <ul class="j-decisions">
+          <li><strong>Product decisions visible:</strong> One permanent link eliminates per-match spam · Prize preview before first join reduces money confusion · Commission never shown to members avoids "tax" framing fights · Money stays offline eliminates regulatory complexity</li>
+        </ul>
+        <div class="j-result">Success metric: Pool live + link shared in under 10 minutes. Admin labour for the rest of the season collapses to approvals and occasional share nudges.</div>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 2: Casual uncle joins and makes his first pick (Match day 1)</h3>
+        <div class="j-meta">Ramesh, 58 — wants to play when reminded, not learn a fintech app</div>
+        <p>Ramesh reads WhatsApp every day but will abandon anything with small text or multi-step forms. He taps the pinned link on his phone. The pool preview shows name, buy-in, and member count — not a full ranked leaderboard (showing a table of cousins already predicting would discourage him).</p>
+        <p>He requests to join. That evening Venkat approves and marks Paid separately after UPI arrives — two states, because real money is asynchronous. Ramesh opens Predict: large team tiles in CSK gold and MI blue, no copyrighted logos. One tap for his pick. Countdown: "Closes in 2h 15m." He changes his mind once; last pick sticks. After cutoff he sees the pool-wide reveal — banter content, not a spreadsheet.</p>
+        <ul class="j-decisions">
+          <li><strong>Product decisions visible:</strong> 48px tap targets and plain language for seniors · Approve ≠ Paid state machine for offline UPI lag · Reveal only after cutoff (independent thinking, then banter) · No tie option matches IPL reality · Never show net losses to members</li>
+        </ul>
+        <div class="j-result">Success metric: First pick made before cutoff without calling Venkat for help.</div>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 3: Power user across two pools (All season)</h3>
+        <div class="j-meta">Priya — family pool and college friends pool, different strategies per social graph</div>
+        <p>Priya is in two pools: family WhatsApp and a college friends group. My Pools shows both cards with role badges. For the same CSK vs MI fixture, she picks CSK in family pool and MI in college — different bragging rights, different social graph. Streaks and achievements are per-pool. "Perfect Week" in college does not pollute family standings.</p>
+        <p>She shares a leaderboard card to Instagram Stories. The card embeds a join QR — every screenshot is simultaneously an invite. Distribution designed into UX, not bolted on as a marketing feature.</p>
+        <ul class="j-decisions">
+          <li><strong>Portfolio evidence:</strong> UNIQUE(pool_id, user_id, match_id) is a schema requirement, not an afterthought — multi-tenant prediction isolation at family scale.</li>
+        </ul>
+        <div class="j-result">Success metric: Two independent predictions for the same match, zero confusion about "which pool am I in?"</div>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 4: Mid-season admin ops (low touch)</h3>
+        <div class="j-meta">Venkat again, week 6 — the product promise is tested here</div>
+        <p>Six weeks in, the V1 promise is under test: if Venkat is back in Sheets, the product failed. On a typical match day: he approves one pending join (rejects another — pool near the 100-member cap). He marks three members Paid after weekend UPI. He shares "Who hasn't predicted" into WhatsApp — three people tap through before cutoff.</p>
+        <p>He does not enter scores. The first person who opens the completed match card triggers the CricketData API call. ON CONFLICT DO NOTHING — one external call per match, served from cache for all subsequent users. Venkat checks the budget tracker: total collected, allocated, remaining — commission % stays admin-only.</p>
+        <ul class="j-decisions">
+          <li><strong>Admin labour collapses to:</strong> Approvals + payment marking + occasional share nudges. Results, scoring, and leaderboard updates are zero-touch. API thrift is product strategy shaped by free-tier constraints.</li>
+        </ul>
+        <div class="j-result">Success metric: Match-day admin time under 5 minutes. Zero spreadsheet opens.</div>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 5: Season-end prizes (offline money, in-app truth)</h3>
+        <div class="j-meta">Family after the final — offline UPI, in-app settlement record</div>
+        <p>Season leaderboard freezes after the final. The prize engine shows Top 3 amounts from the Nx formula: 10 paid members × ₹500 buy-in, 10% commission → ₹4,500 prize pool, 6 parts → 1st ₹2,250, 2nd ₹1,500, 3rd ₹750. If 1st and 2nd tie: they split (₹2,250+₹1,500)/2 = ₹1,875 each; rank inversion guard ensures no lower rank earns more after multi-way splits.</p>
+        <p>Venkat pays via UPI offline and marks prize rows Paid in app. Members see "Won ₹X" only — never a net-loss view. Buy-in is a sunk entry fee; showing losses discourages next season.</p>
+        <ul class="j-decisions">
+          <li><strong>Boundary decision:</strong> App tracks prize settlement, does not process payments. No payment rails, no KYC, no regulatory risk. Knowing what NOT to build is the portfolio skill here.</li>
+        </ul>
+        <div class="j-result">Success metric: Paid marks match offline UPI. Zero "the app stole my money" support drama.</div>
+      </div>
+
+      <div class="journey-card">
+        <h3>Journey 6: Late join (fairness without refunds)</h3>
+        <div class="j-meta">Arjun joins mid-season — explicit policy, no contested logic</div>
+        <p>Arjun joins after 20 completed matches. He sees the buy-in upfront and requests to join. On approval and payment, the late-join policy applies: late joiners start from current fixtures, buy-in is still the full amount, past points are not backdated. Mid-season exit: buy-in stays in the pool with no refund, predictions preserved for history, points frozen from exit date. Contested refund logic is out of scope — clear policy, zero ambiguity.</p>
+        <div class="j-result">Success metric: Arjun joins without a WhatsApp argument about what he should have scored in week one.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CORE FLOWS -->
+<section id="flows" class="section">
+  <div class="container">
+    <div class="section-label">Core Flows</div>
+    <h2 class="section-title">Key state machines and interaction flows</h2>
+    <p class="section-sub">The flows that carry the most product weight — prediction submission, result-to-score cascade, and the join state machine.</p>
+
+    <h3 style="font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:16px">Prediction submission flow</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-col"><h4>User action</h4><p>Member opens Predict tab — today's fixtures across all pools, soonest cutoff first</p></div>
+        <div class="flow-col"><h4>System check</h4><p><code>now() &lt; match.cutoff_at</code> server-side; frontend shows countdown but enforcement is always API</p></div>
+        <div class="flow-col"><h4>State</h4><p>Prediction window open — pick visible only to the member who made it</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-col"><h4>User action</h4><p>Taps Team A or Team B — big touch target, single tap, changeable until cutoff</p></div>
+        <div class="flow-col"><h4>System</h4><p>Upsert into <code>predictions</code> — <code>UNIQUE(pool_id, user_id, match_id)</code> — last write wins</p></div>
+        <div class="flow-col"><h4>State</h4><p>Prediction recorded; can be changed; not visible to others pre-cutoff</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-col"><h4>Auto-lock</h4><p>Cutoff time passes — no admin action needed</p></div>
+        <div class="flow-col"><h4>System</h4><p>All prediction API calls return 403 — window closed deterministically by server time</p></div>
+        <div class="flow-col"><h4>State</h4><p>Predictions locked; still private until match result is known</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-col"><h4>Post-cutoff reveal</h4><p>After cutoff any member can see all picks — grouped by team</p></div>
+        <div class="flow-col"><h4>System</h4><p>API checks <code>now() &gt;= cutoff_at</code>; returns pool-wide predictions if true</p></div>
+        <div class="flow-col"><h4>State</h4><p>Full reveal visible — banter content for the group</p></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:16px;margin-top:32px">Result fetch + score cascade</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-col"><h4>Trigger</h4><p>First member opens a completed match card — no polling, no cron</p></div>
+        <div class="flow-col"><h4>System</h4><p>API checks <code>match_results</code> for cached winner — cache miss triggers CricketData.org fetch</p></div>
+        <div class="flow-col"><h4>Cost</h4><p>~1 external API call per match across entire user base</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-col"><h4>Cache write</h4><p><code>INSERT INTO match_results ON CONFLICT (match_id) DO NOTHING</code></p></div>
+        <div class="flow-col"><h4>Race safety</h4><p>Two simultaneous users? DB constraint — first write wins; second is a no-op</p></div>
+        <div class="flow-col"><h4>State</h4><p>Result cached; subsequent opens serve from DB</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-col"><h4>Score cascade</h4><p>All predictions for this match_id across all pools scored synchronously</p></div>
+        <div class="flow-col"><h4>Points written</h4><p>2 = correct · 0 = wrong · 1 = abandoned (everyone who submitted)</p></div>
+        <div class="flow-col"><h4>State</h4><p><code>predictions.points_awarded</code> set; <code>leaderboard_cache</code> recomputed for all periods</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-col"><h4>Achievements</h4><p>Hot Streak, Perfect Week, Team Loyalist criteria checked</p></div>
+        <div class="flow-col"><h4>System</h4><p>Append-only insert to <code>achievements</code>; UNIQUE constraint prevents duplicates</p></div>
+        <div class="flow-col"><h4>State</h4><p>Badges appear in member profile; leaderboard reflects updated standings</p></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:16px;margin-top:32px">Pool join state machine</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-col"><h4>Free pool</h4><p>Tap join link → auto-approved → status = <code>active</code> immediately</p></div>
+        <div class="flow-col"><h4>Paid pool</h4><p>Tap join link → sees buy-in upfront → requests to join → status = <code>pending</code></p></div>
+        <div class="flow-col"><h4>Constraint</h4><p>Join auto-rejected if pool at 100-member cap</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-col"><h4>Admin approval</h4><p>Admin reviews Requests → approves or rejects → status = <code>approved</code></p></div>
+        <div class="flow-col"><h4>Payment</h4><p>Member sends UPI/cash offline → admin marks Paid → <code>payment_status = paid</code></p></div>
+        <div class="flow-col"><h4>Boundary</h4><p>Approve ≠ Paid — two explicit states because offline money is async</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section id="personas" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Who It's For</div>
+    <h2 class="section-title">Three personas. One design north star.</h2>
+    <p class="section-sub">Design for the least technical member — if the casual uncle can predict unassisted, everyone can. Every interaction in V1 was tested against Ramesh, not Priya.</p>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <span class="persona-tag primary">Primary</span>
+        <h3>Pool Admin</h3>
+        <div class="persona-desc">The organiser who volunteers to run the league every season</div>
+        <p>Spends 15–30 minutes per match day on Google Sheets. Over 70+ IPL matches that's 17–35 hours of unpaid work. If the admin burns out, the pool dies. Predictopia's core value proposition is collapsing their post-setup work to zero. The admin is also the distribution channel — they create pools and invite members. Eliminate admin pain; pools survive full seasons and organic growth follows.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-tag secondary">Secondary</span>
+        <h3>Active Predictor</h3>
+        <div class="persona-desc">Engaged fan, 18–55, checks every match day, wants bragging rights</div>
+        <p>Already excited about IPL. Checks predictions and leaderboards without prompting. Wants streaks, achievements, and a competitive edge. Will share their leaderboard position on social media if the card looks good and includes a join QR. The sharing behaviour is the organic growth engine — every card is an invite, no marketing budget needed.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-tag secondary">Secondary</span>
+        <h3>Casual Predictor</h3>
+        <div class="persona-desc">Ramesh, 58 — plays when reminded, will abandon anything with small text</div>
+        <p>Predicts 3–4 times a week when a family member reminds him. Not competitive, just wants to be part of the group. Will immediately abandon anything requiring more than two taps, a new account, or small print. 48px tap targets, large text, plain language, and big team colour tiles were all designed specifically so Ramesh can pick a winner without calling his nephew for help.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNICAL -->
+<section id="technical" class="section section-dark">
+  <div class="container">
+    <div class="section-label" style="color:var(--teal-light)">Technical Depth</div>
+    <h2 class="section-title" style="color:white">Six deep-dives worth reading</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.55)">The technical decisions that carry portfolio weight — a production RLS incident, architectural constraints as product strategy, and scope calls grounded in engineering reality.</p>
+    <div class="tech-grid">
+
+      <div class="tech-card">
+        <div class="tech-label">RLS Nuclear Fix · Migration 007</div>
+        <h3>Infinite recursion on pool_members</h3>
+        <div class="tech-code">-- Original broken policy (simplified):
+-- pool_members SELECT: WHERE pool_id IN
+--   (SELECT pool_id FROM pool_members
+--    WHERE user_id = auth.uid())
+-- → Policy queries the table it guards → ∞
+
+-- Migration 007 core principles:
+-- 1. No table's policy ever queries itself
+-- 2. pool_members never queries pool_members
+-- 3. pools never queries pool_members
+-- Fix: self-access = auth.uid() = user_id
+-- Creator check = pools.created_by = auth.uid()</div>
+        <p>Early RLS policies let <code>pool_members</code> SELECT verify membership by querying <code>pool_members</code> itself — infinite recursion. The Supabase debugger gave a timeout with no clear stack trace. Migration 007 dropped ALL policies on ALL 15 tables and rebuilt from scratch with three strict rules: no table self-references, <code>pool_members</code> uses <code>auth.uid() = user_id</code> for self-access, time and role logic that doesn't belong in SQL lives in API routes. A production-shaped lesson in access-control design.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Cutoff Engine · Deterministic Time Gate</div>
+        <h3>Prediction lock without toss detection</h3>
+        <div class="tech-code">-- Cutoff stored at schedule import:
+-- cutoff_at = scheduled_at - interval '30 minutes'
+
+-- API route enforcement:
+-- if (now() >= match.cutoff_at) {
+--   return 403 PREDICTION_WINDOW_CLOSED
+-- }
+
+-- No background job needed.
+-- No toss detection API needed.
+-- Server time is authoritative.
+-- Frontend countdown = display only.</div>
+        <p>The product rule was simple: predictions lock ~30 minutes before the scheduled start. The implementation matched: store <code>cutoff_at</code> at schedule import, enforce <code>now() &lt; cutoff_at</code> in every prediction API route. No live toss detection cron, no WebSocket subscription for toss events, no polling. Frontend countdowns are display only — malicious clients cannot extend the window. Clear product rule → simple, auditable implementation.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Prize Engine · Nx Formula + Tie Guard</div>
+        <h3>Commission-based pool with rank inversion protection</h3>
+        <div class="tech-code">-- Prize pool:
+prize_pool = sum(paid_buy_ins)
+           * (1 - commission_pct / 100)
+
+-- Nx formula (Top 3 example):
+-- Parts: 3 + 2 + 1 = 6
+-- 1st: (3/6) × prize_pool
+-- 2nd: (2/6) × prize_pool
+-- 3rd: (1/6) × prize_pool
+
+-- Tie: split sum of tied prizes equally
+-- Rank inversion guard:
+-- rank R always earns >= rank R+1</div>
+        <p>Only paid members count toward <code>prize_pool</code> — unpaid members do not inflate the pot. Nx formula gives intuitive splits. The rank inversion guard is the subtle edge case: if positions 1 and 2 tie and split (₹2,250+₹1,500)/2=₹1,875 each, position 3 still gets ₹750 — and the guard ensures no position earns more than a higher rank after multi-way splits. Live preview at pool creation answers the setup-night question before the first member joins.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">API Thrift · Free-Tier Constraint as Strategy</div>
+        <h3>One CricketData call per match across all users</h3>
+        <div class="tech-code">-- Schedule: daily cron at 00:30 IST
+-- ~84 calls for the full IPL season
+
+-- Results: on-demand, first user triggers
+-- INSERT INTO match_results (match_id, ...)
+-- ON CONFLICT (match_id) DO NOTHING
+-- → First write wins; race handled by DB
+-- → Concurrent users? Second write is no-op
+
+-- CricketData free tier: 100 calls/day ✓
+-- Season total result calls: ~84</div>
+        <p>CricketData.org's free tier provides 100 calls/day. Schedule runs on a daily Vercel Cron — one call for the whole season's upcoming fixtures. Results are never polled. The first user to open a completed match triggers the fetch; <code>ON CONFLICT DO NOTHING</code> caches it. Every subsequent user reads from the DB. Free-tier limits shaped an architecture that also makes the app fast for the 2nd through Nth user.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Hybrid RLS + API Access Control</div>
+        <h3>Static security floor in DB, dynamic logic in routes</h3>
+        <div class="tech-code">-- RLS handles: static pool isolation
+-- "Any authenticated user can read pools"
+-- Prevents unauthenticated DB access
+
+-- API routes handle: time-based gates
+-- "Show picks only after cutoff"
+-- "Only members see pool data"
+-- "Only admins can mark paid"
+
+-- Why split?
+-- Time logic in RLS = untestable SQL
+-- Role checks in routes = debuggable code
+-- Defence in depth = both layers active</div>
+        <p>RLS provides a broad security floor — unauthenticated users hit a wall at the database level. But prediction visibility (hide until cutoff), pool membership filtering, and scoring cascades all involve time comparisons and business rules easier to express and debug in application code. Post-Migration 007: RLS for static "who can touch this table" rules; API routes for dynamic "can this specific action happen now." Both layers active, neither redundant.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-label">Screenshot Cards · Growth Designed In</div>
+        <h3>@vercel/og QR embeds on every shareable card</h3>
+        <div class="tech-code">-- Card types (all include QR + join link):
+-- 1. Leaderboard position (all members)
+-- 2. "My picks" reveal (all members)
+-- 3. "Who hasn't predicted" nudge (admin)
+-- 4. Prize payout card (admin)
+
+-- Generation: @vercel/og (satori)
+-- Server-side → no canvas rendering
+-- Mobile: navigator.share() native sheet
+-- Desktop: copy link + download image</div>
+        <p>Distribution is designed into the UX, not added later. Every screenshot card — whether a member sharing their leaderboard position or an admin posting a payout card — embeds the permanent pool join QR code. Someone who sees the card in a WhatsApp story can join directly from the image. <code>@vercel/og</code> generates cards server-side, so sharing works without client-side canvas rendering. On mobile <code>navigator.share()</code> opens the native sheet; on desktop: copy link and download as image.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="section">
+  <div class="container">
+    <div class="section-label">Stack</div>
+    <h2 class="section-title">Zero monthly cost at family scale</h2>
+    <p class="section-sub">Reuses the PMRocket stack — Supabase + Next.js + Vercel. Zero learning-curve tax in a 9-day build sprint. All free tiers at launch.</p>
+    <div class="stack-badges">
+      <span class="stack-badge"><span class="dot"></span>Next.js 14</span>
+      <span class="stack-badge"><span class="dot"></span>Supabase PostgreSQL</span>
+      <span class="stack-badge"><span class="dot"></span>Supabase Auth (Google OAuth)</span>
+      <span class="stack-badge"><span class="dot"></span>Supabase Realtime</span>
+      <span class="stack-badge"><span class="dot"></span>Vercel Serverless + Cron</span>
+      <span class="stack-badge"><span class="dot"></span>CricketData.org API</span>
+      <span class="stack-badge"><span class="dot"></span>@vercel/og (satori)</span>
+      <span class="stack-badge"><span class="dot"></span>TypeScript strict</span>
+      <span class="stack-badge"><span class="dot"></span>Tailwind CSS</span>
+    </div>
+    <table class="stack-table">
+      <thead>
+        <tr><th>Layer</th><th>Tool</th><th>Free Tier Limit</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Frontend + API</td><td>Next.js 14 App Router on Vercel</td><td>100 GB bandwidth/month</td><td>Serverless functions + 1 Vercel Cron (hobby tier)</td></tr>
+        <tr><td>Database</td><td>Supabase PostgreSQL</td><td>500 MB storage, 50K auth users</td><td>15 tables, 7 migrations (001–007)</td></tr>
+        <tr><td>Auth</td><td>Supabase Auth · Google OAuth</td><td>Included in free tier</td><td>Phone OTP deferred — may require paid Twilio</td></tr>
+        <tr><td>Realtime</td><td>Supabase Realtime</td><td>200 concurrent connections</td><td>Prediction reveal subscriptions per pool</td></tr>
+        <tr><td>Sports data</td><td>CricketData.org</td><td>100 calls/day</td><td>~84 schedule + ~84 result calls per IPL season</td></tr>
+        <tr><td>Screenshot cards</td><td>@vercel/og (satori)</td><td>Serverless function, included</td><td>Server-side image generation with embedded QR</td></tr>
+        <tr><td>Cron</td><td>Vercel Cron</td><td>1 job on hobby tier</td><td>Daily schedule refresh at 00:30 IST</td></tr>
+      </tbody>
+    </table>
+    <div class="stack-note">
+      Target cost at 10–100 family-scale users: <strong>$0/month</strong>. Supabase Pro (~$25/mo) needed only at 1,000+ users. Stack choice is itself a product decision — free-tier limits shaped the API thrift architecture.
+    </div>
+  </div>
+</section>
+
+<!-- DIAGRAMS -->
+<section id="diagrams" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Diagrams</div>
+    <h2 class="section-title">7 architecture &amp; flow diagrams</h2>
+    <p class="section-sub">System context through user journeys — the full technical picture.</p>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D1 · System Context</div>
+      <div class="diag-desc" style="margin-bottom:10px">Actors, Supabase, CricketData.org — external integrations and system boundary</div>
+      <img src="diagrams/export/01-system-context.svg" alt="D1 System Context" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D2 · Component Blocks</div>
+      <div class="diag-desc" style="margin-bottom:10px">App modules — Pool, Predict, Score, Prize, Card — and their Supabase dependencies</div>
+      <img src="diagrams/export/02-component-blocks.svg" alt="D2 Component Blocks" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D3 · Free-Tier Deployment</div>
+      <div class="diag-desc" style="margin-bottom:10px">Vercel (Next.js + Cron + OG) → Supabase (DB + Auth + Realtime) — zero monthly cost topology</div>
+      <img src="diagrams/export/03-deployment-free-tier.svg" alt="D3 Deployment" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D4 · Prediction Sequence</div>
+      <div class="diag-desc" style="margin-bottom:10px">Member → API → DB sequence for prediction submission, cutoff lock, and post-cutoff reveal</div>
+      <img src="diagrams/export/04-sequence-predict.svg" alt="D4 Prediction Sequence" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D5 · Scoring Cascade</div>
+      <div class="diag-desc" style="margin-bottom:10px">On-demand result fetch → cache write → 2/1/0 scoring → leaderboard → achievements</div>
+      <img src="diagrams/export/05-sequence-scoring.svg" alt="D5 Scoring Cascade" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="diag-label" style="margin-bottom:8px">D6 · Admin Journey</div>
+      <div class="diag-desc" style="margin-bottom:10px">Pool create → share → mid-season ops → prize settlement — swimlane across the full IPL season</div>
+      <img src="diagrams/export/06-user-journey-admin.svg" alt="D6 Admin Journey" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+
+    <div style="margin-bottom:8px">
+      <div class="diag-label" style="margin-bottom:8px">D7 · Member Journey</div>
+      <div class="diag-desc" style="margin-bottom:10px">Join via link → first prediction → cutoff reveal → leaderboard → achievements → multi-pool</div>
+      <img src="diagrams/export/07-user-journey-member.svg" alt="D7 Member Journey" style="width:100%;border:1px solid var(--slate-200);border-radius:8px;background:var(--white)">
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="section">
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">Prove admin labour → 0 before adding features</h2>
+    <p class="section-sub section-sub-wide">The sequencing principle: V1 proves the core loop; V1.1 responds to real friction after actual family season use; V2 grows distribution only after habit exists. No "maybe features" floating unowned — every deferred item lives in V1.1/V2 with a reason.</p>
+    <div class="roadmap-grid">
+      <div class="roadmap-col">
+        <div class="roadmap-header now"><span class="phase-sub">Now · Code complete</span>V1 — Family MVP</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item">
+            <h4>Permanent pool link + multi-admin</h4>
+            <p>One link shared once. Creator/Admin/Member roles (WhatsApp model).</p>
+            <span class="roadmap-benefit">Zero daily admin ops</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>One-tap predictions + cutoff lock</h4>
+            <p>Team A or B, auto-lock ~30 min before start. Post-cutoff pool-wide reveal.</p>
+            <span class="roadmap-benefit">No prediction chaos</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>On-demand scoring + leaderboards</h4>
+            <p>First tap fetches result. 2/0/1 scoring. Weekly/monthly/season leaderboards.</p>
+            <span class="roadmap-benefit">Zero manual score tallying</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Commission prize engine</h4>
+            <p>Nx formula, tie guard, live preview, budget tracker. Offline settlement.</p>
+            <span class="roadmap-benefit">No money disputes</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Share cards with QR invites</h4>
+            <p>Every screenshot doubles as a pool join invite. navigator.share on mobile.</p>
+            <span class="roadmap-benefit">Organic distribution</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-header next"><span class="phase-sub">Next · After first family season</span>V1.1 — Fast Follow</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item">
+            <h4>Member "My Money" view</h4>
+            <p>Total won, pending payouts, per-pool breakdown. Won amounts only — never net losses.</p>
+            <span class="roadmap-benefit">Fewer "have I been paid?" DMs</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Bulk payment marking</h4>
+            <p>Admin marks multiple members paid in one batch action after weekend UPI.</p>
+            <span class="roadmap-benefit">Faster settlement ops</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Configurable knockout points</h4>
+            <p>Eliminator 3pts · Qualifier 4pts · Final 5pts. Admin-configurable per match type.</p>
+            <span class="roadmap-benefit">More playoff excitement</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Phone OTP auth</h4>
+            <p>For family members without Google accounts. Pending Twilio cost evaluation.</p>
+            <span class="roadmap-benefit">Broader family coverage</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Visual PNG share cards</h4>
+            <p>Image cards with team colours for Instagram/WhatsApp Stories.</p>
+            <span class="roadmap-benefit">Richer organic sharing</span>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-header later"><span class="phase-sub">Later · Post-season growth</span>V2 — Beyond One Family</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item">
+            <h4>Multi-league templates</h4>
+            <p>EPL, NBA, F1, MotoGP. Schema supports any sport from day one.</p>
+            <span class="roadmap-benefit">Platform, not IPL app</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Public pool discovery</h4>
+            <p><code>is_public</code> boolean already in schema. Browse public pools when enough exist.</p>
+            <span class="roadmap-benefit">Growth beyond invite</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Automated reminders</h4>
+            <p>Email/Telegram/WhatsApp Business API nudges before cutoff.</p>
+            <span class="roadmap-benefit">Higher prediction completion</span>
+          </div>
+          <div class="roadmap-item">
+            <h4>Ads integration</h4>
+            <p>Primary monetisation. Ad-supported, never charge users.</p>
+            <span class="roadmap-benefit">Revenue without payment rails</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap-seq">
+      <strong>Sequencing logic:</strong> V1 proves admin labour → 0 · V1.1 polishes money &amp; ops from real friction after one family season · V2 expands distribution only after V1 retention signal shows members return match-day without admin nagging
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE MAP -->
+<section id="featuremap" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Feature Map</div>
+    <h2 class="section-title">What shipped, what's next, what's out</h2>
+    <p class="section-sub">All V1 features are implemented in code (phases 1–5, March 2026). Production re-deploy and family E2E are the remaining ship steps.</p>
+    <div class="phase-cards">
+
+      <div class="phase-card">
+        <div class="phase-card-header v1">V1 — Family MVP <span class="ph-tag">Code complete</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What this phase delivers</h4>
+            <p>The minimum product that lets a family run IPL predictions with zero manual work after pool setup. Proves admin labour → 0.</p>
+            <p><strong>Auth:</strong> Google OAuth, auto-populated display name + avatar, favourite IPL team tints UI.</p>
+            <p><strong>Pools:</strong> Create wizard (buy-in, commission, distribution, league style), permanent join link, private pools only, max 100 members, multi-admin WhatsApp model, join request + paid states, mid-season exit policy, pool cards with pinning and "Won X" amounts only.</p>
+            <p><strong>Predictions:</strong> One-tap Team A/B, advance picks (next 5), cutoff auto-lock, post-cutoff reveal, per-pool isolation (UNIQUE constraint).</p>
+            <p><strong>Match data:</strong> 84-match IPL schedule seed, daily cron refresh, on-demand result fetch (cached, one write per match), admin result override, times in local timezone.</p>
+            <p><strong>Scoring:</strong> 2/0/1 points, synchronous scoring, weekly/monthly/season leaderboards inside Pool Home, per-pool streaks, Hot Streak + Perfect Week + Team Loyalist achievements.</p>
+            <p><strong>Prizes:</strong> Commission slider (0–50%), Nx distribution (7 tiers), live prize preview, configurable periods, tie-breaking with rank inversion guard, pool budget tracker (admin-only), never show losses, money stays offline.</p>
+            <p><strong>Platform:</strong> 3-tab bottom nav, share cards + QR (all members), feature board, PWA shell, error/loading/404 polish.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>Explicitly in scope</h4>
+            <ul class="scope-list">
+              <li>Google-only auth (no Twilio cost)</li>
+              <li>Permanent pool link (not per-match)</li>
+              <li>Multi-admin WhatsApp model</li>
+              <li>Approve ≠ Paid (offline money state)</li>
+              <li>Cutoff-enforced prediction lock</li>
+              <li>On-demand result fetch (API thrift)</li>
+              <li>Commission prize engine + Nx formula</li>
+              <li>Rank inversion guard on ties</li>
+              <li>QR on every share card</li>
+              <li>Accessibility for seniors (48px targets)</li>
+              <li>RLS hybrid + API defence in depth</li>
+            </ul>
+            <h4 style="margin-top:14px">Explicitly out of scope</h4>
+            <ul class="scope-list out">
+              <li>WhatsApp/Telegram Business APIs</li>
+              <li>In-app payments / UPI rails</li>
+              <li>Public pool discovery</li>
+              <li>Phone OTP auth</li>
+              <li>Upset Caller badge (needs odds data)</li>
+              <li>Live ball-by-ball fantasy</li>
+              <li>Copyrighted team logos</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-card-header v11">V1.1 — Fast Follow <span class="ph-tag">After first season</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What this phase delivers</h4>
+            <p>Data-driven polish from real family season feedback — not calendar-driven. Ships after the top friction points are ranked by admin time and member confusion.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>Candidate features</h4>
+            <ul class="scope-list">
+              <li>Phone OTP auth (Twilio cost permitting)</li>
+              <li>Configurable knockout points</li>
+              <li>Member "My Money" cross-pool view</li>
+              <li>Bulk payment marking for admin</li>
+              <li>Visual PNG share cards for Stories</li>
+              <li>Full 10-team colour palette theming</li>
+              <li>Prorated points for mid-season joiners</li>
+              <li>Upset Caller achievement (needs data)</li>
+              <li>Knockout-specific prize pots</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-card-header v2">V2 — Growth <span class="ph-tag">Post-IPL 2026</span></div>
+        <div class="phase-card-body">
+          <div class="phase-what">
+            <h4>What this phase delivers</h4>
+            <p>Platform expansion beyond one family and beyond IPL. Requires V1 retention signal: members return match-day without admin prompting.</p>
+          </div>
+          <div class="phase-scope">
+            <h4>Candidate features</h4>
+            <ul class="scope-list">
+              <li>Multi-league templates (EPL, NBA, F1)</li>
+              <li>Public pool discovery + search</li>
+              <li>Automated notification channels</li>
+              <li>Ads integration (primary monetisation)</li>
+              <li>Cross-pool aggregate stats in profile</li>
+              <li>Custom scoring rules per group</li>
+              <li>Advanced analytics</li>
+              <li>White-label for brands</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section id="decisions" class="section">
+  <div class="container">
+    <div class="section-label">Decision Log</div>
+    <h2 class="section-title">Key decisions with reasoning preserved</h2>
+    <p class="section-sub">Curated from March 2026 brainstorming and design phases. Every decision listed here directly shaped a shipped feature or an explicit deferral.</p>
+    <div class="decision-list">
+
+      <div class="decision-row">
+        <div class="decision-cat">Product Strategy</div>
+        <div class="decision-content">
+          <h4>Skip hypothesis and discovery phases</h4>
+          <p>Problem validated through 3 seasons of manual Google Sheets leagues. No market research needed for a lived-problem family side project. Scope discipline begins at phase zero.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Product Strategy</div>
+        <div class="decision-content">
+          <h4>Primary persona: Pool Admin (not the predictor)</h4>
+          <p>If admin pain is eliminated, pools survive the full season. Admin is also the distribution channel — building for the admin first means the product gets used at all.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Product Strategy</div>
+        <div class="decision-content">
+          <h4>Multi-league architecture at schema level, IPL only at launch</h4>
+          <p>Schema supports any sport from day one (league column, external API abstraction). IPL is the only seeded content. Platform is the long game; IPL is the wedge.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Pools &amp; Membership</div>
+        <div class="decision-content">
+          <h4>One permanent pool link (never per-match)</h4>
+          <p>Per-match links require admin action before every game and create WhatsApp clutter. One pinned link eliminates that permanently. The join flow is always available — the link never expires.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Pools &amp; Membership</div>
+        <div class="decision-content">
+          <h4>Approve ≠ Paid (two separate states)</h4>
+          <p>UPI and cash payments are asynchronous — money doesn't arrive at the same moment as the approval decision. "Approve = you're in" and "Paid = I have your money" map to how real offline payment actually works.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Pools &amp; Membership</div>
+        <div class="decision-content">
+          <h4>Mid-season exit: buy-in stays in the pool (no refund)</h4>
+          <p>The buy-in is an entry fee, not an investment. Contested refund logic adds support burden and creates scope for disputes. Explicit boring policy beats clever logic.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Predictions</div>
+        <div class="decision-content">
+          <h4>No tie option in prediction UI</h4>
+          <p>IPL always has a result — super overs guarantee a winner. Offering a tie option would be factually wrong for the sport. Product matches sport reality.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Predictions</div>
+        <div class="decision-content">
+          <h4>Cutoff = fixed time, not toss detection</h4>
+          <p>Toss detection requires a live API subscription and a cron watching for toss events. Fixed time at schedule import is deterministic, testable, and requires zero live polling. Simpler implementation, same product outcome.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Prizes &amp; Money</div>
+        <div class="decision-content">
+          <h4>Commission % is admin-only — members never see it</h4>
+          <p>Members see prize amounts, not how commission is computed. Showing the percentage creates a "tax" framing that generates resentment. Members care about what they win, not what the admin earns.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Prizes &amp; Money</div>
+        <div class="decision-content">
+          <h4>Never show net losses to members</h4>
+          <p>"Won ₹X" only. Buy-in is a sunk entry fee. Showing that someone is down ₹400 discourages participation in next season and misframes a social competition as an investment vehicle.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Prizes &amp; Money</div>
+        <div class="decision-content">
+          <h4>Money stays offline — app tracks, doesn't process</h4>
+          <p>In-app UPI requires NPCI/RBI registration, payment gateway, refund policy, and support capacity. The MVP boundary: Predictopia tracks settlement; actual money moves via WhatsApp UPI.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Engineering</div>
+        <div class="decision-content">
+          <h4>Migration 007 — nuclear RLS fix (drop all, rebuild from zero)</h4>
+          <p>Rather than patch individual policies and risk hidden recursion chains, dropped ALL policies on all 15 tables and rebuilt with three strict rules: no table self-references, <code>pool_members</code> never queries itself, time/role logic stays in API routes.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Engineering</div>
+        <div class="decision-content">
+          <h4>Synchronous score calculation (no job queue)</h4>
+          <p>At 15 users and 1 pool, scoring 15 predictions takes milliseconds in the request path. Background job infrastructure adds operational complexity with zero user-visible benefit at family scale.</p>
+        </div>
+      </div>
+      <div class="decision-row">
+        <div class="decision-cat">Engineering</div>
+        <div class="decision-content">
+          <h4>Results on-demand, schedule via cron — opposite of the obvious approach</h4>
+          <p>Polling results via cron would require one API call per match per poll interval. On-demand caching requires one call total per match, ever. Free-tier limits force this choice; it also happens to be faster for users.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OUT OF SCOPE -->
+<section id="scope" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Out of Scope</div>
+    <h2 class="section-title">Explicit non-goals — scope defence is a product skill</h2>
+    <p class="section-sub section-sub-wide">Every item below was actively considered and explicitly rejected. "We don't build X" is a product decision with as much craft as "we build Y."</p>
+
+    <div class="scope-section-title">Not building in any phase</div>
+    <table class="scope-table">
+      <thead><tr><th>Feature</th><th>Why it's out</th></tr></thead>
+      <tbody>
+        <tr><td>In-app payment processing</td><td>NPCI/RBI registration, payment gateway, refunds, KYC — regulatory and support cost exceed the family-scale benefit. App tracks settlement; money moves offline.</td></tr>
+        <tr><td>Real-money gambling marketplace</td><td>Family product positioning. Adding house-edge mechanics or taking a margin would trigger gambling regulations and fundamentally change the product's social dynamic.</td></tr>
+        <tr><td>Live ball-by-ball fantasy</td><td>Different product category — requires different data sources, real-time infrastructure, and a different UX. Predictopia is prediction-before-toss, not live fantasy.</td></tr>
+        <tr><td>Copyrighted team logos / player images</td><td>IPL/BCCI licensing. Team abbreviations in team colours is legally safe and sufficient for the UX. No logos, no player photos in V1 through V2.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="scope-section-title">Deferred to V1.1 (data-driven, not calendar-driven)</div>
+    <table class="scope-table">
+      <thead><tr><th>Feature</th><th>Why deferred (not cut)</th></tr></thead>
+      <tbody>
+        <tr><td>WhatsApp Business API automation</td><td>V1 admin shares one permanent link manually — enough for family scale. Business API requires partner approval and ongoing cost. V1.1 if retention data shows completion would meaningfully increase.</td></tr>
+        <tr><td>Phone OTP auth</td><td>All family members have Google accounts. Phone OTP may require paid Twilio. Google-only covers the V1 use case completely.</td></tr>
+        <tr><td>Upset Caller achievement</td><td>Requires underdog odds data — no free API source identified. Achievement criteria is clear; data dependency is not resolved. Deferred, not abandoned.</td></tr>
+        <tr><td>Public pool discovery</td><td><code>is_public</code> boolean is in the schema from day one. Discovery requires moderation, abuse handling, and enough public pools to make browsing useful. V2 gate: V1 retention signal.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Predictopia</strong> — Multi-group sports prediction leagues that run themselves<br>
+  Family side project · Built March 2026 · Code complete July 2026
+  <div class="footer-links">
+    <a href="#">Open app →</a>
+    <a href="prototype.html">Prototype</a>
+    <a href="help/">User guide</a>
+  </div>
+</footer>
+
+<script>
+const links = document.querySelectorAll('.sb-nav a[href^="#"]');
+const sections = document.querySelectorAll('section[id], div[id="stats"]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sb-nav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
