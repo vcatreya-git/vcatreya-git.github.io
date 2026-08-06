@@ -199,7 +199,7 @@ footer a{color:var(--blue-light)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="wordmark">Predict<span>opia</span></div>
-    <div><span class="sb-status"><span class="sb-dot"></span>In design · v2 rewrite</span></div>
+    <div><span class="sb-status"><span class="sb-dot"></span>Prototype + architecture · v2</span></div>
   </div>
   <nav class="sb-nav">
     <div class="sb-group-label">Product</div>
@@ -210,6 +210,7 @@ footer a{color:var(--blue-light)}
     <div class="sb-group-label">User Experience</div>
     <a href="#personas"><span class="ico">👤</span>Who it's for</a>
     <div class="sb-group-label">Engineering</div>
+    <a href="architecture.html"><span class="ico">📐</span>Architecture</a>
     <a href="#technical"><span class="ico">⚙️</span>Technical depth</a>
     <div class="sb-group-label">Product Thinking</div>
     <a href="#roadmap"><span class="ico">📅</span>Status &amp; roadmap</a>
@@ -218,6 +219,7 @@ footer a{color:var(--blue-light)}
   </nav>
   <div class="sb-ctas">
     <a href="prototype.html" class="sb-btn-primary">Open prototype →</a>
+    <a href="architecture.html" class="sb-btn-ghost">Architecture</a>
     <a href="../" class="sb-btn-ghost">← Back to portfolio</a>
   </div>
 </aside>
@@ -230,11 +232,12 @@ footer a{color:var(--blue-light)}
 
 <!-- OVERVIEW -->
 <section id="overview">
-  <div class="hero-badge"><span class="dot"></span>In design · v2 multi-sport rewrite · Aug 2026</div>
+  <div class="hero-badge"><span class="dot"></span>In design · v2 · prototype + architecture · Aug 2026</div>
   <h1>One prediction pool app for <span>every sport</span> your group follows.</h1>
   <p class="hero-sub">Predictopia v1 shipped in a 9-day solo sprint as an IPL-2026-only app — then sat dormant nine months a year by design. That scoping mistake became the v2 thesis: a Group (persistent people) / Pool (tournament instance) split and a generic prediction-event model, so cricket, football, or the next sport a family adds all run through one schema. Currently a full clickable prototype validating the PRD before a line of v2 backend code gets written.</p>
   <div class="hero-ctas">
     <a href="prototype.html" class="btn btn-primary">Open interactive prototype →</a>
+    <a href="architecture.html" class="btn btn-secondary">Architecture &amp; diagrams</a>
     <a href="../" class="btn btn-secondary">← Back to portfolio</a>
   </div>
 </section>
@@ -364,11 +367,12 @@ footer a{color:var(--blue-light)}
       <div class="tech-card">
         <div class="tech-label">Stack</div>
         <h3>Next.js + Supabase, kept from v1</h3>
-        <div class="tech-code">Next.js (App Router)
-Supabase — Postgres + RLS + Auth
-Vercel — free tier
-CricketData.org + API-Football</div>
-        <p>Domain/schema rewrite matters more than an infra change — reuses the proven v1 stack rather than re-litigating tooling under a hard deadline.</p>
+        <div class="tech-code">Next.js (App Router) PWA
+Auth.js — Google only
+Supabase Postgres + RLS
+Vercel + GitHub Actions cron
+CricketData + API-Football</div>
+        <p>Domain/schema rewrite matters more than an infra change. Auth.js + portable GUC identity (not auth.uid). Jobs via GitHub Actions for sub-daily reminders. See <a href="architecture.html">architecture diagrams</a>.</p>
       </div>
       <div class="tech-card">
         <div class="tech-label">Data model</div>
@@ -384,11 +388,11 @@ Event  → outcome | special
       <div class="tech-card">
         <div class="tech-label">Access control</div>
         <h3>Hybrid RLS + API routes</h3>
-        <div class="tech-code">RLS      → pool membership
-           isolation (static)
-API route → cutoff / visibility
-           (time-dependent)</div>
-        <p>Prediction visibility before/after cutoff is time-dependent — awkward to express safely in RLS alone — so that logic lives in API routes while membership isolation stays in RLS, kept debuggable.</p>
+        <div class="tech-code">Auth.js → app.user_id GUC
+RLS     → membership + reveal
+Jobs    → app_jobs + JOB_SECRET
+DB      → lock triggers</div>
+        <p>Reveal of others' picks is an RLS rule after lock — not UI-only. Cutoff enforced by DB trigger. Full path on the <a href="architecture.html#identity">identity diagram</a>.</p>
       </div>
     </div>
   </div>
@@ -398,21 +402,21 @@ API route → cutoff / visibility
 <section id="roadmap" class="section section-alt">
   <div class="container">
     <div class="section-label">Status &amp; Roadmap</div>
-    <h2 class="section-title">Phase 5 — PRD resolved, prototype validating it, build not started</h2>
-    <p class="section-sub section-sub-wide">The prototype came before roadmap/design/architecture agents ran in the usual order — deliberately short-circuited to pressure-test the PRD's riskiest UX calls (Group/Pool split, navigation, money labelling) before locking a build plan around them.</p>
+    <h2 class="section-title">PRD approved · prototype live · architecture drafted · build next</h2>
+    <p class="section-sub section-sub-wide">v2 went prototype-first to pressure-test Group/Pool, navigation, and money labelling. PRD and roadmap are approved; architecture (stack, event spine, RLS, jobs) is drafted with draw.io diagrams published. Backend milestones M1–M6 are next — no production v2 API yet.</p>
     <div class="roadmap-grid">
       <div class="roadmap-col">
-        <div class="roadmap-header now"><span class="phase-sub">Now</span>Prototype iteration</div>
+        <div class="roadmap-header now"><span class="phase-sub">Now</span>Architecture → build</div>
         <div class="roadmap-body">
-          <div class="roadmap-item"><h4>Navigation/IA redesign</h4><p>Predict · Board · Me · Money (+Manage) tabs, Reveal folded into Board, real cross-pool money rollup — just shipped.</p></div>
-          <div class="roadmap-item"><h4>PRD review</h4><p>Formal <code>prd-reviewer</code> pass against PRD v2.0, the mandatory gate before roadmap/design/architecture proceed.</p></div>
+          <div class="roadmap-item"><h4>Architecture published</h4><p>Stack, five invariants, event spine, RLS identity path, scoring &amp; settlement — <a href="architecture.html">diagrams on this site</a>.</p></div>
+          <div class="roadmap-item"><h4>M1 foundation next</h4><p>Auth.js, catalog, blank schema migrations, schedule job — first real v2 backend work.</p></div>
         </div>
       </div>
       <div class="roadmap-col">
-        <div class="roadmap-header next"><span class="phase-sub">Next</span>Architecture &amp; build</div>
+        <div class="roadmap-header next"><span class="phase-sub">Next</span>Core product slices</div>
         <div class="roadmap-body">
-          <div class="roadmap-item"><h4>Schema rewrite</h4><p>New Group/Pool/event tables, clean rebuild from blank migrations — no live users, so no v1 data migration needed.</p></div>
-          <div class="roadmap-item"><h4>Auth.js integration</h4><p>Google-only sign-in, chosen for provider flexibility over Supabase-native auth.</p></div>
+          <div class="roadmap-item"><h4>M2–M3 Group · Pool · Predict</h4><p>Admit/deny, opt-in pools, one-tap picks, autopilot results scoring.</p></div>
+          <div class="roadmap-item"><h4>M4–M5 Specials · Money</h4><p>Admin specials, period close, owed/settled tracking (no payments).</p></div>
         </div>
       </div>
       <div class="roadmap-col">

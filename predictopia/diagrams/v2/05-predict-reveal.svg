@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="480" viewBox="0 0 980 480">
+
+<defs>
+  <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/></marker>
+  <marker id="arrb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4338CA"/></marker>
+  <marker id="arrg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#047857"/></marker>
+</defs>
+
+<style>
+  .box    { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g  { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o  { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p  { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-c  { fill:#ECFEFF; stroke:#0891B2; stroke-width:1.5; }
+  .box-y  { fill:#FFFBEB; stroke:#D97706; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .box-w  { fill:#FFFFFF; stroke:#CBD5E1; stroke-width:1.5; }
+  .box-core { fill:#3949FF; stroke:#2733D6; stroke-width:1.5; }
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab-w  { font:600 12px system-ui,sans-serif; fill:#FFFFFF; text-anchor:middle; }
+  .lab2   { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .lab2-w { font:11px system-ui,sans-serif; fill:#C7D2FE; text-anchor:middle; }
+  .lab-l  { font:600 12px system-ui,sans-serif; fill:#1E293B; }
+  .lab2-l { font:11px system-ui,sans-serif; fill:#64748B; }
+  .edge   { stroke:#94A3B8; stroke-width:1.5; fill:none; marker-end:url(#arr); }
+  .edge-b { stroke:#4338CA; stroke-width:1.6; fill:none; marker-end:url(#arrb); }
+  .edge-g { stroke:#047857; stroke-width:1.5; fill:none; marker-end:url(#arrg); }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+  .group  { fill:none; stroke:#CBD5E1; stroke-width:1.2; stroke-dasharray:4 3; }
+  .group-lab { font:700 10px system-ui,sans-serif; fill:#94A3B8; letter-spacing:0.6px; }
+</style>
+
+
+<text x="40" y="36" class="title">Predictopia v2 — Predict, lock, reveal</text>
+<text x="40" y="56" class="sub">Cutoff from competition catalog · server-side lock · banter only after lock</text>
+
+<!-- swimlanes -->
+<text x="40" y="100" class="lab-l">Member</text>
+<text x="40" y="200" class="lab-l">API</text>
+<text x="40" y="300" class="lab-l">DB</text>
+<text x="40" y="400" class="lab-l">Jobs</text>
+
+<!-- member boxes -->
+<rect x="120" y="80" width="130" height="50" rx="8" class="box-gray"/>
+  <text x="185" y="102" class="lab">Open pick</text>
+  <text x="185" y="118" class="lab2">Predict / Hub</text>
+<rect x="300" y="80" width="130" height="50" rx="8" class="box"/>
+  <text x="365" y="102" class="lab">PUT prediction</text>
+  <text x="365" y="118" class="lab2">selected_keys</text>
+<rect x="480" y="80" width="130" height="50" rx="8" class="box-y"/>
+  <text x="545" y="102" class="lab">Cutoff passes</text>
+  <text x="545" y="118" class="lab2">is_locked = true</text>
+<rect x="660" y="80" width="150" height="50" rx="8" class="box-g"/>
+  <text x="735" y="102" class="lab">Board → Reveal</text>
+  <text x="735" y="118" class="lab2">collapsible section</text>
+
+<!-- API -->
+<rect x="300" y="180" width="130" height="50" rx="8" class="box-p"/>
+  <text x="365" y="202" class="lab">/api/predictions</text>
+  <text x="365" y="218" class="lab2">+ optional sync fan-out</text>
+<rect x="660" y="180" width="150" height="50" rx="8" class="box-p"/>
+  <text x="735" y="202" class="lab">GET board/reveal</text>
+  <text x="735" y="218" class="lab2">RLS filters others</text>
+
+<!-- DB -->
+<rect x="300" y="280" width="130" height="50" rx="8" class="box-g"/>
+  <text x="365" y="302" class="lab">assert_valid</text>
+  <text x="365" y="318" class="lab2">trigger · not locked</text>
+<rect x="480" y="280" width="130" height="50" rx="8" class="box-g"/>
+  <text x="545" y="302" class="lab">v_events</text>
+  <text x="545" y="318" class="lab2">effective_closes_at</text>
+<rect x="660" y="280" width="150" height="50" rx="8" class="box-g"/>
+  <text x="735" y="302" class="lab">predictions SELECT</text>
+  <text x="735" y="318" class="lab2">others only if locked</text>
+
+<!-- jobs -->
+<rect x="480" y="380" width="200" height="50" rx="8" class="box-y"/>
+  <text x="580" y="402" class="lab">sync-schedule rewrites cutoff_at</text>
+  <text x="580" y="418" class="lab2">postponed fixtures self-heal</text>
+
+<path d="M250,105 H300" class="edge"/>
+<path d="M365,130 V180" class="edge-b"/>
+<path d="M365,230 V280" class="edge-b"/>
+<path d="M430,305 H480" class="edge"/>
+<path d="M545,130 V280" class="edge"/>
+<path d="M610,105 H660" class="edge"/>
+<path d="M735,130 V180" class="edge"/>
+<path d="M735,230 V280" class="edge"/>
+<path d="M545,330 V380" class="edge"/>
+
+<text x="40" y="460" class="legend">Cricket T−30 · Football 60/90 per competition. Admin override per delayed match. Sync mirrors picks across pools on same season when enabled.</text>
+
+</svg>

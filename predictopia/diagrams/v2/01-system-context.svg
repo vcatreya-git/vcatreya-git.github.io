@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560">
+
+<defs>
+  <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/></marker>
+  <marker id="arrb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4338CA"/></marker>
+  <marker id="arrg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#047857"/></marker>
+</defs>
+
+<style>
+  .box    { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g  { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o  { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p  { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-c  { fill:#ECFEFF; stroke:#0891B2; stroke-width:1.5; }
+  .box-y  { fill:#FFFBEB; stroke:#D97706; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .box-w  { fill:#FFFFFF; stroke:#CBD5E1; stroke-width:1.5; }
+  .box-core { fill:#3949FF; stroke:#2733D6; stroke-width:1.5; }
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab-w  { font:600 12px system-ui,sans-serif; fill:#FFFFFF; text-anchor:middle; }
+  .lab2   { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .lab2-w { font:11px system-ui,sans-serif; fill:#C7D2FE; text-anchor:middle; }
+  .lab-l  { font:600 12px system-ui,sans-serif; fill:#1E293B; }
+  .lab2-l { font:11px system-ui,sans-serif; fill:#64748B; }
+  .edge   { stroke:#94A3B8; stroke-width:1.5; fill:none; marker-end:url(#arr); }
+  .edge-b { stroke:#4338CA; stroke-width:1.6; fill:none; marker-end:url(#arrb); }
+  .edge-g { stroke:#047857; stroke-width:1.5; fill:none; marker-end:url(#arrg); }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+  .group  { fill:none; stroke:#CBD5E1; stroke-width:1.2; stroke-dasharray:4 3; }
+  .group-lab { font:700 10px system-ui,sans-serif; fill:#94A3B8; letter-spacing:0.6px; }
+</style>
+
+
+<text x="40" y="36" class="title">Predictopia v2 — System Context</text>
+<text x="40" y="56" class="sub">Multi-sport prediction pools · free-tier · portable Postgres · no payment processing</text>
+
+<!-- Actors -->
+<rect x="30" y="110" width="140" height="54" rx="10" class="box-gray"/>
+  <text x="100" y="133" class="lab">Group Admin</text>
+  <text x="100" y="148" class="lab2">create group · admit · pools</text>
+<rect x="30" y="190" width="140" height="54" rx="10" class="box-gray"/>
+  <text x="100" y="213" class="lab">Pool Admin</text>
+  <text x="100" y="228" class="lab2">specials · money · settle</text>
+<rect x="30" y="270" width="140" height="54" rx="10" class="box-gray"/>
+  <text x="100" y="293" class="lab">Member</text>
+  <text x="100" y="308" class="lab2">predict · board · money</text>
+<rect x="30" y="350" width="140" height="54" rx="10" class="box-gray"/>
+  <text x="100" y="373" class="lab">Invitee</text>
+  <text x="100" y="388" class="lab2">join link → pending</text>
+
+<!-- Core -->
+<rect x="280" y="180" width="220" height="130" rx="14" class="box-core"/>
+  <text x="390" y="230" class="lab-w">Predictopia PWA</text>
+  <text x="390" y="250" class="lab2-w">Next.js App Router</text>
+  <text x="390" y="268" class="lab2-w">Route Handlers · Vercel</text>
+  <text x="390" y="286" class="lab2-w">viewer-local timezones</text>
+
+<!-- Externals right -->
+<rect x="640" y="80" width="190" height="50" rx="10" class="box-g"/>
+  <text x="735" y="102" class="lab">Supabase Postgres</text>
+  <text x="735" y="117" class="lab2">RLS · app.current_user_id()</text>
+<rect x="640" y="150" width="190" height="50" rx="10" class="box-p"/>
+  <text x="735" y="172" class="lab">Auth.js (Google)</text>
+  <text x="735" y="187" class="lab2">@auth/pg-adapter · identity only</text>
+<rect x="640" y="220" width="190" height="50" rx="10" class="box-o"/>
+  <text x="735" y="242" class="lab">CricketData.org</text>
+  <text x="735" y="257" class="lab2">cricket schedule + results</text>
+<rect x="640" y="290" width="190" height="50" rx="10" class="box-o"/>
+  <text x="735" y="312" class="lab">API-Football</text>
+  <text x="735" y="327" class="lab2">football schedule + results</text>
+<rect x="640" y="360" width="190" height="50" rx="10" class="box-y"/>
+  <text x="735" y="382" class="lab">GitHub Actions cron</text>
+  <text x="735" y="397" class="lab2">schedule · results · reminders</text>
+<rect x="640" y="430" width="190" height="50" rx="10" class="box-c"/>
+  <text x="735" y="452" class="lab">Web Push + Resend</text>
+  <text x="735" y="467" class="lab2">cutoff reminders · email fallback</text>
+
+<path d="M170,137 H240 V220 H280" class="edge"/>
+<path d="M170,217 H240 V240 H280" class="edge"/>
+<path d="M170,297 H240 V260 H280" class="edge"/>
+<path d="M170,377 H240 V280 H280" class="edge"/>
+
+<path d="M500,220 H570 V105 H640" class="edge-b"/>
+<path d="M500,235 H570 V175 H640" class="edge-b"/>
+<path d="M500,255 H570 V245 H640" class="edge-b"/>
+<path d="M500,270 H570 V315 H640" class="edge-b"/>
+<path d="M500,285 H570 V385 H640" class="edge-b"/>
+<path d="M500,300 H570 V455 H640" class="edge-b"/>
+
+<text x="40" y="530" class="legend">Money = Splitwise-style tracking only (buy-in collected / prize owed·settled). No payment gateway. WhatsApp share is manual, not an API.</text>
+
+</svg>

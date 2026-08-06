@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+
+<defs>
+  <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/></marker>
+  <marker id="arrb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4338CA"/></marker>
+  <marker id="arrg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#047857"/></marker>
+</defs>
+
+<style>
+  .box    { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g  { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o  { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p  { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-c  { fill:#ECFEFF; stroke:#0891B2; stroke-width:1.5; }
+  .box-y  { fill:#FFFBEB; stroke:#D97706; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .box-w  { fill:#FFFFFF; stroke:#CBD5E1; stroke-width:1.5; }
+  .box-core { fill:#3949FF; stroke:#2733D6; stroke-width:1.5; }
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab-w  { font:600 12px system-ui,sans-serif; fill:#FFFFFF; text-anchor:middle; }
+  .lab2   { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .lab2-w { font:11px system-ui,sans-serif; fill:#C7D2FE; text-anchor:middle; }
+  .lab-l  { font:600 12px system-ui,sans-serif; fill:#1E293B; }
+  .lab2-l { font:11px system-ui,sans-serif; fill:#64748B; }
+  .edge   { stroke:#94A3B8; stroke-width:1.5; fill:none; marker-end:url(#arr); }
+  .edge-b { stroke:#4338CA; stroke-width:1.6; fill:none; marker-end:url(#arrb); }
+  .edge-g { stroke:#047857; stroke-width:1.5; fill:none; marker-end:url(#arrg); }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+  .group  { fill:none; stroke:#CBD5E1; stroke-width:1.2; stroke-dasharray:4 3; }
+  .group-lab { font:700 10px system-ui,sans-serif; fill:#94A3B8; letter-spacing:0.6px; }
+</style>
+
+
+<text x="40" y="36" class="title">Predictopia v2 — Request identity &amp; RLS</text>
+<text x="40" y="56" class="sub">Auth.js owns identity · app tables own roles · database enforces authorization</text>
+
+<!-- steps as horizontal flow -->
+
+<rect x="40" y="120" width="160" height="100" rx="12" class="box-gray"/>
+  <text x="120" y="155" class="lab">Step 1</text>
+  <text x="120" y="178" class="lab2">Browser fetch</text>
+  <text x="120" y="196" class="lab2">/api/pools/.../money</text>
+
+<rect x="220" y="120" width="160" height="100" rx="12" class="box-p"/>
+  <text x="300" y="155" class="lab">Step 2</text>
+  <text x="300" y="178" class="lab2">Auth.js auth()</text>
+  <text x="300" y="196" class="lab2">session.user.id</text>
+
+<rect x="400" y="120" width="160" height="100" rx="12" class="box"/>
+  <text x="480" y="155" class="lab">Step 3</text>
+  <text x="480" y="178" class="lab2">BEGIN + set_config</text>
+  <text x="480" y="196" class="lab2">app.user_id (local)</text>
+
+<rect x="580" y="120" width="160" height="100" rx="12" class="box-g"/>
+  <text x="660" y="155" class="lab">Step 4</text>
+  <text x="660" y="178" class="lab2">Postgres RLS</text>
+  <text x="660" y="196" class="lab2">app.current_user_id()</text>
+
+<rect x="760" y="120" width="160" height="100" rx="12" class="box-core"/>
+  <text x="840" y="155" class="lab-w">Step 5</text>
+  <text x="840" y="178" class="lab2-w">COMMIT → JSON</text>
+  <text x="840" y="196" class="lab2-w">roles in app tables</text>
+
+
+<path d="M200,170 H220" class="edge-b"/><path d="M380,170 H400" class="edge-b"/><path d="M560,170 H580" class="edge-b"/><path d="M740,170 H760" class="edge-b"/>
+
+<rect x="40" y="270" width="880" height="100" rx="12" class="box-w"/>
+<text x="60" y="300" class="lab-l">Why this shape</text>
+<text x="60" y="322" class="lab2-l">• No auth.uid() — works unchanged on RDS · • accounts/sessions RLS enabled with zero policies (tokens unreachable from app_request)</text>
+<text x="60" y="342" class="lab2-l">• Predictions reveal: others' picks SELECT only when event is_locked · · Jobs use app_jobs (BYPASSRLS) + JOB_SECRET only</text>
+<text x="60" y="362" class="lab2-l">• Group Admin inherits pool admin rights in is_pool_admin (architecture review R1) · Leave/remove cannot escalate role</text>
+
+</svg>

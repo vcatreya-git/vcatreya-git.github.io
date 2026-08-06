@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620">
+
+<defs>
+  <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94A3B8"/></marker>
+  <marker id="arrb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4338CA"/></marker>
+  <marker id="arrg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#047857"/></marker>
+</defs>
+
+<style>
+  .box    { fill:#EEF2FF; stroke:#4338CA; stroke-width:1.5; }
+  .box-g  { fill:#ECFDF5; stroke:#047857; stroke-width:1.5; }
+  .box-o  { fill:#FFF7ED; stroke:#C2410C; stroke-width:1.5; }
+  .box-p  { fill:#F5F3FF; stroke:#6D28D9; stroke-width:1.5; }
+  .box-c  { fill:#ECFEFF; stroke:#0891B2; stroke-width:1.5; }
+  .box-y  { fill:#FFFBEB; stroke:#D97706; stroke-width:1.5; }
+  .box-gray { fill:#F8FAFC; stroke:#64748B; stroke-width:1.5; }
+  .box-w  { fill:#FFFFFF; stroke:#CBD5E1; stroke-width:1.5; }
+  .box-core { fill:#3949FF; stroke:#2733D6; stroke-width:1.5; }
+  .title  { font:700 18px system-ui,sans-serif; fill:#0F172A; }
+  .sub    { font:12px system-ui,sans-serif; fill:#64748B; }
+  .lab    { font:600 12px system-ui,sans-serif; fill:#1E293B; text-anchor:middle; }
+  .lab-w  { font:600 12px system-ui,sans-serif; fill:#FFFFFF; text-anchor:middle; }
+  .lab2   { font:11px system-ui,sans-serif; fill:#64748B; text-anchor:middle; }
+  .lab2-w { font:11px system-ui,sans-serif; fill:#C7D2FE; text-anchor:middle; }
+  .lab-l  { font:600 12px system-ui,sans-serif; fill:#1E293B; }
+  .lab2-l { font:11px system-ui,sans-serif; fill:#64748B; }
+  .edge   { stroke:#94A3B8; stroke-width:1.5; fill:none; marker-end:url(#arr); }
+  .edge-b { stroke:#4338CA; stroke-width:1.6; fill:none; marker-end:url(#arrb); }
+  .edge-g { stroke:#047857; stroke-width:1.5; fill:none; marker-end:url(#arrg); }
+  .legend { font:11px system-ui,sans-serif; fill:#94A3B8; }
+  .group  { fill:none; stroke:#CBD5E1; stroke-width:1.2; stroke-dasharray:4 3; }
+  .group-lab { font:700 10px system-ui,sans-serif; fill:#94A3B8; letter-spacing:0.6px; }
+</style>
+
+
+<text x="40" y="36" class="title">Predictopia v2 — Data model (event spine)</text>
+<text x="40" y="56" class="sub">Nothing tournament-shaped in schema · one scoring path for outcomes and specials · points only in event_scores</text>
+
+<!-- Catalog -->
+<rect x="30" y="80" width="220" height="200" rx="12" class="group"/>
+<text x="45" y="100" class="group-lab">CATALOG (SHARED)</text>
+<rect x="50" y="115" width="180" height="36" rx="8" class="box-o"/>
+  <text x="140" y="138" class="lab">sports · competitions</text>
+<rect x="50" y="165" width="180" height="36" rx="8" class="box-o"/>
+  <text x="140" y="188" class="lab">seasons · teams</text>
+<rect x="50" y="215" width="180" height="36" rx="8" class="box-o"/>
+  <text x="140" y="238" class="lab">matches (UTC + cutoff_at)</text>
+
+<!-- People -->
+<rect x="280" y="80" width="200" height="200" rx="12" class="group"/>
+<text x="295" y="100" class="group-lab">PEOPLE</text>
+<rect x="300" y="120" width="160" height="44" rx="8" class="box-g"/>
+  <text x="380" y="140" class="lab">groups</text>
+  <text x="380" y="155" class="lab2">persistent · join_code</text>
+<rect x="300" y="180" width="160" height="44" rx="8" class="box-g"/>
+  <text x="380" y="200" class="lab">group_members</text>
+  <text x="380" y="215" class="lab2">pending · active · admin</text>
+<rect x="300" y="240" width="160" height="28" rx="8" class="box-w"/>
+  <text x="380" y="258" class="lab">users (Auth.js)</text>
+
+<!-- Pool -->
+<rect x="520" y="80" width="200" height="200" rx="12" class="group"/>
+<text x="535" y="100" class="group-lab">TOURNAMENT INSTANCE</text>
+<rect x="540" y="120" width="160" height="44" rx="8" class="box"/>
+  <text x="620" y="140" class="lab">pools</text>
+  <text x="620" y="155" class="lab2">season · economics · splits</text>
+<rect x="540" y="180" width="160" height="36" rx="8" class="box"/>
+  <text x="620" y="203" class="lab">pool_members (opt-in)</text>
+<rect x="540" y="230" width="160" height="36" rx="8" class="box-y"/>
+  <text x="620" y="253" class="lab">pool_periods</text>
+
+<!-- Event spine -->
+<rect x="30" y="320" width="690" height="230" rx="12" class="group"/>
+<text x="45" y="342" class="group-lab">EVENT SPINE (ONE PATH)</text>
+<rect x="50" y="360" width="160" height="60" rx="10" class="box-core"/>
+  <text x="130" y="385" class="lab-w">events</text>
+  <text x="130" y="402" class="lab2-w">outcome | special</text>
+<rect x="240" y="360" width="140" height="60" rx="10" class="box-p"/>
+  <text x="310" y="385" class="lab">event_options</text>
+  <text x="310" y="402" class="lab2">home/away/teams…</text>
+<rect x="410" y="360" width="140" height="60" rx="10" class="box"/>
+  <text x="480" y="385" class="lab">predictions</text>
+  <text x="480" y="402" class="lab2">selected_keys[]</text>
+<rect x="580" y="360" width="120" height="60" rx="10" class="box-g"/>
+  <text x="640" y="385" class="lab">event_scores</text>
+  <text x="640" y="402" class="lab2">points ledger</text>
+
+<rect x="50" y="450" width="300" height="70" rx="10" class="box-y"/>
+  <text x="200" y="478" class="lab">payouts</text>
+  <text x="200" y="496" class="lab2">period_id XOR event_id · owed | settled</text>
+<rect x="380" y="450" width="320" height="70" rx="10" class="box-w"/>
+  <text x="540" y="478" class="lab">Board / Me / Money all read event_scores + payouts</text>
+  <text x="540" y="496" class="lab2">period filter = lens, never a second ledger</text>
+
+<!-- edges -->
+<path d="M250,180 H280" class="edge"/>
+<path d="M480,200 H520" class="edge"/>
+<path d="M140,280 V320" class="edge"/>
+<path d="M620,280 V320" class="edge"/>
+<path d="M210,390 H240" class="edge-b"/>
+<path d="M380,390 H410" class="edge-b"/>
+<path d="M550,390 H580" class="edge-b"/>
+<path d="M640,420 V450" class="edge-g"/>
+<path d="M200,420 V450" class="edge-g"/>
+
+<text x="760" y="120" class="lab-l">Invariants</text>
+<text x="760" y="145" class="lab2-l">1. No sport hardcoding in tables</text>
+<text x="760" y="165" class="lab2-l">2. One event row type</text>
+<text x="760" y="185" class="lab2-l">3. Points only in event_scores</text>
+<text x="760" y="205" class="lab2-l">4. Portable identity (GUC)</text>
+<text x="760" y="225" class="lab2-l">5. Money never overspends pot</text>
+
+<text x="40" y="590" class="legend">Outcome events materialised per (pool, match). Specials = same table, manual resolve. Catalog matches shared across all pools on a season.</text>
+
+</svg>

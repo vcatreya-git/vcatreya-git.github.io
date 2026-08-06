@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Grok" version="22.1.0">
+  <diagram id="01-system-context" name="01-system-context">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+      <mxCell id="0"/>
+      <mxCell id="1" parent="0"/>
+      <mxCell id="t" value="System Context v2" style="text;html=1;fontSize=16;fontStyle=1;align=left;" vertex="1" parent="1"><mxGeometry x="40" y="20" width="400" height="30" as="geometry"/></mxCell>
+      <mxCell id="c1" value="Group Admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#64748B;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="40" y="120" width="140" height="50" as="geometry"/></mxCell>
+      <mxCell id="c2" value="Member" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#64748B;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="40" y="200" width="140" height="50" as="geometry"/></mxCell>
+      <mxCell id="c3" value="Predictopia PWA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3949FF;strokeColor=#94A3B8;fontColor=#FFFFFF;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="280" y="160" width="200" height="90" as="geometry"/></mxCell>
+      <mxCell id="c4" value="Supabase Postgres" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#94A3B8;fontColor=#047857;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="80" width="180" height="50" as="geometry"/></mxCell>
+      <mxCell id="c5" value="Auth.js Google" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#94A3B8;fontColor=#6D28D9;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="150" width="180" height="50" as="geometry"/></mxCell>
+      <mxCell id="c6" value="CricketData + API-Football" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#94A3B8;fontColor=#C2410C;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="220" width="180" height="50" as="geometry"/></mxCell>
+      <mxCell id="c7" value="GH Actions + Web Push/Resend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#94A3B8;fontColor=#D97706;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="600" y="290" width="180" height="50" as="geometry"/></mxCell>
+      <mxCell id="e0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" edge="1" parent="1" source="c1" target="c3"><mxGeometry relative="1" as="geometry"/></mxCell>
+      <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" edge="1" parent="1" source="c2" target="c3"><mxGeometry relative="1" as="geometry"/></mxCell>
+      <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" edge="1" parent="1" source="c3" target="c4"><mxGeometry relative="1" as="geometry"/></mxCell>
+      <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" edge="1" parent="1" source="c3" target="c5"><mxGeometry relative="1" as="geometry"/></mxCell>
+      <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" edge="1" parent="1" source="c3" target="c6"><mxGeometry relative="1" as="geometry"/></mxCell>
+      <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" edge="1" parent="1" source="c3" target="c7"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
