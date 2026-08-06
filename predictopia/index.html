@@ -140,9 +140,11 @@ footer .meta{font-size:12px;color:var(--dim)}
     </div>
   </header>
 
-  <nav class="nav-pills" aria-label="Docs">
+    <nav class="nav-pills" aria-label="Docs">
     <a href="index.html" class="on">Overview</a>
     <a href="architecture.html">Architecture</a>
+    <a href="features.html">Features</a>
+    <a href="help/">User guide</a>
     <a href="prototype.html">Prototype</a>
   </nav>
 
@@ -152,7 +154,8 @@ footer .meta{font-size:12px;color:var(--dim)}
     <p class="sub">Create a group once. Spin up a pool for cricket, football, or the next season. Members opt in, pick winners before kickoff, and track scores and settlements without spreadsheets.</p>
     <div class="cta-row">
       <a class="btn btn-accent" href="prototype.html">Try the interactive prototype</a>
-      <a class="btn btn-ghost" href="architecture.html">Architecture &amp; diagrams</a>
+      <a class="btn btn-ghost" href="architecture.html">Architecture</a>
+      <a class="btn btn-ghost" href="help/">User guide</a>
     </div>
     <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px">
       <span class="chip chip-accent">Clickable prototype</span>
@@ -247,11 +250,22 @@ footer .meta{font-size:12px;color:var(--dim)}
     <p class="lead" style="margin-top:12px">Details and draw.io diagrams: <a href="architecture.html">Architecture</a>.</p>
   </section>
 
+  <section class="section" id="docs">
+    <h2>Documentation</h2>
+    <p class="lead">Same shape as other portfolio products: product overview, feature map, architecture, and an end-user guide.</p>
+    <div class="grid">
+      <div class="tile"><h3><a href="help/">User guide</a></h3><p>How to join a group, predict, use the four tabs, and settle prizes offline.</p></div>
+      <div class="tile"><h3><a href="features.html">Features</a></h3><p>What ships in the prototype vs architecture vs deferred.</p></div>
+      <div class="tile"><h3><a href="architecture.html">Architecture</a></h3><p>Stack, invariants, draw.io diagrams for system design.</p></div>
+      <div class="tile"><h3><a href="prototype.html">Prototype</a></h3><p>Clickable multi-sport demo with mock data.</p></div>
+    </div>
+  </section>
+
   <section class="section" id="status">
     <h2>Status</h2>
     <div class="grid">
-      <div class="tile"><h3>Done</h3><p>PRD, roadmap, interactive prototype, architecture draft + public diagrams.</p></div>
-      <div class="tile"><h3>Next</h3><p>Backend milestones: auth → groups/pools → predict → specials → money → push.</p></div>
+      <div class="tile"><h3>Done</h3><p>PRD, roadmap, prototype, architecture diagrams, user guide + feature map.</p></div>
+      <div class="tile"><h3>Next</h3><p>Backend: auth → groups/pools → predict → specials → money → push.</p></div>
     </div>
   </section>
 
