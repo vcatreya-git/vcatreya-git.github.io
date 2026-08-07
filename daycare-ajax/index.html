@@ -433,6 +433,140 @@
     }
     .toast.show { opacity: 1; }
 
+
+    .progress-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .progress-panel .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+    .progress-panel h2 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+    .progress-count {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+    .progress-bar {
+      height: 10px;
+      background: #e8eef0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0d6e6e, #1a8a7a);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+    .progress-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.75rem;
+    }
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+    }
+    .checklist a {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.85rem;
+      padding: 0.4rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fafaf8;
+    }
+    .checklist a:hover { background: #f0fdfa; border-color: #b7e0df; }
+    .checklist a.is-done {
+      background: #ecfdf5;
+      border-color: #86efac;
+      color: #166534;
+    }
+    .checklist .tick {
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 4px;
+      border: 2px solid #94a3b8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      color: transparent;
+    }
+    .checklist a.is-done .tick {
+      background: #16a34a;
+      border-color: #16a34a;
+      color: #fff;
+    }
+
+    .card.is-done {
+      border-color: #86efac;
+      box-shadow: 0 8px 28px rgba(22, 163, 74, 0.12);
+    }
+    .card.is-done .card-top {
+      background: linear-gradient(180deg, #ecfdf5 0%, #fff 100%);
+    }
+    .card.is-done h3::after {
+      content: " ✓ Done";
+      color: #16a34a;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .card.hidden-done { display: none; }
+
+    .btn-done {
+      background: #16a34a;
+      color: #fff;
+    }
+    .btn-done.undone {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .done-meta {
+      font-size: 0.8rem;
+      color: #166534;
+      margin: 0.35rem 0 0;
+      display: none;
+    }
+    .card.is-done .done-meta { display: block; }
+
+    .filter-chip {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+    .filter-chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
     .sticky-email {
       position: sticky;
       top: 0;
@@ -452,8 +586,11 @@
 </head>
 <body>
   <div class="sticky-email">
-    <span>Fill details once ↓ then use <strong>Send email</strong> on any centre — opens your mail app prefilled.</span>
-    <a class="btn btn-email" href="#email-builder" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Jump to email builder</a>
+    <span><strong id="stickyProgress">0 / 10 done</strong> · Fill details → Send email → mark <strong>Done</strong> (saves on this device)</span>
+    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+      <a class="btn btn-email" href="#progress" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Progress</a>
+      <a class="btn btn-secondary" href="#email-builder" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Email builder</a>
+    </div>
   </div>
 
   <div class="wrap">
@@ -478,6 +615,26 @@
       <strong>Share this page:</strong>
       <code id="pageUrl">https://vcatreya-git.github.io/daycare-ajax/</code>
       <button class="btn btn-secondary" type="button" onclick="copyPageUrl()">Copy link</button>
+    </div>
+
+
+    <div class="progress-panel" id="progress">
+      <div class="row">
+        <h2>Waitlist progress</h2>
+        <span class="progress-count" id="progressCount">0 of 10 complete</span>
+      </div>
+      <div class="progress-bar" aria-hidden="true"><span id="progressFill"></span></div>
+      <p style="margin:0.65rem 0 0;font-size:0.88rem;color:var(--muted);">
+        Tap <strong>Mark done</strong> on each centre after you join the waitlist (email sent or form submitted).
+        Progress is saved in <em>this browser on this device</em> only (not shared with your wife unless she marks her own).
+      </p>
+      <div class="progress-actions">
+        <button type="button" class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">Show all</button>
+        <button type="button" class="filter-chip" data-filter="todo" onclick="setFilter('todo', this)">To do only</button>
+        <button type="button" class="filter-chip" data-filter="done" onclick="setFilter('done', this)">Done only</button>
+        <button type="button" class="btn btn-secondary" style="padding:0.4rem 0.7rem;font-size:0.8rem;" onclick="resetAllDone()">Reset all progress</button>
+      </div>
+      <div class="checklist" id="checklist"></div>
     </div>
 
     <div class="callout">
@@ -522,7 +679,7 @@
       <div class="step">
         <div class="n">3</div>
         <h4>Send waitlist emails</h4>
-        <p>Click <strong>Send email</strong> on each centre — opens Mail / Gmail / Outlook with To, subject, and body filled.</p>
+        <p>Click <strong>Send email</strong>, then <strong>Mark done</strong> so you can track what’s left (progress bar at top).</p>
       </div>
       <div class="step">
         <div class="n">4</div>
@@ -633,7 +790,7 @@
 
     <div class="grid">
 
-      <article class="card" id="ajax-elcc">
+      <article class="card" id="ajax-elcc" data-track="ajax-elcc" data-label="Ajax ELCC">
         <div class="card-top">
           <div>
             <h3>1. Ajax Early Learning &amp; Child Care Centre</h3>
@@ -680,14 +837,16 @@
             <strong>Waitlist:</strong> Official path is the Lillio form. Also send email so you’re on record. Separate application per Regional centre.
           </p>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="ajax_elcc@durham.ca" data-name="Ajax ELCC">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="ajax-elcc" onclick="toggleDone('ajax-elcc')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="ajax_elcc@durham.ca" data-name="Ajax ELCC">✉ Send email</a>
             <a class="btn btn-primary" href="https://app.lillio.com/online_registration/apply/ajax-elcc" target="_blank" rel="noopener">Open waitlist form</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/22+Centennial+Road,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="ajax-elcc"></p>
         </div>
       </article>
 
-      <article class="card" id="hh-westney">
+      <article class="card" id="hh-westney" data-track="hh-westney" data-label="Helping Hands Westney">
         <div class="card-top">
           <div>
             <h3>2. Helping Hands Daycare — Westney</h3>
@@ -733,14 +892,16 @@
             <strong>Waitlist:</strong> Contact form → location <em>HHDC Westney</em>. No public email — use “Copy email body” then paste into their form.
           </p>
           <div class="actions">
-            <button class="btn btn-email" type="button" onclick="copyBodyOnly(); showToast('Body copied — paste into Helping Hands form')">Copy email for form</button>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="hh-westney" onclick="toggleDone('hh-westney')">✓ Mark done</button>
+<button class="btn btn-email" type="button" onclick="copyBodyOnly(); showToast('Body copied — paste into Helping Hands form')">Copy email for form</button>
             <a class="btn btn-primary" href="https://www.helpinghandsdaycare.ca/contact" target="_blank" rel="noopener">Open contact form</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/458+Fairall+Street,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="hh-westney"></p>
         </div>
       </article>
 
-      <article class="card" id="pryde-bolton">
+      <article class="card" id="pryde-bolton" data-track="pryde-bolton" data-label="PRYDE Bolton Falby">
         <div class="card-top">
           <div>
             <h3>3. P.R.Y.D.E. — Bolton C. Falby</h3>
@@ -780,13 +941,15 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="bolton@prydelc.ca" data-name="PRYDE Bolton C. Falby">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="pryde-bolton" onclick="toggleDone('pryde-bolton')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="bolton@prydelc.ca" data-name="PRYDE Bolton C. Falby">✉ Send email</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/80+Falby+Court,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="pryde-bolton"></p>
         </div>
       </article>
 
-      <article class="card" id="rm">
+      <article class="card" id="rm" data-track="rm" data-label="Schoolhouse Roland Michener">
         <div class="card-top">
           <div>
             <h3>4. Schoolhouse Playcare — Roland Michener</h3>
@@ -826,13 +989,15 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="rolandmichener@schoolhouseplaycare.ca" data-name="Schoolhouse Roland Michener">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="rm" onclick="toggleDone('rm')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="rolandmichener@schoolhouseplaycare.ca" data-name="Schoolhouse Roland Michener">✉ Send email</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/95+Ritchie+Avenue,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="rm"></p>
         </div>
       </article>
 
-      <article class="card" id="applecroft">
+      <article class="card" id="applecroft" data-track="applecroft" data-label="Schoolhouse Applecroft">
         <div class="card-top">
           <div>
             <h3>5. Schoolhouse Playcare — Applecroft</h3>
@@ -870,13 +1035,15 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="applecroft@schoolhouseplaycare.ca" data-name="Schoolhouse Applecroft">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="applecroft" onclick="toggleDone('applecroft')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="applecroft@schoolhouseplaycare.ca" data-name="Schoolhouse Applecroft">✉ Send email</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/55+Coles+Avenue,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="applecroft"></p>
         </div>
       </article>
 
-      <article class="card" id="cad">
+      <article class="card" id="cad" data-track="cad" data-label="Schoolhouse Cadarackque">
         <div class="card-top">
           <div>
             <h3>6. Schoolhouse Playcare — Cadarackque</h3>
@@ -914,13 +1081,15 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="cadarackque@schoolhouseplaycare.ca" data-name="Schoolhouse Cadarackque">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="cad" onclick="toggleDone('cad')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="cadarackque@schoolhouseplaycare.ca" data-name="Schoolhouse Cadarackque">✉ Send email</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/15+Miles+Drive,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="cad"></p>
         </div>
       </article>
 
-      <article class="card" id="hh-lakeside">
+      <article class="card" id="hh-lakeside" data-track="hh-lakeside" data-label="Helping Hands Lakeside">
         <div class="card-top">
           <div>
             <h3>7. Helping Hands Daycare — Lakeside</h3>
@@ -960,14 +1129,16 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <button class="btn btn-email" type="button" onclick="copyBodyOnly(); showToast('Body copied — paste into Helping Hands form')">Copy email for form</button>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="hh-lakeside" onclick="toggleDone('hh-lakeside')">✓ Mark done</button>
+<button class="btn btn-email" type="button" onclick="copyBodyOnly(); showToast('Body copied — paste into Helping Hands form')">Copy email for form</button>
             <a class="btn btn-primary" href="https://www.helpinghandsdaycare.ca/contact" target="_blank" rel="noopener">Open contact form</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/60+Ashbury+Boulevard,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="hh-lakeside"></p>
         </div>
       </article>
 
-      <article class="card" id="weewatch">
+      <article class="card" id="weewatch" data-track="weewatch" data-label="Wee Watch">
         <div class="card-top">
           <div>
             <h3>8. Wee Watch Ajax–Pickering (licensed home)</h3>
@@ -1008,13 +1179,15 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="ajax@weewatch.com" data-name="Wee Watch Ajax–Pickering" data-home="1">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="weewatch" onclick="toggleDone('weewatch')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="ajax@weewatch.com" data-name="Wee Watch Ajax–Pickering" data-home="1">✉ Send email</a>
             <a class="btn btn-secondary" href="https://weewatch.com/parents/" target="_blank" rel="noopener">Agency site</a>
           </div>
+          <p class="done-meta" data-done-meta="weewatch"></p>
         </div>
       </article>
 
-      <article class="card" id="tender">
+      <article class="card" id="tender" data-track="tender" data-label="Tender Years">
         <div class="card-top">
           <div>
             <h3>9. Tender Years Child Care</h3>
@@ -1055,14 +1228,16 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="info@tenderyearschildcare.ca" data-name="Tender Years Child Care">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="tender" onclick="toggleDone('tender')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="info@tenderyearschildcare.ca" data-name="Tender Years Child Care">✉ Send email</a>
             <a class="btn btn-primary" href="https://tenderyearschildcare.ca/wait-list/" target="_blank" rel="noopener">Online waitlist form</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/338+Rossland+Road+East,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="tender"></p>
         </div>
       </article>
 
-      <article class="card" id="pryde-st">
+      <article class="card" id="pryde-st" data-track="pryde-st" data-label="PRYDE St. Teresa">
         <div class="card-top">
           <div>
             <h3>10. P.R.Y.D.E. — St. Teresa of Calcutta</h3>
@@ -1100,9 +1275,11 @@
             <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
           </div>
           <div class="actions">
-            <a class="btn btn-email send-mail" href="#" data-to="st.teresa@prydelc.ca" data-name="PRYDE St. Teresa">✉ Send email</a>
+            <button type="button" class="btn btn-done btn-toggle-done" data-id="pryde-st" onclick="toggleDone('pryde-st')">✓ Mark done</button>
+<a class="btn btn-email send-mail" href="#" data-to="st.teresa@prydelc.ca" data-name="PRYDE St. Teresa">✉ Send email</a>
             <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/15+Fishlock+Street,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
           </div>
+          <p class="done-meta" data-done-meta="pryde-st"></p>
         </div>
       </article>
 
@@ -1117,7 +1294,7 @@
 
     <div class="email-panel">
       <h3>Your details</h3>
-      <p class="hint">Stored only in this browser tab. Nothing is uploaded. Fill these before clicking Send email on the cards above.</p>
+      <p class="hint">Saved on this device (browser local storage). Nothing is uploaded to a server. Fill these before clicking Send email.</p>
       <div class="fields">
         <div>
           <label for="parentName">Parent full name *</label>
@@ -1213,6 +1390,132 @@
   <div class="toast" id="toast">Copied</div>
 
   <script>
+    const STORAGE_KEY = "ajaxDaycareWaitlist_v1";
+    const FIELD_KEY = "ajaxDaycareWaitlist_fields_v1";
+    const CENTRES = [
+      { id: "ajax-elcc", label: "Ajax ELCC" },
+      { id: "hh-westney", label: "Helping Hands Westney" },
+      { id: "pryde-bolton", label: "PRYDE Bolton Falby" },
+      { id: "rm", label: "Schoolhouse Roland Michener" },
+      { id: "applecroft", label: "Schoolhouse Applecroft" },
+      { id: "cad", label: "Schoolhouse Cadarackque" },
+      { id: "hh-lakeside", label: "Helping Hands Lakeside" },
+      { id: "weewatch", label: "Wee Watch" },
+      { id: "tender", label: "Tender Years" },
+      { id: "pryde-st", label: "PRYDE St. Teresa" },
+    ];
+
+    let filterMode = "all";
+
+    function loadDone() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveDone(map) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+    }
+
+    function isDone(id) {
+      const m = loadDone();
+      return !!(m[id] && m[id].done);
+    }
+
+    function toggleDone(id) {
+      const map = loadDone();
+      if (map[id] && map[id].done) {
+        delete map[id];
+        showToast("Marked as to do");
+      } else {
+        map[id] = { done: true, at: new Date().toISOString() };
+        showToast("Marked done ✓");
+      }
+      saveDone(map);
+      renderProgress();
+    }
+
+    function resetAllDone() {
+      if (!confirm("Clear all done marks on this device?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      renderProgress();
+      showToast("Progress reset");
+    }
+
+    function setFilter(mode, btn) {
+      filterMode = mode;
+      document.querySelectorAll(".filter-chip[data-filter]").forEach((b) => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderProgress();
+    }
+
+    function formatWhen(iso) {
+      if (!iso) return "";
+      try {
+        const d = new Date(iso);
+        return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function renderProgress() {
+      const map = loadDone();
+      const total = CENTRES.length;
+      let doneCount = 0;
+      CENTRES.forEach((c) => { if (map[c.id] && map[c.id].done) doneCount++; });
+
+      const pct = Math.round((doneCount / total) * 100);
+      const countEl = document.getElementById("progressCount");
+      const fillEl = document.getElementById("progressFill");
+      const sticky = document.getElementById("stickyProgress");
+      if (countEl) countEl.textContent = doneCount + " of " + total + " complete";
+      if (fillEl) fillEl.style.width = pct + "%";
+      if (sticky) sticky.textContent = doneCount + " / " + total + " done";
+
+      // checklist
+      const list = document.getElementById("checklist");
+      if (list) {
+        list.innerHTML = CENTRES.map((c) => {
+          const done = map[c.id] && map[c.id].done;
+          return '<a href="#' + c.id + '" class="' + (done ? "is-done" : "") + '">'
+            + '<span class="tick">✓</span><span>' + c.label + '</span></a>';
+        }).join("");
+      }
+
+      // cards
+      CENTRES.forEach((c) => {
+        const card = document.getElementById(c.id);
+        if (!card) return;
+        const done = map[c.id] && map[c.id].done;
+        card.classList.toggle("is-done", done);
+        card.classList.remove("hidden-done");
+        if (filterMode === "todo" && done) card.classList.add("hidden-done");
+        if (filterMode === "done" && !done) card.classList.add("hidden-done");
+
+        const btn = card.querySelector(".btn-toggle-done");
+        if (btn) {
+          if (done) {
+            btn.textContent = "↩ Undo";
+            btn.classList.add("undone");
+            btn.classList.remove("btn-done");
+            btn.classList.add("btn-secondary");
+          } else {
+            btn.textContent = "✓ Mark done";
+            btn.classList.remove("undone");
+            btn.classList.add("btn-done");
+            btn.classList.remove("btn-secondary");
+          }
+        }
+        const meta = card.querySelector('[data-done-meta="' + c.id + '"]');
+        if (meta) {
+          meta.textContent = done ? ("Completed " + formatWhen(map[c.id].at)) : "";
+        }
+      });
+    }
+
     function val(id, fallback) {
       const el = document.getElementById(id);
       const v = (el && el.value || "").trim();
@@ -1227,8 +1530,7 @@
         ["childName", "child name"],
         ["childDob", "child date of birth"],
       ];
-      const miss = needed.filter(([id]) => !val(id, "")).map(([, label]) => label);
-      return miss;
+      return needed.filter(([id]) => !val(id, "")).map(([, label]) => label);
     }
 
     function buildEmail(opts) {
@@ -1288,10 +1590,10 @@ ${parent}`;
       document.getElementById("emailSubject").textContent = "Subject: " + subject;
       document.getElementById("emailBody").textContent = body;
       wireMailButtons();
+      saveFields();
     }
 
     function mailtoHref(to, subject, body) {
-      // Use encodeURIComponent for subject/body; keep + for spaces avoided
       return "mailto:" + encodeURIComponent(to).replace(/%40/g, "@")
         + "?subject=" + encodeURIComponent(subject)
         + "&body=" + encodeURIComponent(body);
@@ -1312,7 +1614,15 @@ ${parent}`;
             document.getElementById("email-builder").scrollIntoView({ behavior: "smooth" });
             return false;
           }
-          // Let browser open default mail client via mailto:
+          // After opening mail, offer to mark done shortly
+          const trackId = a.closest(".card") && a.closest(".card").getAttribute("data-track");
+          setTimeout(() => {
+            if (trackId && !isDone(trackId)) {
+              if (confirm("Did you send the waitlist email? Mark this centre as done?")) {
+                toggleDone(trackId);
+              }
+            }
+          }, 1200);
           showToast("Opening mail app…");
           return true;
         };
@@ -1357,12 +1667,34 @@ ${parent}`;
       }
     }
 
-    // If hosted on GitHub Pages, show live URL; if opened as file, keep published URL for sharing
-    if (location.protocol.startsWith("http") && location.hostname.includes("github.io")) {
-      document.getElementById("pageUrl").textContent = location.href.replace(/index\.html$/, "");
+    const FIELD_IDS = ["parentName", "parentEmail", "parentPhone", "childName", "childDob", "startWindow"];
+
+    function saveFields() {
+      const data = {};
+      FIELD_IDS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.value;
+      });
+      try { localStorage.setItem(FIELD_KEY, JSON.stringify(data)); } catch (e) {}
     }
 
+    function loadFields() {
+      try {
+        const data = JSON.parse(localStorage.getItem(FIELD_KEY) || "{}");
+        FIELD_IDS.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && data[id] != null && data[id] !== "") el.value = data[id];
+        });
+      } catch (e) {}
+    }
+
+    if (location.protocol.startsWith("http") && location.hostname.includes("github.io")) {
+      document.getElementById("pageUrl").textContent = location.href.replace(/index\\.html$/, "");
+    }
+
+    loadFields();
     refreshEmail();
+    renderProgress();
   </script>
 </body>
 </html>
