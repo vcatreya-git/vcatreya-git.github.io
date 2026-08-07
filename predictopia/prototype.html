@@ -65,7 +65,7 @@ body{
 
 .device-wrap{display:flex;justify-content:center;}
 .device{width:100%;max-width:412px;background:var(--device-bg);border-radius:44px;box-shadow:var(--device-shadow);
-  overflow:hidden;height:min(840px,calc(100vh - 165px));min-height:520px;display:flex;flex-direction:column;position:relative;}
+  overflow:hidden;height:min(840px,calc(100vh - 156px));min-height:400px;display:flex;flex-direction:column;position:relative;}
 .statusbar{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;
   font-size:12.5px;font-weight:700;color:var(--text);background:var(--panel);flex-shrink:0;}
 .statusbar .sb-r{display:flex;align-items:center;gap:5px;}
@@ -529,8 +529,8 @@ img.av.sm{width:30px;height:30px;border-radius:9px;}
     <div class="wt-welcome-body">
       <p>A quick spotlight tour — pick the path you want to see.</p>
       <div class="wt-welcome-actions">
-        <button type="button" class="primary" onclick="wtBegin('member')">Member tour<small>Predict → reveal → score → money</small></button>
-        <button type="button" class="secondary" onclick="wtBegin('admin')">Admin tour<small>Group · pool · specials · economics · settle</small></button>
+        <button type="button" class="primary" onclick="wtBegin('member')">Member tour<small>Join → predict → reveal → money</small></button>
+        <button type="button" class="secondary" onclick="wtBegin('admin')">Admin tour<small>Create group → pool → specials → settle</small></button>
         <button type="button" class="ghost" onclick="wtSkip()">Skip for now</button>
       </div>
     </div>
@@ -952,7 +952,7 @@ function tieRuleEditor(fieldKey){
 function poolTabs(ak,active){
   const pool=POOLS[ak];
   const predictScreen=pool.sport==='cricket'?'poolPredict':'poolFootball';
-  const tabs=[['predict','Predict',predictScreen],['board','Board','poolBoard'],['me','Me','breakdown'],['money','Money','poolWinners']];
+  const tabs=[['predict','Predict',predictScreen],['board','Board','poolBoard'],['reveal','Reveal','poolRevealed'],['me','Me','breakdown'],['money','Money','poolWinners']];
   if(isAdminOf(ak))tabs.push(['manage','Manage','poolAdmin']);
   return`<div class="mini-tabs" data-wt="pool-tabs">${tabs.map(([key,label,screen])=>
     `<button class="${active===key?'on':''}" onclick="state.activePool='${ak}';go('${screen}')">${label}</button>`).join('')}</div>`;
@@ -1099,6 +1099,24 @@ const REVEALS={
    match (2026-08-02). Groups key on the special's own option key; someone
    can appear in more than one group for a multi-choice special since they
    can pick more than one answer. */
+/* Score events were hardcoded to IPL team codes regardless of which pool's
+   Me tab you were on — a football pool (officeBanter, EPL) showed fake
+   cricket results (2026-08-07 fix). Keyed by competition, same pattern as
+   SCHEDULE, so each sport's breakdown actually matches its own fixtures. */
+const BREAKDOWN_EVENTS={
+  ipl2026:[
+    ['CSK','CSK beat GT','Match 38 · correct','+1','pos'],
+    ['RCB','MI beat RCB','Match 39 · wrong','0','zero'],
+    ['KKR','KKR beat DC','Match 40 · correct','+1','pos'],
+    ['SRH','SRH vs PBKS','Match 41 · missed cutoff','0','zero'],
+  ],
+  epl:[
+    ['ARS','ARS beat CHE','Gameweek 24 · correct','+1','pos'],
+    ['MUN','LIV beat MUN','Gameweek 24 · wrong','0','zero'],
+    ['MCI','MCI drew TOT','Gameweek 25 · correct (draw)','+1','pos'],
+    ['LIV','LIV vs ARS','Gameweek 25 · missed cutoff','0','zero'],
+  ],
+};
 const SPECIAL_REVEALS={
   familyCup:{
     sp_top4:{groups:[{key:'MI',avs:['V','A','K']},{key:'CSK',avs:['R','M']}],noPick:['S','P']},
@@ -1297,7 +1315,7 @@ const state={screen:'landing',
   picks:{familyCup:{ipl_m42:'CSK'},iplBuddies:{ipl_m42:'CSK'},cousinsIpl:{ipl_m42:'CSK'},officeBanter:{epl_gw26a:'ARS'}},
   syncByCompetition:{ipl2026:true,epl:true},
   activePool:'familyCup',activeGroup:'family',cameFromDashboard:false,
-  specialPicks:{},specialExpanded:false,revealExpanded:false,periodPickerOpen:false,shareContext:null,shareBack:'home',resolveDraft:{},expandedMatch:null,confirmArmed:null,closePeriodPick:null,
+  specialPicks:{},specialExpanded:false,periodPickerOpen:false,shareContext:null,shareBack:'home',resolveDraft:{},expandedMatch:null,confirmArmed:null,closePeriodPick:null,
   newSpecialQ:'',newSpecialPoints:5,newSpecialPrize:0,newSpecialExpiryDays:null,
   newSpecialType:'single',newSpecialMax:2,newSpecialSource:'custom',newSpecialOptions:['',''],
   period:'overall',
@@ -1471,7 +1489,7 @@ createGroup:()=>`
   <button class="back" onclick="go('groups')">${icon('chevL',15)}Cancel</button>
   <div class="display" style="font-size:22px">New group</div>
   <p class="sub">Just the people — pools come after, whenever a tournament starts.</p>
-  <div class="field mb16"><label>Group name</label><input type="text" data-field="newGroupName" value="${state.newGroupName}" oninput="state.newGroupName=this.value;render()" placeholder="e.g. Office Cricket Crew"></div>
+  <div class="field mb16" data-wt="create-group"><label>Group name</label><input type="text" data-field="newGroupName" value="${state.newGroupName}" oninput="state.newGroupName=this.value;render()" placeholder="e.g. Office Cricket Crew"></div>
   <div class="note mb16">You're the first member and admin. Invite others with a share link once it's created — same as every existing group.</div>
   <button class="btn btn-accent" onclick="createGroupNow()" ${state.newGroupName.trim()?'':'disabled style="opacity:.5;cursor:not-allowed"'}>Create group</button>`,
 
@@ -1547,7 +1565,7 @@ joinPool:()=>`
   <button class="back" onclick="go('groupDetail')">${icon('chevL',15)}Group</button>
   <div class="display" style="font-size:23px">Join this pool?</div>
   <p class="sub">You're already in the group. This competition is optional.</p>
-  <div class="card glow mb16">
+  <div class="card glow mb16" data-wt="join-pool">
     <div class="pool-cover" style="background-image:url('assets/pitch-football.jpg')">
       <div class="cov-chips"><span class="chip chip-solid">Football</span><span class="chip chip-solid">Opt-in</span></div></div>
     <div style="font-family:var(--display);font-size:20px;margin-bottom:11px">Family Premier</div>
@@ -1633,11 +1651,11 @@ poolFootball:()=>{
 poolRevealed:()=>{
   const ak=state.activePool,pool=POOLS[ak],cfg=pool.periodConfig,per=state.period||'overall';
   return`
-  <button class="back" onclick="go('poolBoard')">${icon('chevL',15)}Board</button>
+  <button class="back" onclick="go(${state.cameFromDashboard?"'adminDashboard'":"'home'"})">${icon('chevL',15)}${state.cameFromDashboard?'Dashboard':'Home'}</button>
   <div class="between mb8"><div><div class="kicker">${pool.group}</div>
     <div style="font-family:var(--display);font-size:18px">${pool.name}</div></div></div>
-  <div class="display" style="font-size:22px">Picks revealed</div>
-  <p class="sub">${pool.name} · same window as the Board — cutoff hit, everyone's pick is visible.</p>
+  ${poolTabs(ak,'reveal')}
+  <p class="sub" data-wt="reveal">Everyone's picks stay private until cutoff. Once a match locks, it unlocks here — same window as the Board.</p>
   ${periodPicker(pool,cfg,per)}
   ${revealContent(ak,per)}`;
 },
@@ -1732,19 +1750,7 @@ poolBoard:()=>{
   <button class="btn btn-ghost mt12" onclick="go('breakdown')">Why do I have 18 points?</button>
   <div class="note">${p==='overall'?`Every scored event, all-time — worth ${fmtMoney(pool.prizeOverall,pool.currency)} at season end.`:`${periodLabel(cfg,p)} only, worth ${fmtMoney(pool.prizePerPeriod,pool.currency)} — recognises a period leader without creating a separate score.`}</div>
   <div class="note">Admin set this pool's prize periods to <b>${cfg.type==='matches'?`${cfg.size}-match blocks`:cfg.type==='gameweek'?'gameweeks':'calendar weeks (Sat–Fri)'}</b> — ${cfg.league}. Not a fixed app-wide preset (PRD §7.2). Pool balance and admin fee are visible to the pool admin only — see v1 precedent, Decision Log 2026-08-02.</div>
-  ${(()=>{
-    const data=REVEALS[ak]||{};
-    const allMatches=Object.values(data).flat();
-    const matches=p==='overall'?allMatches:(data[p]||[]);
-    if(!matches.length)return'';
-    return`
-  <div class="special-banner mt16" data-wt="reveal" onclick="state.revealExpanded=!state.revealExpanded;render()">
-    <div class="sb-ic">${icon('bell',14)}</div>
-    <div class="sb-txt">Reveal<div class="sb-sub">${matches.length} match${matches.length>1?'es':''} unlocked — tap to see picks</div></div>
-    <span style="display:inline-flex;transform:rotate(${state.revealExpanded?180:0}deg);transition:transform .15s">${icon('chevD',16)}</span>
-  </div>
-  ${state.revealExpanded?`<div class="mt10">${revealContent(ak,p)}</div>`:''}`;
-  })()}`}`;
+  `}`;
 },
 
 poolEconomics:()=>{
@@ -1784,8 +1790,8 @@ payouts:()=>{
   return`
   <button class="back" onclick="go(${isAdminOf(ak)&&state.cameFromDashboard?"'adminDashboard'":"'poolEconomics'"})">${icon('chevL',15)}${state.cameFromDashboard?'Dashboard':'Economics'}</button>
   <div class="display" style="font-size:22px">Collected / Not collected</div>
-  <p class="sub">${pool.name} · ${fmtMoney(pool.buyIn,pool.currency)} buy-in each · money changes hands offline, this just tracks who's settled.</p>
-  <div class="card" data-wt="buyin">
+  <p class="sub" data-wt="buyin">${pool.name} · ${fmtMoney(pool.buyIn,pool.currency)} buy-in each · money changes hands offline, this just tracks who's settled.</p>
+  <div class="card">
     ${pool.payments.map((m,i)=>`
     <div class="paid-row">
       <div class="row"><img class="av sm" src="${AV(m.a)}" alt=""><b style="font-size:13.5px">${m.n}</b></div>
@@ -1828,10 +1834,7 @@ breakdown:()=>{const ak=state.activePool,pool=POOLS[ak];return`
   <div class="card mb12 between" data-wt="breakdown"><span style="color:var(--dim);font-size:13px">Pool total</span>
     <span style="font-family:var(--display);font-size:30px;color:var(--accent)" data-cu="18">0</span></div>
   <div class="card">
-    ${[['CSK','CSK beat GT','Match 38 · correct','+1','pos'],
-       ['RCB','MI beat RCB','Match 39 · wrong','0','zero'],
-       ['KKR','KKR beat DC','Match 40 · correct','+1','pos'],
-       ['SRH','SRH vs PBKS','Match 41 · missed cutoff','0','zero']].map(([c,t,s,v,cl])=>`
+    ${(BREAKDOWN_EVENTS[pool.competition]||BREAKDOWN_EVENTS.ipl2026).map(([c,t,s,v,cl])=>`
       <div class="break-row"><img src="${CREST(c)}" alt="">
         <div><b style="font-size:13px">${t}</b><div style="color:var(--dim);font-size:11.5px">${s}</div></div>
         <span class="${cl}">${v}</span></div>`).join('')}
@@ -1843,7 +1846,7 @@ createPool1:()=>`
   <div class="steps" data-wt="create-pool"><i class="on"></i><i></i><i></i><i></i><i></i></div>
   <div class="display" style="font-size:22px">Pick a sport</div>
   <p class="sub">Allowlisted only, so results stay reliable. Cutoff defaults ride with the sport.</p>
-  <div class="row mb16">
+  <div class="row mb16" data-wt="pick-sport">
     <div class="sport ${state.sport==='cricket'?'on':''}" onclick="state.sport='cricket';render()">${icon('cricket',23)}Cricket</div>
     <div class="sport ${state.sport==='football'?'on':''}" onclick="state.sport='football';render()">${icon('football',23)}Football</div>
     <div class="sport disabled">${icon('tennis',23)}More later</div></div>
@@ -1860,11 +1863,13 @@ createPool2:()=>{const c=state.sport==='cricket';return`
   <div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
   <div class="display" style="font-size:22px">Pick a competition</div>
   <p class="sub">From the API-backed catalog — not a blank calendar entry.</p>
+  <div data-wt="pick-competition">
   ${(c?[['ipl2026','IPL 2026','74 matches · daily sync'],['wc','ICC World Cup','48 matches']]
       :[['epl','Premier League 25/26','380 matches · daily sync'],['ucl','Champions League','125 matches']])
     .map(([k,n,s])=>`<div class="card tap mb10 ${state.competition===k?'glow':''}" onclick="state.competition='${k}';render()">
       <div class="between"><b style="font-size:14px">${n}</b><span class="chip ${c?'chip-accent':'chip-sky'}">API</span></div>
       <div style="font-size:12px;color:var(--dim);margin-top:3px">${s}</div></div>`).join('')}
+  </div>
   <div class="field mb16"><label>Pool name</label><input type="text" data-field="newPoolName" value="${state.newPoolName}" oninput="state.newPoolName=this.value;render()" placeholder="e.g. ${c?'Family Cup':'Family Premier'}"></div>
   <button class="btn btn-accent" onclick="go('createPool3')" ${state.newPoolName.trim()?'':'disabled style="opacity:.5;cursor:not-allowed"'}>Continue</button>`},
 
@@ -1889,7 +1894,7 @@ createPool3:()=>`
       ${Object.keys(CUR).map(c=>`<option value="${c}" ${state.newCurrency===c?'selected':''}>${c} (${CUR[c].s})</option>`).join('')}
     </select>
   </div>
-  <div class="row mb16" style="gap:8px">
+  <div class="row mb16" style="gap:8px" data-wt="pool-economics-setup">
     <div class="field" style="flex:1"><label>Buy-in per person</label><input type="text" inputmode="numeric" data-field="newBuyIn" value="${state.newBuyIn}" oninput="state.newBuyIn=numVal(this);render()"></div>
     <div class="field" style="flex:1"><label>Min. members to run</label><input type="text" inputmode="numeric" data-field="newMinMembers" value="${state.newMinMembers}" oninput="state.newMinMembers=numVal(this);render()"></div>
     <div class="field" style="flex:1"><label>Admin fee %</label><input type="text" inputmode="numeric" data-field="newAdminFeePct" value="${state.newAdminFeePct}" oninput="state.newAdminFeePct=numVal(this);render()"></div>
@@ -1948,7 +1953,7 @@ createPool5:()=>`
     const netLabel=net>0?`+${fmtMoney(net,state.newCurrency)} buffer`:net===0?'Exactly breakeven':`${fmtMoney(Math.abs(net),state.newCurrency)} short`;
     return`
   <div class="kicker mb8">Will this pool break even?</div>
-  <div class="card mb16">
+  <div class="card mb16" data-wt="break-even">
     <div class="between mb8"><span style="color:var(--dim);font-size:13px">Collected at ${minM} members</span><b style="font-size:13px">${fmtMoney(collected,state.newCurrency)}</b></div>
     <div class="between mb8"><span style="color:var(--dim);font-size:13px">Your fee (${feePct}%)</span><b style="font-size:13px">${fmtMoney(fee,state.newCurrency)}</b></div>
     <div class="between mb8"><span style="color:var(--dim);font-size:13px">Distributable to members</span><b style="font-size:13px">${fmtMoney(distributable,state.newCurrency)}</b></div>
@@ -2123,7 +2128,7 @@ specialCreate:()=>{const pool=POOLS[state.activePool];
   return`
   <button class="back" onclick="go(${state.cameFromDashboard?"'adminDashboard'":"'poolBoard'"})">${icon('chevL',15)}Cancel</button>
   <div class="display" style="font-size:22px">Push a special event</div>
-  <p class="sub">A poll, not just Yes/No — pick an answer format and where the options come from.</p>
+  <p class="sub" data-wt="special-create">A poll, not just Yes/No — pick an answer format and where the options come from.</p>
   <div class="field mb12"><label>Question</label><input type="text" data-field="newSpecialQ" value="${state.newSpecialQ}" oninput="state.newSpecialQ=this.value;render()" placeholder="e.g. Which team makes the Top 4?"></div>
   <div class="row mb16" style="gap:10px">
     <div class="field" style="flex:1"><label>Points if correct</label><input type="text" inputmode="numeric" data-field="newSpecialPoints" value="${state.newSpecialPoints}" oninput="state.newSpecialPoints=numVal(this);render()"></div>
@@ -2281,6 +2286,7 @@ poolWinners:()=>{
       <b style="font-size:14px;color:var(--ok)">${fmtMoney(my.settledTotal,my.currency)}</b></div>
   </div>`:`<div class="note mb16">Bragging rights only — no money tracked in this pool.</div>`}
   ${admin?(openPeriods.length?`
+  <div data-wt="close-period">
   <div class="kicker mb8">Close a period</div>
   <div class="field mb10">
     <select onchange="state.closePeriodPick=this.value;render()" style="width:100%;background:var(--panel);border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:13px 14px;font-size:15px;font-weight:600;font-family:var(--font);min-height:48px">
@@ -2291,7 +2297,8 @@ poolWinners:()=>{
     <div class="kicker" style="margin-bottom:8px">Current standings</div>
     ${leaderboardRows(pick).slice(0,3).map(r=>`<div class="between mb6"><span style="font-size:13px">${r[0]}. ${r[1]}</span><b style="font-size:13px">${r[3]} pts</b></div>`).join('')}
   </div>
-  <button class="btn btn-accent mb16" style="width:100%" onclick="closePeriod('${ak}','${pick}');state.closePeriodPick=null">${icon('lock',14)}Close ${pick==='overall'?'season':periodLabel(cfg,pick)} & lock winners</button>`
+  <button class="btn btn-accent mb16" style="width:100%" onclick="closePeriod('${ak}','${pick}');state.closePeriodPick=null">${icon('lock',14)}Close ${pick==='overall'?'season':periodLabel(cfg,pick)} & lock winners</button>
+  </div>`
   :`<div class="note mb16">Every period is closed — nothing left to lock in.</div>`):''}
   ${!closedKeys.length?`<div class="card" style="text-align:center"><div style="font-weight:800;font-size:14px">No periods closed yet</div>
     <div style="font-size:12.5px;color:var(--dim);margin-top:4px">${admin?'Pick one above once it\'s over.':'The admin closes a period once it\'s over.'}</div></div>`:''}
@@ -2343,8 +2350,8 @@ resolveSpecials:()=>{
     <div style="font-family:var(--display);font-size:18px">${pool.name}</div></div></div>
   ${poolTabs(ak,'manage')}
   <div class="display" style="font-size:22px">Resolve specials</div>
-  <p class="sub">Match outcomes score themselves from the results feed — specials don't have one. Confirm the correct answer once it's known.</p>
-  <div data-wt="resolve">
+  <p class="sub" data-wt="resolve">Match outcomes score themselves from the results feed — specials don't have one. Confirm the correct answer once it's known.</p>
+  <div>
   ${!pool.specials.length?`<div class="card"><div class="kicker">No specials pushed to this pool yet</div>
     <div style="font-size:12.5px;color:var(--dim);margin-top:4px">Push one from the Board first.</div></div>`:''}
   ${unresolved.map(s=>{
@@ -2932,11 +2939,10 @@ function numVal(el){return String(el.value).replace(/[^0-9]/g,'').replace(/^0+(?
 /* Predict/Board/My points/Reveal read as tabs of one pool, not four pages
    (2026-08-02) — group them so lateral moves inside the set don't trigger
    the scroll-reset treatment real navigation gets. */
-/* poolRevealed dropped from this group (v3, 2026-08-06) — no longer a tab
-   destination now that Reveal lives inside Board as a section, so landing
-   on it (if reached at all) is a real navigation, not a lateral tab move.
-   poolWinners added — it's the new Money tab. */
-const POOL_TAB_SCREENS=['poolPredict','poolFootball','poolBoard','breakdown','poolAdmin','poolWinners'];
+/* poolRevealed back in this group (v3, 2026-08-07) — Reveal is a tab again,
+   not a banner buried at the bottom of Board (2026-08-06 demotion made it
+   too easy to miss and hard to explain). poolWinners is the Money tab. */
+const POOL_TAB_SCREENS=['poolPredict','poolFootball','poolBoard','poolRevealed','breakdown','poolAdmin','poolWinners'];
 const screenGroup=s=>POOL_TAB_SCREENS.includes(s)?'poolTabs':s;
 function render(){
   const el=document.getElementById('screen');
@@ -2983,10 +2989,15 @@ let wtRole=null, wtStep=-1, wtActive=false, wtSteps=[];
    DOM (silently fell back to a full-dim no-spotlight screen). Redesigned:
    ~6 stops per tour, one idea each, no accordion, every target verified
    against the actual DOM before being referenced here. */
+/* Rebuilt v3 2026-08-07 — added the "opt into a pool" beat, which the
+   previous cut skipped entirely: it jumped straight from Groups into an
+   already-joined pool's Predict screen, so a first-time viewer never saw
+   that pools are opt-in (not auto-enrolled) or what joining looks like —
+   the exact same class of gap the admin tour had around create-pool. */
 const WT_MEMBER=[
   {target:null,screen:'landing',card:'center',section:'Start',
    title:'You are a member',
-   text:`Quick tour: <b>Home → Groups → Predict → Board → Me → Money → Profile</b>. Spotlighted — tap Next.`,
+   text:`Quick tour: <b>Home → Groups → Join a pool → Predict → Reveal → Me → Money → Profile</b>. Spotlighted — tap Next.`,
    deepdive:null,setup:null},
   {target:'[data-wt="home-card"]',screen:'home',card:'below',section:'Home',
    title:'One card per pool',
@@ -2997,6 +3008,11 @@ const WT_MEMBER=[
    title:'Groups persist. Pools don’t.',
    text:`A <b>Group</b> is your lasting circle. A new season is just a new <b>Pool</b> under it — nobody gets re-invited.`,
    deepdive:null,setup:null},
+  {target:'[data-wt="join-pool"]',screen:'joinPool',card:'below',section:'Join a pool',
+   title:'Opt in, pool by pool',
+   text:`Being in the Group doesn't enrol you in every Pool. See buy-in and cutoff first, then decide.`,
+   deepdive:null,
+   setup:()=>{state.activeGroup='family'}},
   {target:'[data-wt="match-pick"]',screen:'poolPredict',card:'below',section:'Predict',
    title:'One tap, until cutoff',
    text:`Pick a side, change your mind freely — until the countdown hits zero. Then it's locked.`,
@@ -3007,11 +3023,11 @@ const WT_MEMBER=[
    text:`Some pools push extra questions — worth their own points and prize, separate from match picks.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup';state.specialExpanded=false}},
-  {target:'[data-wt="reveal"]',screen:'poolBoard',card:'above',section:'Board',
+  {target:'[data-wt="reveal"]',screen:'poolRevealed',card:'below',section:'Reveal',
    title:'Reveal, after lock',
-   text:`Everyone's picks stay private until cutoff. Then open <b>Reveal</b> to see who picked what.`,
+   text:`Everyone's picks stay private until cutoff. Then its own <b>Reveal</b> tab shows who picked what.`,
    deepdive:null,
-   setup:()=>{state.activePool='familyCup';state.revealExpanded=true}},
+   setup:()=>{state.activePool='familyCup'}},
   {target:'[data-wt="breakdown"]',screen:'breakdown',card:'below',section:'Me',
    title:'Every point explained',
    text:`Score breakdown traces each point to one match. Fix a result and only that event re-scores.`,
@@ -3032,49 +3048,90 @@ const WT_MEMBER=[
    deepdive:null,setup:null},
 ];
 
+/* Rebuilt v3 2026-08-07 — walks the actual order a first-time admin does
+   this in: create the group, invite people, admit them, create a pool,
+   run the pool from Manage, push a special, resolve it, chase buy-in,
+   close a period. The previous cut started mid-lifecycle (assumed a
+   group already existed) and skipped push/close entirely — the two
+   admin actions that most need explaining. */
 const WT_ADMIN=[
   {target:null,screen:'landing',card:'center',section:'Start',
-   title:'You are an admin',
-   text:`Quick tour: <b>admit → create pool → manage → specials → economics → buy-in → settle</b>. Demo makes you admin of Family Cup.`,
+   title:'You are an admin, starting from zero',
+   text:`Quick tour: <b>create group → invite → admit → sport → league → buy-in → break-even → push special → resolve → close period</b>.`,
    deepdive:null,setup:null},
-  {target:'[data-wt="group-members"]',screen:'groupMembers',card:'below',section:'Group admin',
+  {target:'[data-wt="create-group"]',screen:'createGroup',card:'below',section:'Create group',
+   title:'Start with people, not a tournament',
+   text:`A group is just the circle — name it once. Pools (this season's tournament) come after.`,
+   deepdive:null,
+   setup:()=>{state.newGroupName='The Family'}},
+  {target:'[data-wt="group-detail"]',screen:'groupDetail',card:'below',section:'Invite',
+   title:'Add members with a link',
+   text:`Share the invite link. Anyone who opens it lands as <b>pending</b> — not inside the group yet.`,
+   deepdive:null,
+   setup:()=>{state.activeGroup='family'}},
+  {target:'[data-wt="group-members"]',screen:'groupMembers',card:'below',section:'Approve',
    title:'Admit is the trust gate',
-   text:`Nobody sees inside the group until you admit them. This is the whole vetting step — pools trust it.`,
+   text:`Nobody sees inside the group until you admit them from this pending queue. This is the whole vetting step.`,
    deepdive:null,
    setup:()=>{state.activeGroup='family'}},
   {target:'[data-wt="create-pool"]',screen:'createPool1',card:'below',section:'Create pool',
    title:'5-step wizard',
    text:`Sport → competition → economics → prize split → break-even review. Only group admins create pools.`,
    deepdive:null,
-   setup:()=>{state.activeGroup='family'}},
+   setup:()=>{state.activeGroup='family';state.sport='cricket'}},
+  {target:'[data-wt="pick-sport"]',screen:'createPool1',card:'below',section:'Pick a sport',
+   title:'Allowlisted only',
+   text:`Cricket or football today — each carries its own cutoff default and outcome type. Reliable results over more choice.`,
+   deepdive:null,
+   setup:()=>{state.activeGroup='family';state.sport='cricket'}},
+  {target:'[data-wt="pick-competition"]',screen:'createPool2',card:'below',section:'Pick a league',
+   title:'From a real catalog',
+   text:`Every option here is API-backed and synced daily — not a blank calendar entry you fill in by hand.`,
+   deepdive:null,
+   setup:()=>{state.activeGroup='family';state.sport='cricket';state.competition='ipl2026';state.newPoolName='Family T20'}},
+  {target:'[data-wt="pool-economics-setup"]',screen:'createPool3',card:'below',section:'Set the buy-in',
+   title:'Economics, admin-only',
+   text:`Buy-in, minimum members to run, and your admin fee — members never see this screen, only who won and how much.`,
+   deepdive:null,
+   setup:()=>{state.activeGroup='family';state.sport='cricket';state.competition='ipl2026';
+     state.newPoolName='Family T20';state.newBuyIn=200;state.newMinMembers=6;state.newAdminFeePct=10}},
+  {target:'[data-wt="break-even"]',screen:'createPool5',card:'above',section:'Break-even check',
+   title:'Short or profitable — before you commit',
+   text:`Weighs what you'd collect against every prize you've set, at your minimum member count. Red means raise the buy-in or lower a pot before opening the pool.`,
+   deepdive:null,
+   setup:()=>{state.activeGroup='family';state.sport='cricket';state.competition='ipl2026';
+     state.newPoolName='Family T20';state.newBuyIn=200;state.newMinMembers=6;state.newAdminFeePct=10;
+     state.newCurrency='INR';state.newPrizePerPeriod=800;state.newPrizeOverall=2000;state.newPrizeSpecial=150;state.newSeasonPeriods=9}},
   {target:'[data-wt="pool-tabs"]',screen:'poolAdmin',card:'below',section:'Manage',
-   title:'Manage — admin only',
-   text:`Members, economics, specials, settlement. Board stays member-clean — no admin tools leak onto it.`,
+   title:'Everything from here on',
+   text:`Members, economics, specials, buy-in, settlement — every admin action for this pool lives on this one hub.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false}},
-  {target:'[data-wt="resolve"]',screen:'resolveSpecials',card:'below',section:'Specials',
-   title:'Push, then resolve',
-   text:`Author a poll from Manage. Once it's decided, declare the correct answer here — exact winners get the prize.`,
+  {target:'[data-wt="special-create"]',screen:'specialCreate',card:'below',section:'Push a special',
+   title:'Author a poll',
+   text:`A question beyond match picks — "who makes the final?" Set points and a prize, members answer before it locks.`,
+   deepdive:null,
+   setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false;
+     state.newSpecialQ='';state.newSpecialPoints=5;state.newSpecialPrize=POOLS.familyCup.prizeSpecial||0;
+     state.newSpecialType='single';state.newSpecialMax=2;state.newSpecialSource='custom';state.newSpecialOptions=['',''];state.newSpecialExpiryDays=null;}},
+  {target:'[data-wt="resolve"]',screen:'resolveSpecials',card:'below',section:'Resolve',
+   title:'Declare the answer',
+   text:`Once it's decided, come back here and declare the correct answer — exact winners split the prize.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup'}},
-  {target:'[data-wt="economics"]',screen:'poolEconomics',card:'below',section:'Economics',
-   title:'Admin-only money view',
-   text:`Collected, admin fee, distributable — members never see this screen, only who won and how much.`,
-   deepdive:null,
-   setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false}},
   {target:'[data-wt="buyin"]',screen:'payouts',card:'below',section:'Buy-in',
-   title:'Collected, not Paid',
-   text:`Buy-in tracking uses <b>Collected/Not collected</b> — deliberately different wording from prize Owed/Settled.`,
+   title:'Track who’s paid you',
+   text:`Collected / Not collected — mark it once the buy-in actually reaches you offline. Deliberately not "Paid," which means something else on Money.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup'}},
-  {target:'[data-wt="money-you"]',screen:'poolWinners',card:'above',section:'Money',
-   title:'Close period, then settle',
-   text:`Closing freezes standings against your split. Pay offline, then mark each winner <b>Settled</b>.`,
+  {target:'[data-wt="close-period"]',screen:'poolWinners',card:'above',section:'Close period',
+   title:'Lock it in, then settle',
+   text:`Closing a period freezes that window's standings into a payout. Pay offline, then mark each winner <b>Settled</b>.`,
    deepdive:null,
-   setup:()=>{state.activePool='familyCup'}},
+   setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false}},
   {target:null,screen:'home',card:'center',section:'Done',
-   title:'That’s the admin path',
-   text:`Run the <span class="hl">Member tour</span> for the player side, or tap <b>?</b> anytime to restart.`,
+   title:'That’s the whole admin lifecycle',
+   text:`Group → members → pool → specials → money — start to finish. Run the <span class="hl">Member tour</span> for the player side, or tap <b>?</b> anytime to restart.`,
    deepdive:null,setup:null},
 ];
 
@@ -3090,8 +3147,23 @@ function wtHideWelcome(){
   const el=document.getElementById('wt-welcome');
   if(el){el.classList.remove('show');el.style.display='none'}
 }
+/* device-body has scroll-behavior:smooth in CSS, which means scrollIntoView's
+   behavior:'auto' option does NOT force an instant jump — 'auto' just means
+   "respect the CSS," so it still animates. Short scrolls finish fast enough
+   to look instant; long ones (Specials, Reveal, Resolve, Buy-in, Close
+   period all sit well down their screens) were still mid-animation when the
+   card/spotlight read geometry, landing the card on top of the target or
+   the spotlight hole nowhere near it (2026-08-07). Force instant scrolling
+   for the whole tour by overriding scroll-behavior with an inline style,
+   which wins over the CSS rule; restore it when the tour ends so manual
+   scrolling outside the tour still feels smooth. */
+function wtSetInstantScroll(on){
+  const body=document.querySelector('.device-body');
+  if(body)body.style.scrollBehavior=on?'auto':'';
+}
 function wtBegin(role){
   wtHideWelcome();
+  wtSetInstantScroll(true);
   wtRole=role;
   wtSteps=role==='admin'?WT_ADMIN:WT_MEMBER;
   wtActive=true;
@@ -3103,6 +3175,7 @@ function wtSkip(){
   wtHideAll();
   wtMarkDone();
   wtActive=false;
+  wtSetInstantScroll(false);
 }
 function wtNext(){
   if(!wtActive)return;
@@ -3118,6 +3191,7 @@ function wtFinish(){
   wtHideAll();
   wtMarkDone();
   wtActive=false;
+  wtSetInstantScroll(false);
   toast(wtRole==='admin'?'Admin tour complete':'Member tour complete');
 }
 function wtRelaunch(){
@@ -3145,9 +3219,19 @@ function wtShowStep(idx){
     if(el&&typeof el.scrollIntoView==='function'){
       el.scrollIntoView({block:'center',behavior:'auto'});
     }
-    wtRenderCard(step,idx);
-    wtRenderSpotlight(step);
-    wtRenderProgress(idx);
+    /* Fixed 2026-08-07: scrollIntoView doesn't apply synchronously — reading
+       geometry in the same tick can still reflect the pre-scroll layout.
+       wtRenderCard used to position itself on its own separate rAF while
+       wtRenderSpotlight read geometry immediately, so the two could
+       disagree about where the target actually was (spotlight missing the
+       target, or the card landing on top of it). Wait one more frame for
+       the scroll to settle, then position both from the same geometry. */
+    requestAnimationFrame(()=>{
+      wtRenderCard(step,idx);
+      wtRenderSpotlight(step);
+      wtPositionCard(step,document.getElementById('wt-card'));
+      wtRenderProgress(idx);
+    });
   },step.screen?90:30));
 }
 
@@ -3210,7 +3294,9 @@ function wtRenderCard(step,idx){
   }else dd.style.display='none';
   document.getElementById('wt-back-btn').style.display=idx===0?'none':'';
   document.getElementById('wt-next-btn').textContent=idx===wtSteps.length-1?'Finish ✓':'Next →';
-  requestAnimationFrame(()=>wtPositionCard(step,card));
+  /* Positioning is done by the caller (wtShowStep), synchronized with
+     wtRenderSpotlight so both read the same post-scroll geometry — see
+     2026-08-07 fix note there. Do not also schedule it here. */
 }
 
 function wtPositionCard(step,card){
