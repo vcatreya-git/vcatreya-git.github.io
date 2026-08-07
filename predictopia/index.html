@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Predictopia — Docs</title>
+<title>Predictopia — Private prediction pools for friends &amp; family</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -13,9 +13,11 @@
   --accent:#3949ff; --accent-rgb:57,73,255; --accent-dim:rgba(57,73,255,.08);
   --on-accent:#fff;
   --coral:#e8492f; --ok:#0e9f6e; --ok-dim:rgba(14,159,110,.1);
-  --warn:#b45309; --font:'Inter',system-ui,sans-serif; --display:'Sora',system-ui,sans-serif;
+  --warn:#b45309; --warn-dim:rgba(180,83,9,.1);
+  --font:'Inter',system-ui,sans-serif; --display:'Sora',system-ui,sans-serif;
   --glow1:rgba(57,73,255,.06); --glow2:rgba(14,159,110,.05);
-  --radius:20px; --radius-sm:14px;
+  --radius:20px; --radius-sm:14px; --sidebar-w:230px;
+  --shadow-sm:0 1px 3px rgba(20,24,33,.06);
 }
 [data-theme="dark"]{
   --bg:#0b0e09; --bg2:#131810; --panel:#181f14; --panel2:#1f281a; --line:#2b3626;
@@ -23,261 +25,602 @@
   --accent:#c8f542; --accent-rgb:200,245,66; --accent-dim:rgba(200,245,66,.13);
   --on-accent:#11170d;
   --coral:#ff8064; --ok:#4ade80; --ok-dim:rgba(74,222,128,.13);
-  --warn:#fbbf24; --glow1:rgba(200,245,66,.07); --glow2:rgba(255,128,100,.05);
+  --warn:#fbbf24; --warn-dim:rgba(251,191,36,.13);
+  --glow1:rgba(200,245,66,.07); --glow2:rgba(255,128,100,.05);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3);
 }
-*{margin:0;padding:0;box-sizing:border-box}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);font-size:15px;color:var(--text);
+body{font-family:var(--font);font-size:15px;color:var(--text);line-height:1.6;
   background:radial-gradient(1000px 500px at 8% -10%,var(--glow1),transparent 55%),
              radial-gradient(800px 450px at 100% 0%,var(--glow2),transparent 50%),var(--bg);
-  min-height:100vh;transition:background-color .25s,color .25s;
-}
+  min-height:100vh;transition:background-color .25s,color .25s;padding-left:var(--sidebar-w)}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 code{font-family:ui-monospace,monospace;font-size:12px;background:var(--panel2);padding:2px 6px;border-radius:6px;color:var(--text);border:1px solid var(--line)}
 
-.shell{max-width:920px;margin:0 auto;padding:28px 18px 72px}
-.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:28px}
-.brand{display:flex;align-items:center;gap:12px}
-.logo-mark{width:40px;height:40px;border-radius:12px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:18px}
-.brand-text .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
-.brand-text .name{font-family:var(--display);font-size:18px;font-weight:800;letter-spacing:-.02em}
-.brand-text .name span{color:var(--accent)}
-.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.theme-toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
-.theme-toggle button{border:0;background:transparent;color:var(--dim);cursor:pointer;font-size:12px;font-weight:700;
-  padding:8px 14px;border-radius:999px;font-family:var(--font);transition:.15s}
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--panel);border-right:1px solid var(--line);z-index:200;display:flex;flex-direction:column;overflow-y:auto}
+.sb-logo{padding:16px 14px 12px;border-bottom:1px solid var(--line);flex-shrink:0;display:flex;align-items:center;gap:10px}
+.sb-logo .logo-mark{width:32px;height:32px;border-radius:10px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800}
+.sb-logo .wordmark{font-family:var(--display);font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.02em}
+.sb-logo .wordmark span{color:var(--accent)}
+.sb-status{display:flex;align-items:center;gap:5px;margin:8px 14px 4px;font-size:10px;font-weight:700;color:var(--ok);background:var(--ok-dim);padding:3px 9px;border-radius:100px;width:fit-content}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sb-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--dim);padding:14px 14px 4px}
+.sb-nav{padding:2px 8px;flex:1}
+.sb-nav a{display:flex;align-items:center;gap:7px;padding:6px 8px;font-size:12.5px;font-weight:600;color:var(--muted);border-radius:9px;text-decoration:none;transition:all .12s;margin-bottom:1px}
+.sb-nav a .ico{font-size:13px;flex-shrink:0}
+.sb-nav a:hover{background:var(--panel2);color:var(--text);text-decoration:none}
+.sb-nav a.active{background:var(--accent-dim);color:var(--accent)}
+.sb-theme{padding:8px 14px;display:flex}
+.theme-toggle{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.theme-toggle button{border:0;background:transparent;color:var(--dim);cursor:pointer;font-size:11px;font-weight:700;padding:6px 11px;border-radius:999px;font-family:var(--font);transition:.15s}
 .theme-toggle button.on{background:var(--accent);color:var(--on-accent)}
+.sb-ctas{padding:10px;border-top:1px solid var(--line);flex-shrink:0;display:flex;flex-direction:column;gap:6px}
+.sb-ctas a{display:block;text-align:center;padding:9px;font-size:12.5px;font-weight:700;border-radius:11px;text-decoration:none;transition:all .12s}
+.sb-btn-primary{background:var(--accent);color:var(--on-accent)}
+.sb-btn-primary:hover{filter:brightness(1.05);text-decoration:none}
+.sb-btn-ghost{color:var(--text);border:1px solid var(--line)}
+.sb-btn-ghost:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
 
-.nav-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.nav-pills a{
-  font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:999px;
-  background:var(--panel);border:1px solid var(--line);color:var(--muted);text-decoration:none;transition:.14s
-}
-.nav-pills a:hover,.nav-pills a.on{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);text-decoration:none}
+/* MOBILE HEADER */
+.mobile-header{display:none;position:sticky;top:0;z-index:100;background:var(--panel);border-bottom:1px solid var(--line);padding:0 16px;height:54px;align-items:center;justify-content:space-between}
+.mob-logo{font-family:var(--display);font-size:15px;font-weight:800;color:var(--text)}
+.mob-logo span{color:var(--accent)}
+.mob-cta{background:var(--accent);color:var(--on-accent);padding:7px 13px;border-radius:10px;font-size:12px;font-weight:700}
 
-.kicker{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
-.display{font-family:var(--display);font-size:clamp(26px,4vw,34px);line-height:1.12;letter-spacing:-.02em;margin-bottom:10px}
-.sub{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:18px;max-width:560px}
+/* LAYOUT */
+.section{padding:60px 40px}
+.section-alt{background:var(--panel2)}
+.container{max-width:980px;margin:0 auto}
+.section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:var(--accent);margin-bottom:7px}
+.section-title{font-size:clamp(20px,2.4vw,28px);font-family:var(--display);font-weight:800;color:var(--text);letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
+.section-sub{font-size:14px;color:var(--muted);max-width:600px;margin-bottom:34px;line-height:1.65}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px}
-.card + .card{margin-top:12px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
-.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px}
-.tile h3{font-family:var(--display);font-size:15px;margin-bottom:6px;letter-spacing:-.01em}
-.tile p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
-.chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:999px}
+/* HERO */
+#overview{background:radial-gradient(900px 420px at 15% -10%,var(--accent-dim),transparent 60%);padding:72px 40px 60px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ok-dim);color:var(--ok);font-size:11px;font-weight:700;padding:5px 13px;border-radius:100px;margin-bottom:22px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+#overview h1{font-family:var(--display);font-size:clamp(26px,3.6vw,42px);font-weight:800;color:var(--text);letter-spacing:-.02em;line-height:1.15;max-width:680px;margin:0 auto 18px}
+#overview h1 span{color:var(--accent)}
+#overview .hero-sub{font-size:clamp(13.5px,1.5vw,16px);color:var(--muted);max-width:600px;margin:0 auto 30px;line-height:1.7}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;border-radius:14px;font-size:13.5px;font-weight:700;transition:all .15s;text-decoration:none;font-family:var(--font);border:0;cursor:pointer;min-height:44px}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px);text-decoration:none}
+.btn-secondary{background:var(--panel);color:var(--text);border:1.5px solid var(--line)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:999px}
 .chip-accent{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(var(--accent-rgb),.25)}
 .chip-ok{background:var(--ok-dim);color:var(--ok);border:1px solid rgba(14,159,110,.28)}
 .chip-muted{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
 
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  font-family:var(--font);font-weight:700;font-size:13.5px;padding:12px 18px;border-radius:14px;
-  border:0;cursor:pointer;text-decoration:none;transition:.14s;min-height:44px
-}
-.btn-accent{background:var(--accent);color:var(--on-accent)}
-.btn-accent:hover{filter:brightness(1.05);text-decoration:none}
-.btn-ghost{background:var(--panel);color:var(--text);border:1px solid var(--line)}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
-.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+/* STATS */
+#stats{background:var(--panel2);padding:36px 40px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stats-grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:var(--radius);overflow:hidden}
+.stat-item{background:var(--panel);padding:24px 26px;text-align:center}
+.stat-number{font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--accent);letter-spacing:-.02em;display:block;margin-bottom:5px}
+.stat-label{font-size:12px;color:var(--muted);line-height:1.5}
 
-.section{margin-top:36px}
-.section h2{font-family:var(--display);font-size:20px;letter-spacing:-.02em;margin-bottom:8px}
-.section .lead{color:var(--muted);font-size:14px;line-height:1.55;margin-bottom:14px;max-width:560px}
+/* PROBLEM */
+.problem-intro{font-size:14px;color:var(--text);line-height:1.75;max-width:760px;margin-bottom:30px;padding:16px 20px;background:var(--panel);border-radius:var(--radius);border-left:4px solid var(--accent);box-shadow:var(--shadow-sm)}
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.problem-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm)}
+.problem-icon{width:34px;height:34px;background:var(--accent-dim);border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:15px}
+.problem-card h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;font-family:var(--display)}
+.problem-card p{font-size:13px;color:var(--muted);line-height:1.6}
 
-.flow{display:flex;flex-direction:column;gap:0}
-.flow-step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
-.flow-step:last-child{border-bottom:0}
-.flow-n{
-  flex-shrink:0;width:32px;height:32px;border-radius:10px;background:var(--accent-dim);color:var(--accent);
-  font-family:var(--display);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center
-}
-.flow-step h4{font-size:14px;font-weight:700;margin-bottom:3px}
-.flow-step p{font-size:13px;color:var(--muted);margin:0;line-height:1.45}
+/* PIPELINE */
+.pipeline-row{display:flex;flex-wrap:wrap;gap:6px}
+.p-step{flex:1;min-width:130px;background:var(--panel);border:1.5px solid var(--accent);border-radius:var(--radius);padding:16px 14px;position:relative;box-shadow:var(--shadow-sm)}
+.p-step:not(:last-child)::after{content:'→';position:absolute;right:-11px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:14px;font-weight:700;z-index:1}
+.p-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--accent);color:var(--on-accent);border-radius:50%;font-size:10px;font-weight:700;margin-bottom:8px}
+.p-step h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;font-family:var(--display)}
+.p-step p{font-size:11.5px;color:var(--muted);line-height:1.5}
 
-.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;text-align:center}
-.stat .n{font-family:var(--display);font-size:22px;color:var(--accent);letter-spacing:-.02em}
-.stat .l{font-size:11px;color:var(--dim);font-weight:600;margin-top:4px;line-height:1.35}
-
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-th{text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:1px solid var(--line)}
-td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
+/* CAPABILITIES */
+.cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.cap-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm)}
+.cap-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--accent);color:var(--on-accent);border-radius:50%;font-size:10px;font-weight:700;margin-bottom:9px}
+.cap-card h3{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:6px;font-family:var(--display)}
+.cap-card p{font-size:12.5px;color:var(--muted);line-height:1.6}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.card-pad{padding:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 14px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:1px solid var(--line);background:var(--panel2)}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
 td:first-child{color:var(--text);font-weight:600}
 tr:last-child td{border-bottom:0}
+.subhead{font-size:12.5px;font-weight:700;color:var(--text);margin:22px 0 10px;font-family:var(--display)}
+.subhead:first-child{margin-top:0}
 
-footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
-footer .links{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:600}
-footer .meta{font-size:12px;color:var(--dim)}
+/* PERSONAS */
+.persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.persona-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm)}
+.persona-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:3px 9px;border-radius:100px;margin-bottom:10px;background:var(--accent-dim);color:var(--accent)}
+.persona-card h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;font-family:var(--display)}
+.persona-card p{font-size:13px;color:var(--muted);line-height:1.65}
 
-@media(max-width:720px){
-  .grid,.grid-3,.stat-row{grid-template-columns:1fr}
-  .stat-row{grid-template-columns:1fr 1fr}
+/* TECHNICAL */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.tech-card{background:var(--text);border-radius:var(--radius);padding:20px}
+[data-theme="dark"] .tech-card{background:var(--panel2);border:1px solid var(--line)}
+.tech-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--accent);margin-bottom:7px}
+[data-theme="light"] .tech-label{color:#8ef542}
+.tech-card h3{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:9px;font-family:var(--display)}
+[data-theme="dark"] .tech-card h3{color:var(--text)}
+.tech-card p{font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.65}
+[data-theme="dark"] .tech-card p{color:var(--muted)}
+.tech-card .tnum{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:800;margin-bottom:9px;background:rgba(255,255,255,.14);color:#fff}
+[data-theme="dark"] .tech-card .tnum{background:var(--accent-dim);color:var(--accent)}
+
+/* DIAGRAMS */
+.diagrams-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.diag-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .15s,transform .15s}
+.diag-item:hover{transform:translateY(-2px)}
+.diag-item a{display:block;text-decoration:none}
+.diag-img{background:var(--panel2);padding:10px;display:flex;align-items:center;justify-content:center;min-height:110px;overflow:hidden}
+.diag-img img{max-width:100%;max-height:120px;object-fit:contain}
+.diag-caption{padding:8px 10px;font-size:10.5px;font-weight:700;color:var(--text);border-top:1px solid var(--line)}
+
+/* ROADMAP */
+.roadmap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.roadmap-col{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.roadmap-header{padding:12px 16px;font-size:13px;font-weight:700;color:#fff;font-family:var(--display)}
+.roadmap-header.now{background:var(--ok)}
+.roadmap-header.next{background:var(--accent)}
+[data-theme="dark"] .roadmap-header.next{color:var(--on-accent)}
+.roadmap-header.later{background:var(--dim)}
+.roadmap-header .phase-sub{font-size:9px;font-weight:600;opacity:.8;text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:1px}
+.roadmap-body{padding:12px}
+.roadmap-item{padding:10px 12px;margin-bottom:6px;background:var(--panel2);border-radius:var(--radius-sm);border:1px solid var(--line)}
+.roadmap-item:last-child{margin-bottom:0}
+.roadmap-item h4{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.roadmap-item p{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* GUIDE */
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.guide-steps{display:flex;flex-direction:column;gap:0}
+.g-step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.g-step:last-child{border-bottom:0}
+.g-n{flex-shrink:0;width:28px;height:28px;border-radius:9px;background:var(--accent-dim);color:var(--accent);font-family:var(--display);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+.g-step strong{display:block;font-size:13.5px;margin-bottom:2px}
+.g-step span{font-size:12.5px;color:var(--muted);line-height:1.5}
+.guide-tabs{display:flex;flex-direction:column;gap:8px}
+.gt-row{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--panel2);border-radius:11px;font-size:12.5px}
+.gt-row b{color:var(--text)}
+.gt-row span{color:var(--muted);text-align:right}
+
+footer{background:var(--panel2);color:var(--dim);padding:32px 40px;text-align:center;font-size:12px;line-height:1.8;border-top:1px solid var(--line)}
+footer strong{color:var(--text);font-weight:700}
+.footer-links{display:flex;gap:18px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.footer-links a{font-size:11.5px;color:var(--dim)}
+.footer-links a:hover{color:var(--accent);text-decoration:none}
+
+@media(max-width:900px){
+  body{padding-left:0}
+  .sidebar{display:none}
+  .mobile-header{display:flex}
+  .roadmap-grid{grid-template-columns:1fr}
+  .diagrams-grid{grid-template-columns:repeat(2,1fr)}
+  .guide-grid{grid-template-columns:1fr}
+  #overview,.section,#stats{padding-left:20px;padding-right:20px}
+}
+@media(max-width:560px){
+  .diagrams-grid{grid-template-columns:1fr}
+  .pipeline-row{flex-direction:column}
+  .p-step::after{display:none}
+  .stats-grid{grid-template-columns:1fr;gap:0}
 }
 </style>
 </head>
 <body>
-<div class="shell">
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo-mark">P</div>
-      <div class="brand-text">
-        <div class="eyebrow">Docs</div>
-        <div class="name">Predict<span>opia</span></div>
-      </div>
-    </div>
-    <div class="top-actions">
-      <div class="theme-toggle" id="themeToggle">
-        <button type="button" data-t="light" class="on">Light</button>
-        <button type="button" data-t="dark">Dark</button>
-      </div>
-      <a class="btn btn-ghost" href="../">Portfolio</a>
-      <a class="btn btn-accent" href="prototype.html">Open prototype</a>
-    </div>
-  </header>
-
-    <nav class="nav-pills" aria-label="Docs">
-    <a href="index.html" class="on">Overview</a>
-    <a href="architecture.html">Architecture</a>
-    <a href="features.html">Features</a>
-    <a href="help/">User guide</a>
-    <a href="prototype.html">Prototype</a>
-  </nav>
-
-  <section>
-    <div class="kicker">Multi-sport prediction pools</div>
-    <h1 class="display">Private leagues for friends &amp; family — any tournament, one app.</h1>
-    <p class="sub">Create a group once. Spin up a pool for cricket, football, or the next season. Members opt in, pick winners before kickoff, and track scores and settlements without spreadsheets.</p>
-    <div class="cta-row">
-      <a class="btn btn-accent" href="prototype.html">Try the prototype (member &amp; admin tours)</a>
-      <a class="btn btn-ghost" href="architecture.html">Architecture</a>
-      <a class="btn btn-ghost" href="help/">User guide</a>
-    </div>
-    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px">
-      <span class="chip chip-accent">Clickable prototype</span>
-      <span class="chip chip-ok">Architecture reviewed</span>
-      <span class="chip chip-muted">Backend not live yet</span>
-    </div>
-  </section>
-
-  <div class="stat-row">
-    <div class="stat"><div class="n">2</div><div class="l">Sports in the prototype</div></div>
-    <div class="stat"><div class="n">1</div><div class="l">Event model for all picks</div></div>
-    <div class="stat"><div class="n">4</div><div class="l">Pool tabs for members</div></div>
-    <div class="stat"><div class="n">$0</div><div class="l">Target cost at family scale</div></div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="logo-mark">P</div>
+    <div class="wordmark">Predict<span>opia</span></div>
   </div>
+  <div class="sb-status"><span class="sb-dot"></span>Prototype + architecture · Aug 2026</div>
+  <nav class="sb-nav">
+    <div class="sb-group-label">Product</div>
+    <a href="#overview" class="active"><span class="ico">🏠</span>Overview</a>
+    <a href="#problem"><span class="ico">🎯</span>The Problem</a>
+    <a href="#pipeline"><span class="ico">⚡</span>How It Works</a>
+    <a href="#capabilities"><span class="ico">✦</span>Capabilities</a>
+    <a href="#personas"><span class="ico">👤</span>Who It's For</a>
+    <div class="sb-group-label">Engineering</div>
+    <a href="#technical"><span class="ico">⚙️</span>Technical Depth</a>
+    <a href="#stack"><span class="ico">🧱</span>Stack</a>
+    <a href="#diagrams"><span class="ico">📐</span>Diagrams</a>
+    <div class="sb-group-label">Product Thinking</div>
+    <a href="#roadmap"><span class="ico">📅</span>Roadmap</a>
+    <a href="#guide"><span class="ico">📘</span>User Guide</a>
+    <a href="architecture.html"><span class="ico">📄</span>Full Architecture</a>
+  </nav>
+  <div class="sb-theme">
+    <div class="theme-toggle" id="themeToggle">
+      <button type="button" data-t="light" class="on">Light</button>
+      <button type="button" data-t="dark">Dark</button>
+    </div>
+  </div>
+  <div class="sb-ctas">
+    <a href="prototype.html" class="sb-btn-primary">Open prototype →</a>
+    <a href="../" class="sb-btn-ghost">Portfolio</a>
+  </div>
+</aside>
 
-  <section class="section" id="how">
-    <h2>How it works</h2>
-    <p class="lead">Three layers: people, tournament, and predictions.</p>
-    <div class="card">
-      <div class="flow">
-        <div class="flow-step">
-          <div class="flow-n">1</div>
-          <div>
-            <h4>Group</h4>
-            <p>Persistent circle of people. Join via invite link; admins admit or deny. Survives every future season.</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">2</div>
-          <div>
-            <h4>Pool</h4>
-            <p>One competition under a group (e.g. IPL or Premier League). Members opt in — no auto-enroll. Admin sets buy-in, periods, and prizes (tracking only).</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">3</div>
-          <div>
-            <h4>Predict</h4>
-            <p>One-tap outcomes before cutoff. Admin specials (polls) use the same event model. Scores and boards update when results resolve.</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-n">4</div>
-          <div>
-            <h4>Money tab</h4>
-            <p>Who won what, what you’re owed, settled or not — like Splitwise for the pool. Cash moves offline (UPI / cash).</p>
-          </div>
-        </div>
+<!-- MOBILE HEADER -->
+<header class="mobile-header">
+  <div class="mob-logo">Predict<span>opia</span></div>
+  <a href="prototype.html" class="mob-cta">Open prototype →</a>
+</header>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="hero-badge"><span class="dot"></span>Prototype live · Architecture independently reviewed</div>
+  <h1>Every family and friend group already runs a prediction pool.<br>It just lives in <span>a WhatsApp thread and a dying spreadsheet.</span></h1>
+  <p class="hero-sub">You know the pattern: someone volunteers to "run the pool" every IPL or World Cup. They build a spreadsheet, pin a WhatsApp group, and spend the whole tournament chasing picks, settling arguments about who said what before kickoff, and trying to remember who still owes ₹500. Predictopia is that admin's job, built as software — so the group survives past one season and the ledger survives past one person's memory.</p>
+  <div class="hero-ctas">
+    <a href="prototype.html" class="btn btn-primary">Open prototype →</a>
+    <a href="architecture.html" class="btn btn-secondary">View architecture →</a>
+    <a href="help/" class="btn btn-secondary">User guide →</a>
+  </div>
+  <div class="hero-chips">
+    <span class="chip chip-accent">Clickable prototype · member &amp; admin tours</span>
+    <span class="chip chip-ok">Architecture independently reviewed</span>
+    <span class="chip chip-muted">Backend not live yet</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-number">1 new</span>
+      <div class="stat-label">spreadsheet and invite list built from scratch, every single season</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">2 labels</span>
+      <div class="stat-label">buy-in "collected" and prize "settled" — the two things every pool admin loses track of first</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">1 person</span>
+      <div class="stat-label">holds the entire ledger in their head until they inevitably forget, or stop volunteering</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem" class="section">
+  <div class="container">
+    <div class="section-label">The problem</div>
+    <h2 class="section-title">Running a pool by hand doesn't survive a second season</h2>
+    <div class="problem-intro">It starts fine. Round one of the tournament, everyone's in the group chat picking winners, the spreadsheet is up to date, the banter is good. By the semi-finals, three people have missed a match and argue they "said it in the chat," nobody's sure if the buy-in column is current, and the admin is manually tallying who's owed what at 11pm. Next season, the same person has to decide whether it's worth doing it all again — usually starting from a blank sheet, because nothing from last time carried forward.</div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🔁</div>
+        <h3>The group dies every off-season</h3>
+        <p>A WhatsApp group and a spreadsheet don't persist as a "circle of people who play together" — they persist as one tournament's artifact. Next season means a new invite list, a new sheet, and re-explaining the rules to people who already knew them.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⏱️</div>
+        <h3>No real lock, so every pick is disputable</h3>
+        <p>"I texted my pick before kickoff" is unverifiable in a group chat. Without a hard, visible cutoff, every close call becomes a relitigated argument instead of a settled fact.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <h3>Money and points blur into one guess</h3>
+        <p>Who's collected their buy-in and who's owed prize money end up as two columns in the same spreadsheet, edited by hand, understood by exactly one person — the admin — until they make a mistake or lose interest.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section" id="app">
-    <h2>In the app</h2>
-    <p class="lead">Pool navigation is four tabs for everyone, plus Manage for admins.</p>
-    <div class="grid">
-      <div class="tile"><h3>Predict</h3><p>Today’s open picks and specials. Cutoff countdown. Sync across pools that share a competition.</p></div>
-      <div class="tile"><h3>Board</h3><p>Standings with period filter. Members list. Reveal of others’ picks after lock (collapsible).</p></div>
-      <div class="tile"><h3>Me</h3><p>Your points and per-event score breakdown — why each point landed.</p></div>
-      <div class="tile"><h3>Money</h3><p>Your owed / settled first, then full winners. Close period lives here for admins.</p></div>
+<!-- PIPELINE -->
+<section id="pipeline" class="section section-alt">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">One persistent circle, any number of seasons</h2>
+    <p class="section-sub">Four layers, each solving one part of the spreadsheet problem above. All four are clickable in the prototype today.</p>
+    <div class="pipeline-row">
+      <div class="p-step">
+        <div class="p-step-num">1</div>
+        <h3>Group</h3>
+        <p>Your lasting circle — family, office, cousins. Invite once. Admins admit or deny. Survives every future tournament with no re-invite.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">2</div>
+        <h3>Pool</h3>
+        <p>One competition under a group (this IPL, this Premier League). Members opt in — no auto-enroll. Admin sets buy-in, periods, prizes.</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">3</div>
+        <h3>Predict</h3>
+        <p>One-tap outcomes, editable until a real countdown hits zero. Admin specials use the same event model. No "I said it in the chat."</p>
+      </div>
+      <div class="p-step">
+        <div class="p-step-num">4</div>
+        <h3>Money</h3>
+        <p>Who won what, what you're owed, settled or not — Splitwise for the pool. Cash still moves offline; the app just remembers.</p>
+      </div>
     </div>
-    <div class="card" style="margin-top:12px">
-      <h3 style="font-family:var(--display);font-size:15px;margin-bottom:6px">Manage <span class="chip chip-muted" style="margin-left:6px">admin only</span></h3>
-      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.5">Economics, prize split, buy-in collected, push / resolve specials. Never mixed into the Board.</p>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section" id="who">
-    <h2>Who it’s for</h2>
-    <div class="grid-3">
-      <div class="tile"><h3>Group admin</h3><p>Owns the circle, admits members, creates pools — and runs each season's specials, period close, and settlement, since only a group admin can create a pool.</p></div>
-      <div class="tile"><h3>Co-admin</h3><p>Delegated by the group admin. Shares Manage-tab duties on a specific pool without owning group membership decisions.</p></div>
-      <div class="tile"><h3>Member</h3><p>Predicts, checks the board, sees what they’re owed. Senior-friendly targets and copy.</p></div>
-    </div>
-  </section>
+<!-- CAPABILITIES -->
+<section id="capabilities" class="section">
+  <div class="container">
+    <div class="section-label">Capabilities</div>
+    <h2 class="section-title">What's in the prototype today</h2>
+    <p class="section-sub">Status reflects the interactive prototype and the independently-reviewed architecture. Production backend is the next phase.</p>
 
-  <section class="section" id="stack">
-    <h2>Stack (planned)</h2>
-    <div class="card" style="padding:0;overflow:hidden">
+    <div class="cap-grid">
+      <div class="cap-card"><div class="cap-num">1</div><h3>Groups that persist</h3><p>Invite link, admit/deny, co-admins. One circle, unlimited future seasons — no rebuilding next tournament.</p></div>
+      <div class="cap-card"><div class="cap-num">2</div><h3>Opt-in pools</h3><p>Multiple concurrent pools per group. Nobody is auto-enrolled into a season they don't want to play.</p></div>
+      <div class="cap-card"><div class="cap-num">3</div><h3>One-tap predictions</h3><p>Cricket win/loss, football Home/Draw/Away, with a visible cutoff countdown — the "I said it in the chat" argument disappears.</p></div>
+      <div class="cap-card"><div class="cap-num">4</div><h3>Cross-pool sync</h3><p>In more than one pool watching the same competition? Mirror your picks across pools instead of entering them twice.</p></div>
+      <div class="cap-card"><div class="cap-num">5</div><h3>Reveal, after lock</h3><p>Everyone's picks stay private until cutoff, then unlock on the Board — the banter moment, without letting anyone copy a pick early.</p></div>
+      <div class="cap-card"><div class="cap-num">6</div><h3>Specials</h3><p>Admin-authored polls ("who makes the final?") on the same event model as match picks — single or multi-select, with resolution.</p></div>
+      <div class="cap-card"><div class="cap-num">7</div><h3>Money, not payments</h3><p>Owed/Settled for prizes, Collected/Not collected for buy-in — two honest, separate labels. Cash still moves offline; nothing here touches real money.</p></div>
+      <div class="cap-card"><div class="cap-num">8</div><h3>Manage hub, admin-only</h3><p>Economics, prize splits, and specials live in one admin surface — never leaking onto the member-facing Board.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-pad">
+        <div class="subhead">Core product — in the prototype</div>
+      </div>
       <table>
-        <thead><tr><th>Layer</th><th>Choice</th></tr></thead>
+        <thead><tr><th>Feature</th><th>What it does</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>App</td><td>Next.js PWA · Vercel</td></tr>
-          <tr><td>Auth</td><td>Auth.js · Google only</td></tr>
-          <tr><td>Data</td><td>Supabase Postgres · RLS · portable identity GUC</td></tr>
-          <tr><td>Sports</td><td>CricketData.org + API-Football (adapter)</td></tr>
-          <tr><td>Jobs</td><td>GitHub Actions → authenticated job routes</td></tr>
-          <tr><td>Notify</td><td>Web Push · Resend email fallback</td></tr>
+          <tr><td>Groups</td><td>Persistent people, invite link, admit/deny, co-admins</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Pools</td><td>Tournament instance under a group; opt-in; multi concurrent</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Predict</td><td>One-tap outcomes; football draw; cutoff countdown</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Open predictions</td><td>All pending picks across pools in one place</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Cross-pool sync</td><td>Mirror picks across pools on the same competition</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Board + periods</td><td>Running total + admin-defined period filter</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Reveal</td><td>Others' picks after lock (Board, collapsible)</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Me / breakdown</td><td>Per-event points drill-down</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Specials</td><td>Admin polls; single/multi; resolve; optional expiry</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Money</td><td>You card, winners, close period, owed/settled</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Buy-in tracking</td><td>Collected / not collected (offline pay)</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Manage hub</td><td>Admin-only economics, splits, specials</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Profile rollup</td><td>Owed / won across every pool, in each pool's currency</td><td><span class="chip chip-ok">In prototype</span></td></tr>
+          <tr><td>Guided tour</td><td>Spotlight walkthrough — separate Member and Admin paths</td><td><span class="chip chip-ok">In prototype</span></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="lead" style="margin-top:12px">Details and draw.io diagrams: <a href="architecture.html">Architecture</a>.</p>
-  </section>
 
-  <section class="section" id="docs">
-    <h2>Documentation</h2>
-    <p class="lead">Same shape as other portfolio products: product overview, feature map, architecture, and an end-user guide.</p>
-    <div class="grid">
-      <div class="tile"><h3><a href="help/">User guide</a></h3><p>How to join a group, predict, use the four tabs, and settle prizes offline.</p></div>
-      <div class="tile"><h3><a href="features.html">Features</a></h3><p>What ships in the prototype vs architecture vs deferred.</p></div>
-      <div class="tile"><h3><a href="architecture.html">Architecture</a></h3><p>Stack, invariants, draw.io diagrams for system design.</p></div>
-      <div class="tile"><h3><a href="prototype.html">Prototype</a></h3><p>Clickable multi-sport demo with mock data.</p></div>
-    </div>
-  </section>
+    <div style="height:14px"></div>
 
-  <section class="section" id="status">
-    <h2>Status</h2>
-    <div class="grid">
-      <div class="tile"><h3>Done</h3><p>PRD, roadmap, prototype, architecture (independently reviewed), diagrams, user guide + feature map.</p></div>
-      <div class="tile"><h3>Next</h3><p>Backend: auth → groups/pools → predict → specials → money → push.</p></div>
+    <div class="card">
+      <div class="card-pad"><div class="subhead">Platform — designed, not built</div></div>
+      <table>
+        <thead><tr><th>Feature</th><th>What it does</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Auth.js Google</td><td>Identity only; roles live in app tables</td><td><span class="chip chip-accent">Architecture</span></td></tr>
+          <tr><td>Catalog + sports APIs</td><td>CricketData + API-Football behind an adapter</td><td><span class="chip chip-accent">Architecture</span></td></tr>
+          <tr><td>Autopilot results</td><td>Scheduled jobs fetch results → score events</td><td><span class="chip chip-accent">Architecture</span></td></tr>
+          <tr><td>Web Push + email</td><td>Cutoff reminders; Resend fallback</td><td><span class="chip chip-accent">Architecture</span></td></tr>
+          <tr><td>RLS + portable identity</td><td><code>app.user_id()</code> GUC; reveal rules live in policies</td><td><span class="chip chip-accent">Architecture</span></td></tr>
+        </tbody>
+      </table>
     </div>
-  </section>
 
-  <footer>
-    <div class="links">
-      <a href="prototype.html">Prototype</a>
-      <a href="architecture.html">Architecture</a>
-      <a href="../">Portfolio</a>
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <div class="card-pad"><div class="subhead">Deliberately out of scope</div></div>
+      <table>
+        <thead><tr><th>Item</th><th>Why not</th></tr></thead>
+        <tbody>
+          <tr><td>In-app payments</td><td>Tracking only — Splitwise model, never moves real money</td></tr>
+          <tr><td>Public pool discovery</td><td>Invite-only private groups by design</td></tr>
+          <tr><td>WhatsApp Business API</td><td>Manual share is enough for MVP</td></tr>
+          <tr><td>Achievements / streaks</td><td>Deferred — not core to the settlement problem</td></tr>
+          <tr><td>Native mobile apps</td><td>PWA first</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="meta">Predictopia · private pools · tracking only, never betting</div>
-  </footer>
-</div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section id="personas" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Who it's for</div>
+    <h2 class="section-title">Three roles, one honest split of responsibility</h2>
+    <p class="section-sub">Every screen is defended by one of these three lenses — nothing exists for a hypothetical fourth user.</p>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <span class="persona-tag">Group admin</span>
+        <h3>Owns the circle</h3>
+        <p>Admits members, creates pools, and — because only a group admin can create a pool — runs that season's specials, period close, and settlement. The person who used to own the spreadsheet, minus the spreadsheet.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-tag">Co-admin</span>
+        <h3>Delegated, not demoted</h3>
+        <p>Shares Manage-tab duties on a specific pool — pushing specials, marking buy-ins collected — without owning group-membership decisions. Lets one admin actually take a week off during the tournament.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-tag">Member</span>
+        <h3>Predicts, checks, gets paid</h3>
+        <p>Picks before cutoff, checks the board, sees exactly what they're owed. Senior-friendly targets and copy — this has to work for the family group, not just the office one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNICAL DEPTH -->
+<section id="technical" class="section">
+  <div class="container">
+    <div class="section-label">Technical depth</div>
+    <h2 class="section-title">Reviewed by a second model before any backend code</h2>
+    <p class="section-sub">Drafted with Claude, then independently reviewed by a second model (Grok) — not a rubber stamp. Five required changes came back; all fixed the same day.</p>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tnum">!</div>
+        <div class="tech-label">Security</div>
+        <h3>Privilege-escalation gap in a leave policy</h3>
+        <p>A member's own "leave the group" RLS check only validated <code>user_id</code>, not <code>role</code> — a crafted request could have self-promoted to admin. Fixed with a status-pinning check plus a trigger that blocks any self-service role change. The same gap existed in the pool-leave policy and hadn't been noticed at all — fixed the same pattern.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tnum">✓</div>
+        <div class="tech-label">Correctness</div>
+        <h3>Admin-inheritance gap</h3>
+        <p>A group admin without their own explicit pool-membership row would have been locked out of managing pools they should administer by default — the helper function didn't carry the inheritance rule its own policy already had.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tnum">✓</div>
+        <div class="tech-label">Build safety</div>
+        <h3>A referenced function that was never defined</h3>
+        <p>Period-close cited a <code>leaderboard()</code> function that didn't exist anywhere in the schema — would have failed at build time. Now defined as one <code>SUM()</code> query with a period-type branch.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tnum">✓</div>
+        <div class="tech-label">Scalability</div>
+        <h3>Sports-API rate-limit risk, resolved structurally</h3>
+        <p>Flagged as unvalidated in two earlier product reviews. Architecture confirms calls scale with real-world match count, never with how many pools or groups are predicting on the same match — concrete worst case well under the free-tier cap.</p>
+      </div>
+    </div>
+
+    <div class="subhead" style="margin-top:28px">Invariants the schema is built to hold</div>
+    <div class="card"><div class="card-pad">
+      <table>
+        <tbody>
+          <tr><td>No tournament hardcoding</td><td>Sports and competitions are catalog rows, not schema shape.</td></tr>
+          <tr><td>One event spine</td><td>Match outcomes and specials share one table and one scoring function.</td></tr>
+          <tr><td>Points only in <code>event_scores</code></td><td>Boards and period filters are SUM lenses — not a second ledger.</td></tr>
+          <tr><td>Portable identity</td><td><code>app.current_user_id()</code> via session GUC — not vendor-only auth helpers.</td></tr>
+          <tr><td>Money never overspends</td><td>Split + tie rules are budget-safe; closed periods snapshot immutably.</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Stack</div>
+    <h2 class="section-title">Free-tier, portable — no cost until it's real</h2>
+    <p class="section-sub">Every layer chosen to run at $0/mo at family-and-friends scale, with a clean adapter boundary if traffic ever justifies a paid tier.</p>
+    <div class="card"><div class="card-pad" style="padding:0">
+      <table>
+        <thead><tr><th>Layer</th><th>Choice</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>App</td><td>Next.js PWA · Vercel</td><td>Mobile-first · installable shell for Web Push</td></tr>
+          <tr><td>API</td><td>Route Handlers</td><td>Cutoffs, scoring, jobs</td></tr>
+          <tr><td>DB</td><td>Supabase Postgres + RLS</td><td>Blank v2 schema</td></tr>
+          <tr><td>Auth</td><td>Auth.js · Google only</td><td>Roles in app tables</td></tr>
+          <tr><td>Sports</td><td>CricketData · API-Football</td><td>Provider adapter · allowlist</td></tr>
+          <tr><td>Jobs</td><td>GitHub Actions → <code>/api/jobs/*</code></td><td>Sub-daily reminders</td></tr>
+          <tr><td>Notify</td><td>Web Push + Resend</td><td>Email fallback</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+</section>
+
+<!-- DIAGRAMS -->
+<section id="diagrams" class="section">
+  <div class="container">
+    <div class="section-label">System diagrams</div>
+    <h2 class="section-title">Six diagrams, drawn before a line of backend code</h2>
+    <p class="section-sub">SVG for reading here. Full-size and editable <code>.drawio</code> sources live on the <a href="architecture.html">architecture page</a>.</p>
+    <div class="diagrams-grid">
+      <div class="diag-item"><a href="architecture.html#d1"><div class="diag-img"><img src="diagrams/v2/01-system-context.svg" alt="System context" loading="lazy"></div><div class="diag-caption">01 · System context</div></a></div>
+      <div class="diag-item"><a href="architecture.html#d2"><div class="diag-img"><img src="diagrams/v2/02-deployment.svg" alt="Deployment" loading="lazy"></div><div class="diag-caption">02 · Deployment</div></a></div>
+      <div class="diag-item"><a href="architecture.html#d3"><div class="diag-img"><img src="diagrams/v2/03-data-model.svg" alt="Data model" loading="lazy"></div><div class="diag-caption">03 · Data model</div></a></div>
+      <div class="diag-item"><a href="architecture.html#d4"><div class="diag-img"><img src="diagrams/v2/04-identity-rls.svg" alt="Identity and RLS" loading="lazy"></div><div class="diag-caption">04 · Identity &amp; RLS</div></a></div>
+      <div class="diag-item"><a href="architecture.html#d5"><div class="diag-img"><img src="diagrams/v2/05-predict-reveal.svg" alt="Predict lock reveal" loading="lazy"></div><div class="diag-caption">05 · Predict · lock · reveal</div></a></div>
+      <div class="diag-item"><a href="architecture.html#d6"><div class="diag-img"><img src="diagrams/v2/06-scoring-money.svg" alt="Scoring and money" loading="lazy"></div><div class="diag-caption">06 · Scoring &amp; settlement</div></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="section section-alt">
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">Now · Next · Later</h2>
+    <p class="section-sub">Sequenced by build order M1–M6 from the reviewed architecture — each milestone unlocks the next, not chosen for convenience.</p>
+    <div class="roadmap-grid">
+      <div class="roadmap-col">
+        <div class="roadmap-header now"><span class="phase-sub">Done</span>Now</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item"><h4>PRD → prototype</h4><p>Full product spec, five review rounds, no open contradictions.</p></div>
+          <div class="roadmap-item"><h4>Clickable prototype</h4><p>Member and admin flows, guided tours for both, mock data.</p></div>
+          <div class="roadmap-item"><h4>Architecture, independently reviewed</h4><p>Schema, RLS, six diagrams — five required fixes found and closed.</p></div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-header next"><span class="phase-sub">M1 – M3</span>Next</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item"><h4>M1 · Foundation</h4><p>Auth, catalog, PWA shell, scheduled job runner.</p></div>
+          <div class="roadmap-item"><h4>M2 · Groups &amp; pools</h4><p>Admit/deny, opt-in pools, co-admin delegation.</p></div>
+          <div class="roadmap-item"><h4>M3 · Predict &amp; score</h4><p>Lock enforcement, results ingestion, event scoring.</p></div>
+        </div>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-header later"><span class="phase-sub">M4 – M6</span>Later</div>
+        <div class="roadmap-body">
+          <div class="roadmap-item"><h4>M4 · Specials</h4><p>Author, push, and resolve admin polls.</p></div>
+          <div class="roadmap-item"><h4>M5 · Money</h4><p>Period close, owed/settled, profile rollup.</p></div>
+          <div class="roadmap-item"><h4>M6 · Notify &amp; share</h4><p>Push + email reminders, share cards for leaderboards.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER GUIDE -->
+<section id="guide" class="section">
+  <div class="container">
+    <div class="section-label">User guide</div>
+    <h2 class="section-title">How to actually use it</h2>
+    <p class="section-sub">Written for people who play, not for engineers. Full guide covers groups, admin duties, scoring, and an FAQ.</p>
+    <div class="guide-grid">
+      <div class="card"><div class="card-pad">
+        <div class="subhead" style="margin-top:0">Quick start</div>
+        <div class="guide-steps">
+          <div class="g-step"><div class="g-n">1</div><div><strong>Sign in with Google</strong><span>That's your account — no password to remember.</span></div></div>
+          <div class="g-step"><div class="g-n">2</div><div><strong>Join a group</strong><span>Open the invite link → request to join → wait for a group admin to admit you.</span></div></div>
+          <div class="g-step"><div class="g-n">3</div><div><strong>Opt into a pool</strong><span>A pool is one tournament. Tap Join — you're not auto-enrolled.</span></div></div>
+          <div class="g-step"><div class="g-n">4</div><div><strong>Predict before lock</strong><span>Open Predict, pick a winner, change anytime until the countdown ends.</span></div></div>
+        </div>
+      </div></div>
+      <div class="card"><div class="card-pad">
+        <div class="subhead" style="margin-top:0">The four tabs, every pool</div>
+        <div class="guide-tabs">
+          <div class="gt-row"><b>Predict</b><span>Open picks and specials — what to do now</span></div>
+          <div class="gt-row"><b>Board</b><span>Standings, members, Reveal after lock</span></div>
+          <div class="gt-row"><b>Me</b><span>Your points and why each one landed</span></div>
+          <div class="gt-row"><b>Money</b><span>Owed / settled, plus full winners list</span></div>
+          <div class="gt-row"><b>Manage</b><span>Admins only — economics, buy-in, specials</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="cta-row" style="margin-top:20px">
+      <a class="btn btn-primary" href="help/">Read the full user guide →</a>
+      <a class="btn btn-secondary" href="prototype.html">Try the guided tour →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div><strong>Predictopia</strong> · private prediction pools · tracking only, never betting</div>
+  <div class="footer-links">
+    <a href="prototype.html">Prototype</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="help/">User guide</a>
+    <a href="../">Portfolio</a>
+  </div>
+</footer>
 
 <script>
 const root=document.documentElement;
@@ -294,6 +637,17 @@ document.getElementById('themeToggle').addEventListener('click',e=>{
   localStorage.setItem('predictopia-docs-theme',b.dataset.t);
   paintTheme();
 });
+
+/* Active sidebar link tracking */
+const navLinks=[...document.querySelectorAll('.sb-nav a[href^="#"]')];
+const sections=navLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+function onScroll(){
+  let current=sections[0];
+  for(const s of sections){ if(window.scrollY >= s.offsetTop - 120) current=s; }
+  navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+current.id));
+}
+document.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
 </script>
 </body>
 </html>
