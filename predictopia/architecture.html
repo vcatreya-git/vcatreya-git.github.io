@@ -146,6 +146,7 @@ footer .meta{font-size:12px;color:var(--dim)}
     <p class="sub">Free-tier, portable stack for multi-sport private pools. One event spine for match outcomes and specials. Settlement tracking only — no payments.</p>
     <div style="display:flex;flex-wrap:wrap;gap:8px">
       <span class="chip chip-accent">draw.io + SVG</span>
+      <a href="#review" class="chip" style="background:var(--ok-dim);color:var(--ok);border:1px solid rgba(14,159,110,.28);text-decoration:none">Independently reviewed</a>
       <span class="chip chip-muted">Backend not live yet</span>
     </div>
   </section>
@@ -176,6 +177,17 @@ footer .meta{font-size:12px;color:var(--dim)}
       <div class="inv"><div class="inv-n">3</div><div><strong>Points only in <code>event_scores</code></strong><span>Boards and period filters are SUM lenses — not a second ledger.</span></div></div>
       <div class="inv"><div class="inv-n">4</div><div><strong>Portable identity</strong><span><code>app.current_user_id()</code> via session GUC — not vendor-only auth helpers.</span></div></div>
       <div class="inv"><div class="inv-n">5</div><div><strong>Money never overspends</strong><span>Split + tie rules are budget-safe; closed periods snapshot immutably.</span></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="review">
+    <h2>Independently reviewed</h2>
+    <p class="lead">Drafted with Claude, then reviewed by a second model (Grok) before any backend code was written — not a rubber stamp. Five required changes came back, all fixed the same day.</p>
+    <div class="card">
+      <div class="inv"><div class="inv-n">!</div><div><strong>Privilege-escalation gap in a leave policy</strong><span>A member's own "leave the group" RLS check only validated <code>user_id</code>, not <code>role</code> — a crafted request could have self-promoted to admin. Fixed with a status-pinning check plus a trigger that blocks any self-service role change.</span></div></div>
+      <div class="inv"><div class="inv-n">✓</div><div><strong>Admin-inheritance gap</strong><span>A group admin without their own explicit pool-membership row would have been locked out of managing pools they should administer by default — the helper function didn't carry the inheritance rule its own policy already had.</span></div></div>
+      <div class="inv"><div class="inv-n">✓</div><div><strong>A referenced function that was never defined</strong><span>Period-close cited a <code>leaderboard()</code> function that didn't exist anywhere in the schema — would have failed at build time. Now defined as one <code>SUM()</code> query with a period-type branch.</span></div></div>
+      <div class="inv"><div class="inv-n">✓</div><div><strong>Sports-API rate-limit risk, resolved structurally</strong><span>Flagged as unvalidated in two earlier product reviews. Architecture confirms calls scale with real-world match count, never with how many pools or groups are predicting on the same match — concrete worst case well under the free-tier cap.</span></div></div>
     </div>
   </section>
 
