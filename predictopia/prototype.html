@@ -356,6 +356,48 @@ img.av.sm{width:30px;height:30px;border-radius:9px;}
 @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 #fx{position:absolute;inset:0;pointer-events:none;z-index:35;}
+
+/* ── Guided walkthrough (member / admin) ── */
+.tour-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 auto 16px;max-width:520px}
+.tour-bar button{
+  border:1px solid var(--line);background:var(--panel);color:var(--text);font-family:var(--font);
+  font-size:12.5px;font-weight:700;padding:10px 14px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;min-height:40px;transition:.14s;
+}
+.tour-bar button:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.tour-bar button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.tour-bar button .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.85}
+.tour-panel{
+  max-width:412px;margin:18px auto 0;background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;padding:16px 16px 14px;box-shadow:var(--device-shadow);
+  display:none;animation:sIn .28s cubic-bezier(.22,1,.36,1);
+}
+.tour-panel.show{display:block}
+.tour-panel .role-chip{
+  display:inline-flex;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;margin-bottom:8px;
+  background:var(--accent-dim);color:var(--accent);border:1px solid rgba(var(--accent-rgb),.25);
+}
+.tour-panel .role-chip.admin{background:var(--warn-dim);color:var(--warn);border-color:rgba(180,83,9,.3)}
+.tour-panel h3{font-family:var(--display);font-size:17px;letter-spacing:-.015em;margin:0 0 6px;line-height:1.2}
+.tour-panel p{font-size:13.5px;color:var(--muted);line-height:1.5;margin:0 0 12px}
+.tour-panel .tour-meta{font-size:11px;font-weight:700;color:var(--dim);margin-bottom:10px}
+.tour-panel .tour-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tour-panel .tour-actions .spacer{flex:1}
+.tour-panel .btn-sm{
+  border:0;font-family:var(--font);font-size:12.5px;font-weight:700;padding:10px 14px;border-radius:12px;
+  cursor:pointer;min-height:40px;
+}
+.tour-panel .btn-sm.primary{background:var(--accent);color:var(--on-accent)}
+.tour-panel .btn-sm.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.tour-panel .btn-sm.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.device.tour-active{outline:2px solid var(--accent);outline-offset:4px}
+@media(min-width:900px){
+  .layout{align-items:flex-start;gap:24px}
+  .tour-panel{margin:0;max-width:320px;position:sticky;top:24px}
+  .tour-panel.show{align-self:flex-start}
+}
+
 </style>
 </head>
 <body>
@@ -371,6 +413,11 @@ img.av.sm{width:30px;height:30px;border-radius:9px;}
       <div class="theme-toggle" id="themeToggle"></div>
     </div>
   </div>
+
+    <div class="tour-bar" id="tourBar">
+      <button type="button" id="tourMemberBtn" onclick="startTour('member')"><span class="dot"></span>Tour · Member</button>
+      <button type="button" id="tourAdminBtn" onclick="startTour('admin')"><span class="dot"></span>Tour · Admin</button>
+    </div>
 
   <div class="layout">
     <div class="device-wrap">
@@ -390,6 +437,19 @@ img.av.sm{width:30px;height:30px;border-radius:9px;}
         </nav>
       </div>
     </div>
+    <div class="tour-panel" id="tourPanel" aria-live="polite">
+      <div class="role-chip" id="tourRole">Member tour</div>
+      <div class="tour-meta" id="tourMeta">Step 1 of 8</div>
+      <h3 id="tourTitle">Title</h3>
+      <p id="tourBody">Body</p>
+      <div class="tour-actions">
+        <button type="button" class="btn-sm ghost" onclick="endTour()">Skip</button>
+        <button type="button" class="btn-sm ghost" id="tourPrev" onclick="tourPrev()">Back</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn-sm primary" id="tourNext" onclick="tourNext()">Next</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -2810,7 +2870,96 @@ function render(){
   hydrate(tabbar);
   lastScreen=state.screen;
 }
-tabbar.addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.go);});
+
+/* ══════════ Guided walkthroughs ══════════ */
+const TOURS={
+  member:[
+    {screen:'landing',title:'Welcome — member path',body:'This short tour shows how a typical member joins a group, opts into a pool, predicts, and checks scores and money. You can click around anytime; Next moves the demo for you.'},
+    {screen:'home',setup:()=>{state.activePool='familyCup';},title:'Home · My pools',body:'Every pool you play shows rank and a next action. Predict wins if anything is open; otherwise Money if you’re owed. Tap a card to jump in.'},
+    {screen:'groups',title:'Groups',body:'A Group is your lasting circle of people — family, office, cousins. Membership survives every future tournament so you are not re-invited from scratch.'},
+    {screen:'groupDetail',setup:()=>{state.activeGroup='family';},title:'Inside a group',body:'See which pools are running under the group. New pools appear as “not joined” — you opt in only if you care about that sport or season.'},
+    {screen:'joinPool',setup:()=>{state.activePool='familyCup';state.activeGroup='family';},title:'Opt into a pool',body:'Review rules and buy-in before joining. Paid buy-ins are settled offline; the app only tracks whether the admin marked you collected.'},
+    {screen:'poolPredict',setup:()=>{state.activePool='familyCup';},title:'Predict',body:'One-tap winner picks (football also has draw). Change freely until the cutoff countdown hits zero — then the pick locks.'},
+    {screen:'poolBoard',setup:()=>{state.activePool='familyCup';state.period='overall';state.revealExpanded=true;},title:'Board + Reveal',body:'Standings with a period filter. After lock, expand Reveal on Board to see who picked what — the banter moment. Admin tools never live here.'},
+    {screen:'breakdown',setup:()=>{state.activePool='familyCup';},title:'Me · score breakdown',body:'Every point traces to a match or special. If something looks wrong, this is the self-serve “why do I have this score?” view.'},
+    {screen:'poolWinners',setup:()=>{state.activePool='familyCup';},title:'Money',body:'Your owed / settled amounts first, then the full winners list. The app never moves cash — it tracks settlement like Splitwise for the pool.'},
+    {screen:'profile',title:'You · across pools',body:'Identity, open predictions, and money rolled up across every pool (multi-currency). Tap through to a pool’s Money when you need detail.'},
+    {screen:'home',title:'You’re set',body:'That’s the member loop: Group → opt into Pool → Predict → Board / Me → Money. Start the Admin tour next if you run a pool.',done:true},
+  ],
+  admin:[
+    {screen:'landing',title:'Welcome — admin path',body:'This tour covers group admin and pool admin: admit people, create a pool, specials, economics, and closing prize periods. Demo data already makes you admin of Family Cup.'},
+    {screen:'adminDashboard',setup:()=>{state.cameFromDashboard=true;},title:'Admin dashboard',body:'Every pool you administer across groups, in one place — useful when you run more than one season at a time.'},
+    {screen:'groupMembers',setup:()=>{state.activeGroup='family';},title:'Group · members & admins',body:'Admit or deny join requests. Delegate co-admins. Removing someone from the group cascades out of its pools.'},
+    {screen:'createPool1',setup:()=>{state.activeGroup='family';},title:'Create a pool · wizard',body:'Only group admins create pools (buy-in and prizes are serious). Walk sport → competition → economics → prize split → review.'},
+    {screen:'poolAdmin',setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false;},title:'Manage tab',body:'Admin-only hub: members, economics, prize distribution, specials, winners. Board stays clean for members.'},
+    {screen:'specialCreate',setup:()=>{state.activePool='familyCup';},title:'Push a special',body:'Author a poll (single or multi-choice), points, prize, optional expiry. Same event model as match outcomes — no separate scoring system.'},
+    {screen:'resolveSpecials',setup:()=>{state.activePool='familyCup';},title:'Resolve specials',body:'When you know the answer, confirm it here. Exact winners get prize owed; multi-pick partial credit can apply to points only.'},
+    {screen:'poolEconomics',setup:()=>{state.activePool='familyCup';},title:'Pool economics',body:'Collected, admin fee %, distributable pots — admin only. Members never see the fee math; they only see what they can win and what they are owed.'},
+    {screen:'payouts',setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false;},title:'Buy-in collected',body:'Mark Collected when UPI/cash arrives offline. Separate from prize Owed/Settled on the Money / Winners screens.'},
+    {screen:'poolWinners',setup:()=>{state.activePool='familyCup';},title:'Close periods & settle',body:'Close a period to freeze winners (split + tie rules). Then mark Owed → Settled after you pay people offline. Closed pots stay locked.'},
+    {screen:'adminNudge',setup:()=>{state.activePool='familyCup';},title:'Nudge not-joined',body:'See group members who have not opted into this pool and share a manual reminder — no automated WhatsApp in the prototype MVP path.'},
+    {screen:'home',title:'Admin tour complete',body:'You can run the Member tour for the player-facing path, or keep clicking Manage on any pool. Production backend is not live — this is the design demo.',done:true},
+  ],
+};
+
+let tour=null; // {role, i}
+
+function startTour(role){
+  if(!TOURS[role]) return;
+  tour={role,i:0};
+  document.getElementById('tourMemberBtn')?.classList.toggle('on',role==='member');
+  document.getElementById('tourAdminBtn')?.classList.toggle('on',role==='admin');
+  document.querySelector('.device')?.classList.add('tour-active');
+  applyTourStep();
+}
+
+function endTour(){
+  tour=null;
+  document.getElementById('tourPanel')?.classList.remove('show');
+  document.getElementById('tourMemberBtn')?.classList.remove('on');
+  document.getElementById('tourAdminBtn')?.classList.remove('on');
+  document.querySelector('.device')?.classList.remove('tour-active');
+}
+
+function tourNext(){
+  if(!tour) return;
+  if(tour.i>=TOURS[tour.role].length-1){endTour();return;}
+  tour.i++;
+  applyTourStep();
+}
+function tourPrev(){
+  if(!tour||tour.i<=0) return;
+  tour.i--;
+  applyTourStep();
+}
+
+function applyTourStep(){
+  if(!tour) return;
+  const steps=TOURS[tour.role];
+  const step=steps[tour.i];
+  if(typeof step.setup==='function') step.setup();
+  state.screen=step.screen;
+  // panel
+  const panel=document.getElementById('tourPanel');
+  if(!panel) return;
+  panel.classList.add('show');
+  const roleEl=document.getElementById('tourRole');
+  roleEl.textContent=tour.role==='admin'?'Admin tour':'Member tour';
+  roleEl.classList.toggle('admin',tour.role==='admin');
+  document.getElementById('tourMeta').textContent=`Step ${tour.i+1} of ${steps.length}`;
+  document.getElementById('tourTitle').textContent=step.title;
+  document.getElementById('tourBody').textContent=step.body;
+  document.getElementById('tourPrev').style.visibility=tour.i===0?'hidden':'visible';
+  const next=document.getElementById('tourNext');
+  next.textContent=step.done||tour.i===steps.length-1?'Done':'Next';
+  render();
+  // scroll device body to top for clean step
+  const body=document.getElementById('screen');
+  if(body) body.scrollTop=0;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+tabbar.addEventListener('click',e=>{const b=e.target.closest('button');if(b){if(tour){/* allow free nav during tour */}go(b.dataset.go);}});
 sbTime.textContent=fmtT(Date.now());
 chrome();render();
 </script>
