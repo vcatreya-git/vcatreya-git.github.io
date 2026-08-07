@@ -55,7 +55,7 @@ body{
 .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;margin-bottom:22px;max-width:412px;margin-left:auto;margin-right:auto;}
 .brand-row{display:flex;align-items:center;gap:10px;}
 .brand-block .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
-.right-controls{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.right-controls{display:flex;flex-direction:row;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
 .theme-toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;}
 .theme-toggle button{border:0;background:transparent;color:var(--dim);cursor:pointer;font-size:12px;font-weight:700;
   padding:8px 14px;border-radius:999px;display:flex;align-items:center;gap:6px;min-height:36px;font-family:var(--font);transition:.15s;}
@@ -65,7 +65,7 @@ body{
 
 .device-wrap{display:flex;justify-content:center;}
 .device{width:100%;max-width:412px;background:var(--device-bg);border-radius:44px;box-shadow:var(--device-shadow);
-  overflow:hidden;height:840px;display:flex;flex-direction:column;position:relative;}
+  overflow:hidden;height:min(840px,calc(100vh - 165px));min-height:520px;display:flex;flex-direction:column;position:relative;}
 .statusbar{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;
   font-size:12.5px;font-weight:700;color:var(--text);background:var(--panel);flex-shrink:0;}
 .statusbar .sb-r{display:flex;align-items:center;gap:5px;}
@@ -472,6 +472,7 @@ img.av.sm{width:30px;height:30px;border-radius:9px;}
     </div>
     <div class="right-controls">
       <div class="theme-toggle" id="themeToggle"></div>
+      <button type="button" id="wt-help-btn" onclick="wtRelaunch()">? Tour</button>
     </div>
   </div>
 
@@ -526,10 +527,10 @@ img.av.sm{width:30px;height:30px;border-radius:9px;}
       <div class="sub">Interactive prototype · guided walkthrough</div>
     </div>
     <div class="wt-welcome-body">
-      <p>A quick, six-stop spotlight tour — pick the path you want to see.</p>
+      <p>A quick spotlight tour — pick the path you want to see.</p>
       <div class="wt-welcome-actions">
-        <button type="button" class="primary" onclick="wtBegin('member')">Member tour<small>Join → predict → board → money</small></button>
-        <button type="button" class="secondary" onclick="wtBegin('admin')">Admin tour<small>Group · pool · specials · settle</small></button>
+        <button type="button" class="primary" onclick="wtBegin('member')">Member tour<small>Predict → reveal → score → money</small></button>
+        <button type="button" class="secondary" onclick="wtBegin('admin')">Admin tour<small>Group · pool · specials · economics · settle</small></button>
         <button type="button" class="ghost" onclick="wtSkip()">Skip for now</button>
       </div>
     </div>
@@ -770,8 +771,8 @@ function periodPicker(pool,cfg,p){
 /* Shared by Board and the share-card preview so a shared leaderboard is
    never a different table than the live one (2026-08-02). */
 function leaderboardRows(period){
-  return period==='p1'?[[1,'Anu','A',8,'up'],[2,'You','V',7,'up'],[3,'Raj','R',6,'same'],[4,'Meera','M',5,'dn']]
-    :[[1,'Anu','A',20,'same'],[2,'You','V',18,'up'],[3,'Raj','R',15,'dn'],[4,'Meera','M',12,'same'],[5,'Sid','S',11,'up']];
+  return period==='p1'?[[1,'Amara','A',8,'up'],[2,'You','V',7,'up'],[3,'Ravi','R',6,'same'],[4,'Mei','M',5,'dn']]
+    :[[1,'Amara','A',20,'same'],[2,'You','V',18,'up'],[3,'Ravi','R',15,'dn'],[4,'Mei','M',12,'same'],[5,'Sven','S',11,'up']];
 }
 /* Shared by Predict (both sports) and the Hub — same match card, same pick
    logic, wherever it's rendered (2026-08-02). Draw only shows when the
@@ -982,12 +983,12 @@ const POOLS={
        both shapes live rather than every seed pool defaulting to [100]. */
     periodSplit:[50,30,20],seasonSplit:[100],tieRule:'split',
     /* One period already closed — demonstrates Winners live on load, same
-       as every other feature in this file (2026-08-05). Anu paid, You/Raj
+       as every other feature in this file (2026-08-05). Amara Settled, You/Ravi
        not yet — shows both states of the payout Paid/Unpaid toggle too. */
     payouts:{p1:{closedAt:T0-3*86400000,winners:[
-      {a:'A',n:'Anu',rank:1,pct:50,amount:400,paid:true,tie:false},
+      {a:'A',n:'Amara',rank:1,pct:50,amount:400,paid:true,tie:false},
       {a:'V',n:'You',rank:2,pct:30,amount:240,paid:false,tie:false},
-      {a:'R',n:'Raj',rank:3,pct:20,amount:160,paid:false,tie:false},
+      {a:'R',n:'Ravi',rank:3,pct:20,amount:160,paid:false,tie:false},
     ]}},
     /* sp_top4 is already resolved below (correctAnswer 'MI') — this is its
        matching payout record (2026-08-06), computed by hand from
@@ -996,8 +997,8 @@ const POOLS={
        load, same as every other feature in this file. */
     specialPayouts:{sp_top4:{winners:[
       {a:'V',n:'You',amount:167,paid:false},
-      {a:'A',n:'Anu',amount:167,paid:true},
-      {a:'K',n:'Karan',amount:167,paid:false},
+      {a:'A',n:'Amara',amount:167,paid:true},
+      {a:'K',n:'Kwame',amount:167,paid:false},
     ]}},
     /* Each special carries its own prize, set when it's created — not one
        shared "specials pot" figure. Top 4 and Player of the Series are
@@ -1022,14 +1023,14 @@ const POOLS={
         optionsSource:'teams',options:COMPETITION_TEAMS.ipl2026.map(t=>({key:t,label:t})),resolved:false,correctAnswer:null,
         expiry:Date.now()+5*86400000,adminUnlock:false},
     ],
-    payments:[{a:'V',n:'You',paid:true},{a:'A',n:'Anu',paid:true},{a:'R',n:'Raj',paid:false},{a:'M',n:'Meera',paid:true},{a:'S',n:'Sid',paid:false},{a:'K',n:'Karan',paid:true}]},
+    payments:[{a:'V',n:'You',paid:true},{a:'A',n:'Amara',paid:true},{a:'R',n:'Ravi',paid:false},{a:'M',n:'Mei',paid:true},{a:'S',n:'Sven',paid:false},{a:'K',n:'Kwame',paid:true}]},
   iplBuddies:{name:'IPL Buddies',group:'College Friends',groupKey:'friends',sport:'cricket',competition:'ipl2026',chip:'chip-accent',
     pitch:'pitch-cricket.jpg',members:6,wonSoFar:0,admins:['V'],
     periodConfig:{type:'gameweek',league:'IPL 2026 · 10 teams',periods:defaultSeasonPeriods('gameweek','ipl2026')},
     currency:'INR',buyIn:150,adminFeePct:5,prizePerPeriod:450,prizeOverall:1200,prizeSpecial:100,
     periodSplit:[100],seasonSplit:[100],tieRule:'shrink',payouts:{},specialPayouts:{},
     specials:[],
-    payments:[{a:'V',n:'You',paid:false},{a:'S',n:'Sid',paid:true},{a:'K',n:'Karan',paid:true},{a:'P',n:'Priya',paid:false}]},
+    payments:[{a:'V',n:'You',paid:false},{a:'S',n:'Sofia',paid:true},{a:'K',n:'Kenji',paid:true},{a:'P',n:'Paulo',paid:false}]},
   /* Different currency on purpose (UK-based group) AND Venkat is NOT admin
      here — a plain member, so this pool proves the privacy fix for real:
      no economics banner, no fee, no collected total shown on its board. */
@@ -1039,7 +1040,7 @@ const POOLS={
     currency:'GBP',buyIn:10,adminFeePct:0,prizePerPeriod:40,prizeOverall:100,prizeSpecial:0,
     periodSplit:[70,30],seasonSplit:[100],tieRule:'split',payouts:{},specialPayouts:{},
     specials:[],
-    payments:[{a:'V',n:'You',paid:true},{a:'S',n:'Sid',paid:true},{a:'K',n:'Karan',paid:false},{a:'P',n:'Priya',paid:true},{a:'A',n:'Amit',paid:false}]},
+    payments:[{a:'V',n:'You',paid:true},{a:'S',n:'Sofia',paid:true},{a:'K',n:'Kenji',paid:false},{a:'P',n:'Paulo',paid:true},{a:'A',n:'Amina',paid:false}]},
   /* Third pool sharing ipl2026 — proves sync/switcher/sync-label actually
      scale past 2 (2026-08-02, user question: "what if the user is in
      multiple pools?"). Also the first real ₹0 pool now that the landing
@@ -1120,8 +1121,8 @@ const GROUPS={
    the app doesn't otherwise need. Scoped per-group since the same initial
    (e.g. 'S' or 'K') means a different person in a different group. */
 const GROUP_NAMES={
-  family:{V:'You',A:'Anu',R:'Raj',M:'Meera',S:'Sid',K:'Karan',P:'Priya',D:'Deepak',N:'Nisha'},
-  friends:{S:'Sid',K:'Karan',P:'Priya',V:'You'},
+  family:{V:'You',A:'Amara',R:'Ravi',M:'Mei',S:'Sven',K:'Kwame',P:'Priya',D:'Diego',N:'Noor'},
+  friends:{S:'Sofia',K:'Kenji',P:'Paulo',V:'You'},
   cousins:{R:'Rohan',K:'Kavya',S:'Suresh'},
 };
 const memberName=(gk,i)=>(GROUP_NAMES[gk]&&GROUP_NAMES[gk][i])||i;
@@ -1136,7 +1137,7 @@ const memberName=(gk,i)=>(GROUP_NAMES[gk]&&GROUP_NAMES[gk][i])||i;
    precedent), but can go on to lose or never hold the Group-wide role
    afterward while keeping that Pool's admin seat. Venkat on IPL Buddies is
    exactly this: Pool-admin there, plain Member of College Friends overall
-   (Sid holds that Group's admin seat) — seeded directly to prove the two
+   (Sofia holds that Group's admin seat) — seeded directly to prove the two
    layers stay independently real, not collapsed into one flag, without
    depending on the create-pool flow to reach that state. */
 const isGroupAdmin=gk=>GROUPS[gk].admins.includes('V');
@@ -1962,7 +1963,7 @@ adminNudge:()=>`
   <button class="back" onclick="go(${state.cameFromDashboard?"'adminDashboard'":"'groupDetail'"})">${icon('chevL',15)}${state.cameFromDashboard?'Dashboard':'Group'}</button>
   <div class="display" style="font-size:22px">Who hasn't joined</div>
   <p class="sub">EPL · Family Premier · 4 of 12 joined</p>
-  ${[['P','Papa','In the group',0],['M','Mom','In the group',0],['K','Karan','',1]].map(([a,n,s,inPool])=>`
+  ${[['P','Papa','In the group',0],['M','Mom','In the group',0],['K','Kwame','',1]].map(([a,n,s,inPool])=>`
     <div class="card mb10 between"><div class="row"><img class="av md" src="${AV(a)}" alt="">
       <div><b style="font-size:14px">${n}</b>${s?`<div style="font-size:11.5px;color:var(--dim)">${s}</div>`:''}</div></div>
       ${inPool?`<span class="chip chip-ok">Already in</span>`
@@ -2985,7 +2986,7 @@ let wtRole=null, wtStep=-1, wtActive=false, wtSteps=[];
 const WT_MEMBER=[
   {target:null,screen:'landing',card:'center',section:'Start',
    title:'You are a member',
-   text:`Quick tour: <b>Home → Groups → Predict → Board → Money</b>. Six stops, spotlighted — tap Next.`,
+   text:`Quick tour: <b>Home → Groups → Predict → Board → Me → Money → Profile</b>. Spotlighted — tap Next.`,
    deepdive:null,setup:null},
   {target:'[data-wt="home-card"]',screen:'home',card:'below',section:'Home',
    title:'One card per pool',
@@ -3001,16 +3002,30 @@ const WT_MEMBER=[
    text:`Pick a side, change your mind freely — until the countdown hits zero. Then it's locked.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup'}},
+  {target:'[data-wt="special-banner"]',screen:'poolPredict',card:'below',section:'Specials',
+   title:'Bonus questions',
+   text:`Some pools push extra questions — worth their own points and prize, separate from match picks.`,
+   deepdive:null,
+   setup:()=>{state.activePool='familyCup';state.specialExpanded=false}},
   {target:'[data-wt="reveal"]',screen:'poolBoard',card:'above',section:'Board',
    title:'Reveal, after lock',
    text:`Everyone's picks stay private until cutoff. Then open <b>Reveal</b> to see who picked what.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup';state.revealExpanded=true}},
+  {target:'[data-wt="breakdown"]',screen:'breakdown',card:'below',section:'Me',
+   title:'Every point explained',
+   text:`Score breakdown traces each point to one match. Fix a result and only that event re-scores.`,
+   deepdive:null,
+   setup:()=>{state.activePool='familyCup'}},
   {target:'[data-wt="money-you"]',screen:'poolWinners',card:'above',section:'Money',
    title:'Owed vs. Settled',
    text:`Your prize status first. <span class="hl">Owed/Settled</span> is prize money — buy-in uses a different label, <b>Collected/Not collected</b>. Never the same thing.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup'}},
+  {target:'[data-wt="profile-money"]',screen:'profile',card:'below',section:'Profile',
+   title:'Everything, rolled up',
+   text:`Your <b>You</b> tab totals what you owe and what you've won across every pool you're in, in each pool's own currency.`,
+   deepdive:null,setup:null},
   {target:null,screen:'home',card:'center',section:'Done',
    title:'That’s the player path',
    text:`Re-open anytime with <b>?</b>. Creating pools and closing periods? Run the <span class="hl">Admin tour</span>.`,
@@ -3020,7 +3035,7 @@ const WT_MEMBER=[
 const WT_ADMIN=[
   {target:null,screen:'landing',card:'center',section:'Start',
    title:'You are an admin',
-   text:`Quick tour: <b>admit → create pool → manage → specials → settle</b>. Demo makes you admin of Family Cup.`,
+   text:`Quick tour: <b>admit → create pool → manage → specials → economics → buy-in → settle</b>. Demo makes you admin of Family Cup.`,
    deepdive:null,setup:null},
   {target:'[data-wt="group-members"]',screen:'groupMembers',card:'below',section:'Group admin',
    title:'Admit is the trust gate',
@@ -3040,6 +3055,16 @@ const WT_ADMIN=[
   {target:'[data-wt="resolve"]',screen:'resolveSpecials',card:'below',section:'Specials',
    title:'Push, then resolve',
    text:`Author a poll from Manage. Once it's decided, declare the correct answer here — exact winners get the prize.`,
+   deepdive:null,
+   setup:()=>{state.activePool='familyCup'}},
+  {target:'[data-wt="economics"]',screen:'poolEconomics',card:'below',section:'Economics',
+   title:'Admin-only money view',
+   text:`Collected, admin fee, distributable — members never see this screen, only who won and how much.`,
+   deepdive:null,
+   setup:()=>{state.activePool='familyCup';state.cameFromDashboard=false}},
+  {target:'[data-wt="buyin"]',screen:'payouts',card:'below',section:'Buy-in',
+   title:'Collected, not Paid',
+   text:`Buy-in tracking uses <b>Collected/Not collected</b> — deliberately different wording from prize Owed/Settled.`,
    deepdive:null,
    setup:()=>{state.activePool='familyCup'}},
   {target:'[data-wt="money-you"]',screen:'poolWinners',card:'above',section:'Money',
