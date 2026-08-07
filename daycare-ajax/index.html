@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Ajax Ontario CWELCC / fee-subsidy daycare waitlist guide for families near L1S 0B1 — distances, costs, ratings, review links, and one-click waitlist emails." />
+  <title>Ajax Daycare Guide — CWELCC / Subsidy · L1S 0B1</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --card: #ffffff;
+      --ink: #1a2332;
+      --muted: #5c6b7a;
+      --accent: #0d6e6e;
+      --accent-soft: #e6f3f3;
+      --warn: #9a3412;
+      --warn-bg: #fff7ed;
+      --border: #e2e0d8;
+      --priority-1: #0d6e6e;
+      --priority-2: #2563eb;
+      --priority-3: #7c3aed;
+      --star: #d97706;
+      --shadow: 0 8px 28px rgba(26, 35, 50, 0.08);
+      --radius: 14px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #d8ebea 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, #fde8d8 0%, transparent 45%),
+        var(--bg);
+      line-height: 1.55;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    header.hero {
+      background: linear-gradient(135deg, #0d4f4f 0%, #0d6e6e 55%, #1a8a7a 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 2rem 2rem 1.75rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+    header.hero h1 {
+      margin: 0 0 0.4rem;
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    header.hero p {
+      margin: 0.35rem 0;
+      opacity: 0.92;
+      max-width: 48rem;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.1rem;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    .share-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .share-bar strong { font-size: 0.9rem; }
+    .share-bar code {
+      font-size: 0.8rem;
+      background: #f1f5f9;
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+      word-break: break-all;
+    }
+
+    .callout {
+      background: var(--warn-bg);
+      border: 1px solid #fed7aa;
+      border-left: 4px solid var(--warn);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+    .callout h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: var(--warn);
+    }
+    .callout ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+    .callout li { margin: 0.25rem 0; color: #7c2d12; }
+
+    .info-box {
+      background: var(--accent-soft);
+      border: 1px solid #b7e0df;
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h2 {
+      margin: 0 0 0.4rem;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+    .info-box p, .info-box li { font-size: 0.92rem; margin: 0.3rem 0; color: #134e4a; }
+    .info-box ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+
+    .section-title {
+      font-size: 1.25rem;
+      margin: 2rem 0 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    .section-sub {
+      color: var(--muted);
+      margin: -0.4rem 0 1rem;
+      font-size: 0.95rem;
+    }
+
+    .grid { display: grid; gap: 1rem; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 1.15rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #fafaf8 0%, #fff 100%);
+    }
+    .card-top h3 { margin: 0; font-size: 1.1rem; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: flex-start; }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.28rem 0.55rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .badge.p1 { background: var(--accent-soft); color: var(--priority-1); }
+    .badge.p2 { background: #dbeafe; color: var(--priority-2); }
+    .badge.p3 { background: #ede9fe; color: var(--priority-3); }
+    .badge.cw { background: #ecfdf5; color: #047857; }
+    .badge.infant { background: #fef3c7; color: #92400e; }
+
+    .rating-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      margin-top: 0.45rem;
+    }
+    .rating-pill .stars { color: var(--star); letter-spacing: 0.02em; }
+    .rating-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 0.2rem;
+    }
+
+    .card-body { padding: 1rem 1.25rem 1.25rem; }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+    }
+    .fact {
+      background: #f8f7f4;
+      border-radius: 10px;
+      padding: 0.7rem 0.8rem;
+    }
+    .fact label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .fact strong { font-size: 0.95rem; font-weight: 600; }
+    .fact .small { font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+
+    .review-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.5rem 0 0.75rem;
+    }
+    .review-links a {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid #b7e0df;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+    }
+    .review-links a:hover { background: #d5efef; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+    a.btn, button.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.55rem 0.9rem;
+      border-radius: 9px;
+      transition: transform 0.12s ease, opacity 0.12s ease;
+    }
+    a.btn:hover, button.btn:hover { transform: translateY(-1px); opacity: 0.95; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-email {
+      background: #1d4ed8;
+      color: #fff;
+    }
+    .btn-secondary { background: #eef2f6; color: var(--ink); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+    }
+
+    .email-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.35rem;
+      margin-top: 0.5rem;
+    }
+    .email-panel h3 { margin: 0 0 0.35rem; }
+    .email-panel .hint { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.85rem; }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.65rem;
+      margin-bottom: 0.9rem;
+    }
+    .fields label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+    .fields input {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+      background: #fff;
+    }
+    .fields input:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    .email-preview {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      max-height: 420px;
+      overflow: auto;
+    }
+    .email-subject {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 0.55rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 0.65rem;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .send-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.55rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .send-grid .btn { justify-content: center; width: 100%; }
+
+    table.summary {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: 0.88rem;
+    }
+    table.summary th,
+    table.summary td {
+      text-align: left;
+      padding: 0.7rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    table.summary th {
+      background: #0d4f4f;
+      color: #fff;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    table.summary tr:last-child td { border-bottom: none; }
+    table.summary tr:nth-child(even) td { background: #fafaf8; }
+    table.summary .rating-cell { color: #92400e; font-weight: 700; white-space: nowrap; }
+    @media (max-width: 720px) {
+      table.summary { display: block; overflow-x: auto; }
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+    .step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .step .n {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .step h4 { margin: 0 0 0.35rem; font-size: 0.98rem; }
+    .step p { margin: 0; font-size: 0.88rem; color: var(--muted); }
+
+    footer {
+      margin-top: 2.5rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    footer a { color: var(--accent); }
+
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #0f172a;
+      color: #fff;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+    }
+    .toast.show { opacity: 1; }
+
+    .sticky-email {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sticky-email span { font-size: 0.85rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="sticky-email">
+    <span>Fill details once ↓ then use <strong>Send email</strong> on any centre — opens your mail app prefilled.</span>
+    <a class="btn btn-email" href="#email-builder" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Jump to email builder</a>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <h1>Ajax Daycare Waitlist Guide</h1>
+      <p>
+        Government-funded track (CWELCC + Durham fee subsidy) for centres near
+        <strong>L1S 0B1</strong>. Built for a baby ~4 months old, targeting full-day care at
+        <strong>14–16 months</strong> (approx. mid–late 2027). Includes distances, costs,
+        parent ratings / review links, waitlist steps, and one-click emails.
+      </p>
+      <div class="meta-row">
+        <span class="chip">📍 Home: L1S 0B1</span>
+        <span class="chip">👶 Target: 14–16 months</span>
+        <span class="chip">💰 CWELCC ~$22/day max</span>
+        <span class="chip">⭐ Ratings + review links</span>
+        <span class="chip">📅 Aug 2026</span>
+      </div>
+    </header>
+
+    <div class="share-bar">
+      <strong>Share this page:</strong>
+      <code id="pageUrl">https://vcatreya-git.github.io/daycare-ajax/</code>
+      <button class="btn btn-secondary" type="button" onclick="copyPageUrl()">Copy link</button>
+    </div>
+
+    <div class="callout">
+      <h2>Read this first</h2>
+      <ul>
+        <li><strong>CWELCC</strong> = fee cap (~$22/day max under age 6) at enrolled centres. No separate application.</li>
+        <li><strong>Durham Fee Subsidy</strong> = extra income-tested help. No waitlist for subsidy itself — you need a secured space + start date within ~3 months to apply.</li>
+        <li>Ajax has <strong>no single regional waitlist</strong>. Join each centre separately this week.</li>
+        <li>Distances are approximate driving estimates from L1S 0B1. Confirm on Maps before tours.</li>
+        <li><strong>Ratings</strong> are parent Google / aggregate scores where found — not Ministry rankings. Always open the review links and Ontario inspection reports yourself.</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h2>How we treated “ratings”</h2>
+      <p>Ontario does not publish a single star score for daycares. Use three layers:</p>
+      <ul>
+        <li><strong>Parent reviews</strong> — Google / Maps (link on each card)</li>
+        <li><strong>Ministry inspections</strong> — Ontario licensed child care search (compliance reports)</li>
+        <li><strong>Durham quality</strong> — Region Operating Criteria / ask centre for recent assessment</li>
+      </ul>
+      <p style="margin-top:0.6rem;">
+        Official inspection search:
+        <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Search licensed child care (Ontario)</a>
+        · Durham directory:
+        <a href="https://apps.durham.ca/Applications/social/childcare/" target="_blank" rel="noopener">Child Care Directory</a>
+      </p>
+    </div>
+
+    <h2 class="section-title">This week’s action plan</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h4>Fill your details</h4>
+        <p>Use the email builder (name, phone, email, child’s DOB, start window). Saved only in this browser tab.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h4>Read ratings + inspections</h4>
+        <p>Open Google reviews and the Ontario inspection search for your shortlist before touring.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h4>Send waitlist emails</h4>
+        <p>Click <strong>Send email</strong> on each centre — opens Mail / Gmail / Outlook with To, subject, and body filled.</p>
+      </div>
+      <div class="step">
+        <div class="n">4</div>
+        <h4>Subsidy later</h4>
+        <p>When a centre offers a real start date within 3 months, apply for Durham Fee Subsidy online.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Quick comparison (distance + rating)</h2>
+    <p class="section-sub">Sorted by distance from L1S 0B1. Ratings = approximate parent scores from public sources (Aug 2026 research) — verify live links.</p>
+    <table class="summary">
+      <thead>
+        <tr>
+          <th>Centre</th>
+          <th>~Drive</th>
+          <th>Parent rating</th>
+          <th>CWELCC cost</th>
+          <th>Waitlist</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ajax ELCC</strong> (Region)</td>
+          <td>~2 km</td>
+          <td class="rating-cell">Region-run · check Google + inspections</td>
+          <td>$22 infant / day</td>
+          <td>Lillio form + email</td>
+          <td>ajax_elcc@durham.ca</td>
+        </tr>
+        <tr>
+          <td><strong>Helping Hands Westney</strong></td>
+          <td>~2 km</td>
+          <td class="rating-cell">~4.7 ★ (Google aggregate sources)</td>
+          <td>Confirm (~$22 if CWELCC)</td>
+          <td>Web form</td>
+          <td>Form only</td>
+        </tr>
+        <tr>
+          <td><strong>PRYDE · Bolton C. Falby</strong></td>
+          <td>~3 km</td>
+          <td class="rating-cell">~4.3 ★ (agency aggregate)</td>
+          <td>Confirm</td>
+          <td>Email / phone</td>
+          <td>bolton@prydelc.ca</td>
+        </tr>
+        <tr>
+          <td><strong>Schoolhouse · Roland Michener</strong></td>
+          <td>~3 km</td>
+          <td class="rating-cell">Check Google (non-profit, infant room)</td>
+          <td>Confirm</td>
+          <td>Email</td>
+          <td>rolandmichener@schoolhouseplaycare.ca</td>
+        </tr>
+        <tr>
+          <td><strong>Schoolhouse · Applecroft</strong></td>
+          <td>~5 km</td>
+          <td class="rating-cell">Check Google</td>
+          <td>Confirm</td>
+          <td>Email</td>
+          <td>applecroft@schoolhouseplaycare.ca</td>
+        </tr>
+        <tr>
+          <td><strong>Schoolhouse · Cadarackque</strong></td>
+          <td>~5 km</td>
+          <td class="rating-cell">Check Google</td>
+          <td>Confirm</td>
+          <td>Email</td>
+          <td>cadarackque@schoolhouseplaycare.ca</td>
+        </tr>
+        <tr>
+          <td><strong>Helping Hands Lakeside</strong></td>
+          <td>~5 km</td>
+          <td class="rating-cell">~4.9 ★ / 57 reviews (aggregate listing)</td>
+          <td>Confirm</td>
+          <td>Web form</td>
+          <td>Form only</td>
+        </tr>
+        <tr>
+          <td><strong>Wee Watch Ajax–Pickering</strong></td>
+          <td>Varies</td>
+          <td class="rating-cell">Agency · rate each home separately</td>
+          <td>CWELCC agency rates</td>
+          <td>Email / phone</td>
+          <td>ajax@weewatch.com</td>
+        </tr>
+        <tr>
+          <td><strong>Tender Years</strong></td>
+          <td>~8 km</td>
+          <td class="rating-cell">Parent site testimonials · limited Google volume</td>
+          <td>CWELCC (handbook)</td>
+          <td>Form + email</td>
+          <td>info@tenderyearschildcare.ca</td>
+        </tr>
+        <tr>
+          <td><strong>PRYDE · St. Teresa</strong></td>
+          <td>~7 km</td>
+          <td class="rating-cell">Check Google for school site</td>
+          <td>Confirm</td>
+          <td>Email</td>
+          <td>st.teresa@prydelc.ca</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Centre details</h2>
+    <p class="section-sub">Priority = distance + infant suitability + clear waitlist path. <strong>Send email</strong> opens your default mail app with prefilled To / subject / body.</p>
+
+    <div class="grid">
+
+      <article class="card" id="ajax-elcc">
+        <div class="card-top">
+          <div>
+            <h3>1. Ajax Early Learning &amp; Child Care Centre</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Region of Durham · directly operated</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Region-run quality focus</div>
+            <div class="rating-note">No single star score published · check Google + Ministry inspections · strong parent survey process (Durham DOC)</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p1">Priority 1</span>
+            <span class="badge cw">$22/day published</span>
+            <span class="badge infant">Infant room</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~2 km drive</strong>
+              <div class="small">22 Centennial Rd, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Cost (CWELCC published)</label>
+              <strong>$22.00 / day infant</strong>
+              <div class="small">Toddler ~$21.97 · meals included</div>
+            </div>
+            <div class="fact">
+              <label>Ages / hours</label>
+              <strong>Infant, toddler, preschool</strong>
+              <div class="small">Mon–Fri ~7am–6pm (confirm)</div>
+            </div>
+            <div class="fact">
+              <label>Phone / email</label>
+              <strong>905-683-4001</strong>
+              <div class="small">ajax_elcc@durham.ca</div>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Ajax+Early+Learning+and+Child+Care+Centre+22+Centennial+Road+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Ajax+Early+Learning+and+Child+Care+Centre+22+Centennial+Road+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspection search</a>
+            <a href="https://www.durham.ca/living-here/child-care-and-early-years/regional-early-learning-and-child-care-centres/" target="_blank" rel="noopener">Durham ELCC page</a>
+          </div>
+          <p style="margin:0 0 0.5rem;font-size:0.92rem;">
+            <strong>Waitlist:</strong> Official path is the Lillio form. Also send email so you’re on record. Separate application per Regional centre.
+          </p>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="ajax_elcc@durham.ca" data-name="Ajax ELCC">✉ Send email</a>
+            <a class="btn btn-primary" href="https://app.lillio.com/online_registration/apply/ajax-elcc" target="_blank" rel="noopener">Open waitlist form</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/22+Centennial+Road,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="hh-westney">
+        <div class="card-top">
+          <div>
+            <h3>2. Helping Hands Daycare — Westney</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Long-standing Durham operator</p>
+            <div class="rating-pill"><span class="stars">★★★★★</span> ~4.7 / 5</div>
+            <div class="rating-note">~4.7 ★ cited on parent listing sites (e.g. 100+ reviews on some aggregates). Confirm live Google score.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p1">Priority 1</span>
+            <span class="badge infant">Infant program</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~2 km drive</strong>
+              <div class="small">458 Fairall St, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+              <div class="small">Ask CWELCC + fee subsidy</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-427-4900</strong>
+              <div class="small">Supervisor: Angie</div>
+            </div>
+            <div class="fact">
+              <label>Waitlist path</label>
+              <strong>Web form (no public email)</strong>
+              <div class="small">Paste email draft into message</div>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Helping+Hands+Daycare+Westney+458+Fairall+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Helping+Hands+Daycare+458+Fairall+Street+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.helpinghandsdaycare.ca/parent-testimonials-hhdc-westney" target="_blank" rel="noopener">Parent testimonials</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <p style="margin:0 0 0.5rem;font-size:0.92rem;">
+            <strong>Waitlist:</strong> Contact form → location <em>HHDC Westney</em>. No public email — use “Copy email body” then paste into their form.
+          </p>
+          <div class="actions">
+            <button class="btn btn-email" type="button" onclick="copyBodyOnly(); showToast('Body copied — paste into Helping Hands form')">Copy email for form</button>
+            <a class="btn btn-primary" href="https://www.helpinghandsdaycare.ca/contact" target="_blank" rel="noopener">Open contact form</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/458+Fairall+Street,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="pryde-bolton">
+        <div class="card-top">
+          <div>
+            <h3>3. P.R.Y.D.E. — Bolton C. Falby</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Non-profit · in-school · downtown Ajax</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> ~4.3 / 5</div>
+            <div class="rating-note">Agency-level aggregate ~4.3 ★ (limited sample). Check Google for this school site.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p1">Priority 1</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~3 km drive</strong>
+              <div class="small">80 Falby Court, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-427-1556</strong>
+              <div class="small">HO: 905-430-2774</div>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>bolton@prydelc.ca</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=P.R.Y.D.E.+Learning+Centres+Bolton+Falby+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Bolton+C.+Falby+Public+School+Ajax+child+care" target="_blank" rel="noopener">Google Maps</a>
+            <a href="http://prydelearningcentres.ca/" target="_blank" rel="noopener">PRYDE website</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="bolton@prydelc.ca" data-name="PRYDE Bolton C. Falby">✉ Send email</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/80+Falby+Court,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="rm">
+        <div class="card-top">
+          <div>
+            <h3>4. Schoolhouse Playcare — Roland Michener</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Non-profit · infant room · midtown</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Check Google</div>
+            <div class="rating-note">No reliable public aggregate score found — open Google Maps reviews + inspections before deciding.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p1">Priority 1</span>
+            <span class="badge infant">Infant 6 wks–18 mo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~3 km drive</strong>
+              <div class="small">95 Ritchie Ave, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-686-5440</strong>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>rolandmichener@schoolhouseplaycare.ca</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Schoolhouse+Playcare+Roland+Michener+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Schoolhouse+Playcare+Roland+Michener+95+Ritchie+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.schoolhouseplaycare.ca/" target="_blank" rel="noopener">Schoolhouse website</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="rolandmichener@schoolhouseplaycare.ca" data-name="Schoolhouse Roland Michener">✉ Send email</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/95+Ritchie+Avenue,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="applecroft">
+        <div class="card-top">
+          <div>
+            <h3>5. Schoolhouse Playcare — Applecroft</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Non-profit · confirm infant vs toddler for your start</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Check Google</div>
+            <div class="rating-note">Open Maps reviews for this school site specifically.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p2">Priority 2</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~5 km drive</strong>
+              <div class="small">55 Coles Ave, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-427-8097</strong>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>applecroft@schoolhouseplaycare.ca</strong>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Schoolhouse+Playcare+Applecroft+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Schoolhouse+Playcare+Applecroft+55+Coles+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="applecroft@schoolhouseplaycare.ca" data-name="Schoolhouse Applecroft">✉ Send email</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/55+Coles+Avenue,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="cad">
+        <div class="card-top">
+          <div>
+            <h3>6. Schoolhouse Playcare — Cadarackque</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Non-profit · midtown / east Ajax</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Check Google</div>
+            <div class="rating-note">Confirm ages served and live parent score on Maps.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p2">Priority 2</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~5 km drive</strong>
+              <div class="small">15 Miles Drive, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-428-3331</strong>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>cadarackque@schoolhouseplaycare.ca</strong>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Schoolhouse+Playcare+Cadarackque+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Schoolhouse+Playcare+Cadarackque+15+Miles+Drive+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="cadarackque@schoolhouseplaycare.ca" data-name="Schoolhouse Cadarackque">✉ Send email</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/15+Miles+Drive,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="hh-lakeside">
+        <div class="card-top">
+          <div>
+            <h3>7. Helping Hands Daycare — Lakeside</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">East Ajax · frequently high parent scores</p>
+            <div class="rating-pill"><span class="stars">★★★★★</span> ~4.9 / 5</div>
+            <div class="rating-note">~4.9 ★ from ~57 reviews on a public listing aggregate — verify on Google Maps (scores move).</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p2">Priority 2</span>
+            <span class="badge infant">Infant program</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~5 km drive</strong>
+              <div class="small">60 Ashbury Blvd, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-427-4122</strong>
+            </div>
+            <div class="fact">
+              <label>Waitlist</label>
+              <strong>Web form only</strong>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Helping+Hands+Daycare+Lakeside+60+Ashbury+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Helping+Hands+Daycare+60+Ashbury+Boulevard+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.helpinghandsdaycare.ca/parent-testimonials" target="_blank" rel="noopener">Parent testimonials</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <button class="btn btn-email" type="button" onclick="copyBodyOnly(); showToast('Body copied — paste into Helping Hands form')">Copy email for form</button>
+            <a class="btn btn-primary" href="https://www.helpinghandsdaycare.ca/contact" target="_blank" rel="noopener">Open contact form</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/60+Ashbury+Boulevard,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="weewatch">
+        <div class="card-top">
+          <div>
+            <h3>8. Wee Watch Ajax–Pickering (licensed home)</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">CWELCC agency · small groups · rate each home</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Agency (homes vary)</div>
+            <div class="rating-note">Agency CWELCC-participating. Parent ratings depend on the individual home provider — ask for homes near L1S and visit before accepting.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p2">Priority 2</span>
+            <span class="badge cw">CWELCC agency</span>
+            <span class="badge infant">Infants</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>Varies by home</strong>
+              <div class="small">Request near L1S 0B1</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-479-9671</strong>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>ajax@weewatch.com</strong>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>CWELCC agency rates</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Wee+Watch+Ajax+Pickering+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.facebook.com/weewatchajaxpickering/" target="_blank" rel="noopener">Facebook page</a>
+            <a href="https://weewatch.com/parents/" target="_blank" rel="noopener">Wee Watch parents</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="ajax@weewatch.com" data-name="Wee Watch Ajax–Pickering" data-home="1">✉ Send email</a>
+            <a class="btn btn-secondary" href="https://weewatch.com/parents/" target="_blank" rel="noopener">Agency site</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="tender">
+        <div class="card-top">
+          <div>
+            <h3>9. Tender Years Child Care</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">CWELCC · infant program · further north</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Limited public volume</div>
+            <div class="rating-note">Positive parent quotes on their site; limited Google volume found. Read Maps + inspections carefully. (Ignore Indeed employee scores for care quality.)</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p3">Priority 3</span>
+            <span class="badge cw">CWELCC stated</span>
+            <span class="badge infant">0–18 months</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~8 km drive</strong>
+              <div class="small">338 Rossland Rd E, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-683-2559</strong>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>info@tenderyearschildcare.ca</strong>
+            </div>
+            <div class="fact">
+              <label>Hours</label>
+              <strong>6:30am – 6:30pm</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=Tender+Years+Childcare+338+Rossland+Ajax+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Tender+Years+Childcare+338+Rossland+Road+East+Ajax" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://tenderyearschildcare.ca/" target="_blank" rel="noopener">Website / FAQs</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="info@tenderyearschildcare.ca" data-name="Tender Years Child Care">✉ Send email</a>
+            <a class="btn btn-primary" href="https://tenderyearschildcare.ca/wait-list/" target="_blank" rel="noopener">Online waitlist form</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/338+Rossland+Road+East,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="pryde-st">
+        <div class="card-top">
+          <div>
+            <h3>10. P.R.Y.D.E. — St. Teresa of Calcutta</h3>
+            <p style="margin:0.25rem 0 0;color:var(--muted);font-size:0.9rem;">Non-profit · north Ajax</p>
+            <div class="rating-pill"><span class="stars">★★★★☆</span> Check Google</div>
+            <div class="rating-note">Confirm infant/toddler capacity and open Maps reviews for this location.</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge p3">Priority 3</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="facts">
+            <div class="fact">
+              <label>Distance from L1S 0B1</label>
+              <strong>~7 km drive</strong>
+              <div class="small">15 Fishlock St, Ajax</div>
+            </div>
+            <div class="fact">
+              <label>Phone</label>
+              <strong>905-686-7040</strong>
+            </div>
+            <div class="fact">
+              <label>Email</label>
+              <strong>st.teresa@prydelc.ca</strong>
+            </div>
+            <div class="fact">
+              <label>Cost</label>
+              <strong>Confirm with centre</strong>
+            </div>
+          </div>
+          <div class="review-links">
+            <a href="https://www.google.com/search?q=P.R.Y.D.E.+St+Teresa+Ajax+child+care+reviews" target="_blank" rel="noopener">Google reviews</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=St+Teresa+of+Calcutta+Catholic+School+Ajax+child+care" target="_blank" rel="noopener">Google Maps</a>
+            <a href="https://www.earlyyears.edu.gov.on.ca/LCCWWeb/childcare/search.xhtml" target="_blank" rel="noopener">Ontario inspections</a>
+          </div>
+          <div class="actions">
+            <a class="btn btn-email send-mail" href="#" data-to="st.teresa@prydelc.ca" data-name="PRYDE St. Teresa">✉ Send email</a>
+            <a class="btn btn-secondary" href="https://www.google.com/maps/dir/L1S+0B1,+Ajax,+ON/15+Fishlock+Street,+Ajax,+ON" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- EMAIL BUILDER -->
+    <h2 class="section-title" id="email-builder">Email builder + Send</h2>
+    <p class="section-sub">
+      Fill once. Every <strong>Send email</strong> button opens your default mail app (Apple Mail, Outlook, Gmail app if set as default) with
+      <strong>To</strong>, <strong>Subject</strong>, and <strong>Body</strong> prefilled. On iPhone/Mac this uses the system mail client.
+    </p>
+
+    <div class="email-panel">
+      <h3>Your details</h3>
+      <p class="hint">Stored only in this browser tab. Nothing is uploaded. Fill these before clicking Send email on the cards above.</p>
+      <div class="fields">
+        <div>
+          <label for="parentName">Parent full name *</label>
+          <input id="parentName" type="text" placeholder="e.g. Priya Sharma" oninput="refreshEmail()" autocomplete="name" />
+        </div>
+        <div>
+          <label for="parentEmail">Your email *</label>
+          <input id="parentEmail" type="email" placeholder="you@email.com" oninput="refreshEmail()" autocomplete="email" />
+        </div>
+        <div>
+          <label for="parentPhone">Phone *</label>
+          <input id="parentPhone" type="tel" placeholder="905-xxx-xxxx" oninput="refreshEmail()" autocomplete="tel" />
+        </div>
+        <div>
+          <label for="childName">Child first name *</label>
+          <input id="childName" type="text" placeholder="e.g. Anya" oninput="refreshEmail()" />
+        </div>
+        <div>
+          <label for="childDob">Child date of birth *</label>
+          <input id="childDob" type="text" placeholder="YYYY-MM-DD" oninput="refreshEmail()" />
+        </div>
+        <div>
+          <label for="startWindow">Preferred start</label>
+          <input id="startWindow" type="text" value="June–August 2027 (when she is 14–16 months)" oninput="refreshEmail()" />
+        </div>
+      </div>
+
+      <div class="email-subject" id="emailSubject">Subject: …</div>
+      <div class="email-preview" id="emailBody"></div>
+
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="copyEmail()">Copy subject + body</button>
+        <button class="btn btn-secondary" type="button" onclick="copyBodyOnly()">Copy body only</button>
+      </div>
+
+      <h3 style="margin:1.25rem 0 0.5rem;font-size:1rem;">One-click send (opens mail app)</h3>
+      <p class="hint" style="margin-top:0">Same draft for every centre. Form-only centres (Helping Hands) use Copy instead.</p>
+      <div class="send-grid">
+        <a class="btn btn-email send-mail" href="#" data-to="ajax_elcc@durham.ca" data-name="Ajax ELCC">Send → Ajax ELCC</a>
+        <a class="btn btn-email send-mail" href="#" data-to="bolton@prydelc.ca" data-name="PRYDE Bolton">Send → PRYDE Falby</a>
+        <a class="btn btn-email send-mail" href="#" data-to="rolandmichener@schoolhouseplaycare.ca" data-name="Schoolhouse Roland Michener">Send → Roland Michener</a>
+        <a class="btn btn-email send-mail" href="#" data-to="applecroft@schoolhouseplaycare.ca" data-name="Schoolhouse Applecroft">Send → Applecroft</a>
+        <a class="btn btn-email send-mail" href="#" data-to="cadarackque@schoolhouseplaycare.ca" data-name="Schoolhouse Cadarackque">Send → Cadarackque</a>
+        <a class="btn btn-email send-mail" href="#" data-to="ajax@weewatch.com" data-name="Wee Watch Ajax–Pickering" data-home="1">Send → Wee Watch</a>
+        <a class="btn btn-email send-mail" href="#" data-to="info@tenderyearschildcare.ca" data-name="Tender Years">Send → Tender Years</a>
+        <a class="btn btn-email send-mail" href="#" data-to="st.teresa@prydelc.ca" data-name="PRYDE St. Teresa">Send → PRYDE St. Teresa</a>
+      </div>
+    </div>
+
+    <h2 class="section-title">Durham fee subsidy (apply later)</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="facts">
+          <div class="fact">
+            <label>When to apply</label>
+            <strong>After you have a space</strong>
+            <div class="small">Start date within ~3 months</div>
+          </div>
+          <div class="fact">
+            <label>Subsidy waitlist?</label>
+            <strong>None in Durham</strong>
+          </div>
+          <div class="fact">
+            <label>Phone</label>
+            <strong>905-666-6239</strong>
+            <div class="small">1-800-372-1102</div>
+          </div>
+          <div class="fact">
+            <label>Documents</label>
+            <strong>NOA / CCB, address, work/school</strong>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://www.durham.ca/living-here/child-care-and-early-years/child-care-fee-help-subsidy/" target="_blank" rel="noopener">Fee subsidy apply</a>
+          <a class="btn btn-secondary" href="http://apps.durham.ca/Applications/Social/SubsidyCalculator" target="_blank" rel="noopener">Fee calculator</a>
+          <a class="btn btn-secondary" href="https://apps.durham.ca/Applications/social/childcare/" target="_blank" rel="noopener">Child care directory</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        Parent research helper — not official municipal advice. Verify CWELCC enrolment, fees, ages,
+        ratings, and inspections yourself. Distances approximate from geocoded L1S 0B1.
+        Rating figures are from public listings as of research date and can change.
+      </p>
+      <p>
+        Share link: <a href="https://vcatreya-git.github.io/daycare-ajax/">https://vcatreya-git.github.io/daycare-ajax/</a>
+      </p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    function val(id, fallback) {
+      const el = document.getElementById(id);
+      const v = (el && el.value || "").trim();
+      return v || fallback;
+    }
+
+    function missingRequired() {
+      const needed = [
+        ["parentName", "parent name"],
+        ["parentEmail", "your email"],
+        ["parentPhone", "phone"],
+        ["childName", "child name"],
+        ["childDob", "child date of birth"],
+      ];
+      const miss = needed.filter(([id]) => !val(id, "")).map(([, label]) => label);
+      return miss;
+    }
+
+    function buildEmail(opts) {
+      opts = opts || {};
+      const parent = val("parentName", "[Your full name]");
+      const email = val("parentEmail", "[your.email@example.com]");
+      const phone = val("parentPhone", "[905-xxx-xxxx]");
+      const child = val("childName", "[Child first name]");
+      const dob = val("childDob", "[YYYY-MM-DD]");
+      const start = val("startWindow", "June–August 2027 (when she is 14–16 months)");
+      const centreName = opts.name || "your centre";
+      const isHome = !!opts.home;
+
+      const subject = isHome
+        ? "Waitlist inquiry — licensed home care near Ajax L1S 0B1 (14–16 months)"
+        : "Waitlist inquiry — full-day care from 14–16 months (Ajax L1S 0B1)";
+
+      const homeLine = isHome
+        ? "We are looking for a licensed home child care provider through your agency, preferably near Ajax postal code L1S 0B1.\n\n"
+        : "";
+
+      const body =
+`Hello${opts.name ? " " + centreName + " team" : ""},
+
+I would like to add my daughter to your waitlist for full-day licensed child care.
+
+${homeLine}Child’s name: ${child}
+Date of birth: ${dob} (currently about 4 months old)
+Preferred start: ${start}
+Care needed: Full-time, Monday–Friday
+Home: Ajax, postal code L1S 0B1
+
+We are planning for care once she is 14–16 months old, so we want to join the waitlist well in advance. Please place us for that start window (or the closest available date).
+
+Could you please confirm:
+1) That your program is enrolled in CWELCC
+2) That you accept Durham Region child care fee subsidy (purchase of service agreement)
+3) Current approximate daily / monthly fees for the infant or toddler room at our start age
+4) The process and any deposit or registration fee to join / stay on the waitlist
+5) How often we should follow up so we remain active on the list
+6) Whether a tour is available once we are on the waitlist
+${isHome ? "7) Whether you have (or expect) providers near L1S 0B1 / south Ajax for that start window\n" : ""}
+Parent / guardian: ${parent}
+Phone: ${phone}
+Email: ${email}
+
+Thank you very much for your help — we look forward to hearing from you.
+
+Warm regards,
+${parent}`;
+
+      return { subject, body };
+    }
+
+    function refreshEmail() {
+      const { subject, body } = buildEmail();
+      document.getElementById("emailSubject").textContent = "Subject: " + subject;
+      document.getElementById("emailBody").textContent = body;
+      wireMailButtons();
+    }
+
+    function mailtoHref(to, subject, body) {
+      // Use encodeURIComponent for subject/body; keep + for spaces avoided
+      return "mailto:" + encodeURIComponent(to).replace(/%40/g, "@")
+        + "?subject=" + encodeURIComponent(subject)
+        + "&body=" + encodeURIComponent(body);
+    }
+
+    function wireMailButtons() {
+      document.querySelectorAll(".send-mail").forEach((a) => {
+        const to = a.getAttribute("data-to");
+        const name = a.getAttribute("data-name") || "";
+        const home = a.getAttribute("data-home") === "1";
+        const { subject, body } = buildEmail({ name, home });
+        a.setAttribute("href", mailtoHref(to, subject, body));
+        a.onclick = function (e) {
+          const miss = missingRequired();
+          if (miss.length) {
+            e.preventDefault();
+            showToast("Please fill: " + miss.join(", "));
+            document.getElementById("email-builder").scrollIntoView({ behavior: "smooth" });
+            return false;
+          }
+          // Let browser open default mail client via mailto:
+          showToast("Opening mail app…");
+          return true;
+        };
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2000);
+    }
+
+    async function copyEmail() {
+      const { subject, body } = buildEmail();
+      const full = "Subject: " + subject + "\n\n" + body;
+      try {
+        await navigator.clipboard.writeText(full);
+        showToast("Subject + body copied");
+      } catch (e) {
+        showToast("Select the draft and copy manually");
+      }
+    }
+
+    async function copyBodyOnly() {
+      const { body } = buildEmail();
+      try {
+        await navigator.clipboard.writeText(body);
+        showToast("Email body copied");
+      } catch (e) {
+        showToast("Select the draft and copy manually");
+      }
+    }
+
+    async function copyPageUrl() {
+      const url = document.getElementById("pageUrl").textContent;
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast("Share link copied");
+      } catch (e) {
+        showToast(url);
+      }
+    }
+
+    // If hosted on GitHub Pages, show live URL; if opened as file, keep published URL for sharing
+    if (location.protocol.startsWith("http") && location.hostname.includes("github.io")) {
+      document.getElementById("pageUrl").textContent = location.href.replace(/index\.html$/, "");
+    }
+
+    refreshEmail();
+  </script>
+</body>
+</html>
