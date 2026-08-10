@@ -42,9 +42,9 @@ See also: [`RESUME-WORKFLOW.md`](./RESUME-WORKFLOW.md)
 | Email | vc.atreya@gmail.com |
 | Phone | 647-917-2912 |
 | Location | Ajax, ON (Toronto) · remote OK |
-| GitHub | https://github.com/vcatreya-git |
+| Portfolio (use on resume contact) | https://vcatreya-git.github.io/ |
 | LinkedIn | https://www.linkedin.com/in/chandrasekarvenkatraman |
-| Profile | https://vcatreya-git.github.io/ |
+| GitHub (code only; not resume primary) | https://github.com/vcatreya-git |
 
 ---
 
