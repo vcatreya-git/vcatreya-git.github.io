@@ -1,0 +1,121 @@
+Venkatraman Chandrasekar
+Product Owner | Senior Business Analyst | Technology Product Manager
+Greater Toronto Area, Ontario, Canada | Open to hybrid (Mississauga / GTA)
+vc.atreya@gmail.com | 647-917-2912
+LinkedIn: linkedin.com/in/chandrasekarvenkatraman
+Portfolio: vcatreya-git.github.io
+
+================================================================================
+PROFESSIONAL SUMMARY
+================================================================================
+Product Owner and Senior Business Analyst with 15+ years in global banking and financial services technology. Defines product vision, shapes multi-year roadmaps, and drives end-to-end delivery of complex concurrent initiatives across multi-entity and multi-market environments where scope, regulation, and dependencies span business, technology, operations, risk, and compliance. Proven delivery at Qatar National Bank (5-country Enterprise Payments Hub; approximately 60% STP improvement; IBS Fintech Innovation Award 2019), Standard Chartered (payments modernisation and core interfaces across 40+ markets), and FIS (concurrent platform products: open banking consent and account lifecycle, multi-tenant notifications, rail-agnostic payment origination). Strengths: executive communication; BA artifacts including BRDs, FRDs, FSDs, ISDs, user stories, acceptance criteria, process flows, and data flows; delivery under formal governance (Agile, waterfall, hybrid); team leadership including standing up Scrum and SAFe delivery teams and, at peak, running parallel workstreams with skill-based allocation across 10+ member squads.
+
+================================================================================
+KEY ACHIEVEMENTS
+================================================================================
+- QNB multi-entity payments hub: Took over a troubled programme; rebuilt requirements and delivered multi-entity multi-currency architecture across Qatar, France, UK, Singapore, and Kuwait (15 payment types, 16 channels). Intelligent correspondent routing improved STP approximately 60%. IBS Fintech Innovation Award 2019.
+- Standard Chartered multi-market complexity: Owned Origination Pre-Processor spanning mixed migration states for 40+ markets; multi-format adapters (IFX, ISO 20022, MT/SWIFT) and country-by-product rollout plans.
+- FIS concurrent platform initiatives: Owned and drove open banking (Open Access Connect), multi-tenant Notification Platform, Money Movement Hub, and RTP/FedNow/Wires APIs.
+
+================================================================================
+PROFESSIONAL EXPERIENCE
+(Use one block per Workday "Work Experience" entry — copy Title, Company, Dates, Location, then Responsibilities)
+================================================================================
+
+----- Experience 1 -----
+Job Title: Product Owner / Technology Product Manager
+Company: FIS
+Start Date: July 2021
+End Date: Present (or current)
+Location: Canada
+Responsibilities:
+- Own product vision inputs, roadmaps, requirements, and delivery outcomes across multiple concurrent banking platform initiatives (open banking, payment APIs, enterprise notifications). Partner with technology, business clients, and operations through contracts, backlog prioritisation, UAT, and release.
+- Lead concurrent high-impact workstreams with explicit management of scope, dependencies, risks, and sequencing across clients and technology partners.
+- Produce and govern BA and Product Owner artifacts: epics, user stories, acceptance criteria, API contracts, process flows, and solution design inputs. Requirements kept testable, traceable, and release-ready.
+- Navigate multi-client release governance: formal change management, multi-tier approval gates, and risk-aware rollout sequencing across bank clients and BaaS integrators.
+- Translate complex technical and integration topics into clear status, options, and recommendations for business and technology stakeholders; manage expectation shifts on scope and timeline.
+- Brought in to stand up new Scrum teams as Product Owner across multiple engagements: set project context, defined delivery outcomes and timelines, shaped delivery culture, and managed team morale from day one. At peak ran parallel workstreams (for example Platform Payments and Open Banking / FDX simultaneously), assessing developer capability and allocating work by skill and complexity.
+- Open Access Connect (open banking): Owned FDX-aligned platform for fintech aggregator onboarding and bank data access — third-party identity, authorized applications, data scope, consent lifecycle, and entitlement checks. Defined end-to-end flow from fintech onboarding through authorized data fetch. Shipped Consent Management Dashboard reused across retail and business channels.
+- Money Movement Hub: Owned ISO 20022-aligned origination contracts abstracting posting, balances, lien placement, and account validation across wires, RTP/FedNow, and ACH.
+- Payment APIs: Delivered channel-agnostic RTP/FedNow APIs; turned around troubled Wires API programme through UAT to production.
+- Notification Platform: Defined multi-tenant single outbound API for SMS, email, and push. Built on AWS serverless (Lambda, SQS, EventBridge, DynamoDB). Ran architecture review meetings as Product Owner; feedback on HLD and LLD documents.
+
+----- Experience 2 -----
+Job Title: Senior Manager / Lead Consultant
+Company: Capgemini Technology Services
+Start Date: May 2019
+End Date: June 2021
+Location: India
+Responsibilities:
+- Standard Chartered payments modernisation: Owned Origination Pre-Processor for strategic payments modernisation across 40+ markets — bridging concurrent legacy and target channel and engine states without stopping the business.
+- Led requirements, interface contracts, multi-format adapters, and country-by-product rollout planning. Every release subject to formal change management with multi-tier approval gates. Owned impact analysis, risk communications, and release note walkthroughs with CTOs and country heads across 40+ markets.
+- Led day-to-day team operations: work allocation, task supervision, quality review, and mentoring of business analysts on system studies, backlog quality, and cross-market consistency.
+- First Abu Dhabi Bank: Led Saudi Arabia implementation of Corporate Web Portal and Host-to-Host services — participant onboarding, entitlements, accounts, bill payment, and Wage Protection System (WPS) with regulatory coordination. Authored BRD for the Saudi rollout.
+
+----- Experience 3 -----
+Job Title: Product Owner / Functional Anchor
+Company: Edgeverve Limited (Infosys)
+Start Date: June 2016
+End Date: May 2019
+Location: Doha, London, Dhaka, Medellin
+Responsibilities:
+- Qatar National Bank Enterprise Payments Hub (multi-entity): Rebuilt a troubled multi-country hub from requirements up — multi-entity multi-currency delivery across five jurisdictions (Qatar, France, UK, Singapore, Kuwait); 15 payment types, 16 channels, ISO 20022 SOA.
+- Full end-to-end ownership from discovery through post-delivery: problem framing, FRD/FSD documentation, solution options, stakeholder alignment, UAT support, on-site go-live operations (Qatar and London), and post-delivery optimisation.
+- Owned Bankers Almanac integration for intelligent correspondent routing; improved STP by approximately 60%. IBS Fintech Innovation Award 2019 — Best Payments System Implementation.
+- Partnered with Finacle product engineering on base-product versus custom trade-offs; productised recurring custom gaps into platform capabilities.
+- Trusted counterpart to Treasury, Operations, and regional heads across five jurisdictions; owned progress, risk, and strategic options communications for programme governance and steering forums.
+- BRAC Bank and Bancolombia: Led gap analysis and FRD/FSD documentation for Finacle 7.x to 10.x payments migration (BRAC); owned FCY and RTGS tracks end-to-end at Bancolombia under Agile delivery.
+
+----- Experience 4 -----
+Job Title: Lead Analyst — Payments and Channel Integrations
+Company: Scope International (Standard Chartered GBS)
+Start Date: March 2013
+End Date: May 2016
+Location: Chennai, India
+Responsibilities:
+- Standardised core banking payment and channel interfaces across 40+ markets. Produced FSDs and ISDs / Contract Documents governing integration specifications.
+- Real-time payment capability rollouts in Singapore, India, Sri Lanka, and Bahrain. On-site go-lives in Singapore and Malaysia.
+
+----- Experience 5 -----
+Job Title: Systems Analyst / Product Delivery
+Company: Tata Consultancy Services
+Start Date: May 2010
+End Date: March 2013
+Location: Mumbai, India; Ulaanbaatar, Mongolia
+Responsibilities:
+- Loan origination systems end-to-end for Tata Capital, Tata Motor Finance, and Khan Bank — design through production. Hub-and-spoke authorization models for multi-regional operations.
+
+----- Experience 6 (optional — if Workday has room) -----
+Job Title: Independent Product Builder
+Company: Self-employed / Portfolio
+Start Date: January 2025
+End Date: Present
+Location: Canada
+Responsibilities:
+- Hands-on GenAI-assisted delivery from discovery and PRD through production code.
+- PMRocket: end-to-end product ownership for a PM career navigation product.
+- Predictopia: multi-pool prediction league platform delivered PRD-to-production.
+
+================================================================================
+SKILLS (paste into Skills / Keywords fields if separate)
+================================================================================
+Product vision and roadmap; multi-initiative ownership; BRD; FRD; FSD; ISD; user stories; acceptance criteria; process flows; data flows; UAT; API contracts; SDLC; multi-entity banking; multi-market programmes; matrixed delivery; dependency management; risk management; change management governance; programme turnaround; Agile; waterfall; hybrid; SAFe; executive communication; steering reporting; Scrum Product Owner; mentoring business analysts; payments; ISO 20022; open banking; consent; entitlements; onboarding; account lifecycle; RTP; FedNow; wires; ACH; correspondent routing; AWS Lambda; SQS; EventBridge; DynamoDB; SQL; GenAI-assisted delivery
+
+================================================================================
+EDUCATION
+================================================================================
+Degree: Executive MBA
+School: Quantic School of Business and Technology
+Dates: 2023 – 2024
+
+Degree: Bachelor of Engineering, Electrical
+School: Anna University
+Dates: 2005 – 2009
+
+================================================================================
+CERTIFICATIONS
+================================================================================
+ISO 20022 Masterclass
+SAFe Product Owner / Product Manager (POPM)
+SAFe Agilist (SA)
+Certified Scrum Master (CSM)

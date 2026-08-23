@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cover Letter — Stripe Connect PM · Draft v2</title>
+<style>
+:root {
+  --slate-900: #0f172a;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --teal: #0D9488;
+  --teal-dark: #0F766E;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: #f8fafc;
+  color: var(--slate-700);
+  line-height: 1.75;
+  font-size: 15px;
+  padding: 40px 24px;
+}
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  background: white;
+  padding: 56px 60px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.sender { margin-bottom: 32px; }
+.sender strong {
+  font-size: 17px; color: var(--slate-900); display: block; margin-bottom: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.sender span {
+  font-size: 13px; color: var(--slate-400);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.date {
+  font-size: 13px; color: var(--slate-400); margin-bottom: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.addressee {
+  margin-bottom: 28px; font-size: 14px; color: var(--slate-600);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.addressee strong { color: var(--slate-900); font-weight: 600; display: block; }
+.subject {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--teal); margin-bottom: 24px;
+}
+p { margin-bottom: 18px; }
+.sign-off { margin-top: 32px; }
+.sign-off p { margin-bottom: 6px; }
+.sign-off strong {
+  font-size: 16px; color: var(--slate-900);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: block; margin-top: 12px;
+}
+.sign-off span {
+  font-size: 13px; color: var(--slate-400);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.no-print {
+  max-width: 720px; margin: 0 auto 16px;
+  display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; align-items: center;
+}
+.no-print button, .no-print a {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 6px;
+  border: none; cursor: pointer; text-decoration: none; display: inline-block;
+}
+.btn-p { background: var(--teal); color: white; }
+.btn-s { background: white; color: var(--slate-700); border: 1.5px solid var(--slate-200); }
+.draft-tag {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px; font-weight: 600; color: var(--teal-dark);
+  margin-right: auto; padding: 6px 10px; background: #F0FDFA; border-radius: 6px;
+}
+
+@media print {
+  body { background: white; padding: 0; }
+  .no-print { display: none; }
+  .page { box-shadow: none; padding: 18mm 20mm; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <span class="draft-tag">Draft v2 · refined for Stripe Connect Abstractions</span>
+  <a class="btn-s" href="stripe-connect-cover-letter.html">← Prior draft</a>
+  <a class="btn-s" href="resume-stripe-connect-v2.html">Resume v2</a>
+  <button class="btn-p" onclick="window.print()">Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <div class="sender">
+    <strong>Venkatraman Chandrasekar</strong>
+    <span>vc.atreya@gmail.com · 647-917-2912 · Greater Toronto Area · vcatreya-git.github.io</span>
+  </div>
+
+  <div class="date">July 2026</div>
+
+  <div class="addressee">
+    <strong>Stripe · Connect Abstractions Team</strong>
+    Product Manager, Connect Platform
+  </div>
+
+  <div class="subject">Re: Product Manager, Connect Platform — Connect Abstractions</div>
+
+  <p>
+    Connect’s bet is that the highest-leverage financial infrastructure is what you build
+    <em>for platforms</em> — so marketplaces, networks, and embedded-finance products can
+    represent participants, onboard them safely, configure capabilities, and move money
+    without rebuilding payments and compliance themselves. That is the layer I have worked
+    on for 15 years: platform primitives that fintechs and multi-party operators depend on
+    when the alternative is custom integration forever.
+  </p>
+
+  <p>
+    At FIS I own Open Access Connect, the FDX-aligned open-banking platform for fintech
+    aggregators. The hard problem was never “expose account data.” It was: when a fintech
+    wants to serve users across bank clients, how do you model that third party’s relationship
+    with each bank — identity, authorized applications, data scope, consent lifecycle, and
+    entitlement checks on every call — so the fintech onboards once and reuses a clean
+    capability surface? We shipped that as a product abstraction, including a consent
+    dashboard that works the same way across retail and business channels rather than as
+    forked custom work per relationship. That is the shape of work I want to do on Connect
+    accounts: start from a real platform use case, then harden the primitive.
+  </p>
+
+  <p>
+    The same instinct shows up elsewhere. The Money Movement Hub put one ISO&nbsp;20022-aligned
+    origination contract in front of wires, RTP, and FedNow so posting, balances, liens, and
+    validation behaved the same way for integrators regardless of rail. The Notification
+    Platform consolidates fragmented delivery vendors behind a single multi-tenant outbound
+    API, with a roadmap that keeps early integrators stable while the platform absorbs more
+    complexity (routing, failover, preferences, branding). On the payments side, I rebuilt a
+    troubled multi-country hub at Qatar National Bank (5 countries, ~60% STP via intelligent
+    correspondent routing, IBS Fintech Innovation Award 2019) and fed recurring custom gaps
+    into base product so they stopped being one-off projects — the productising-bespoke-to-
+    platform pattern Connect needs when platform demand gets ahead of the shared model.
+  </p>
+
+  <p>
+    What draws me to Connect Abstractions specifically is work that compounds: primitives
+    that stay simple by default, stay flexible when platforms get weird, and do not fork every
+    time a business model shifts. AI makes that more urgent, not less — more dynamic
+    participants, multi-role operators, and non-human callers still need trustworthy onboarding,
+    configurable capabilities, and clean lifecycle without re-onboarding theatre. Those are
+    abstraction problems. I want to help define them at Stripe scale, for the next generation
+    of platforms that will depend on Connect.
+  </p>
+
+  <div class="sign-off">
+    <p>I would welcome the conversation.</p>
+    <strong>Venkatraman Chandrasekar</strong>
+    <span>vc.atreya@gmail.com · 647-917-2912 · vcatreya-git.github.io</span>
+  </div>
+
+</div>
+</body>
+</html>
